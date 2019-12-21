@@ -5,10 +5,11 @@
 
 set -euo pipefail
 
-NB_CONFIG=$HOME/dev/netbricks/experiments/config_2core.toml
-NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 LOG_DIR=$HOME/netbricks_logs/$2/$1/
 LOG=$LOG_DIR/$3.log
+NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
+NB_CONFIG=$HOME/dev/netbricks/experiments/config_2core.toml
+NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_2core_long.toml
 
 echo $LOG_DIR
 echo $LOG
@@ -24,7 +25,9 @@ if [ $2 == "pvn-p2p" ]; then
 	sudo rm -rf /data/config/*
 	sudo mkdir -p /data/config /data/downloads
 
-	$NETBRICKS_BUILD run $2 -f $NB_CONFIG | tee $LOG
+	$NETBRICKS_BUILD run-full $2 -f $NB_CONFIG_LONG | tee $LOG
+elif [ $2 == "pvn-rdr-wd" ]; then
+	$NETBRICKS_BUILD run-full $2 -f $NB_CONFIG_LONG | tee $LOG
 else
 	$NETBRICKS_BUILD run $2 -f $NB_CONFIG | tee $LOG
 fi

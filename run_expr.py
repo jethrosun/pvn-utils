@@ -23,14 +23,14 @@ def netbricks_sess_setup():
         sys.exit(1)
 
 
-def pktgen_sess_setup():
+def pktgen_sess_setup(trace):
     print("Entering pktgen_sess setup")
     try:
         pktgen_sess = Screen("pktgen", True)
         print("pktgen session is spawned")
 
         pktgen_sess.send_commands('bash')
-        pktgen_sess.enable_logs("pktgen.log")
+        pktgen_sess.enable_logs("pktgen_" +trace+ ".log")
         pktgen_sess.send_commands('cd /home/jethros/dev/pktgen-dpdk/experiments')
 
         return pktgen_sess
@@ -66,13 +66,13 @@ def main(nf_list, trace_list):
     netbricks_sess = netbricks_sess_setup()
 
     for trace in trace_list:
-        pktgen_sess = pktgen_sess_setup()
+        pktgen_sess = pktgen_sess_setup(trace)
         print("Running experiments that replay the {} trace".format(trace))
         run_pktgen(pktgen_sess, trace)
         for nf in nf_list:
             for epoch in range(2):
                 run_netbricks(netbricks_sess, trace, nf, epoch)
-                time.sleep(90)
+                time.sleep(320)
                 # sess_destroy(netbricks_sess)
         sess_destroy(pktgen_sess)
         # try:
