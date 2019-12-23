@@ -25,9 +25,9 @@ if [ $2 == "pvn-p2p" ]; then
 	sudo rm -rf /data/config/*
 	sudo mkdir -p /data/config /data/downloads
 
-	$NETBRICKS_BUILD run-full $2 -f $NB_CONFIG_LONG | tee $LOG
+	$NETBRICKS_BUILD run-full $2 -f $NB_CONFIG | tee $LOG
 elif [ $2 == "pvn-rdr-wd" ]; then
-	$NETBRICKS_BUILD run-full $2 -f $NB_CONFIG_LONG | tee $LOG
+	$NETBRICKS_BUILD run-full $2 -f $NB_CONFIG | tee $LOG
 else
 	$NETBRICKS_BUILD run $2 -f $NB_CONFIG | tee $LOG
 fi

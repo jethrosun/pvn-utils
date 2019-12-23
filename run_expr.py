@@ -72,7 +72,8 @@ def main(nf_list, trace_list):
         for nf in nf_list:
             for epoch in range(2):
                 run_netbricks(netbricks_sess, trace, nf, epoch)
-                time.sleep(320)
+                # time.sleep(320)
+                time.sleep(90)
                 # sess_destroy(netbricks_sess)
         sess_destroy(pktgen_sess)
         # try:
@@ -86,4 +87,8 @@ if __name__=='__main__':
                'zcsi-maglev', 'zcsi-nat', 'zcsi-lpm', 'zcsi-aclfw']
     trace_list = ['tls_handshake_trace', 'ictf2010.pcap', 'net-2009-11-18-10:32.pcap']
 
-    main(nf_list, trace_list)
+    simple_nf_list = ['pvn-tlsv', 'pvn-rdr-wd', 'pvn-p2p']
+    simple_trace_list = ['tls_handshake_trace', 'ictf2010.pcap', 'net-2009-11-18-10:32.pcap']
+
+    # main(nf_list, trace_list)
+    main(simple_nf_list, simple_trace_list)
