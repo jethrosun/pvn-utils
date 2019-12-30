@@ -25,9 +25,12 @@ if [ $2 == "pvn-p2p" ]; then
 	sudo rm -rf /data/config/*
 	sudo mkdir -p /data/config /data/downloads
 
-	$NETBRICKS_BUILD run-full $2 -f $NB_CONFIG | tee $LOG
+	$NETBRICKS_BUILD run-full $2 -f $NB_CONFIG | tee $LOG &&
+		ps aux --sort=-%mem | awk 'NR<=10{print $0}'
 elif [ $2 == "pvn-rdr-wd" ]; then
-	$NETBRICKS_BUILD run-full $2 -f $NB_CONFIG | tee $LOG
+	$NETBRICKS_BUILD run-full $2 -f $NB_CONFIG | tee $LOG &&
+		ps aux --sort=-%mem | awk 'NR<=10{print $0}'
 else
-	$NETBRICKS_BUILD run $2 -f $NB_CONFIG | tee $LOG
+	$NETBRICKS_BUILD run $2 -f $NB_CONFIG | tee $LOG && 
+		ps aux --sort=-%mem | awk 'NR<=10{print $0}'
 fi

@@ -72,8 +72,10 @@ def main(nf_list, trace_list):
         for nf in nf_list:
             for epoch in range(2):
                 run_netbricks(netbricks_sess, trace, nf, epoch)
+                # NOTE: we know each measurement in each run takes 60 seconds
+                # and the duration is 65 seconds.
                 # time.sleep(320)
-                time.sleep(90)
+                time.sleep(100)
                 # sess_destroy(netbricks_sess)
         sess_destroy(pktgen_sess)
         # try:
@@ -83,7 +85,7 @@ def main(nf_list, trace_list):
 
 
 if __name__=='__main__':
-    nf_list = ['pvn-tlsv-re', 'pvn-tlsv', 'pvn-rdr-wd', 'pvn-p2p',
+    nf_list = ['pvn-tlsv-re', 'pvn-tlsv', 'pvn-rdr-wd', 'pvn-p2p-nat', 'pvn-p2p-nat-2',
                'zcsi-maglev', 'zcsi-nat', 'zcsi-lpm', 'zcsi-aclfw']
     trace_list = ['tls_handshake_trace', 'ictf2010.pcap', 'net-2009-11-18-10:32.pcap']
 
