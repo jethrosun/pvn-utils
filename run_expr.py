@@ -42,7 +42,7 @@ def pktgen_sess_setup(trace):
 
 def sess_destroy(sess):
     if sess.exists:
-            sess.kill()
+        sess.kill()
 
 def run_pktgen(sess, trace):
     cmd_str = "sudo ./run_pktgen.sh " + trace
@@ -85,9 +85,13 @@ def main(nf_list, trace_list):
 
 
 if __name__=='__main__':
-    nf_list = ['pvn-tlsv-re', 'pvn-tlsv', 'pvn-rdr-wd', 'pvn-p2p-nat', 'pvn-p2p-nat-2',
+    nf_list = ['pvn-tlsv-re', 'pvn-tlsv', 'pvn-rdr-wd-nat', 'pvn-p2p-nat',
                'zcsi-maglev', 'zcsi-nat', 'zcsi-lpm', 'zcsi-aclfw']
-    trace_list = ['tls_handshake_trace', 'ictf2010.pcap', 'net-2009-11-18-10:32.pcap']
+    trace_list = ['tls_handshake_trace', 'p2p-small.pcap',
+                  'ictf2010.pcap10', 'ictf2010.pcap14', 'ictf2010.pcap',
+                  'net-2009-11-18-10:32.pcap', 'net-2009-11-18-17:35.pcap',
+                  'net-2009-11-23-16:54.pcap', 'rdr-browsing.pcap'
+                  ]
 
     simple_nf_list = ['pvn-tlsv', 'pvn-rdr-wd', 'pvn-p2p']
     simple_trace_list = ['tls_handshake_trace', 'ictf2010.pcap', 'net-2009-11-18-10:32.pcap']
