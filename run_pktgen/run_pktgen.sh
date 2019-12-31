@@ -2,7 +2,7 @@
 
 PKTGEN_SCRIPT=$HOME/dev/pktgen-dpdk/app/x86_64-native-linuxapp-gcc/pktgen
 # FIXME
-TRACE_DIR=$HOME/traces/$1.pcap
+TRACE_DIR=$HOME/traces/$1
 LOG_DIR=$HOME/pktgen_logs/
 
 printf "Running pktgen"
