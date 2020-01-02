@@ -23,14 +23,14 @@ def netbricks_sess_setup():
         sys.exit(1)
 
 
-def pktgen_sess_setup(trace):
+def pktgen_sess_setup(trace, nf):
     print("Entering pktgen_sess setup")
     try:
         pktgen_sess = Screen("pktgen", True)
         print("pktgen session is spawned")
 
         pktgen_sess.send_commands('bash')
-        pktgen_sess.enable_logs("pktgen_" +trace+ ".log")
+        pktgen_sess.enable_logs("pktgen_" + trace + "_" + nf + ".log")
         pktgen_sess.send_commands('cd /home/jethros/dev/pktgen-dpdk/experiments')
 
         return pktgen_sess
@@ -66,10 +66,10 @@ def main(nf_list, trace_list):
     netbricks_sess = netbricks_sess_setup()
 
     for trace in trace_list:
-        pktgen_sess = pktgen_sess_setup(trace)
         print("Running experiments that replay the {} trace".format(trace))
-        run_pktgen(pktgen_sess, trace)
         for nf in nf_list:
+            pktgen_sess = pktgen_sess_setup(trace, nf)
+            run_pktgen(pktgen_sess, trace)
             for epoch in range(2):
                 run_netbricks(netbricks_sess, trace, nf, epoch)
                 # NOTE: we know each measurement in each run takes 60 seconds
@@ -77,7 +77,7 @@ def main(nf_list, trace_list):
                 # time.sleep(320)
                 time.sleep(100)
                 # sess_destroy(netbricks_sess)
-        sess_destroy(pktgen_sess)
+            sess_destroy(pktgen_sess)
         # try:
         # except Exception as err:
         #     print("exiting nf failed with {}".format(err))
@@ -85,7 +85,7 @@ def main(nf_list, trace_list):
 
 
 if __name__=='__main__':
-    nf_list = ['pvn-tlsv-re', 'pvn-tlsv', 'pvn-rdr-wd-nat', 'pvn-p2p-nat',
+    nf_list = ['pvn-tlsv-re', 'pvn-tlsv', 'pvn-rdr-wd-nat', 'pvn-p2p-nat', 'pvn-p2p-nat-2',
                'zcsi-maglev', 'zcsi-nat', 'zcsi-lpm', 'zcsi-aclfw']
     trace_list = ['tls_handshake_trace.pcap', 'p2p-small.pcap',
                   'ictf2010.pcap10', 'ictf2010.pcap14', 'ictf2010.pcap',
@@ -96,5 +96,5 @@ if __name__=='__main__':
     simple_nf_list = ['pvn-tlsv', 'pvn-rdr-wd-nat', 'pvn-p2p-nat']
     simple_trace_list = ['tls_handshake_trace', 'ictf2010.pcap14', 'net-2009-11-18-10:32.pcap']
 
-    # main(nf_list, trace_list)
-    main(simple_nf_list, simple_trace_list)
+    main(nf_list, trace_list)
+    # main(simple_nf_list, simple_trace_list)
