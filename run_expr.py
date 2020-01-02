@@ -45,14 +45,26 @@ def sess_destroy(sess):
         sess.kill()
 
 def run_pktgen(sess, trace):
-    cmd_str = "sudo ./run_pktgen.sh " + trace
-    set_port_str= "set 0 rate 100"
-    start_str = "start 0"
+    if trace in ['64B', '128B', '256B']:
+        size = trace[:-1]
+        cmd_str = "sudo ./run_pktgen.sh " + trace
+        set_rate_str= "set 0 rate 100"
+        set_size_str= "set 0 size " + size
+        start_str = "start 0"
 
-    # print("Pktgen\nStart with cmd: {}".format(cmd_str))
-    sess.send_commands(cmd_str, set_port_str, start_str)
-    print("Pktgen\nRUN pktgen")
-    # return pktgen_sess
+        # print("Pktgen\nStart with cmd: {}".format(cmd_str))
+        sess.send_commands(cmd_str, set_rate_str, set_size_str, start_str)
+        print("Pktgen\nRUN pktgen")
+    else:
+        cmd_str = "sudo ./run_pktgen.sh " + trace
+        set_port_str= "set 0 rate 100"
+        start_str = "start 0"
+
+        # print("Pktgen\nStart with cmd: {}".format(cmd_str))
+        sess.send_commands(cmd_str, set_port_str, start_str)
+        print("Pktgen\nRUN pktgen")
+
+        # return pktgen_sess
 
 
 def run_netbricks(sess, trace, nf, epoch):
@@ -90,7 +102,8 @@ if __name__=='__main__':
     trace_list = ['tls_handshake_trace.pcap', 'p2p-small.pcap',
                   'ictf2010.pcap10', 'ictf2010.pcap14', 'ictf2010.pcap',
                   'net-2009-11-18-10:32.pcap', 'net-2009-11-18-17:35.pcap',
-                  'net-2009-11-23-16:54.pcap', 'rdr-browsing.pcap'
+                  'net-2009-11-23-16:54.pcap', 'rdr-browsing.pcap',
+                  '64B', '128B', '256B',
                   ]
 
     simple_nf_list = ['pvn-tlsv', 'pvn-rdr-wd-nat', 'pvn-p2p-nat']
