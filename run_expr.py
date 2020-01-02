@@ -87,9 +87,10 @@ def main(nf_list, trace_list):
                 # NOTE: we know each measurement in each run takes 60 seconds
                 # and the duration is 65 seconds.
                 # time.sleep(320)
-                time.sleep(100)
+                time.sleep(120)
                 # sess_destroy(netbricks_sess)
             sess_destroy(pktgen_sess)
+            time.sleep(15)
         # try:
         # except Exception as err:
         #     print("exiting nf failed with {}".format(err))
@@ -97,8 +98,10 @@ def main(nf_list, trace_list):
 
 
 if __name__=='__main__':
-    nf_list = ['pvn-tlsv-re', 'pvn-tlsv', 'pvn-rdr-wd-nat', 'pvn-p2p-nat', 'pvn-p2p-nat-2',
-               'zcsi-maglev', 'zcsi-nat', 'zcsi-lpm', 'zcsi-aclfw']
+    nf_list = ['pvn-tlsv-re', 'pvn-tlsv',
+               'zcsi-maglev', 'zcsi-nat', 'zcsi-lpm', 'zcsi-aclfw',
+                'pvn-rdr-wd-nat', 'pvn-p2p-nat', 'pvn-p2p-nat-2',
+               ]
     trace_list = ['tls_handshake_trace.pcap', 'p2p-small.pcap',
                   'ictf2010.pcap10', 'ictf2010.pcap14', 'ictf2010.pcap',
                   'net-2009-11-18-10:32.pcap', 'net-2009-11-18-17:35.pcap',
