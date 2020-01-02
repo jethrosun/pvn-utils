@@ -87,7 +87,7 @@ def main(nf_list, trace_list):
                 # NOTE: we know each measurement in each run takes 60 seconds
                 # and the duration is 65 seconds.
                 # time.sleep(320)
-                time.sleep(320)
+                time.sleep(600)
                 # sess_destroy(netbricks_sess)
             sess_destroy(pktgen_sess)
             time.sleep(15)
