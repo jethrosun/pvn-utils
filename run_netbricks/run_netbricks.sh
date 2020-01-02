@@ -6,9 +6,16 @@
 set -euo pipefail
 
 LOG_DIR=$HOME/netbricks_logs/$2/$1/
+
 LOG=$LOG_DIR/$3.log
 MLOG=$LOG_DIR/$3_measurement.log
+TCP_LOG=$LOG_DIR/$3_tcptop.log
+BIO_LOG=$LOG_DIR/$3_biotop.log
+
 NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
+BIO_TOP_MONITOR=/usr/share/bcc/tools/biotop
+TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
+
 NB_CONFIG=$HOME/dev/netbricks/experiments/config_2core.toml
 NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_2core_long.toml
 
@@ -26,12 +33,18 @@ if [ $2 == "pvn-p2p" ]; then
 	sudo rm -rf /data/config/*
 	sudo mkdir -p /data/config /data/downloads
 
-	$NETBRICKS_BUILD run-full $2 -f $NB_CONFIG | tee $LOG &&
-		ps aux --sort=-%mem | awk 'NR<=10{print $0}' | tee $MLOG
+	$NETBRICKS_BUILD run-full $2 -f $NB_CONFIG | tee $LOG &
+	ps aux --sort=-%mem | awk 'NR<=10{print $0}' | tee $MLOG &
+	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
 elif [ $2 == "pvn-rdr-wd" ]; then
-	$NETBRICKS_BUILD run-full $2 -f $NB_CONFIG | tee $LOG &&
-		ps aux --sort=-%mem | awk 'NR<=10{print $0}' | tee $MLOG
+	$NETBRICKS_BUILD run-full $2 -f $NB_CONFIG | tee $LOG &
+	ps aux --sort=-%mem | awk 'NR<=10{print $0}' | tee $MLOG &
+	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
 else
-	$NETBRICKS_BUILD run $2 -f $NB_CONFIG | tee $LOG &&
-		ps aux --sort=-%mem | awk 'NR<=10{print $0}' | tee $MLOG
+	$NETBRICKS_BUILD run $2 -f $NB_CONFIG | tee $LOG &
+	ps aux --sort=-%mem | awk 'NR<=10{print $0}' | tee $MLOG &
+	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
 fi
