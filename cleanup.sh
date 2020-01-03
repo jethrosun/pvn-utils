@@ -15,9 +15,9 @@ if [ -e $HOME/pktgen_logs ]; then
 	mv $HOME/pktgen_logs/ $HOME/logs/pktgen_logs/$current_date_time
 	printf "Moving all pktgen logs to the backup logs\n"
 fi
-if [ -f $HOME/dev/pvn-utils/netbricks.log ]; then
+if [ -f $HOME/dev/pvn-utils/netbricks*.log ]; then
 	mkdir -p $HOME/logs/pktgen_logs/$current_date_time
-	mv $HOME/dev/pvn-utils/netbricks.log $HOME/logs/pktgen_logs/$current_date_time
+	mv $HOME/dev/pvn-utils/netbricks*.log $HOME/logs/pktgen_logs/$current_date_time
 	printf "Moving just the pvn netbricks logs to the backup logs\n"
 	mkdir -p $HOME/logs/pktgen_logs/$current_date_time
 	mv $HOME/dev/pvn-utils/pktgen*.log $HOME/logs/pktgen_logs/$current_date_time

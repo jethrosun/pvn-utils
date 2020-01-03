@@ -40,15 +40,15 @@ if [ $2 == "pvn-p2p" ]; then
 	ps aux --sort=-%mem | awk 'NR<=10{print $0}' | tee $MLOG && sleep 90 &
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG && sleep 90 &
 	$TCP_TOP_MONITOR -C | tee $TCP_LOG && sleep 90 &
-	$NETBRICKS_BUILD run-full $2 -f $TMP_NB_CONFIG | tee $LOG
+	$NETBRICKS_BUILD run-full $2 -f $TMP_NB_CONFIG
 elif [ $2 == "pvn-rdr-wd" ]; then
 	ps aux --sort=-%mem | awk 'NR<=10{print $0}' | tee $MLOG && sleep 90 &
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG && sleep 90 &
 	$TCP_TOP_MONITOR -C | tee $TCP_LOG  && sleep 90 &
-	$NETBRICKS_BUILD run-full $2 -f $TMP_NB_CONFIG | tee $LOG
+	$NETBRICKS_BUILD run-full $2 -f $TMP_NB_CONFIG
 else
 	ps aux --sort=-%mem | awk 'NR<=10{print $0}' | tee $MLOG && sleep 90 &
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG && sleep &
 	$TCP_TOP_MONITOR -C | tee $TCP_LOG && sleep 90 &
-	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG 
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG
 fi
