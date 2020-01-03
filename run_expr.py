@@ -5,14 +5,14 @@ import sys
 import time
 
 
-def netbricks_sess_setup():
+def netbricks_sess_setup(trace, nf, epoch):
     print("Entering netbricks_sess setup")
     try:
         netbricks_sess = Screen("netbricks", True)
         print("netbricks session is spawned")
 
         netbricks_sess.send_commands('bash')
-        netbricks_sess.enable_logs("netbricks.log")
+        netbricks_sess.enable_logs("netbricks--" + trace + "_" +  nf + "_" + str(epoch) + ".log")
         netbricks_sess.send_commands('ssh jethros@tuco')
         netbricks_sess.send_commands('cd /home/jethros/dev/netbricks/experiments')
 
@@ -30,7 +30,7 @@ def pktgen_sess_setup(trace, nf):
         print("pktgen session is spawned")
 
         pktgen_sess.send_commands('bash')
-        pktgen_sess.enable_logs("pktgen_" + trace + "_" + nf + ".log")
+        pktgen_sess.enable_logs("pktgen--" + trace + "_" + nf + ".log")
         pktgen_sess.send_commands('cd /home/jethros/dev/pktgen-dpdk/experiments')
 
         return pktgen_sess
@@ -75,7 +75,6 @@ def run_netbricks(sess, trace, nf, epoch):
 
 def main(nf_list, trace_list):
     """"""
-    netbricks_sess = netbricks_sess_setup()
 
     for trace in trace_list:
         print("Running experiments that replay the {} trace".format(trace))
@@ -83,18 +82,19 @@ def main(nf_list, trace_list):
             pktgen_sess = pktgen_sess_setup(trace, nf)
             run_pktgen(pktgen_sess, trace)
             for epoch in range(2):
+                netbricks_sess = netbricks_sess_setup(trace, nf, epoch)
                 run_netbricks(netbricks_sess, trace, nf, epoch)
                 # NOTE: we know each measurement in each run takes 60 seconds
                 # and the duration is 65 seconds.
                 # time.sleep(320)
                 time.sleep(600)
+                sess_destroy(netbricks_sess)
                 # sess_destroy(netbricks_sess)
             sess_destroy(pktgen_sess)
             time.sleep(15)
         # try:
         # except Exception as err:
         #     print("exiting nf failed with {}".format(err))
-    sess_destroy(netbricks_sess)
 
 
 if __name__=='__main__':
