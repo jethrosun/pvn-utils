@@ -37,18 +37,18 @@ if [ $2 == "pvn-p2p" ]; then
 	sudo rm -rf /data/config/*
 	sudo mkdir -p /data/config /data/downloads
 
-	repeat 100 do (ps aux --sort=-%mem | awk 'NR<=10{print $0}' ) && sleep 1 | tee $MLOG &
-	timeout 90s ($BIO_TOP_MONITOR -C | tee $BIO_LOG) &
-	timeout 90s ($TCP_TOP_MONITOR -C | tee $TCP_LOG) &
+	repeat 100 do {ps aux --sort=-%mem | awk 'NR<=10{print $0}'} && sleep 1 | tee $MLOG &
+	timeout 90s {$BIO_TOP_MONITOR -C | tee $BIO_LOG} &
+	timeout 90s {$TCP_TOP_MONITOR -C | tee $TCP_LOG} &
 	$NETBRICKS_BUILD run-full $2 -f $TMP_NB_CONFIG
 elif [ $2 == "pvn-rdr-wd" ]; then
-	repeat 100 do (ps aux --sort=-%mem | awk 'NR<=10{print $0}' ) && sleep 1 | tee $MLOG &
-	timeout 90s ($BIO_TOP_MONITOR -C | tee $BIO_LOG) &
-	timeout 90s ($TCP_TOP_MONITOR -C | tee $TCP_LOG) &
+	repeat 100 do {ps aux --sort=-%mem | awk 'NR<=10{print $0}'} && sleep 1 | tee $MLOG &
+	timeout 90s {$BIO_TOP_MONITOR -C | tee $BIO_LOG} &
+	timeout 90s {$TCP_TOP_MONITOR -C | tee $TCP_LOG} &
 	$NETBRICKS_BUILD run-full $2 -f $TMP_NB_CONFIG
 else
-	repeat 100 do (ps aux --sort=-%mem | awk 'NR<=10{print $0}' ) && sleep 1 | tee $MLOG &
-	timeout 90s ($BIO_TOP_MONITOR -C | tee $BIO_LOG) &
-	timeout 90s ($TCP_TOP_MONITOR -C | tee $TCP_LOG) &
+	repeat 100 do {ps aux --sort=-%mem | awk 'NR<=10{print $0}'} && sleep 1 | tee $MLOG &
+	timeout 90s {$BIO_TOP_MONITOR -C | tee $BIO_LOG} &
+	timeout 90s {$TCP_TOP_MONITOR -C | tee $TCP_LOG} &
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG
 fi

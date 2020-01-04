@@ -112,5 +112,5 @@ if __name__=='__main__':
     simple_nf_list = ['pvn-tlsv', 'pvn-rdr-wd-nat', 'pvn-p2p-nat']
     simple_trace_list = ['tls_handshake_trace', 'ictf2010.pcap14', 'net-2009-11-18-10:32.pcap']
 
-    main(nf_list, trace_list)
-    # main(simple_nf_list, simple_trace_list)
+    # main(nf_list, trace_list)
+    main(simple_nf_list, simple_trace_list)
