@@ -16,6 +16,7 @@ def netbricks_sess_setup(trace, nf, epoch):
         netbricks_sess.send_commands('ssh jethros@tuco')
         netbricks_sess.send_commands('cd /home/jethros/dev/netbricks/experiments')
 
+        time.sleep(5)
         return netbricks_sess
     except Exception as err:
         print("Creating screen sessions failed: {}".format(err))
@@ -33,6 +34,7 @@ def pktgen_sess_setup(trace, nf):
         pktgen_sess.enable_logs("pktgen--" + trace + "_" + nf + ".log")
         pktgen_sess.send_commands('cd /home/jethros/dev/pktgen-dpdk/experiments')
 
+        time.sleep(5)
         return pktgen_sess
     except Exception as err:
         print("Creating screen sessions failed: {}".format(err))
@@ -87,9 +89,10 @@ def main(nf_list, trace_list):
                 # NOTE: we know each measurement in each run takes 60 seconds
                 # and the duration is 65 seconds.
                 # time.sleep(320)
-                time.sleep(120)
+                time.sleep(180)
                 sess_destroy(netbricks_sess)
                 # sess_destroy(netbricks_sess)
+                time.sleep(15)
             sess_destroy(pktgen_sess)
             time.sleep(15)
         # try:
@@ -100,17 +103,19 @@ def main(nf_list, trace_list):
 if __name__=='__main__':
     nf_list = ['pvn-tlsv-re', 'pvn-tlsv',
                'zcsi-maglev', 'zcsi-nat', 'zcsi-lpm', 'zcsi-aclfw',
-                'pvn-rdr-wd-nat', 'pvn-p2p-nat', 'pvn-p2p-nat-2',
+               'pvn-rdr-wd-nat', 'pvn-p2p-nat', 'pvn-p2p-nat-2',
                ]
-    trace_list = ['tls_handshake_trace.pcap', 'p2p-small.pcap',
-                  'ictf2010.pcap10', 'ictf2010.pcap14', 'ictf2010.pcap',
-                  'net-2009-11-18-10:32.pcap', 'net-2009-11-18-17:35.pcap',
-                  'net-2009-11-23-16:54.pcap', 'rdr-browsing.pcap',
+    trace_list = ['tls_handshake_trace.pcap', 'p2p-small-re.pcap',
+                  'net-2009-11-23-16:54-re.pcap', 'net-2009-12-07-11:59-re.pcap',
+                  'net-2009-12-08-11:59-re.pcap',
+                  'rdr-browsing-re.pcap',
                   '64B', '128B', '256B',
                   ]
 
     simple_nf_list = ['pvn-tlsv', 'pvn-rdr-wd-nat', 'pvn-p2p-nat']
     simple_trace_list = ['tls_handshake_trace.pcap', 'ictf2010.pcap14', 'net-2009-11-18-10:32.pcap']
 
+
     main(nf_list, trace_list)
     # main(simple_nf_list, simple_trace_list)
+
