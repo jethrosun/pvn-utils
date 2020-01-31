@@ -92,7 +92,7 @@ def main(nf_list, trace_list):
                 run_netbricks(netbricks_sess, trace, nf, epoch)
                 # NOTE: we know each measurement in each run takes 60 seconds,
                 # but we need to wait for the results
-                time.sleep(240)
+                time.sleep(300)
                 sess_destroy(netbricks_sess)
                 # sess_destroy(netbricks_sess)
                 time.sleep(10)
@@ -120,12 +120,25 @@ if __name__=='__main__':
             'net-2009-12-08-11:59-re.pcap',
             ]
 
+    # To fix transcoder
+    fix_trans_nf_list = [
+            'pvn-transcoder-nat-filter', 'pvn-transcoder-nat-groupby'
+            ]
+    fix_trans_trace_list = ['tls_handshake_trace.pcap', 'p2p-small-re.pcap',
+            'rdr-browsing-re.pcap',
+            'net-2009-11-23-16:54-re.pcap', 'net-2009-12-07-11:59-re.pcap',
+            'net-2009-12-08-11:59-re.pcap',
+            'ictf2010-0.pcap', 'ictf2010-11.pcap', 'ictf2010-1.pcap',
+            'ictf2010-12.pcap', 'ictf2010-10.pcap', 'ictf2010-13.pcap',
+            '64B', '128B', '256B',
+            ]
+
     # Total NF and traces
     nf_list = ['zcsi-maglev', 'zcsi-nat', 'zcsi-lpm', 'zcsi-aclfw',
             'pvn-tlsv-filter', 'pvn-tlsv-groupby',
             'pvn-rdr-nat-filter', 'pvn-rdr-nat-groupby',
             'pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby',
-            'pvn-transcode-nat-filter', 'pvn-transcode-nat-groupby'
+            'pvn-transcoder-nat-filter', 'pvn-transcoder-nat-groupby'
             ]
     trace_list = ['tls_handshake_trace.pcap', 'p2p-small-re.pcap',
             'rdr-browsing-re.pcap',
@@ -138,4 +151,5 @@ if __name__=='__main__':
 
     # main(simple_nf_list, simple_trace_list)
     # main(now_nf_list, now_trace_list)
+    # main(fix_trans_nf_list, fix_trans_trace_list)
     main(nf_list, trace_list)
