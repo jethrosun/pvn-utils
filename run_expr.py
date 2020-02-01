@@ -54,20 +54,22 @@ def run_pktgen(sess, trace):
         set_size_str= "set 0 size " + size
         start_str = "start 0"
 
+        time.sleep(2)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
         sess.send_commands(cmd_str, set_rate_str, set_size_str, start_str)
 
-        time.sleep(10)
+        time.sleep(8)
         print("Pktgen\nRUN pktgen")
     else:
         cmd_str = "sudo ./run_pktgen.sh " + trace
         set_port_str= "set 0 rate 100"
         start_str = "start 0"
 
+        time.sleep(2)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
         sess.send_commands(cmd_str, set_port_str, start_str)
 
-        time.sleep(10)
+        time.sleep(8)
         print("Pktgen\nRUN pktgen")
 
         # return pktgen_sess
