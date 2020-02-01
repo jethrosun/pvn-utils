@@ -42,10 +42,6 @@ def pktgen_sess_setup(trace, nf):
         sys.exit(1)
 
 
-def sess_destroy(sess):
-    if sess.exists:
-        sess.kill()
-
 def run_pktgen(sess, trace):
     if trace in ['64B', '128B', '256B']:
         size = trace[:-1]
@@ -72,12 +68,21 @@ def run_pktgen(sess, trace):
         time.sleep(8)
         print("Pktgen\nRUN pktgen")
 
-        # return pktgen_sess
-
 
 def run_netbricks(sess, trace, nf, epoch):
     cmd_str = "sudo ./run_netbricks.sh " + trace + " " + nf + " " + str(epoch)
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
+    sess.send_commands(cmd_str)
+
+
+def sess_destroy(sess):
+    if sess.exists:
+        sess.kill()
+
+
+def p2p_cleanup(sess):
+    cmd_str = "sudo ./p2p_cleanup.sh " 
+    print("Extra clean up for P2P with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
 
@@ -95,9 +100,12 @@ def main(nf_list, trace_list):
                 # NOTE: we know each measurement in each run takes 60 seconds,
                 # but we need to wait for the results
                 time.sleep(300)
+                if nf in ['pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby']:
+                    p2p_cleanup(netbricks_sess)
                 sess_destroy(netbricks_sess)
                 # sess_destroy(netbricks_sess)
                 time.sleep(10)
+
             sess_destroy(pktgen_sess)
             time.sleep(10)
         # try:
