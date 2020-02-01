@@ -154,8 +154,8 @@ if __name__=='__main__':
             'rdr-browsing-re.pcap',
             'net-2009-11-23-16:54-re.pcap', 'net-2009-12-07-11:59-re.pcap',
             'net-2009-12-08-11:59-re.pcap',
-            'ictf2010-0.pcap', 'ictf2010-11.pcap', 'ictf2010-1.pcap',
-            'ictf2010-12.pcap', 'ictf2010-10.pcap', 'ictf2010-13.pcap',
+            'ictf2010-0-re.pcap', 'ictf2010-11-re.pcap', 'ictf2010-1-re.pcap',
+            'ictf2010-12-re.pcap', 'ictf2010-10-re.pcap', 'ictf2010-13-re.pcap',
             '64B', '128B', '256B',
             ]
 
