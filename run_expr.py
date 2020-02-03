@@ -50,7 +50,7 @@ def run_pktgen(sess, trace):
         set_size_str= "set 0 size " + size
         start_str = "start 0"
 
-        time.sleep(10)
+        time.sleep(15)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
         sess.send_commands(cmd_str, set_rate_str, set_size_str, start_str)
 
@@ -109,7 +109,7 @@ def main(nf_list, trace_list):
                 time.sleep(10)
 
             sess_destroy(pktgen_sess)
-            time.sleep(10)
+            time.sleep(20)
         # try:
         # except Exception as err:
         #     print("exiting nf failed with {}".format(err))
