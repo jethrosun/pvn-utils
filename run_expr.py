@@ -34,7 +34,7 @@ def pktgen_sess_setup(trace, nf):
         pktgen_sess.enable_logs("pktgen--" + trace + "_" + nf + ".log")
         pktgen_sess.send_commands('cd /home/jethros/dev/pktgen-dpdk/experiments')
 
-        time.sleep(5)
+        time.sleep(10)
         return pktgen_sess
     except Exception as err:
         print("Creating screen sessions failed: {}".format(err))
@@ -50,7 +50,7 @@ def run_pktgen(sess, trace):
         set_size_str= "set 0 size " + size
         start_str = "start 0"
 
-        time.sleep(5)
+        time.sleep(10)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
         sess.send_commands(cmd_str, set_rate_str, set_size_str, start_str)
 
@@ -61,7 +61,7 @@ def run_pktgen(sess, trace):
         set_port_str= "set 0 rate 100"
         start_str = "start 0"
 
-        time.sleep(5)
+        time.sleep(10)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
         sess.send_commands(cmd_str, set_port_str, start_str)
 
@@ -94,7 +94,7 @@ def main(nf_list, trace_list):
         for nf in nf_list:
             pktgen_sess = pktgen_sess_setup(trace, nf)
             run_pktgen(pktgen_sess, trace)
-            for epoch in range(2):
+            for epoch in range(3):
                 netbricks_sess = netbricks_sess_setup(trace, nf, epoch)
 
                 if nf in ['pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby']:
