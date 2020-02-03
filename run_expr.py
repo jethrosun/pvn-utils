@@ -50,7 +50,7 @@ def run_pktgen(sess, trace):
         set_size_str= "set 0 size " + size
         start_str = "start 0"
 
-        time.sleep(15)
+        time.sleep(5)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
         sess.send_commands(cmd_str, set_rate_str, set_size_str, start_str)
 
@@ -61,7 +61,7 @@ def run_pktgen(sess, trace):
         set_port_str= "set 0 rate 100"
         start_str = "start 0"
 
-        time.sleep(10)
+        time.sleep(5)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
         sess.send_commands(cmd_str, set_port_str, start_str)
 
@@ -100,8 +100,9 @@ def main(nf_list, trace_list):
                 # NOTE: we know each measurement in each run takes 60 seconds,
                 # but we need to wait for the results
                 if nf in ['pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby']:
-                    time.sleep(350)
+                    time.sleep(300)
                     p2p_cleanup(netbricks_sess)
+                    time.sleep(30)
                 else:
                     time.sleep(300)
                 sess_destroy(netbricks_sess)
