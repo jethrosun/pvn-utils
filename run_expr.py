@@ -16,7 +16,7 @@ def netbricks_sess_setup(trace, nf, epoch):
         netbricks_sess.send_commands('ssh jethros@tuco')
         netbricks_sess.send_commands('cd /home/jethros/dev/netbricks/experiments')
 
-        time.sleep(10)
+        time.sleep(5)
         return netbricks_sess
     except Exception as err:
         print("Creating screen sessions failed: {}".format(err))
@@ -34,7 +34,7 @@ def pktgen_sess_setup(trace, nf):
         pktgen_sess.enable_logs("pktgen--" + trace + "_" + nf + ".log")
         pktgen_sess.send_commands('cd /home/jethros/dev/pktgen-dpdk/experiments')
 
-        time.sleep(10)
+        time.sleep(5)
         return pktgen_sess
     except Exception as err:
         print("Creating screen sessions failed: {}".format(err))
@@ -50,22 +50,22 @@ def run_pktgen(sess, trace):
         set_size_str= "set 0 size " + size
         start_str = "start 0"
 
-        time.sleep(2)
+        time.sleep(10)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
         sess.send_commands(cmd_str, set_rate_str, set_size_str, start_str)
 
-        time.sleep(8)
+        time.sleep(10)
         print("Pktgen\nRUN pktgen")
     else:
         cmd_str = "sudo ./run_pktgen.sh " + trace
         set_port_str= "set 0 rate 100"
         start_str = "start 0"
 
-        time.sleep(2)
+        time.sleep(10)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
         sess.send_commands(cmd_str, set_port_str, start_str)
 
-        time.sleep(8)
+        time.sleep(10)
         print("Pktgen\nRUN pktgen")
 
 
@@ -81,7 +81,7 @@ def sess_destroy(sess):
 
 
 def p2p_cleanup(sess):
-    cmd_str = "sudo ./p2p_cleanup.sh " 
+    cmd_str = "sudo ./p2p_cleanup.sh "
     print("Extra clean up for P2P with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
@@ -99,9 +99,11 @@ def main(nf_list, trace_list):
                 run_netbricks(netbricks_sess, trace, nf, epoch)
                 # NOTE: we know each measurement in each run takes 60 seconds,
                 # but we need to wait for the results
-                time.sleep(300)
                 if nf in ['pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby']:
+                    time.sleep(350)
                     p2p_cleanup(netbricks_sess)
+                else:
+                    time.sleep(300)
                 sess_destroy(netbricks_sess)
                 # sess_destroy(netbricks_sess)
                 time.sleep(10)
@@ -143,6 +145,21 @@ if __name__=='__main__':
             '64B', '128B', '256B',
             ]
 
+    test_nf_list = [
+            'pvn-tlsv-filter', 'pvn-tlsv-groupby',
+            'pvn-rdr-nat-filter', 'pvn-rdr-nat-groupby',
+            'pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby',
+            'pvn-transcoder-nat-filter', 'pvn-transcoder-nat-groupby'
+            ]
+    test_trace_list = ['tls_handshake_trace.pcap', 'p2p-small-re.pcap',
+            'rdr-browsing-re.pcap',
+            'net-2009-11-23-16:54-re.pcap', 'net-2009-12-07-11:59-re.pcap',
+            'net-2009-12-08-11:59-re.pcap',
+            'ictf2010-0-re.pcap', 'ictf2010-11-re.pcap', 'ictf2010-1-re.pcap',
+            'ictf2010-12-re.pcap', 'ictf2010-10-re.pcap', 'ictf2010-13-re.pcap',
+            '64B', '128B', '256B',
+            ]
+
     # Total NF and traces
     nf_list = ['zcsi-maglev', 'zcsi-nat', 'zcsi-lpm', 'zcsi-aclfw',
             'pvn-tlsv-filter', 'pvn-tlsv-groupby',
@@ -159,7 +176,7 @@ if __name__=='__main__':
             '64B', '128B', '256B',
             ]
 
+
     # main(simple_nf_list, simple_trace_list)
-    # main(now_nf_list, now_trace_list)
-    # main(fix_trans_nf_list, fix_trans_trace_list)
-    main(nf_list, trace_list)
+    main(test_nf_list, test_trace_list)
+    # main(nf_list, trace_list)
