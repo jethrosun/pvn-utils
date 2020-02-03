@@ -16,7 +16,7 @@ def netbricks_sess_setup(trace, nf, epoch):
         netbricks_sess.send_commands('ssh jethros@tuco')
         netbricks_sess.send_commands('cd /home/jethros/dev/netbricks/experiments')
 
-        time.sleep(5)
+        time.sleep(15)
         return netbricks_sess
     except Exception as err:
         print("Creating screen sessions failed: {}".format(err))
@@ -96,7 +96,13 @@ def main(nf_list, trace_list):
             run_pktgen(pktgen_sess, trace)
             for epoch in range(2):
                 netbricks_sess = netbricks_sess_setup(trace, nf, epoch)
+
+                if nf in ['pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby']:
+                    p2p_cleanup(netbricks_sess)
+                    time.sleep(30)
+
                 run_netbricks(netbricks_sess, trace, nf, epoch)
+
                 # NOTE: we know each measurement in each run takes 60 seconds,
                 # but we need to wait for the results
                 if nf in ['pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby']:
@@ -162,10 +168,11 @@ if __name__=='__main__':
             ]
 
     # Total NF and traces
-    nf_list = ['zcsi-maglev', 'zcsi-nat', 'zcsi-lpm', 'zcsi-aclfw',
+    nf_list = [
+            'pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby',
+            'zcsi-maglev', 'zcsi-nat', 'zcsi-lpm', 'zcsi-aclfw',
             'pvn-tlsv-filter', 'pvn-tlsv-groupby',
             'pvn-rdr-nat-filter', 'pvn-rdr-nat-groupby',
-            'pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby',
             'pvn-transcoder-nat-filter', 'pvn-transcoder-nat-groupby'
             ]
     trace_list = ['tls_handshake_trace.pcap', 'p2p-small-re.pcap',
@@ -179,5 +186,5 @@ if __name__=='__main__':
 
 
     # main(simple_nf_list, simple_trace_list)
-    main(test_nf_list, test_trace_list)
-    # main(nf_list, trace_list)
+    # main(test_nf_list, test_trace_list)
+    main(nf_list, trace_list)
