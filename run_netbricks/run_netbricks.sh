@@ -29,13 +29,13 @@ mkdir -p $LOG_DIR
 
 if [ $2 == "pvn-p2p-nat-filter" ]; then
 	# clean the states of transmission
-	sudo rm -rf downloads/*
-	sudo rm -rf config/*
-	mkdir -p config downloads
-
-	sudo rm -rf /data/downloads/*
-	sudo rm -rf /data/config/*
-	sudo mkdir -p /data/config /data/downloads
+	# sudo rm -rf downloads/*
+	# sudo rm -rf config/*
+	# mkdir -p config downloads
+        #
+	# sudo rm -rf /data/downloads/*
+	# sudo rm -rf /data/config/*
+	# sudo mkdir -p /data/config /data/downloads
 
 	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
 		P1=$!
@@ -49,13 +49,13 @@ if [ $2 == "pvn-p2p-nat-filter" ]; then
 
 elif [ $2 == "pvn-p2p-nat-groupby" ]; then
 	# clean the states of transmission
-	sudo rm -rf downloads/*
-	sudo rm -rf config/*
-	mkdir -p config downloads
-
-	sudo rm -rf /data/downloads/*
-	sudo rm -rf /data/config/*
-	sudo mkdir -p /data/config /data/downloads
+	# sudo rm -rf downloads/*
+	# sudo rm -rf config/*
+	# mkdir -p config downloads
+        #
+	# sudo rm -rf /data/downloads/*
+	# sudo rm -rf /data/config/*
+	# sudo mkdir -p /data/config /data/downloads
 
 	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
 		P1=$!
