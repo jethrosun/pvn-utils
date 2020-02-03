@@ -38,14 +38,14 @@ if [ $2 == "pvn-p2p-nat-filter" ]; then
 	# sudo mkdir -p /data/config /data/downloads
 
 	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
-		P1=$!
-		$BIO_TOP_MONITOR -C | tee $BIO_LOG &
-		P2=$!
-		$TCP_TOP_MONITOR -C | tee $TCP_LOG &
-		P3=$!
-		$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
-		P4=$!
-		wait $P1 $P2 $P3 $P4
+	P1=$!
+	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	P2=$!
+	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	P3=$!
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
+	P4=$!
+	wait $P1 $P2 $P3 $P4
 
 elif [ $2 == "pvn-p2p-nat-groupby" ]; then
 	# clean the states of transmission
@@ -58,14 +58,14 @@ elif [ $2 == "pvn-p2p-nat-groupby" ]; then
 	# sudo mkdir -p /data/config /data/downloads
 
 	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
-		P1=$!
-		$BIO_TOP_MONITOR -C | tee $BIO_LOG &
-		P2=$!
-		$TCP_TOP_MONITOR -C | tee $TCP_LOG &
-		P3=$!
-		$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
-		P4=$!
-		wait $P1 $P2 $P3 $P4
+	P1=$!
+	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	P2=$!
+	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	P3=$!
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
+	P4=$!
+	wait $P1 $P2 $P3 $P4
 
 elif [ $2 == "pvn-transcoder-nat-groupby" ]; then
 
@@ -74,14 +74,14 @@ elif [ $2 == "pvn-transcoder-nat-groupby" ]; then
 	sudo mkdir -p /home/jethros/dev/pvn-utils/data/output_videos/
 
 	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
-		P1=$!
-		$BIO_TOP_MONITOR -C | tee $BIO_LOG &
-		P2=$!
-		$TCP_TOP_MONITOR -C | tee $TCP_LOG &
-		P3=$!
-		$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
-		P4=$!
-		wait $P1 $P2 $P3 $P4
+	P1=$!
+	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	P2=$!
+	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	P3=$!
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
+	P4=$!
+	wait $P1 $P2 $P3 $P4
 
 
 elif [ $2 == "pvn-transcoder-nat-filter" ]; then
@@ -91,24 +91,24 @@ elif [ $2 == "pvn-transcoder-nat-filter" ]; then
 	sudo mkdir -p /home/jethros/dev/pvn-utils/data/output_videos/
 
 	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
-		P1=$!
-		$BIO_TOP_MONITOR -C | tee $BIO_LOG &
-		P2=$!
-		$TCP_TOP_MONITOR -C | tee $TCP_LOG &
-		P3=$!
-		$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
-		P4=$!
-		wait $P1 $P2 $P3 $P4
+	P1=$!
+	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	P2=$!
+	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	P3=$!
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
+	P4=$!
+	wait $P1 $P2 $P3 $P4
 
 else
 	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
-		P1=$!
-		$BIO_TOP_MONITOR -C | tee $BIO_LOG &
-		P2=$!
-		$TCP_TOP_MONITOR -C | tee $TCP_LOG &
-		P3=$!
-		$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
-		P4=$!
-		wait $P1 $P2 $P3 $P4
+	P1=$!
+	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	P2=$!
+	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	P3=$!
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
+	P4=$!
+	wait $P1 $P2 $P3 $P4
 
 fi
