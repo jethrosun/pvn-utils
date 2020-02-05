@@ -117,7 +117,7 @@ def main(nf_list, trace_list):
                     time.sleep(10)
 
             sess_destroy(pktgen_sess)
-            time.sleep(20)
+            time.sleep(30)
         # try:
         # except Exception as err:
         #     print("exiting nf failed with {}".format(err))
