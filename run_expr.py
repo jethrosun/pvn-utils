@@ -94,25 +94,25 @@ def main(nf_list, trace_list):
         for nf in nf_list:
             pktgen_sess = pktgen_sess_setup(trace, nf)
             run_pktgen(pktgen_sess, trace)
-            for epoch in range(3):
+            for epoch in range(10):
                 netbricks_sess = netbricks_sess_setup(trace, nf, epoch)
 
                 if nf in ['pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby']:
                     p2p_cleanup(netbricks_sess)
-                    time.sleep(30)
+                    time.sleep(60)
 
                 run_netbricks(netbricks_sess, trace, nf, epoch)
 
                 if nf in ['pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby']:
                     time.sleep(300)
                     p2p_cleanup(netbricks_sess)
-                    time.sleep(30)
+                    time.sleep(60)
                 else:
                     time.sleep(300)
                 sess_destroy(netbricks_sess)
                 # sess_destroy(netbricks_sess)
                 if nf in ['pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby']:
-                    time.sleep(30)
+                    time.sleep(60)
                 else:
                     time.sleep(10)
 
