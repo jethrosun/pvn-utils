@@ -103,8 +103,6 @@ def main(nf_list, trace_list):
 
                 run_netbricks(netbricks_sess, trace, nf, epoch)
 
-                # NOTE: we know each measurement in each run takes 60 seconds,
-                # but we need to wait for the results
                 if nf in ['pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby']:
                     time.sleep(300)
                     p2p_cleanup(netbricks_sess)
@@ -113,7 +111,10 @@ def main(nf_list, trace_list):
                     time.sleep(300)
                 sess_destroy(netbricks_sess)
                 # sess_destroy(netbricks_sess)
-                time.sleep(10)
+                if nf in ['pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby']:
+                    time.sleep(30)
+                else:
+                    time.sleep(10)
 
             sess_destroy(pktgen_sess)
             time.sleep(20)
