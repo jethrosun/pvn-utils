@@ -34,7 +34,7 @@ def pktgen_sess_setup(trace, nf):
         pktgen_sess.enable_logs("pktgen--" + trace + "_" + nf + ".log")
         pktgen_sess.send_commands('cd /home/jethros/dev/pktgen-dpdk/experiments')
 
-        time.sleep(10)
+        time.sleep(20)
         return pktgen_sess
     except Exception as err:
         print("Creating screen sessions failed: {}".format(err))
@@ -50,7 +50,7 @@ def run_pktgen(sess, trace):
         set_size_str= "set 0 size " + size
         start_str = "start 0"
 
-        time.sleep(10)
+        time.sleep(30)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
         sess.send_commands(cmd_str, set_rate_str, set_size_str, start_str)
 
@@ -94,7 +94,7 @@ def main(nf_list, trace_list):
         for nf in nf_list:
             pktgen_sess = pktgen_sess_setup(trace, nf)
             run_pktgen(pktgen_sess, trace)
-            for epoch in range(10):
+            for epoch in range(3):
                 netbricks_sess = netbricks_sess_setup(trace, nf, epoch)
 
                 if nf in ['pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby']:
@@ -159,13 +159,9 @@ if __name__=='__main__':
             'pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby',
             'pvn-transcoder-nat-filter', 'pvn-transcoder-nat-groupby'
             ]
-    test_trace_list = ['tls_handshake_trace.pcap', 'p2p-small-re.pcap',
-            'rdr-browsing-re.pcap',
-            'net-2009-11-23-16:54-re.pcap', 'net-2009-12-07-11:59-re.pcap',
-            'net-2009-12-08-11:59-re.pcap',
+    test_trace_list = [
             'ictf2010-0-re.pcap', 'ictf2010-11-re.pcap', 'ictf2010-1-re.pcap',
             'ictf2010-12-re.pcap', 'ictf2010-10-re.pcap', 'ictf2010-13-re.pcap',
-            '64B', '128B', '256B',
             ]
 
     # Total NF and traces
@@ -187,5 +183,5 @@ if __name__=='__main__':
 
 
     # main(simple_nf_list, simple_trace_list)
-    # main(test_nf_list, test_trace_list)
-    main(nf_list, trace_list)
+    main(test_nf_list, test_trace_list)
+    # main(nf_list, trace_list)
