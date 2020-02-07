@@ -61,7 +61,7 @@ def run_pktgen(sess, trace):
         set_port_str= "set 0 rate 100"
         start_str = "start 0"
 
-        time.sleep(10)
+        time.sleep(30)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
         sess.send_commands(cmd_str, set_port_str, start_str)
 
