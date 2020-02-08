@@ -105,7 +105,7 @@ def main(nf_list, trace_list):
 
                 if nf in pvn_nf_list:
                     p2p_cleanup(netbricks_sess)
-                    time.sleep(60)
+                    time.sleep(100)
 
                 run_netbricks(netbricks_sess, trace, nf, epoch)
 
@@ -119,7 +119,7 @@ def main(nf_list, trace_list):
                 # sess_destroy(netbricks_sess)
 
                 if nf in pvn_nf_list:
-                    time.sleep(60)
+                    time.sleep(100)
                 else:
                     time.sleep(10)
 
@@ -191,4 +191,4 @@ if __name__=='__main__':
 
     # main(simple_nf_list, simple_trace_list)
     # main(test_nf_list, test_trace_list)
-    main(nf_list, trace_list)
+    # main(nf_list, trace_list)
