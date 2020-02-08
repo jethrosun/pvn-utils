@@ -105,21 +105,21 @@ def main(nf_list, trace_list):
 
                 if nf in pvn_nf_list:
                     p2p_cleanup(netbricks_sess)
-                    time.sleep(100)
+                    time.sleep(120)
 
                 run_netbricks(netbricks_sess, trace, nf, epoch)
 
                 if nf in pvn_nf_list:
                     time.sleep(300)
                     p2p_cleanup(netbricks_sess)
-                    time.sleep(60)
+                    time.sleep(100)
                 else:
                     time.sleep(300)
                 sess_destroy(netbricks_sess)
                 # sess_destroy(netbricks_sess)
 
                 if nf in pvn_nf_list:
-                    time.sleep(100)
+                    time.sleep(120)
                 else:
                     time.sleep(10)
 
