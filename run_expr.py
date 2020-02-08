@@ -110,11 +110,11 @@ def main(nf_list, trace_list):
                 run_netbricks(netbricks_sess, trace, nf, epoch)
 
                 if nf in pvn_nf_list:
-                    time.sleep(300)
+                    time.sleep(320)
                     p2p_cleanup(netbricks_sess)
                     time.sleep(100)
                 else:
-                    time.sleep(300)
+                    time.sleep(320)
                 sess_destroy(netbricks_sess)
                 # sess_destroy(netbricks_sess)
 
