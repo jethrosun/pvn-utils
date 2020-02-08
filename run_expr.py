@@ -89,6 +89,12 @@ def p2p_cleanup(sess):
 def main(nf_list, trace_list):
     """"""
 
+    pvn_nf_list = ['pvn-tlsv-filter', 'pvn-tlsv-groupby',
+            'pvn-rdr-nat-filter', 'pvn-rdr-nat-groupby',
+            'pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby',
+            'pvn-transcoder-nat-filter', 'pvn-transcoder-nat-groupby'
+            ]
+
     for trace in trace_list:
         print("Running experiments that replay the {} trace".format(trace))
         for nf in nf_list:
@@ -97,13 +103,13 @@ def main(nf_list, trace_list):
             for epoch in range(3):
                 netbricks_sess = netbricks_sess_setup(trace, nf, epoch)
 
-                if nf in ['pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby']:
+                if nf in pvn_nf_list:
                     p2p_cleanup(netbricks_sess)
                     time.sleep(60)
 
                 run_netbricks(netbricks_sess, trace, nf, epoch)
 
-                if nf in ['pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby']:
+                if nf in pvn_nf_list:
                     time.sleep(300)
                     p2p_cleanup(netbricks_sess)
                     time.sleep(60)
@@ -111,7 +117,8 @@ def main(nf_list, trace_list):
                     time.sleep(300)
                 sess_destroy(netbricks_sess)
                 # sess_destroy(netbricks_sess)
-                if nf in ['pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby']:
+
+                if nf in pvn_nf_list:
                     time.sleep(60)
                 else:
                     time.sleep(10)
@@ -183,5 +190,5 @@ if __name__=='__main__':
 
 
     # main(simple_nf_list, simple_trace_list)
-    main(test_nf_list, test_trace_list)
-    # main(nf_list, trace_list)
+    # main(test_nf_list, test_trace_list)
+    main(nf_list, trace_list)
