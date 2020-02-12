@@ -95,31 +95,37 @@ def main(nf_list, trace_list):
             'pvn-transcoder-nat-filter', 'pvn-transcoder-nat-groupby'
             ]
 
+    p2p_nf_list = ['pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby',]
+
     for trace in trace_list:
         print("Running experiments that replay the {} trace".format(trace))
         for nf in nf_list:
             pktgen_sess = pktgen_sess_setup(trace, nf)
             run_pktgen(pktgen_sess, trace)
-            for epoch in range(3):
+            for epoch in range(2):
                 netbricks_sess = netbricks_sess_setup(trace, nf, epoch)
 
-                if nf in pvn_nf_list:
+                if nf in p2p_nf_list:
                     p2p_cleanup(netbricks_sess)
                     time.sleep(150)
 
                 run_netbricks(netbricks_sess, trace, nf, epoch)
 
-                if nf in pvn_nf_list:
+                if nf in p2p_nf_list:
                     time.sleep(320)
                     p2p_cleanup(netbricks_sess)
                     time.sleep(150)
+                elif nf in pvn_nf_list:
+                    time.sleep(150)
                 else:
-                    time.sleep(320)
+                    time.sleep(30)
                 sess_destroy(netbricks_sess)
                 # sess_destroy(netbricks_sess)
 
-                if nf in pvn_nf_list:
+                if nf in p2p_nf_list:
                     time.sleep(150)
+                elif nf in pvn_nf_list:
+                    time.sleep(30)
                 else:
                     time.sleep(10)
 
