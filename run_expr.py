@@ -90,9 +90,9 @@ def main(nf_list, trace_list):
     """"""
 
     pvn_nf_list = ['pvn-tlsv-filter', 'pvn-tlsv-groupby',
-            'pvn-rdr-nat-filter', 'pvn-rdr-nat-groupby',
-            'pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby',
-            'pvn-transcoder-nat-filter', 'pvn-transcoder-nat-groupby'
+            'pvn-rdr-filter', 'pvn-rdr-groupby',
+            'pvn-p2p-filter', 'pvn-p2p-groupby',
+            'pvn-transcoder-filter', 'pvn-transcoder-groupby'
             ]
 
     p2p_nf_list = ['pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby',]
@@ -155,7 +155,7 @@ if __name__=='__main__':
 
     # To fix transcoder
     fix_trans_nf_list = [
-            'pvn-transcoder-nat-filter', 'pvn-transcoder-nat-groupby'
+            'pvn-transcoder-filter', 'pvn-transcoder-groupby'
             ]
     fix_trans_trace_list = ['tls_handshake_trace.pcap', 'p2p-small-re.pcap',
             'rdr-browsing-re.pcap',
@@ -179,11 +179,11 @@ if __name__=='__main__':
 
     # Total NF and traces
     nf_list = [
-            'pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby',
+            'pvn-p2p-filter', 'pvn-p2p-groupby',
             'zcsi-maglev', 'zcsi-nat', 'zcsi-lpm', 'zcsi-aclfw',
             'pvn-tlsv-filter', 'pvn-tlsv-groupby',
-            'pvn-rdr-nat-filter', 'pvn-rdr-nat-groupby',
-            'pvn-transcoder-nat-filter', 'pvn-transcoder-nat-groupby'
+            'pvn-rdr-filter', 'pvn-rdr-groupby',
+            'pvn-transcoder-filter', 'pvn-transcoder-groupby'
             ]
     trace_list = ['tls_handshake_trace.pcap', 'p2p-small-re.pcap',
             'rdr-browsing-re.pcap',
