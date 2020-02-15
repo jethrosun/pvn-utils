@@ -95,7 +95,7 @@ def main(nf_list, trace_list):
             'pvn-transcoder-filter', 'pvn-transcoder-groupby'
             ]
 
-    p2p_nf_list = ['pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby',]
+    p2p_nf_list = ['pvn-p2p-filter', 'pvn-p2p-groupby',]
 
     for trace in trace_list:
         print("Running experiments that replay the {} trace".format(trace))

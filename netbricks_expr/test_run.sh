@@ -27,7 +27,7 @@ echo $LOG_DIR
 echo $LOG
 mkdir -p $LOG_DIR
 
-if [ $2 == "pvn-p2p-nat-filter" ]; then
+if [ $2 == "pvn-p2p-filter" ]; then
 	# while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
 	# P1=$!
 	# $BIO_TOP_MONITOR -C | tee $BIO_LOG &
@@ -38,7 +38,7 @@ if [ $2 == "pvn-p2p-nat-filter" ]; then
 	# P4=$!
 	# wait $P1 $P2 $P3 $P4
 
-elif [ $2 == "pvn-p2p-nat-groupby" ]; then
+elif [ $2 == "pvn-p2p-groupby" ]; then
 	# clean the states of transmission
 	# sudo rm -rf downloads/*
 	# sudo rm -rf config/*
@@ -58,7 +58,7 @@ elif [ $2 == "pvn-p2p-nat-groupby" ]; then
 	# P4=$!
 	# wait $P1 $P2 $P3 $P4
 
-elif [ $2 == "pvn-transcoder-nat-groupby" ]; then
+elif [ $2 == "pvn-transcoder-groupby" ]; then
 
 	# clean the states of transcoder
 	sudo rm -rf /home/jethros/dev/pvn-utils/data/output_videos/*
@@ -75,7 +75,7 @@ elif [ $2 == "pvn-transcoder-nat-groupby" ]; then
 	# wait $P1 $P2 $P3 $P4
 
 
-elif [ $2 == "pvn-transcoder-nat-filter" ]; then
+elif [ $2 == "pvn-transcoder-filter" ]; then
 
 	# clean the states of transcoder
 	sudo rm -rf /home/jethros/dev/pvn-utils/data/output_videos/*
