@@ -102,7 +102,7 @@ def main(nf_list, trace_list):
         for nf in nf_list:
             pktgen_sess = pktgen_sess_setup(trace, nf)
             run_pktgen(pktgen_sess, trace)
-            for epoch in range(2):
+            for epoch in range(3):
                 netbricks_sess = netbricks_sess_setup(trace, nf, epoch)
 
                 if nf in p2p_nf_list:
@@ -116,9 +116,9 @@ def main(nf_list, trace_list):
                     p2p_cleanup(netbricks_sess)
                     time.sleep(150)
                 elif nf in pvn_nf_list:
-                    time.sleep(150)
+                    time.sleep(320)
                 else:
-                    time.sleep(30)
+                    time.sleep(300)
                 sess_destroy(netbricks_sess)
                 # sess_destroy(netbricks_sess)
 
