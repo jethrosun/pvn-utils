@@ -180,13 +180,13 @@ if __name__=='__main__':
     # Total NF and traces
     nf_list = [
             'pvn-p2p-filter', 'pvn-p2p-groupby',
-            'zcsi-maglev', 'zcsi-nat', 'zcsi-lpm', 'zcsi-aclfw',
             'pvn-tlsv-filter', 'pvn-tlsv-groupby',
             'pvn-rdr-filter', 'pvn-rdr-groupby',
             'pvn-transcoder-filter', 'pvn-transcoder-groupby'
+            'zcsi-maglev', 'zcsi-nat', 'zcsi-lpm', 'zcsi-aclfw',
             ]
     trace_list = ['tls_handshake_trace.pcap', 'p2p-small-re.pcap',
-            'rdr-browsing-re.pcap',
+            'rdr-browsing-re.pcap', 'video_trace_2_re.pcap',
             'net-2009-11-23-16:54-re.pcap', 'net-2009-12-07-11:59-re.pcap',
             'net-2009-12-08-11:59-re.pcap',
             'ictf2010-0-re.pcap', 'ictf2010-11-re.pcap', 'ictf2010-1-re.pcap',
