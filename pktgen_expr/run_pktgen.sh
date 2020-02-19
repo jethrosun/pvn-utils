@@ -22,6 +22,8 @@ elif [ $1 == "128B" ]; then
 	sudo -E $PKTGEN_SCRIPT -l 0-4 -n 3 -- -P -N -T -m "[1:3].0, [2:4].1"  -l $LOG_DIR$@.log
 elif [ $1 == "256B" ]; then
 	sudo -E $PKTGEN_SCRIPT -l 0-4 -n 3 -- -P -N -T -m "[1:3].0, [2:4].1"  -l $LOG_DIR$@.log
+elif [ $1 == "1500B" ]; then
+	sudo -E $PKTGEN_SCRIPT -l 0-4 -n 3 -- -P -N -T -m "[1:3].0, [2:4].1"  -l $LOG_DIR$@.log
 else
 	sudo -E $PKTGEN_SCRIPT -l 0-4 -n 3 -- -P -N -T -m "[1:3].0, [2:4].1"  -s 0:$TRACE_DIR -l $LOG_DIR$@.log
 fi

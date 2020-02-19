@@ -43,7 +43,7 @@ def pktgen_sess_setup(trace, nf):
 
 
 def run_pktgen(sess, trace):
-    if trace in ['64B', '128B', '256B']:
+    if trace in ['64B', '128B', '256B', '1500B']:
         size = trace[:-1]
         cmd_str = "sudo ./run_pktgen.sh " + trace
         set_rate_str= "set 0 rate 100"
@@ -102,12 +102,12 @@ def main(nf_list, trace_list):
         for nf in nf_list:
             pktgen_sess = pktgen_sess_setup(trace, nf)
             run_pktgen(pktgen_sess, trace)
-            for epoch in range(3):
+            for epoch in range(5):
                 netbricks_sess = netbricks_sess_setup(trace, nf, epoch)
 
                 if nf in p2p_nf_list:
                     p2p_cleanup(netbricks_sess)
-                    time.sleep(150)
+                    time.sleep(200)
 
                 run_netbricks(netbricks_sess, trace, nf, epoch)
 
@@ -123,7 +123,7 @@ def main(nf_list, trace_list):
                 # sess_destroy(netbricks_sess)
 
                 if nf in p2p_nf_list:
-                    time.sleep(150)
+                    time.sleep(200)
                 elif nf in pvn_nf_list:
                     time.sleep(30)
                 else:
@@ -182,7 +182,7 @@ if __name__=='__main__':
             'pvn-p2p-filter', 'pvn-p2p-groupby',
             'pvn-tlsv-filter', 'pvn-tlsv-groupby',
             'pvn-rdr-filter', 'pvn-rdr-groupby',
-            'pvn-transcoder-filter', 'pvn-transcoder-groupby'
+            'pvn-transcoder-filter', 'pvn-transcoder-groupby',
             'zcsi-maglev', 'zcsi-nat', 'zcsi-lpm', 'zcsi-aclfw',
             ]
     trace_list = ['tls_handshake_trace.pcap', 'p2p-small-re.pcap',
@@ -193,8 +193,9 @@ if __name__=='__main__':
             'ictf2010-12-re.pcap', 'ictf2010-10-re.pcap', 'ictf2010-13-re.pcap',
             '64B', '128B', '256B',
             ]
-
+    additional_trace = ['1500B']
 
     # main(simple_nf_list, simple_trace_list)
     # main(test_nf_list, test_trace_list)
-    main(nf_list, trace_list)
+    # main(nf_list, trace_list)
+    main(nf_list, additional_trace)
