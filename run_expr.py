@@ -86,6 +86,12 @@ def p2p_cleanup(sess):
     sess.send_commands(cmd_str)
 
 
+def xcdr_cleanup(sess):
+    cmd_str = "sudo ./xcdr_cleanup.sh "
+    print("Extra clean up for XCDR with cmd: {}".format(cmd_str))
+    sess.send_commands(cmd_str)
+
+
 def main(nf_list, trace_list):
     """"""
 
@@ -94,8 +100,8 @@ def main(nf_list, trace_list):
             'pvn-p2p-filter', 'pvn-p2p-groupby',
             'pvn-transcoder-filter', 'pvn-transcoder-groupby'
             ]
-
     p2p_nf_list = ['pvn-p2p-filter', 'pvn-p2p-groupby',]
+    xcdr_nf_list = ['pvn-transcoder-filter', 'pvn-transcoder-groupby']
 
     for trace in trace_list:
         print("Running experiments that replay the {} trace".format(trace))
@@ -107,6 +113,9 @@ def main(nf_list, trace_list):
 
                 if nf in p2p_nf_list:
                     p2p_cleanup(netbricks_sess)
+                    time.sleep(200)
+                elif nf in xcdr_nf_list:
+                    xcdr_cleanup(netbricks_sess)
                     time.sleep(200)
 
                 run_netbricks(netbricks_sess, trace, nf, epoch)
@@ -191,11 +200,15 @@ if __name__=='__main__':
             'net-2009-12-08-11:59-re.pcap',
             'ictf2010-0-re.pcap', 'ictf2010-11-re.pcap', 'ictf2010-1-re.pcap',
             'ictf2010-12-re.pcap', 'ictf2010-10-re.pcap', 'ictf2010-13-re.pcap',
-            '64B', '128B', '256B',
+            '64B', '128B', '256B', '1500B'
+            ]
+    additional_nf = [
+            'pvn-transcoder-filter', 'pvn-transcoder-groupby',
             ]
     additional_trace = ['1500B']
 
     # main(simple_nf_list, simple_trace_list)
     # main(test_nf_list, test_trace_list)
     # main(nf_list, trace_list)
-    main(nf_list, additional_trace)
+    # main(nf_list, additional_trace)
+    main(additional_nf, trace_list)
