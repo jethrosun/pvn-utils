@@ -95,20 +95,20 @@ def xcdr_cleanup(sess):
 def main(nf_list, trace_list):
     """"""
 
-    pvn_nf_list = ['pvn-tlsv-filter', 'pvn-tlsv-groupby',
-            'pvn-rdr-filter', 'pvn-rdr-groupby',
-            'pvn-p2p-filter', 'pvn-p2p-groupby',
-            'pvn-transcoder-filter', 'pvn-transcoder-groupby'
+    pvn_nf_list = ['pvn-tlsv-transform', 'pvn-tlsv-groupby',
+            'pvn-rdr-transform', 'pvn-rdr-groupby',
+            'pvn-p2p-transform', 'pvn-p2p-groupby',
+            'pvn-transcoder-transform', 'pvn-transcoder-groupby'
             ]
-    p2p_nf_list = ['pvn-p2p-filter', 'pvn-p2p-groupby',]
-    xcdr_nf_list = ['pvn-transcoder-filter', 'pvn-transcoder-groupby']
+    p2p_nf_list = ['pvn-p2p-transform', 'pvn-p2p-groupby',]
+    xcdr_nf_list = ['pvn-transcoder-transform', 'pvn-transcoder-groupby']
 
     for trace in trace_list:
         print("Running experiments that replay the {} trace".format(trace))
         for nf in nf_list:
             pktgen_sess = pktgen_sess_setup(trace, nf)
             run_pktgen(pktgen_sess, trace)
-            for epoch in range(5):
+            for epoch in range(1):
                 netbricks_sess = netbricks_sess_setup(trace, nf, epoch)
 
                 if nf in p2p_nf_list:
@@ -147,51 +147,13 @@ def main(nf_list, trace_list):
 
 if __name__=='__main__':
     # for simple test
-    simple_nf_list = ['pvn-tlsv', 'pvn-rdr-wd-nat', 'pvn-p2p-nat']
-    simple_trace_list = ['tls_handshake_trace.pcap', 'ictf2010.pcap14', 'net-2009-11-18-10:32.pcap']
-
-    # Fix again
-    now_nf_list = ['pvn-tlsv-re', 'pvn-tlsv',
-            'zcsi-maglev', 'zcsi-nat', 'zcsi-lpm', 'zcsi-aclfw',
-            'pvn-rdr-wd-nat', 'pvn-p2p-nat', 'pvn-p2p-nat-2',
-            ]
-    now_trace_list = [
-            'ictf2010-0.pcap', 'ictf2010-11.pcap', 'ictf2010-1.pcap',
-            'ictf2010-12.pcap', 'ictf2010-10.pcap', 'ictf2010-13.pcap',
-            'net-2009-11-23-16:54-re.pcap', 'net-2009-12-07-11:59-re.pcap',
-            'net-2009-12-08-11:59-re.pcap',
-            ]
-
-    # To fix transcoder
-    fix_trans_nf_list = [
-            'pvn-transcoder-filter', 'pvn-transcoder-groupby'
-            ]
-    fix_trans_trace_list = ['tls_handshake_trace.pcap', 'p2p-small-re.pcap',
-            'rdr-browsing-re.pcap',
-            'net-2009-11-23-16:54-re.pcap', 'net-2009-12-07-11:59-re.pcap',
-            'net-2009-12-08-11:59-re.pcap',
-            'ictf2010-0.pcap', 'ictf2010-11.pcap', 'ictf2010-1.pcap',
-            'ictf2010-12.pcap', 'ictf2010-10.pcap', 'ictf2010-13.pcap',
-            '64B', '128B', '256B',
-            ]
-
-    test_nf_list = [
-            'pvn-tlsv-filter', 'pvn-tlsv-groupby',
-            'pvn-rdr-nat-filter', 'pvn-rdr-nat-groupby',
-            'pvn-p2p-nat-filter', 'pvn-p2p-nat-groupby',
-            'pvn-transcoder-nat-filter', 'pvn-transcoder-nat-groupby'
-            ]
-    test_trace_list = [
-            'ictf2010-0-re.pcap', 'ictf2010-11-re.pcap', 'ictf2010-1-re.pcap',
-            'ictf2010-12-re.pcap', 'ictf2010-10-re.pcap', 'ictf2010-13-re.pcap',
-            ]
 
     # Total NF and traces
     nf_list = [
-            'pvn-p2p-filter', 'pvn-p2p-groupby',
-            'pvn-tlsv-filter', 'pvn-tlsv-groupby',
-            'pvn-rdr-filter', 'pvn-rdr-groupby',
-            'pvn-transcoder-filter', 'pvn-transcoder-groupby',
+            'pvn-p2p-transform', 'pvn-p2p-groupby',
+            'pvn-tlsv-transform', 'pvn-tlsv-groupby',
+            'pvn-rdr-transform', 'pvn-rdr-groupby',
+            'pvn-transcoder-transform', 'pvn-transcoder-groupby',
             'zcsi-maglev', 'zcsi-nat', 'zcsi-lpm', 'zcsi-aclfw',
             ]
     trace_list = ['tls_handshake_trace.pcap', 'p2p-small-re.pcap',
@@ -203,7 +165,11 @@ if __name__=='__main__':
             '64B', '128B', '256B', '1500B'
             ]
     additional_nf = [
-            'pvn-transcoder-filter', 'pvn-transcoder-groupby',
+            'pvn-tlsv-transform', 'pvn-tlsv-groupby',
+            'pvn-p2p-transform', 'pvn-p2p-groupby',
+            'pvn-rdr-transform', 'pvn-rdr-groupby',
+            'pvn-transcoder-transform', 'pvn-transcoder-groupby',
+
             ]
     additional_trace = ['1500B']
 
