@@ -108,7 +108,7 @@ def main(nf_list, trace_list):
         for nf in nf_list:
             pktgen_sess = pktgen_sess_setup(trace, nf)
             run_pktgen(pktgen_sess, trace)
-            for epoch in range(1):
+            for epoch in range(5):
                 netbricks_sess = netbricks_sess_setup(trace, nf, epoch)
 
                 if nf in p2p_nf_list:

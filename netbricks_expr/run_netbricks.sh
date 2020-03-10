@@ -70,7 +70,7 @@ elif [ $2 == "pvn-p2p-groupby" ]; then
 elif [ $2 == "pvn-transcoder-groupby" ]; then
 
 	# clean the states of transcoder
-	sudo rm -rf /home/jethros/dev/pvn-utils/data/output_videos/*
+	sudo rm -rf /home/jethros/dev/pvn-utils/data/output_videos/
 	sudo mkdir -p /home/jethros/dev/pvn-utils/data/output_videos/
 
 	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
@@ -87,7 +87,7 @@ elif [ $2 == "pvn-transcoder-groupby" ]; then
 elif [ $2 == "pvn-transcoder-filter" ]; then
 
 	# clean the states of transcoder
-	sudo rm -rf /home/jethros/dev/pvn-utils/data/output_videos/*
+	sudo rm -rf /home/jethros/dev/pvn-utils/data/output_videos/
 	sudo mkdir -p /home/jethros/dev/pvn-utils/data/output_videos/
 
 	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
