@@ -45,7 +45,7 @@ pub fn append_job(pivot: u128, job_queue: &Arc<RwLock<Vec<(String, String, Strin
 }
 
 /// Run the transcoding job using threading in crossbeam.
-pub fn run_transcode_crossbeam(pivot: usize, queue: &Arc<RwLock<Vec<(String, String, String)>>>) {
+pub fn run_transcode_crossbeam(infile_str: &str, outfile_str: &str, width_height_str: &str) {
     thread::scope(|s| {
         let core_ids = core_affinity::get_core_ids().unwrap();
         let handles = core_ids
@@ -55,10 +55,6 @@ pub fn run_transcode_crossbeam(pivot: usize, queue: &Arc<RwLock<Vec<(String, Str
                     core_affinity::set_for_current(id);
 
                     if id.id == 5 as usize {
-                        // println!("Working in core {:?} as 0-5", id);
-                        let r = queue.read().unwrap();
-                        let (infile_str, outfile_str, width_height_str) = &r[pivot];
-
                         // println!("transcode job {:?} in the queue {:?}", pivot, r.len());
                         transcode(
                             infile_str.to_string(),
@@ -172,11 +168,13 @@ fn main() {
         let outfile_str = job_args[1].as_str().unwrap();
         let width_height_str = job_args[2].as_str().unwrap();
 
-        transcode(
-            infile_str.to_string(),
-            outfile_str.to_string(),
-            width_height_str.to_string(),
-        );
+        run_transcode_crossbeam(infile_str, outfile_str, width_height_str);
+        // run_transcode_crossbeam(
+        //     infile_str.to_string(),
+        //     outfile_str.to_string(),
+        //     width_height_str.to_string(),
+        // );
+
         println!("video transcoded");
         Ok(())
     });
