@@ -159,7 +159,7 @@ fn main() {
     let default_faktory_conn = "tcp://:some_password@localhost:7419";
     let mut c = ConsumerBuilder::default();
     c.register("app-xcdr_t", |job| -> io::Result<()> {
-        println!("{:?}", job);
+        // println!("{:?}", job);
         // Job { jid: "uHZtO6qTxNurjck4", queue: "default", kind: "app-xcdr_t", args: [String("/home/jethros/dev/pvn-utils/data/tiny.y4m"), String("/home/jethros/dev/pvn-utils/data/output_videos/321_0.y4m"), String("360x24")], created_at: Some(2020-05-06T22:34:34.479399561Z), enqueued_at: Some(2020-05-06T22:34:34.479430746Z), at: None, reserve_for: Some(600), retry: Some(25), priority: None, backtrace: None, failure: None, custom: {} }
         println!("{:?}", job.args());
         let job_args = job.args();
@@ -175,7 +175,7 @@ fn main() {
         //     width_height_str.to_string(),
         // );
 
-        println!("video transcoded");
+        // println!("video transcoded");
         Ok(())
     });
     let mut c = c.connect(Some(default_faktory_conn)).unwrap();
