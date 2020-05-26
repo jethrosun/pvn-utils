@@ -100,7 +100,44 @@ elif [ $2 == "pvn-transcoder-filter" ]; then
 	P4=$!
 	wait $P1 $P2 $P3 $P4
 
+elif  [ $2 == "app-xcdr_t" ]; then
+	echo "{"setup": $5}\n{"port": $6}" > /home/jethros/setup
+
+	./home/jethros/dev/pvn-utils/faktory_srv/run_faktory_docker.sh $6 $7 &
+	P0=$!
+	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
+	P1=$!
+	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	P2=$!
+	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	P3=$!
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
+	P4=$!
+	./home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $6 &
+	P5=$!
+
+	wait $P0 $P1 $P2 $P3 $P4 $P5
+
+elif  [ $2 == "app-xcdr_g" ]; then
+	echo "{"setup": $5}\n{"port": $6}" > /home/jethros/setup
+
+	./home/jethros/dev/pvn-utils/faktory_srv/run_faktory_docker.sh $6 $7 &
+	P0=$!
+	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
+	P1=$!
+	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	P2=$!
+	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	P3=$!
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
+	P4=$!
+	./home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $6 &
+	P5=$!
+
+	wait $P0 $P1 $P2 $P3 $P4 $P5
+
 else
+	echo "{"setup": $5}" > /home/jethros/setup
 	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
 	P1=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &

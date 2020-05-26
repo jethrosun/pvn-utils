@@ -15,6 +15,7 @@ use std::sync::{Arc, RwLock};
 use std::fs::File;
 // use std::thread;
 // use std::time::{Duration, Instant};
+use std::env;
 
 // only append job
 pub fn append_job(pivot: u128, job_queue: &Arc<RwLock<Vec<(String, String, String)>>>) {
@@ -156,7 +157,9 @@ fn transcode(infile: String, outfile: String, width_height: String) {
 }
 
 fn main() {
-    let default_faktory_conn = "tcp://:some_password@localhost:7419";
+    let port: String = env::args().collect();
+
+    let default_faktory_conn = "tcp://:some_password@localhost:".to_string() + &port;
     let mut c = ConsumerBuilder::default();
     c.register("app-xcdr_t", |job| -> io::Result<()> {
         // println!("{:?}", job);
@@ -178,7 +181,7 @@ fn main() {
         // println!("video transcoded");
         Ok(())
     });
-    let mut c = c.connect(Some(default_faktory_conn)).unwrap();
+    let mut c = c.connect(Some(&default_faktory_conn)).unwrap();
     if let Err(e) = c.run(&["default"]) {
         println!("worker failed: {}", e);
     }
