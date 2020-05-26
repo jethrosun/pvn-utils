@@ -133,9 +133,9 @@ def main(expr_list):
         print("Running experiments that for {} application NF".format(expr))
         for nf in pvn_nf[expr]:
             pktgen_sess = pktgen_sess_setup(trace[expr], nf)
-            run_pktgen(pktgen_sess, trace)
+            run_pktgen(pktgen_sess, trace[expr])
             for epoch in range(5):
-                netbricks_sess = netbricks_sess_setup(trace, nf, epoch)
+                netbricks_sess = netbricks_sess_setup(trace[expr], nf, epoch)
 
                 if nf in p2p_nf_list:
                     p2p_cleanup(netbricks_sess)
@@ -144,7 +144,7 @@ def main(expr_list):
                     xcdr_cleanup(netbricks_sess)
                     time.sleep(200)
 
-                run_netbricks(netbricks_sess, trace, nf, epoch)
+                run_netbricks(netbricks_sess, trace[expr], nf, epoch)
 
                 if nf in p2p_nf_list:
                     time.sleep(expr_wait_time)
