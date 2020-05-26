@@ -206,10 +206,9 @@ if __name__ == '__main__':
         'app_p2p',
     ]
 
-    main(trace_list)
+    main(expr_list)
 
     # main(simple_nf_list, simple_trace_list)
     # main(test_nf_list, test_trace_list)
     # main(nf_list, trace_list)
     # main(nf_list, additional_trace)
-    #
