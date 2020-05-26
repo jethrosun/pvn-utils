@@ -20,7 +20,7 @@ NB_CONFIG=$HOME/dev/netbricks/experiments/config_2core.toml
 NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_2core_long.toml
 TMP_NB_CONFIG=$HOME/config.toml
 
-sed "/duration = 290/i log_path = '$LOG'" $NB_CONFIG > $TMP_NB_CONFIG
+sed "/duration = 850/i log_path = '$LOG'" $NB_CONFIG > $TMP_NB_CONFIG
 
 
 echo $LOG_DIR
@@ -137,6 +137,7 @@ elif  [ $2 == "app-xcdr_g" ]; then
 	wait $P0 $P1 $P2 $P3 $P4 $P5 $P6
 
 else
+	echo "{"setup": $5}" > /home/jethros/setup
 	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
 	P1=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
