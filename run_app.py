@@ -73,15 +73,13 @@ def run_pktgen(sess, trace):
 
 
 def run_netbricks(sess, trace, nf, epoch, setup):
-    cmd_str = "sudo ./run_netbricks.sh " + trace + " " + nf + " " + str(epoch)
-    + " " + setup
+    cmd_str = "sudo ./run_netbricks_app.sh " + trace + " " + nf + " " + str(epoch) + " " + setup
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
 
 def run_netbricks_xcdr(sess, trace, nf, epoch, setup, port1, port2):
-    cmd_str = "sudo ./run_netbricks.sh " + trace + " " + nf + " " + str(epoch)
-    + " " + setup + " " + port1 + " " + port2
+    cmd_str = "sudo ./run_netbricks_app.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + port1 + " " + port2
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
@@ -157,10 +155,10 @@ def main(expr_list):
                         time.sleep(200)
 
                     if nf in xcdr_nf_list:
-                        run_netbricks(netbricks_sess, trace[expr], nf, epoch, setup)
-                    else:
                         port2 = epoch * 6 + int(setup) *2
-                        run_netbricks(netbricks_sess, trace[expr], nf, epoch, setup, port2-1, port2)
+                        run_netbricks_xcdr(netbricks_sess, trace[expr], nf, epoch, setup, port2-1, port2)
+                    else:
+                        run_netbricks(netbricks_sess, trace[expr], nf, epoch, setup)
 
                     if nf in p2p_nf_list:
                         time.sleep(expr_wait_time)
