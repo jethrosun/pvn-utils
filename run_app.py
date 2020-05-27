@@ -106,17 +106,20 @@ def main(expr_list):
 
     pvn_nf = {
         'app_rdr': [
-            'app-rdr_g',
-            'app-rdr_t',
+            'pvn-rdr-transform-app',
+            'pvn-rdr-groupby-app',
         ],
-        'app_xcdr': ['app-xcdr_g', 'app-xcdr_t'],
+        'app_xcdr': [
+            'pvn-transcoder-transform-app',
+            'pvn-transcoder-groupby-app',
+        ],
         'app_tlsv': [
-            'app-tlsv_g',
-            'app-tlsv_t',
+            'pvn-tlsv-transform-app',
+            'pvn-tlsv-groupby-app',
         ],
         'app_p2p': [
-            'app-p2p_g',
-            'app-p2p_t',
+            'pvn-p2p-transform-app',
+            'pvn-p2p-groupby-app',
         ]
     }
     trace = {
@@ -126,11 +129,22 @@ def main(expr_list):
         'app_p2p': 'p2p-small-re.pcap'
     }
     pvn_nf_list = [
-        'app-rdr_g', 'app-rdr_t', 'app-tlsv_g', 'app-tlsv_t', 'app-p2p_g',
-        'app-p2p_t', 'app-xcdr_g', 'app-xcdr_t'
+        'pvn-tlsv-transform-app',
+        'pvn-tlsv-groupby-app',
+        'pvn-p2p-transform-app',
+        'pvn-p2p-groupby-app',
+        'pvn-rdr-transform-app',
+        'pvn-rdr-groupby-app',
+        'pvn-transcoder-transform-app',
+        'pvn-transcoder-groupby-app',
     ]
-    p2p_nf_list = ['app-p2p_g', 'app-p2p_t']
-    xcdr_nf_list = ['app-xcdr_g', 'app-xcdr_t']
+
+    p2p_nf_list = ['pvn-p2p-transform-app',
+                   'pvn-p2p-groupby-app',
+                   ]
+    xcdr_nf_list = ['pvn-transcoder-transform-app',
+                    'pvn-transcoder-groupby-app',
+                    ]
 
     set_list = ['1', '2', '3', '4', '5', '6', ]
     # expr is 10 min/600 sec
@@ -190,8 +204,14 @@ if __name__ == '__main__':
 
     # Total NF and traces
     nf_list = [
-        'app-rdr_g', 'app-rdr_t', 'app-tlsv_g', 'app-tlsv_t', 'app-p2p_g',
-        'app-p2p_t', 'app-xcdr_g', 'app-xcdr_t'
+        'pvn-tlsv-transform-app',
+        'pvn-tlsv-groupby-app',
+        'pvn-p2p-transform-app',
+        'pvn-p2p-groupby-app',
+        'pvn-rdr-transform-app',
+        'pvn-rdr-groupby-app',
+        'pvn-transcoder-transform-app',
+        'pvn-transcoder-groupby-app',
     ]
     trace_list = [
         'tls_handshake_trace.pcap', 'p2p-small-re.pcap',
