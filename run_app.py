@@ -156,7 +156,7 @@ def main(expr_list):
             pktgen_sess = pktgen_sess_setup(trace[expr], nf)
             run_pktgen(pktgen_sess, trace[expr])
             # epoch from 0 to 9
-            for epoch in range(1):
+            for epoch in range(2):
                 # setup 1 to 6
                 for setup in set_list:
                     netbricks_sess = netbricks_sess_setup(trace[expr], nf, epoch)

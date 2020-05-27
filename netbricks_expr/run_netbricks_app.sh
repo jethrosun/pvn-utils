@@ -7,10 +7,10 @@ set -euo pipefail
 
 LOG_DIR=$HOME/netbricks_logs/$2/$1
 
-LOG=$LOG_DIR/$3.log
-MLOG=$LOG_DIR/$3_measurement.log
-TCP_LOG=$LOG_DIR/$3_tcptop.log
-BIO_LOG=$LOG_DIR/$3_biotop.log
+LOG=$LOG_DIR/$3_$4.log
+MLOG=$LOG_DIR/$3_$4_measurement.log
+TCP_LOG=$LOG_DIR/$3_$4_tcptop.log
+BIO_LOG=$LOG_DIR/$3_$4_biotop.log
 
 NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 BIO_TOP_MONITOR=/usr/share/bcc/tools/biotop
