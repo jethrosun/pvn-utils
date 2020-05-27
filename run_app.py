@@ -146,7 +146,9 @@ def main(expr_list):
                     'pvn-transcoder-groupby-app',
                     ]
 
-    set_list = ['1', '2', '3', '4', '5', '6', ]
+    # set_list = ['1', '2', '3', '4', '5', '6', ]
+    set_list = ['1', '2', '3', ]
+   
     # expr is 10 min/600 sec
     expr_wait_time = 800
 
