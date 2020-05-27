@@ -148,7 +148,7 @@ def main(expr_list):
 
     # set_list = ['1', '2', '3', '4', '5', '6', ]
     set_list = ['1', '2', '3', ]
-   
+
     # expr is 10 min/600 sec
     expr_wait_time = 800
 
@@ -172,7 +172,7 @@ def main(expr_list):
 
                     if nf in xcdr_nf_list:
                         port2 = epoch * 6 + int(setup) *2
-                        run_netbricks_xcdr(netbricks_sess, trace[expr], nf, epoch, setup, port2-1, port2)
+                        run_netbricks_xcdr(netbricks_sess, trace[expr], nf, epoch, setup, str(port2-1), str(port2))
                     else:
                         run_netbricks(netbricks_sess, trace[expr], nf, epoch, setup)
 
