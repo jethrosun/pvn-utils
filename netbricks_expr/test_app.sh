@@ -146,9 +146,9 @@ else
 	# P2=$!
 	# $TCP_TOP_MONITOR -C | tee $TCP_LOG &
 	# P3=$!
-	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
-	P4=$!
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG
+	# P4=$!
 	# wait $P1 $P2 $P3 $P4
-	wait  $P4
+	# wait  $P4
 
 fi
