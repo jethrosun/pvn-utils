@@ -146,7 +146,7 @@ def main(expr_list):
     # set_list = ['1', '2', '3', '4', '5', '6', ]
     set_list = ['1', '2', '3', ]
 
-    rdr_sending_rate=10
+    rdr_sending_rate=1
     sending_rate = {
         'app_xcdr': {'1': 1, '2':2, '3': 10, '4': 20, '5': 50, '6': 100},
         'app_p2p': {'1': 3, '2': 13, '3':25, '4':50, '5':75, '6':100},
