@@ -148,10 +148,10 @@ def main(expr_list):
 
     rdr_sending_rate=10
     sending_rate = {
-        'xcdr': {'1': 1, '2':2, '3': 10, '4': 20, '5': 50, '6': 100},
-        'p2p': {'1': 3, '2': 13, '3':25, '4':50, '5':75, '6':100},
-        'rdr': {'1': rdr_sending_rate, '2':rdr_sending_rate, '3':rdr_sending_rate, '4':rdr_sending_rate, '5':rdr_sending_rate, '6':rdr_sending_rate},
-        'tlsv': {'1': 1, '2': 5, '3': 10, '4': 20, '5': 50, '6': 100},
+        'app_xcdr': {'1': 1, '2':2, '3': 10, '4': 20, '5': 50, '6': 100},
+        'app_p2p': {'1': 3, '2': 13, '3':25, '4':50, '5':75, '6':100},
+        'app_rdr': {'1': rdr_sending_rate, '2':rdr_sending_rate, '3':rdr_sending_rate, '4':rdr_sending_rate, '5':rdr_sending_rate, '6':rdr_sending_rate},
+        'app_tlsv': {'1': 1, '2': 5, '3': 10, '4': 20, '5': 50, '6': 100},
     }
 
     # expr is 10 min/600 sec
