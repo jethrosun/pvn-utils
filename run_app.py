@@ -26,7 +26,7 @@ def netbricks_sess_setup(trace, nf, epoch):
         sys.exit(1)
 
 
-def pktgen_sess_setup(trace, nf):
+def pktgen_sess_setup(trace, nf, setup):
     print("Entering pktgen_sess setup")
     try:
         pktgen_sess = Screen("pktgen", True)
@@ -45,7 +45,8 @@ def pktgen_sess_setup(trace, nf):
         sys.exit(1)
 
 
-def run_pktgen(sess, trace):
+def run_pktgen(sess, trace, setup):
+    # never here
     if trace in ['64B', '128B', '256B', '1500B']:
         size = trace[:-1]
         cmd_str = "sudo ./run_pktgen.sh " + trace
@@ -61,7 +62,7 @@ def run_pktgen(sess, trace):
         print("Pktgen\nRUN pktgen")
     else:
         cmd_str = "sudo ./run_pktgen.sh " + trace
-        set_port_str = "set 0 rate 100"
+        set_port_str = "set 0 rate " + str(setup)
         start_str = "start 0"
 
         time.sleep(30)
@@ -139,15 +140,19 @@ def main(expr_list):
         'pvn-transcoder-groupby-app',
     ]
 
-    p2p_nf_list = ['pvn-p2p-transform-app',
-                   'pvn-p2p-groupby-app',
-                   ]
-    xcdr_nf_list = ['pvn-transcoder-transform-app',
-                    'pvn-transcoder-groupby-app',
-                    ]
+    p2p_nf_list = ['pvn-p2p-transform-app', 'pvn-p2p-groupby-app',]
+    xcdr_nf_list = ['pvn-transcoder-transform-app', 'pvn-transcoder-groupby-app']
 
     # set_list = ['1', '2', '3', '4', '5', '6', ]
     set_list = ['1', '2', '3', ]
+
+    rdr_sending_rate=10
+    sending_rate = {
+        'xcdr': {'1': 1, '2':2, '3': 10, '4': 20, '5': 50, '6': 100},
+        'p2p': {'1': 3, '2': 13, '3':25, '4':50, '5':75, '6':100},
+        'rdr': {'1': rdr_sending_rate, '2':rdr_sending_rate, '3':rdr_sending_rate, '4':rdr_sending_rate, '5':rdr_sending_rate, '6':rdr_sending_rate},
+        'tlsv': {'1': 1, '2': 5, '3': 10, '4': 20, '5': 50, '6': 100},
+    }
 
     # expr is 10 min/600 sec
     expr_wait_time = 800
@@ -155,12 +160,12 @@ def main(expr_list):
     for expr in expr_list:
         print("Running experiments that for {} application NF".format(expr))
         for nf in pvn_nf[expr]:
-            pktgen_sess = pktgen_sess_setup(trace[expr], nf)
-            run_pktgen(pktgen_sess, trace[expr])
             # epoch from 0 to 9
-            for epoch in range(2):
+            for setup in set_list:
+                pktgen_sess = pktgen_sess_setup(trace[expr], nf, sending_rate[expr])
+                run_pktgen(pktgen_sess, trace[expr], sending_rate[expr])
+                for epoch in range(2):
                 # setup 1 to 6
-                for setup in set_list:
                     netbricks_sess = netbricks_sess_setup(trace[expr], nf, epoch)
 
                     if nf in p2p_nf_list:
@@ -194,8 +199,8 @@ def main(expr_list):
                     else:
                         time.sleep(10)
 
-            sess_destroy(pktgen_sess)
-            time.sleep(30)
+                sess_destroy(pktgen_sess)
+                time.sleep(30)
         # try:
         # except Exception as err:
         #     print("exiting nf failed with {}".format(err))
