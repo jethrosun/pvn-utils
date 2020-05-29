@@ -101,7 +101,11 @@ elif [ $2 == "pvn-transcoder-filter" ]; then
 	wait $P1 $P2 $P3 $P4
 
 elif  [ $2 == 'pvn-transcoder-transform-app' ]; then
-	echo '{"setup": '$4'}'\n'{"port": '$5'}' > /home/jethros/setup
+	JSON_STRING=$( jq -n \
+		--arg setup "$4" \
+		--arg port "$5" \
+		'{setup: $setup, port: $port}' )
+	echo $JSON_STRING > /home/jethros/setup
 
 	./home/jethros/dev/pvn-utils/faktory_srv/run_faktory_docker.sh $5 $6 &
 	P0=$!
@@ -120,7 +124,12 @@ elif  [ $2 == 'pvn-transcoder-transform-app' ]; then
 	wait $P0  $P4 $P5
 
 elif  [ $2 == 'pvn-transcoder-transform-app' ]; then
-	echo '{"setup": '$4'}'\n'{"port": '$5'}' > /home/jethros/setup
+	JSON_STRING=$( jq -n \
+		--arg setup "$4" \
+		--arg port "$5" \
+		'{setup: $setup, port: $port}' )
+
+	echo $JSON_STRING > /home/jethros/setup
 
 	./home/jethros/dev/pvn-utils/faktory_srv/run_faktory_docker.sh $5 $6 &
 	P0=$!
@@ -136,7 +145,7 @@ elif  [ $2 == 'pvn-transcoder-transform-app' ]; then
 	P5=$!
 
 	# wait $P0 $P1 $P2 $P3 $P4 $P5 $P6
-	wait $P0  $P4 $P5 $P6
+	wait $P0  $P4 $P5
 
 else
 	echo '{"setup": '$4'}' > /home/jethros/setup
