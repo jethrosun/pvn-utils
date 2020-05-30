@@ -109,17 +109,17 @@ elif  [ $2 == 'pvn-transcoder-transform-app' ]; then
 	echo $JSON_STRING > /home/jethros/setup
 
 	./home/jethros/dev/pvn-utils/faktory_srv/run_faktory_docker.sh $5 $6 &
-	P6=$!
-	./home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 &
-	P5=$!
-	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
 	P1=$!
-	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	./home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 &
 	P2=$!
-	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
 	P3=$!
-	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
+	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P4=$!
+	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	P5=$!
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
+	P6=$!
 	wait $P1 $P2 $P3 $P4 $P5 $P6
 
 elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
@@ -130,17 +130,17 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	echo $JSON_STRING > /home/jethros/setup
 
 	./home/jethros/dev/pvn-utils/faktory_srv/run_faktory_docker.sh $5 $6 &
-	P6=$!
-	./home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 &
-	P5=$!
-	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
 	P1=$!
-	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	./home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 &
 	P2=$!
-	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
 	P3=$!
-	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
+	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P4=$!
+	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	P5=$!
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
+	P6=$!
 	wait $P1 $P2 $P3 $P4 $P5 $P6
 
 else
