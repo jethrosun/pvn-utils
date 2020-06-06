@@ -9,3 +9,5 @@ set -euo pipefail
 #
 sudo rm -rf ~/dev/pvn-utils/output/output_videos/*
 sudo mkdir -p ~/dev/pvn-utils/output/output_videos/
+
+docker kill $(docker ps -q)

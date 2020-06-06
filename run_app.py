@@ -168,6 +168,7 @@ def main(expr_list):
                 # setup 1 to 6
                     netbricks_sess = netbricks_sess_setup(trace[expr], nf, epoch)
 
+                    # run clean up for p2p nf before experiment
                     if nf in p2p_nf_list:
                         p2p_cleanup(netbricks_sess)
                         time.sleep(200)
@@ -181,14 +182,19 @@ def main(expr_list):
                     else:
                         run_netbricks(netbricks_sess, trace[expr], nf, epoch, setup)
 
+                    # run clean up for p2p nf before experiment
                     if nf in p2p_nf_list:
                         time.sleep(expr_wait_time)
                         p2p_cleanup(netbricks_sess)
                         time.sleep(150)
+                    elif nf in xcdr_nf_list:
+                        xcdr_cleanup(netbricks_sess)
+                        time.sleep(200)
                     elif nf in pvn_nf_list:
                         time.sleep(expr_wait_time)
                     else:
                         time.sleep(expr_wait_time)
+
                     sess_destroy(netbricks_sess)
                     # sess_destroy(netbricks_sess)
 
