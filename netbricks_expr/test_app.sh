@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 # Usage:
 #   $ ./run_netbricks.sh trace nf epoch
 
@@ -27,45 +29,45 @@ echo $LOG_DIR
 echo $LOG
 mkdir -p $LOG_DIR
 
-if [ $2 == "pvn-p2p-filter" ]; then
+if [ $2 == "pvn-p2p-transform-app" ]; then
 	# clean the states of transmission
-	# sudo rm -rf downloads/*
-	# sudo rm -rf config/*
-	# mkdir -p config downloads
-        #
-	# sudo rm -rf /data/downloads/*
-	# sudo rm -rf /data/config/*
-	# sudo mkdir -p /data/config /data/downloads
+	sudo rm -rf downloads/*
+	sudo rm -rf config/*
+	mkdir -p config downloads
 
-	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
-	P1=$!
-	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
-	P2=$!
-	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
-	P3=$!
-	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
-	P4=$!
-	wait $P1 $P2 $P3 $P4
+	sudo rm -rf /data/downloads/*
+	sudo rm -rf /data/config/*
+	sudo mkdir -p /data/config /data/downloads
 
-elif [ $2 == "pvn-p2p-groupby" ]; then
+	# while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
+	# P1=$!
+	# $BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	# P2=$!
+	# $TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	# P3=$!
+	$NETBRICKS_BUILD run-full $2 -f $TMP_NB_CONFIG | tee $LOG
+	# P4=$!
+	# wait $P1 $P2 $P3 $P4
+
+elif [ $2 == "pvn-p2p-groupby-app" ]; then
 	# clean the states of transmission
-	# sudo rm -rf downloads/*
-	# sudo rm -rf config/*
-	# mkdir -p config downloads
-        #
-	# sudo rm -rf /data/downloads/*
-	# sudo rm -rf /data/config/*
-	# sudo mkdir -p /data/config /data/downloads
+	sudo rm -rf downloads/*
+	sudo rm -rf config/*
+	mkdir -p config downloads
 
-	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
-	P1=$!
-	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
-	P2=$!
-	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
-	P3=$!
-	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
-	P4=$!
-	wait $P1 $P2 $P3 $P4
+	sudo rm -rf /data/downloads/*
+	sudo rm -rf /data/config/*
+	sudo mkdir -p /data/config /data/downloads
+
+	# while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
+	# P1=$!
+	# $BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	# P2=$!
+	# $TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	# P3=$!
+	$NETBRICKS_BUILD run-full $2 -f $TMP_NB_CONFIG | tee $LOG
+	# P4=$!
+	# wait $P1 $P2 $P3 $P4
 
 elif [ $2 == "pvn-transcoder-groupby" ]; then
 
@@ -83,23 +85,6 @@ elif [ $2 == "pvn-transcoder-groupby" ]; then
 	P4=$!
 	wait $P1 $P2 $P3 $P4
 
-
-elif [ $2 == "pvn-transcoder-filter" ]; then
-
-	# clean the states of transcoder
-	sudo rm -rf /home/jethros/dev/pvn-utils/data/output_videos/
-	sudo mkdir -p /home/jethros/dev/pvn-utils/data/output_videos/
-
-	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
-	P1=$!
-	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
-	P2=$!
-	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
-	P3=$!
-	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
-	P4=$!
-	wait $P1 $P2 $P3 $P4
-
 elif  [ $2 == 'pvn-transcoder-transform-app' ]; then
 	JSON_STRING=$( jq -n \
 		--arg setup "$4" \
@@ -107,23 +92,24 @@ elif  [ $2 == 'pvn-transcoder-transform-app' ]; then
 		'{setup: $setup, port: $port}' )
 	echo $JSON_STRING > /home/jethros/setup
 
-	./home/jethros/dev/pvn-utils/faktory_srv/run_faktory_docker.sh $5 $6 &
+	/home/jethros/dev/pvn-utils/faktory_srv/run_faktory_docker.sh $5 $6 &
 	P0=$!
+	sleep 5
 	# while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
 	# P1=$!
 	# $BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	# P2=$!
 	# $TCP_TOP_MONITOR -C | tee $TCP_LOG &
 	# P3=$!
-	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
+	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 &
 	P4=$!
-	./home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 &
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG
 	P5=$!
 
 	# wait $P0 $P1 $P2 $P3 $P4 $P5
 	wait $P0  $P4 $P5
 
-elif  [ $2 == 'pvn-transcoder-transform-app' ]; then
+elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	JSON_STRING=$( jq -n \
 		--arg setup "$4" \
 		--arg port "$5" \
@@ -131,17 +117,18 @@ elif  [ $2 == 'pvn-transcoder-transform-app' ]; then
 
 	echo $JSON_STRING > /home/jethros/setup
 
-	./home/jethros/dev/pvn-utils/faktory_srv/run_faktory_docker.sh $5 $6 &
+	/home/jethros/dev/pvn-utils/faktory_srv/run_faktory_docker.sh $5 $6 &
 	P0=$!
+	sleep 5
 	# while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
 	# P1=$!
 	# $BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	# P2=$!
 	# $TCP_TOP_MONITOR -C | tee $TCP_LOG &
 	# P3=$!
-	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
+	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 &
 	P4=$!
-	./home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 &
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG
 	P5=$!
 
 	# wait $P0 $P1 $P2 $P3 $P4 $P5 $P6
@@ -161,3 +148,5 @@ else
 	# wait  $P4
 
 fi
+
+# rdr done

@@ -9,6 +9,7 @@ use faktory::ConsumerBuilder;
 use resize::Pixel::Gray8;
 use resize::Type::Triangle;
 use std::io;
+use std::process;
 use std::sync::{Arc, RwLock};
 // use serde_json::{from_reader, Value};
 // use std::collections::{HashMap, HashSet};
@@ -157,9 +158,21 @@ fn transcode(infile: String, outfile: String, width_height: String) {
 }
 
 fn main() {
-    let port: String = env::args().collect();
+    // get the list of ports from cmd args and cast into a Vec
+    let ports: Vec<String> = env::args().collect();
 
-    let default_faktory_conn = "tcp://:some_password@localhost:".to_string() + &port;
+    if ports.len() == 3 {
+        println!("Parse 2 args");
+    } else if ports.len() < 3 {
+        println!("Less than 2 args are provided. Run it with *PORT1 PORT2*");
+        process::exit(0x0100);
+    } else {
+        println!("More than 2 args are provided. Run it with *PORT1 PORT2*");
+        println!("{:?}", ports);
+        process::exit(0x0100);
+    }
+
+    let default_faktory_conn = "tcp://:some_password@localhost:".to_string() + &ports[1];
     let mut c = ConsumerBuilder::default();
     c.register("app-xcdr_t", |job| -> io::Result<()> {
         // println!("{:?}", job);
