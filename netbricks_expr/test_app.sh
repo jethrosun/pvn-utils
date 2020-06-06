@@ -39,6 +39,8 @@ if [ $2 == "pvn-p2p-transform-app" ]; then
 	sudo rm -rf /data/config/*
 	sudo mkdir -p /data/config /data/downloads
 
+	echo '{"setup": '$4'}' > /home/jethros/setup
+
 	# while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
 	# P1=$!
 	# $BIO_TOP_MONITOR -C | tee $BIO_LOG &
@@ -58,6 +60,8 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 	sudo rm -rf /data/downloads/*
 	sudo rm -rf /data/config/*
 	sudo mkdir -p /data/config /data/downloads
+
+	echo '{"setup": '$4'}' > /home/jethros/setup
 
 	# while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
 	# P1=$!
@@ -136,6 +140,7 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 
 else
 	echo '{"setup": '$4'}' > /home/jethros/setup
+
 	# while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
 	# P1=$!
 	# $BIO_TOP_MONITOR -C | tee $BIO_LOG &
