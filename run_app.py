@@ -157,25 +157,28 @@ def main(expr_list):
     # expr is 10 min/600 sec
     expr_wait_time = 800
 
+    # app rdr, app p2p ...
     for expr in expr_list:
         print("Running experiments that for {} application NF".format(expr))
+        # app_rdr_g, app_rdr_t; app_p2p_g, app_p2p_t
         for nf in pvn_nf[expr]:
-            # epoch from 0 to 9
+            # config the pktgen sending rate
             for setup in set_list:
                 pktgen_sess = pktgen_sess_setup(trace[expr], nf, sending_rate[expr][setup])
                 run_pktgen(pktgen_sess, trace[expr], sending_rate[expr][setup])
+                # epoch from 0 to 9
                 for epoch in range(2):
-                # setup 1 to 6
                     netbricks_sess = netbricks_sess_setup(trace[expr], nf, epoch)
 
                     # run clean up for p2p nf before experiment
                     if nf in p2p_nf_list:
                         p2p_cleanup(netbricks_sess)
-                        time.sleep(200)
+                        time.sleep(60)
                     elif nf in xcdr_nf_list:
                         xcdr_cleanup(netbricks_sess)
-                        time.sleep(200)
+                        time.sleep(60)
 
+                    # Actual RUN
                     if nf in xcdr_nf_list:
                         port2 = epoch * 6 + int(setup) *2
                         run_netbricks_xcdr(netbricks_sess, trace[expr], nf, epoch, setup, str(port2-1), str(port2))
@@ -186,27 +189,29 @@ def main(expr_list):
                     if nf in p2p_nf_list:
                         time.sleep(expr_wait_time)
                         p2p_cleanup(netbricks_sess)
-                        time.sleep(150)
+                        time.sleep(60)
                     elif nf in xcdr_nf_list:
+                        time.sleep(expr_wait_time)
                         xcdr_cleanup(netbricks_sess)
-                        time.sleep(200)
+                        time.sleep(60)
                     elif nf in pvn_nf_list:
                         time.sleep(expr_wait_time)
                     else:
-                        time.sleep(expr_wait_time)
+                        print("Unknown nf?")
+                        sys.exit(1)
 
                     sess_destroy(netbricks_sess)
                     # sess_destroy(netbricks_sess)
 
                     if nf in p2p_nf_list:
-                        time.sleep(200)
+                        time.sleep(60)
                     elif nf in pvn_nf_list:
                         time.sleep(30)
                     else:
                         time.sleep(10)
 
                 sess_destroy(pktgen_sess)
-                time.sleep(30)
+                time.sleep(60)
         # try:
         # except Exception as err:
         #     print("exiting nf failed with {}".format(err))
