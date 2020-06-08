@@ -200,3 +200,10 @@ fn main() {
     }
     println!("Hello, world!");
 }
+
+// Parse 2 args
+// [String("/home/jethros/dev/pvn-utils/data/tiny.y4m"), String("/home/jethros/dev/pvn-utils/data/output_videos/4856_0.y4m"), String("360x24")]
+// transcoding
+// thread '<unnamed>' panicked at 'called `Result::unwrap()` on an `Err` value: Os { code: 13, kind: PermissionDenied, message: "Permission denied" }', src/main.rs:122:50
+// note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+// thread '<unnamed>' panicked at 'called `Result::unwrap()` on an `Err` value: Any', src/main.rs:72:13

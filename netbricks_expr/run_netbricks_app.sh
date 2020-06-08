@@ -22,8 +22,6 @@ TMP_NB_CONFIG=$HOME/config.toml
 
 sed "/duration = 800/i log_path = '$LOG'" $NB_CONFIG_LONG > $TMP_NB_CONFIG
 
-
-
 echo $LOG_DIR
 echo $LOG
 mkdir -p $LOG_DIR
@@ -44,7 +42,7 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 	P3=$!
 	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
 	P4=$!
-	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 &
+	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 &
 	P5=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P6=$!
@@ -66,7 +64,7 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	P3=$!
 	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
 	P4=$!
-	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 &
+	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 &
 	P5=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P6=$!
