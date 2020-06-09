@@ -178,3 +178,4 @@ if __name__=='__main__':
     # main(nf_list, trace_list)
     # main(nf_list, additional_trace)
     main(additional_nf, trace_list)
+    print("All experiments are done")

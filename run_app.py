@@ -260,7 +260,9 @@ if __name__ == '__main__':
 
     main(expr_list)
 
+
     # main(simple_nf_list, simple_trace_list)
     # main(test_nf_list, test_trace_list)
     # main(nf_list, trace_list)
     # main(nf_list, additional_trace)
+    print("All experiments are done")
