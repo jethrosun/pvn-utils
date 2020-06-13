@@ -36,7 +36,7 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 	/home/jethros/dev/pvn-utils/faktory_srv/run_faktory_docker.sh $5 $6 &
 	P1=$!
 	sleep 5
-	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
+	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
 	P2=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P3=$!
@@ -58,7 +58,7 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	/home/jethros/dev/pvn-utils/faktory_srv/run_faktory_docker.sh $5 $6 &
 	P1=$!
 	sleep 5
-	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
+	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
 	P2=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P3=$!
@@ -82,7 +82,7 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 
 	echo '{"setup": '$4'}' > /home/jethros/setup
 
-	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
+	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
 	P1=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P2=$!
@@ -104,7 +104,7 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 
 	echo '{"setup": '$4'}' > /home/jethros/setup
 
-	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
+	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
 	P1=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P2=$!
@@ -116,7 +116,7 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 
 else
 	echo '{"setup": '$4'}' > /home/jethros/setup
-	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done | tee $MLOG &
+	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
 	P1=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P2=$!
