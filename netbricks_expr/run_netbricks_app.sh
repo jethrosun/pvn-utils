@@ -114,6 +114,30 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 	P4=$!
 	wait $P1 $P2 $P3 $P4
 
+elif [ $2 == "pvn-rdr-transform-app" ]; then
+	echo '{"setup": '$4'}' > /home/jethros/setup
+	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=100{print $0}'; done | tee $MLOG &
+	P1=$!
+	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	P2=$!
+	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	P3=$!
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
+	P4=$!
+	wait $P1 $P2 $P3 $P4
+
+elif [ $2 == "pvn-rdr-groupby-app" ]; then
+	echo '{"setup": '$4'}' > /home/jethros/setup
+	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=100{print $0}'; done | tee $MLOG &
+	P1=$!
+	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	P2=$!
+	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	P3=$!
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
+	P4=$!
+	wait $P1 $P2 $P3 $P4
+
 else
 	echo '{"setup": '$4'}' > /home/jethros/setup
 	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
