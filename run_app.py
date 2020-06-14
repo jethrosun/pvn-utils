@@ -167,7 +167,7 @@ def main(expr_list):
                 pktgen_sess = pktgen_sess_setup(trace[expr], nf, sending_rate[expr][setup])
                 run_pktgen(pktgen_sess, trace[expr], sending_rate[expr][setup])
                 # epoch from 0 to 9
-                for epoch in range(3):
+                for epoch in range(5):
                     netbricks_sess = netbricks_sess_setup(trace[expr], nf, epoch)
 
                     # run clean up for p2p nf before experiment
