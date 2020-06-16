@@ -20,7 +20,7 @@ NB_CONFIG=$HOME/dev/netbricks/experiments/config_2core.toml
 NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_2core_long.toml
 TMP_NB_CONFIG=$HOME/config.toml
 
-sed "/duration = 800/i log_path = '$LOG'" $NB_CONFIG_LONG > $TMP_NB_CONFIG
+sed "/duration = 700/i log_path = '$LOG'" $NB_CONFIG_LONG > $TMP_NB_CONFIG
 
 echo $LOG_DIR
 echo $LOG
@@ -36,7 +36,7 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 	/home/jethros/dev/pvn-utils/faktory_srv/run_faktory_docker.sh $5 $6 &
 	P1=$!
 	sleep 5
-	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=20{print $0}'; done | tee $MLOG &
+	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
 	# top -b -d 1 -n 700 | tee $MLOG &
 	P2=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
@@ -59,7 +59,7 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	/home/jethros/dev/pvn-utils/faktory_srv/run_faktory_docker.sh $5 $6 &
 	P1=$!
 	sleep 5
-	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=20{print $0}'; done | tee $MLOG &
+	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
 	# top -b -d 1 -n 700 | tee $MLOG &
 	P2=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
@@ -84,7 +84,7 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 
 	echo '{"setup": '$4'}' > /home/jethros/setup
 
-	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=20{print $0}'; done | tee $MLOG &
+	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
 	# top -b -d 1 -n 700 | tee $MLOG &
 	P1=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
@@ -107,7 +107,7 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 
 	echo '{"setup": '$4'}' > /home/jethros/setup
 
-	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=20{print $0}'; done | tee $MLOG &
+	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
 	# top -b -d 1 -n 700 | tee $MLOG &
 	P1=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
@@ -120,7 +120,7 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 
 elif [ $2 == "pvn-rdr-transform-app" ]; then
 	echo '{"setup": '$4'}' > /home/jethros/setup
-	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=20{print $0}'; done | tee $MLOG &
+	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
 	# top -b -d 1 -n 700 | tee $MLOG &
 	P1=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
