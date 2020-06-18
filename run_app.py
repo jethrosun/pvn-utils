@@ -143,14 +143,14 @@ def main(expr_list):
     p2p_nf_list = ['pvn-p2p-transform-app', 'pvn-p2p-groupby-app',]
     xcdr_nf_list = ['pvn-transcoder-transform-app', 'pvn-transcoder-groupby-app']
 
-    # set_list = ['1', '2', '3', '4', '5', '6', ]
-    set_list = ['1', '2', '3', ]
+    # set_list = ['1', '2', '3', ]
+    set_list = ['1', '2', '3', '4', '5', '6', ]
 
     rdr_sending_rate=1
     sending_rate = {
         'app_xcdr': {'1': 1, '2':2, '3': 10, '4': 20, '5': 50, '6': 100},
         'app_p2p': {'1': 3, '2': 13, '3':25, '4':50, '5':75, '6':100},
-        'app_rdr': {'1': rdr_sending_rate, '2':rdr_sending_rate, '3':rdr_sending_rate, '4':rdr_sending_rate, '5':rdr_sending_rate, '6':rdr_sending_rate},
+        'app_rdr': {'1': rdr_sending_rate, '2': 2, '3': 5, '4': 10, '5': 15, '6':20},
         'app_tlsv': {'1': 1, '2': 5, '3': 10, '4': 20, '5': 50, '6': 100},
     }
 
