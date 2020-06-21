@@ -87,7 +87,7 @@ pub fn run_transcode_native(pivot: u128) {
                 // println!("id {:?}", id);
 
                 if id.id == 5 as usize {
-                    println!("Working in core {:?} as from 0-5", id);
+                    // println!("Working in core {:?} as from 0-5", id);
                     let infile = "/home/jethros/dev/pvn-utils/data/tiny.y4m";
                     // let outfile = "out.y4m";
                     let width_height = "360x24";
@@ -117,7 +117,7 @@ pub fn run_transcode_native(pivot: u128) {
 ///
 /// We set up all the parameters for the transcoding job to happen.
 fn transcode(infile: String, outfile: String, width_height: String) {
-    println!("transcoding");
+    // println!("transcoding");
     let mut infh: Box<dyn io::Read> = Box::new(File::open(&infile).unwrap());
     let mut outfh: Box<dyn io::Write> = Box::new(File::create(&outfile).unwrap());
     let dst_dims: Vec<_> = width_height
@@ -168,7 +168,7 @@ fn main() {
         process::exit(0x0100);
     } else {
         println!("More than 2 args are provided. Run it with *PORT1 PORT2*");
-        println!("{:?}", ports);
+        // println!("{:?}", ports);
         process::exit(0x0100);
     }
 
@@ -177,7 +177,7 @@ fn main() {
     c.register("app-xcdr_t", |job| -> io::Result<()> {
         // println!("{:?}", job);
         // Job { jid: "uHZtO6qTxNurjck4", queue: "default", kind: "app-xcdr_t", args: [String("/home/jethros/dev/pvn-utils/data/tiny.y4m"), String("/home/jethros/dev/pvn-utils/data/output_videos/321_0.y4m"), String("360x24")], created_at: Some(2020-05-06T22:34:34.479399561Z), enqueued_at: Some(2020-05-06T22:34:34.479430746Z), at: None, reserve_for: Some(600), retry: Some(25), priority: None, backtrace: None, failure: None, custom: {} }
-        println!("{:?}", job.args());
+        // println!("{:?}", job.args());
         let job_args = job.args();
 
         let infile_str = job_args[0].as_str().unwrap();
@@ -198,7 +198,7 @@ fn main() {
     if let Err(e) = c.run(&["default"]) {
         println!("worker failed: {}", e);
     }
-    println!("Hello, world!");
+    // println!("Hello, world!");
 }
 
 // Parse 2 args

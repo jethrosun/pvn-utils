@@ -62,6 +62,7 @@ def run_pktgen(sess, trace, setup):
         print("Pktgen\nRUN pktgen")
     else:
         cmd_str = "sudo ./run_pktgen.sh " + trace
+        print(cmd_str)
         set_port_str = "set 0 rate " + str(setup)
         start_str = "start 0"
 
