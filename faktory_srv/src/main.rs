@@ -159,41 +159,44 @@ fn transcode(infile: String, outfile: String, width_height: String) {
 
 fn main() {
     // get the list of ports from cmd args and cast into a Vec
-    let ports: Vec<String> = env::args().collect();
+    let params: Vec<String> = env::args().collect();
 
-    if ports.len() == 3 {
+    if params.len() == 4 {
         println!("Parse 2 args");
-    } else if ports.len() < 3 {
-        println!("Less than 2 args are provided. Run it with *PORT1 PORT2*");
+    } else if params.len() < 4 {
+        println!("Less than 3 args are provided. Run it with *PORT1 PORT2 expr_num*");
         process::exit(0x0100);
     } else {
-        println!("More than 2 args are provided. Run it with *PORT1 PORT2*");
+        println!("More than 2 args are provided. Run it with *PORT1 PORT2 expr_num*");
         // println!("{:?}", ports);
         process::exit(0x0100);
     }
 
-    let default_faktory_conn = "tcp://:some_password@localhost:".to_string() + &ports[1];
+    let default_faktory_conn = "tcp://:some_password@localhost:".to_string() + &params[1];
     let mut c = ConsumerBuilder::default();
-    c.register("app-xcdr_t", |job| -> io::Result<()> {
-        // println!("{:?}", job);
-        // Job { jid: "uHZtO6qTxNurjck4", queue: "default", kind: "app-xcdr_t", args: [String("/home/jethros/dev/pvn-utils/data/tiny.y4m"), String("/home/jethros/dev/pvn-utils/data/output_videos/321_0.y4m"), String("360x24")], created_at: Some(2020-05-06T22:34:34.479399561Z), enqueued_at: Some(2020-05-06T22:34:34.479430746Z), at: None, reserve_for: Some(600), retry: Some(25), priority: None, backtrace: None, failure: None, custom: {} }
-        // println!("{:?}", job.args());
-        let job_args = job.args();
+    c.register(
+        "app-xcdr_t-".to_owned() + &params[3],
+        |job| -> io::Result<()> {
+            // println!("{:?}", job);
+            // Job { jid: "uHZtO6qTxNurjck4", queue: "default", kind: "app-xcdr_t", args: [String("/home/jethros/dev/pvn-utils/data/tiny.y4m"), String("/home/jethros/dev/pvn-utils/data/output_videos/321_0.y4m"), String("360x24")], created_at: Some(2020-05-06T22:34:34.479399561Z), enqueued_at: Some(2020-05-06T22:34:34.479430746Z), at: None, reserve_for: Some(600), retry: Some(25), priority: None, backtrace: None, failure: None, custom: {} }
+            // println!("{:?}", job.args());
+            let job_args = job.args();
 
-        let infile_str = job_args[0].as_str().unwrap();
-        let outfile_str = job_args[1].as_str().unwrap();
-        let width_height_str = job_args[2].as_str().unwrap();
+            let infile_str = job_args[0].as_str().unwrap();
+            let outfile_str = job_args[1].as_str().unwrap();
+            let width_height_str = job_args[2].as_str().unwrap();
 
-        run_transcode_crossbeam(infile_str, outfile_str, width_height_str);
-        // run_transcode_crossbeam(
-        //     infile_str.to_string(),
-        //     outfile_str.to_string(),
-        //     width_height_str.to_string(),
-        // );
+            run_transcode_crossbeam(infile_str, outfile_str, width_height_str);
+            // run_transcode_crossbeam(
+            //     infile_str.to_string(),
+            //     outfile_str.to_string(),
+            //     width_height_str.to_string(),
+            // );
 
-        // println!("video transcoded");
-        Ok(())
-    });
+            // println!("video transcoded");
+            Ok(())
+        },
+    );
     let mut c = c.connect(Some(&default_faktory_conn)).unwrap();
     if let Err(e) = c.run(&["default"]) {
         println!("worker failed: {}", e);

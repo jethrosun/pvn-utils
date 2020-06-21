@@ -30,7 +30,8 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 	JSON_STRING=$( jq -n \
 		--arg setup "$4" \
 		--arg port "$5" \
-		'{setup: $setup, port: $port}' )
+		--arg expr_num "$7" \
+		'{setup: $setup, port: $port, expr_num: $expr_num}' )
 	echo $JSON_STRING > /home/jethros/setup
 
 	/home/jethros/dev/pvn-utils/faktory_srv/run_faktory_docker.sh $5 $6 &
@@ -43,7 +44,7 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 	P3=$!
 	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
 	P4=$!
-	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 &
+	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 $7 &
 	P5=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P6=$!
@@ -53,7 +54,8 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	JSON_STRING=$( jq -n \
 		--arg setup "$4" \
 		--arg port "$5" \
-		'{setup: $setup, port: $port}' )
+		--arg expr_num "$7" \
+		'{setup: $setup, port: $port, expr_num: $expr_num}' )
 	echo $JSON_STRING > /home/jethros/setup
 
 	/home/jethros/dev/pvn-utils/faktory_srv/run_faktory_docker.sh $5 $6 &
@@ -66,7 +68,7 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	P3=$!
 	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
 	P4=$!
-	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 &
+	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 $7 &
 	P5=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P6=$!

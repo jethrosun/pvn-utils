@@ -9,4 +9,4 @@ mkdir /home/jethros/dev/pvn-utils/data/output_videos/
 # /home/jethros/.cargo/bin/cargo build --release
 
 # sudo -u jethros /home/jethros/dev/pvn-utils/faktory_srv/target/release/faktory_srv $1 $2
-sudo /home/jethros/dev/pvn-utils/faktory_srv/target/release/faktory_srv $1 $2
+sudo /home/jethros/dev/pvn-utils/faktory_srv/target/release/faktory_srv $1 $2 $3

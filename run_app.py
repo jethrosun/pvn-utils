@@ -80,8 +80,8 @@ def run_netbricks(sess, trace, nf, epoch, setup):
     sess.send_commands(cmd_str)
 
 
-def run_netbricks_xcdr(sess, trace, nf, epoch, setup, port1, port2):
-    cmd_str = "sudo ./run_netbricks_app.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + port1 + " " + port2
+def run_netbricks_xcdr(sess, trace, nf, epoch, setup, port1, port2, expr_num):
+    cmd_str = "sudo ./run_netbricks_app.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + port1 + " " + port2 + " " + expr_num
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
@@ -158,6 +158,8 @@ def main(expr_list):
     # expr is 10 min/600 sec
     expr_wait_time = 800
 
+    xcdr_port_base = 7418
+
     # app rdr, app p2p ...
     for expr in expr_list:
         print("Running experiments that for {} application NF".format(expr))
@@ -181,8 +183,9 @@ def main(expr_list):
 
                     # Actual RUN
                     if nf in xcdr_nf_list:
-                        port2 = epoch * 6 + int(setup) *2 + 7418
-                        run_netbricks_xcdr(netbricks_sess, trace[expr], nf, epoch, setup, str(port2-1), str(port2))
+                        expr_num = epoch * 6 + int(setup) *2
+                        port2 = xcdr_port_base + expr_num
+                        run_netbricks_xcdr(netbricks_sess, trace[expr], nf, epoch, setup, str(port2-1), str(port2), str(expr_num))
                     else:
                         run_netbricks(netbricks_sess, trace[expr], nf, epoch, setup)
 
