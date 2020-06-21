@@ -180,7 +180,7 @@ def main(expr_list):
 
                     # Actual RUN
                     if nf in xcdr_nf_list:
-                        port2 = epoch * 6 + int(setup) *2
+                        port2 = epoch * 6 + int(setup) *2 + 7418
                         run_netbricks_xcdr(netbricks_sess, trace[expr], nf, epoch, setup, str(port2-1), str(port2))
                     else:
                         run_netbricks(netbricks_sess, trace[expr], nf, epoch, setup)
@@ -257,8 +257,11 @@ if __name__ == '__main__':
         'app_tlsv',
         'app_p2p',
     ]
+    only_xcdr_list = ['app_xcdr',]
 
-    main(expr_list)
+
+    # main(expr_list)
+    main(only_xcdr_list)
 
 
     # main(simple_nf_list, simple_trace_list)
