@@ -10,4 +10,12 @@ set -euo pipefail
 sudo rm -rf ~/dev/pvn-utils/output/output_videos/*
 sudo mkdir -p ~/dev/pvn-utils/output/output_videos/
 
-docker kill $(docker ps -q)
+
+if [ $(docker ps | grep keyword | wc -l) -gt 0 ]
+then
+    echo "Running!"
+	docker kill $(docker ps -q)
+else
+    echo "Not running!"
+    exit 1
+fi
