@@ -46,6 +46,7 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 	P4=$!
 	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 $7 &
 	P5=$!
+	sleep 10
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P6=$!
 	wait $P1 $P2 $P3 $P4 $P5 $P6
@@ -70,6 +71,7 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	P4=$!
 	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 $7 &
 	P5=$!
+	sleep 10
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P6=$!
 	wait $P1 $P2 $P3 $P4 $P5 $P6
