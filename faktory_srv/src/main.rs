@@ -162,7 +162,8 @@ fn main() {
     let params: Vec<String> = env::args().collect();
 
     if params.len() == 4 {
-        println!("Parse 2 args");
+        println!("Parse 3 args");
+        println!("{:?} {:?} {:?} ", params[1], params[2], params[3]);
     } else if params.len() < 4 {
         println!("Less than 3 args are provided. Run it with *PORT1 PORT2 expr_num*");
         process::exit(0x0100);
@@ -197,6 +198,7 @@ fn main() {
             Ok(())
         },
     );
+    // println!("{:?}", default_faktory_conn);
     let mut c = c.connect(Some(&default_faktory_conn)).unwrap();
     if let Err(e) = c.run(&["default"]) {
         println!("worker failed: {}", e);
