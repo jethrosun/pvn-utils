@@ -36,7 +36,7 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 
 	/home/jethros/dev/pvn-utils/faktory_srv/run_faktory_docker.sh $5 $6 &
 	P1=$!
-	sleep 5
+	sleep 15
 	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
 	# top -b -d 1 -n 700 | tee $MLOG &
 	P2=$!
@@ -46,7 +46,7 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 	P4=$!
 	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 $7 &
 	P5=$!
-	sleep 10
+	sleep 20
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P6=$!
 	wait $P1 $P2 $P3 $P4 $P5 $P6
@@ -61,7 +61,7 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 
 	/home/jethros/dev/pvn-utils/faktory_srv/run_faktory_docker.sh $5 $6 &
 	P1=$!
-	sleep 5
+	sleep 15
 	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
 	# top -b -d 1 -n 700 | tee $MLOG &
 	P2=$!
@@ -71,7 +71,7 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	P4=$!
 	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 $7 &
 	P5=$!
-	sleep 10
+	sleep 20
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P6=$!
 	wait $P1 $P2 $P3 $P4 $P5 $P6
