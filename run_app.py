@@ -209,6 +209,8 @@ def main(expr_list):
 
                     if nf in p2p_nf_list:
                         time.sleep(60)
+                    elif nf in xcdr_nf_list:
+                        time.sleep(60)
                     elif nf in pvn_nf_list:
                         time.sleep(30)
                     else:
