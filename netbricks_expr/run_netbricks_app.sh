@@ -34,8 +34,9 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 		'{setup: $setup, port: $port, expr_num: $expr_num}' )
 	echo $JSON_STRING > /home/jethros/setup
 
-	/home/jethros/dev/pvn-utils/faktory_srv/run_faktory_docker.sh $5 $6 &
+	docker run --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest /faktory -b :7419 -w :7420 &
 	P1=$!
+	docker ps
 	sleep 15
 	# while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
 	# top -b -d 1 -n 700 | tee $MLOG &
@@ -60,8 +61,9 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 		'{setup: $setup, port: $port, expr_num: $expr_num}' )
 	echo $JSON_STRING > /home/jethros/setup
 
-	/home/jethros/dev/pvn-utils/faktory_srv/run_faktory_docker.sh $5 $6 &
+	docker run --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest /faktory -b :7419 -w :7420 &
 	P1=$!
+	docker ps
 	sleep 15
 	# while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
 	# top -b -d 1 -n 700 | tee $MLOG &

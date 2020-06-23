@@ -178,7 +178,7 @@ def main(expr_list):
                         p2p_cleanup(netbricks_sess)
                         time.sleep(60)
                     elif nf in xcdr_nf_list:
-                        xcdr_cleanup(netbricks_sess)
+                        # xcdr_cleanup(netbricks_sess)
                         time.sleep(60)
 
                     # Actual RUN
@@ -196,7 +196,7 @@ def main(expr_list):
                         time.sleep(60)
                     elif nf in xcdr_nf_list:
                         time.sleep(expr_wait_time)
-                        xcdr_cleanup(netbricks_sess)
+                        # xcdr_cleanup(netbricks_sess)
                         time.sleep(60)
                     elif nf in pvn_nf_list:
                         time.sleep(expr_wait_time)

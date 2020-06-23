@@ -3,7 +3,8 @@ extern crate faktory;
 extern crate resize;
 extern crate y4m;
 
-use core_affinity::{self, CoreId};
+// use core_affinity::{self, CoreId};
+use core_affinity::{self};
 use crossbeam::thread;
 use faktory::ConsumerBuilder;
 use resize::Pixel::Gray8;
@@ -173,7 +174,9 @@ fn main() {
         process::exit(0x0100);
     }
 
-    let default_faktory_conn = "tcp://:some_password@localhost:".to_string() + &params[1];
+    // let default_faktory_conn = "tcp://:some_password@localhost:".to_string() + &params[1];
+    let default_faktory_conn = "tcp://localhost:7419";
+
     let mut c = ConsumerBuilder::default();
     c.register(
         "app-xcdr_t-".to_owned() + &params[3],
@@ -198,8 +201,10 @@ fn main() {
             Ok(())
         },
     );
-    // println!("{:?}", default_faktory_conn);
+
+    println!("{:?}", default_faktory_conn);
     let mut c = c.connect(Some(&default_faktory_conn)).unwrap();
+
     if let Err(e) = c.run(&["default"]) {
         println!("worker failed: {}", e);
     }
