@@ -34,12 +34,13 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 		'{setup: $setup, port: $port, expr_num: $expr_num}' )
 	echo $JSON_STRING > /home/jethros/setup
 
-	docker run -d --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest /faktory -b :7419 -w :7420
+	docker run -d --name faktory_src --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest /faktory -b :7419 -w :7420
 	# P1=$!
 	docker ps
 	sleep 15
-	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
 	# top -b -d 1 -n 700 | tee $MLOG &
+
+	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
 	P2=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P3=$!
@@ -60,12 +61,13 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 		'{setup: $setup, port: $port, expr_num: $expr_num}' )
 	echo $JSON_STRING > /home/jethros/setup
 
-	docker run -d --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest /faktory -b :7419 -w :7420
+	docker run -d --name faktory_srv --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest /faktory -b :7419 -w :7420
 	# P1=$!
 	docker ps
 	sleep 15
-	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
 	# top -b -d 1 -n 700 | tee $MLOG &
+
+	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
 	P2=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P3=$!
