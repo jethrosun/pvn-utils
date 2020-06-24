@@ -34,24 +34,23 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 		'{setup: $setup, port: $port, expr_num: $expr_num}' )
 	echo $JSON_STRING > /home/jethros/setup
 
-	docker run --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest /faktory -b :7419 -w :7420 &
-	P1=$!
+	docker run -d --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest /faktory -b :7419 -w :7420
+	# P1=$!
 	docker ps
 	sleep 15
-	# while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
+	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
 	# top -b -d 1 -n 700 | tee $MLOG &
-	# P2=$!
-	# $BIO_TOP_MONITOR -C | tee $BIO_LOG &
-	# P3=$!
-	# $TCP_TOP_MONITOR -C | tee $TCP_LOG &
-	# P4=$!
+	P2=$!
+	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	P3=$!
+	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	P4=$!
 	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 $7 &
 	P5=$!
 	sleep 20
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P6=$!
-	wait $P1  $P5 $P6
-	# wait $P1 $P2 $P3 $P4 $P5 $P6
+	wait $P2 $P3 $P4 $P5 $P6
 
 elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	JSON_STRING=$( jq -n \
@@ -61,24 +60,23 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 		'{setup: $setup, port: $port, expr_num: $expr_num}' )
 	echo $JSON_STRING > /home/jethros/setup
 
-	docker run --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest /faktory -b :7419 -w :7420 &
-	P1=$!
+	docker run -d --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest /faktory -b :7419 -w :7420
+	# P1=$!
 	docker ps
 	sleep 15
-	# while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
+	while sleep 1; do ps aux --sort=-%cpu | awk 'NR<=50{print $0}'; done | tee $MLOG &
 	# top -b -d 1 -n 700 | tee $MLOG &
-	# P2=$!
-	# $BIO_TOP_MONITOR -C | tee $BIO_LOG &
-	# P3=$!
-	# $TCP_TOP_MONITOR -C | tee $TCP_LOG &
-	# P4=$!
+	P2=$!
+	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	P3=$!
+	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	P4=$!
 	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 $7 &
 	P5=$!
 	sleep 20
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P6=$!
-	# wait $P1 $P2 $P3 $P4 $P5 $P6
-	wait $P1  $P5 $P6
+	wait  $P2 $P3 $P4 $P5 $P6
 
 elif [ $2 == "pvn-p2p-transform-app" ]; then
 	# clean the states of transmission

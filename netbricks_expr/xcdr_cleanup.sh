@@ -11,11 +11,15 @@ sudo rm -rf ~/dev/pvn-utils/output/output_videos/*
 sudo mkdir -p ~/dev/pvn-utils/output/output_videos/
 
 
-if [ $(docker ps | grep keyword | wc -l) -gt 0 ]
-then
-    echo "Running!"
-	docker kill $(docker ps -q)
+CONTAINER_NAME='laughing_heisenberg'
+
+CID=$(docker ps -q -f status=running -f name=^/${CONTAINER_NAME}$)
+
+if [ ! "${CID}" ]; then
+	echo "Container doesn't exist"
 else
-    echo "Not running!"
-    exit 1
+	echo "Running!"
+	docker kill $(docker ps -q)
 fi
+
+unset CID
