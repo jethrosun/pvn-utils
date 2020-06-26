@@ -4,7 +4,7 @@ cores = [2, 3]
 strict = false
 pool_size = 3072
 cache_size = 32
-duration = 700
+duration = 600
 [[ports]]
   # name = ["0000:01:00.0", "0000:01:00.1"]
   name = "0000:01:00.0"

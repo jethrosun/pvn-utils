@@ -22,13 +22,13 @@ NB_CONFIG=$HOME/dev/netbricks/experiments/config_2core.toml
 NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_2core_long.toml
 TMP_NB_CONFIG=$HOME/config.toml
 
-sed "/duration = 600/i log_path = '$LOG'" $NB_CONFIG_LONG > $TMP_NB_CONFIG
+sed "/duration = 290/i log_path = '$LOG'" $NB_CONFIG_LONG > $TMP_NB_CONFIG
 
 echo $LOG_DIR
 echo $LOG
 mkdir -p $LOG_DIR
 
-INST_LEVEL=off
+INST_LEVEL=on
 
 if [ $2 == 'pvn-transcoder-transform-app' ]; then
 	JSON_STRING=$( jq -n \
