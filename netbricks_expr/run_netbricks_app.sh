@@ -11,10 +11,12 @@ LOG=$LOG_DIR/$3_$4.log
 MLOG=$LOG_DIR/$3_$4_measurement.log
 TCP_LOG=$LOG_DIR/$3_$4_tcptop.log
 BIO_LOG=$LOG_DIR/$3_$4_biotop.log
+IPTRAF_LOG=$LOG_DIR/$3_$4_iptraf.log
 
 NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
-BIO_TOP_MONITOR=/usr/share/bcc/tools/biotop
 TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
+BIO_TOP_MONITOR=/usr/share/bcc/tools/biotop
+IPTRAF_MONITOR=/usr/sbin/iptraf-ng
 
 NB_CONFIG=$HOME/dev/netbricks/experiments/config_2core.toml
 NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_2core_long.toml
@@ -44,11 +46,10 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 	P2=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P3=$!
-	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	$IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
 	P4=$!
 	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 $7 &
 	P5=$!
-	sleep 20
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P6=$!
 	wait $P2 $P3 $P4 $P5 $P6
@@ -71,11 +72,10 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	P2=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P3=$!
-	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	$IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
 	P4=$!
 	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 $7 &
 	P5=$!
-	sleep 20
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P6=$!
 	wait  $P2 $P3 $P4 $P5 $P6
@@ -97,7 +97,7 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 	P1=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P2=$!
-	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	$IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
 	P3=$!
 	$NETBRICKS_BUILD run-full $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P4=$!
@@ -120,7 +120,7 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 	P1=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P2=$!
-	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	$IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
 	P3=$!
 	$NETBRICKS_BUILD run-full $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P4=$!
@@ -133,7 +133,7 @@ elif [ $2 == "pvn-rdr-transform-app" ]; then
 	P1=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P2=$!
-	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	$IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
 	P3=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P4=$!
@@ -146,7 +146,7 @@ elif [ $2 == "pvn-rdr-groupby-app" ]; then
 	P1=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P2=$!
-	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	$IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
 	P3=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P4=$!
@@ -159,7 +159,7 @@ else
 	P1=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P2=$!
-	$TCP_TOP_MONITOR -C | tee $TCP_LOG &
+	$IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
 	P3=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P4=$!
