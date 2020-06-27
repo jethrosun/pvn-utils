@@ -164,7 +164,7 @@ def main(expr_list):
     }
 
     # expr is 10 min/600 sec
-    expr_wait_time = 800
+    expr_wait_time = 630
 
     xcdr_port_base = 7418
 
@@ -331,9 +331,9 @@ if __name__ == '__main__':
     only_p2p_list = ['app_p2p-ext',]
 
 
+    main(only_xcdr_list)
     # main(expr_list)
-    # main(only_xcdr_list)
-    main(only_p2p_list)
+    # main(only_p2p_list)
 
 
     # main(simple_nf_list, simple_trace_list)

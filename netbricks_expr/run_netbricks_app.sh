@@ -22,7 +22,7 @@ NB_CONFIG=$HOME/dev/netbricks/experiments/config_2core.toml
 NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_2core_long.toml
 TMP_NB_CONFIG=$HOME/config.toml
 
-sed "/duration = 600/i log_path = '$LOG'" $NB_CONFIG_LONG > $TMP_NB_CONFIG
+sed "/duration = 610/i log_path = '$LOG'" $NB_CONFIG_LONG > $TMP_NB_CONFIG
 
 echo $LOG_DIR
 echo $LOG
@@ -39,7 +39,7 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 		'{setup: $setup, port: $port, expr_num: $expr_num, inst: $inst}' )
 	echo $JSON_STRING > /home/jethros/setup
 
-	docker run -d --name faktory_src --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest /faktory -b :7419 -w :7420
+	docker run -d --cpuset 4 --name faktory_src --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest /faktory -b :7419 -w :7420
 	# P1=$!
 	docker ps
 	sleep 15
@@ -49,7 +49,7 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 	P2=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P3=$!
-	$IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
+	sudo $IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
 	P4=$!
 	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 $7 &
 	P5=$!
@@ -66,7 +66,7 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 		'{setup: $setup, port: $port, expr_num: $expr_num, inst: $inst}' )
 	echo $JSON_STRING > /home/jethros/setup
 
-	docker run -d --name faktory_srv --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest /faktory -b :7419 -w :7420
+	docker run -d --cpuset 4 --name faktory_srv --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest /faktory -b :7419 -w :7420
 	# P1=$!
 	docker ps
 	sleep 15
@@ -76,7 +76,7 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	P2=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P3=$!
-	$IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
+	sudo $IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
 	P4=$!
 	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 $7 &
 	P5=$!
@@ -105,7 +105,7 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 	P1=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P2=$!
-	$IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
+	sudo $IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
 	P3=$!
 	$NETBRICKS_BUILD run-full $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P4=$!
@@ -132,7 +132,7 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 	P1=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P2=$!
-	$IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
+	sudo $IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
 	P3=$!
 	$NETBRICKS_BUILD run-full $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P4=$!
@@ -150,7 +150,7 @@ elif [ $2 == "pvn-rdr-transform-app" ]; then
 	P1=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P2=$!
-	$IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
+	sudo $IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
 	P3=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P4=$!
@@ -168,7 +168,7 @@ elif [ $2 == "pvn-rdr-groupby-app" ]; then
 	P1=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P2=$!
-	$IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
+	sudo $IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
 	P3=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P4=$!
@@ -186,7 +186,7 @@ else
 	P1=$!
 	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
 	P2=$!
-	$IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
+	sudo $IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
 	P3=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P4=$!
