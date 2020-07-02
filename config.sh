@@ -6,7 +6,7 @@ if [ $HOSTNAME == "tuco" ]; then
 	printf "Getting netbricks "
 	mkdir -p ~/dev
 	rm -rf ~/dev/netbricks
-	git clone https://github.com/jethrosun/NetBricks -b expr ~/dev/netbricks
+	git clone git@github.com:jethrosun/NetBricks.git -b expr ~/dev/netbricks
 	cd ~/dev/netbricks
 	./build.sh
 	printf "netbricks building done"
@@ -30,7 +30,7 @@ elif [ $HOSTNAME == "saul" ]; then
 
 	mkdir -p ~/dev
 	rm -rf ~/dev/netbricks
-	git clone https://github.com/jethrosun/NetBricks -b expr ~/dev/netbricks
+	git clone git@github.com:jethrosun/NetBricks.git -b expr ~/dev/netbricks
 	cd ~/dev/netbricks
 	./build.sh
 	printf "netbricks building done"

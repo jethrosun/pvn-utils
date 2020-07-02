@@ -52,15 +52,15 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 
 	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 $7 &
 	P5=$!
-	while sleep 1; do pgrep -P $P5 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done | tee $AMLOG &
+	while sleep 1; do pgrep -P $P5 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done > $AMLOG &
 	P6=$!
-	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done | tee $MLOG &
+	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done > $MLOG &
 	P2=$!
-	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
-	sudo $IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
+	sudo $IPTRAF_MONITOR -B -L $IPTRAF_LOG -d eno1 &
 	P4=$!
 	wait $P1 $P2 $P3 $P4 $P5 $6
 
@@ -78,18 +78,17 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	docker ps
 	sleep 15
 	# top -b -d 1 -n 700 | tee $MLOG &
-
 	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 $7 &
 	P5=$!
-	while sleep 1; do pgrep -P $P5 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done | tee $MLOG &
+	while sleep 1; do pgrep -P $P5 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done > $MLOG &
 	P6=$!
-	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done | tee $MLOG &
+	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done > $MLOG &
 	P2=$!
-	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
-	sudo $IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
+	sudo $IPTRAF_MONITOR -B -L $IPTRAF_LOG -d eno1 &
 	P4=$!
 	wait $P1 $P2 $P3 $P4 $P5 $P6
 
@@ -109,14 +108,14 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 		'{setup: $setup, inst: $inst}' )
 	echo $JSON_STRING > /home/jethros/setup
 
-	$NETBRICKS_BUILD run-full $2 -f $TMP_NB_CONFIG | tee $LOG &
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done | tee $MLOG &
+	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done > $MLOG &
 	P2=$!
 	# top -b -d 1 -n 700 | tee $MLOG &
-	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
-	sudo $IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
+	sudo $IPTRAF_MONITOR -B -L $IPTRAF_LOG -d eno1 &
 	P4=$!
 	wait $P1 $P2 $P3 $P4
 
@@ -136,14 +135,14 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 		'{setup: $setup, inst: $inst}' )
 	echo $JSON_STRING > /home/jethros/setup
 
-	$NETBRICKS_BUILD run-full $2 -f $TMP_NB_CONFIG | tee $LOG &
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done | tee $MLOG &
+	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done > $MLOG &
 	P2=$!
 	# top -b -d 1 -n 700 | tee $MLOG &
-	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
-	sudo $IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
+	sudo $IPTRAF_MONITOR -B -L $IPTRAF_LOG -d eno1 &
 	P4=$!
 	wait $P1 $P2 $P3 $P4
 
@@ -154,14 +153,14 @@ elif [ $2 == "pvn-rdr-transform-app" ]; then
 		'{setup: $setup, inst: $inst}' )
 	echo $JSON_STRING > /home/jethros/setup
 
-	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done | tee $MLOG &
+	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done > $MLOG &
 	P2=$!
 	# top -b -d 1 -n 700 | tee $MLOG &
-	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
-	sudo $IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
+	sudo $IPTRAF_MONITOR -B -L $IPTRAF_LOG -d eno1 &
 	P4=$!
 	wait $P1 $P2 $P3 $P4
 
@@ -172,14 +171,14 @@ elif [ $2 == "pvn-rdr-groupby-app" ]; then
 		'{setup: $setup, inst: $inst}' )
 	echo $JSON_STRING > /home/jethros/setup
 
-	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done | tee $MLOG &
+	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done > $MLOG &
 	P2=$!
 	# top -b -d 1 -n 700 | tee $MLOG &
-	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
-	sudo $IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
+	sudo $IPTRAF_MONITOR -B -L $IPTRAF_LOG -d eno1 &
 	P4=$!
 	wait $P1 $P2 $P3 $P4
 
@@ -192,12 +191,15 @@ else
 
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P1=$!
-	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done | tee $MLOG &
+	echo $P1
+	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done > $MLOG &
 	P2=$!
+	echo $P2
+	pgrep -P $P1
 	# top -b -d 1 -n 700 | tee $MLOG &
-	$BIO_TOP_MONITOR -C | tee $BIO_LOG &
+	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
-	sudo $IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
+	sudo $IPTRAF_MONITOR -B -L $IPTRAF_LOG -d eno1 &
 	P4=$!
 	wait $P1 $P2 $P3 $P4
 
