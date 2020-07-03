@@ -189,7 +189,7 @@ else
 		--arg inst "$INST_LEVEL" \
 		'{setup: $setup, inst: $inst}' )
 
-	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
 	echo $P1
 	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done > $MLOG &
