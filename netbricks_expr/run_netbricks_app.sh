@@ -13,6 +13,7 @@ AMLOG=$LOG_DIR/$3_$4_a_measurement.log
 TCP_LOG=$LOG_DIR/$3_$4_tcptop.log
 BIO_LOG=$LOG_DIR/$3_$4_biotop.log
 IPTRAF_LOG=$LOG_DIR/$3_$4_iptraf.log
+SHORT_IPTRAF_LOG=$3_$4_iptraf.log
 
 NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
@@ -191,7 +192,7 @@ else
 
 	touch $IPTRAF_LOG
 
-	sudo $IPTRAF_MONITOR -B -L $IPTRAF_LOG -d eno1  &
+	sudo $IPTRAF_MONITOR -B -L $SHORT_IPTRAF_LOG -d eno1  &
 	P4=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
