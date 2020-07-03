@@ -193,7 +193,7 @@ else
 	touch $IPTRAF_LOG
 
 	echo $IPTRAF_LOG
-	sudo $IPTRAF_MONITOR -L $IPTRAF_LOG -d eno1 &
+	sudo $IPTRAF_MONITOR -L $IPTRAF_LOG -d eno1 -B &
 	echo $SHORT_IPTRAF_LOG
 	# sudo $IPTRAF_MONITOR -L $SHORT_IPTRAF_LOG -d eno1 &
 	P4=$!
