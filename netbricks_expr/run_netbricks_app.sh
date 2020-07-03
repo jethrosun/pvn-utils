@@ -194,8 +194,8 @@ else
 
 	echo $IPTRAF_LOG
 	echo $SHORT_IPTRAF_LOG
-	sudo $IPTRAF_MONITOR -B -L $SHORT_IPTRAF_LOG -d eno1 -t 10 &
-	P4=$!
+	# sudo $IPTRAF_MONITOR -B -L $SHORT_IPTRAF_LOG -d eno1 -t 10
+	# P4=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
 	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done > $MLOG &
@@ -204,6 +204,6 @@ else
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
 
-	wait $P1 $P2 $P3 $P4
+	wait $P1 $P2 $P3 #$P4
 
 fi
