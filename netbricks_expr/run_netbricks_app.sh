@@ -193,9 +193,9 @@ else
 	touch $IPTRAF_LOG
 
 	echo $IPTRAF_LOG
-	# sudo $IPTRAF_MONITOR -L $IPTRAF_LOG -d eno1 &
+	sudo $IPTRAF_MONITOR -L $IPTRAF_LOG -d eno1 &
 	echo $SHORT_IPTRAF_LOG
-	sudo $IPTRAF_MONITOR -L $SHORT_IPTRAF_LOG -d eno1 &
+	# sudo $IPTRAF_MONITOR -L $SHORT_IPTRAF_LOG -d eno1 &
 	P4=$!
 	# echo 1
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
