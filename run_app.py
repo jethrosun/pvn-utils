@@ -12,8 +12,8 @@ def netbricks_sess_setup(trace, nf, epoch):
         print("netbricks session is spawned")
 
         netbricks_sess.send_commands('bash')
-        netbricks_sess.enable_logs(
-            "netbricks--" + trace + "_" + nf + "_" + str(epoch) + ".log")
+        netbricks_sess.enable_logs("netbricks--" + trace + "_" + nf + "_" +
+                                   str(epoch) + ".log")
         netbricks_sess.send_commands('ssh jethros@tuco')
         netbricks_sess.send_commands(
             'cd /home/jethros/dev/netbricks/experiments')
@@ -75,13 +75,15 @@ def run_pktgen(sess, trace, setup):
 
 
 def run_netbricks(sess, trace, nf, epoch, setup):
-    cmd_str = "sudo ./run_netbricks_app.sh " + trace + " " + nf + " " + str(epoch) + " " + setup
+    cmd_str = "sudo ./run_netbricks_app.sh " + trace + " " + nf + " " + str(
+        epoch) + " " + setup
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
 
 def run_netbricks_xcdr(sess, trace, nf, epoch, setup, port1, port2, expr_num):
-    cmd_str = "sudo ./run_netbricks_app.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + port1 + " " + port2 + " " + expr_num
+    cmd_str = "sudo ./run_netbricks_app.sh " + trace + " " + nf + " " + str(
+        epoch) + " " + setup + " " + port1 + " " + port2 + " " + expr_num
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
@@ -146,21 +148,122 @@ def main(expr_list):
         'pvn-transcoder-groupby-app',
     ]
 
-    p2p_nf_list = ['pvn-p2p-transform-app', 'pvn-p2p-groupby-app',]
-    xcdr_nf_list = ['pvn-transcoder-transform-app', 'pvn-transcoder-groupby-app']
+    p2p_nf_list = [
+        'pvn-p2p-transform-app',
+        'pvn-p2p-groupby-app',
+    ]
+    xcdr_nf_list = [
+        'pvn-transcoder-transform-app', 'pvn-transcoder-groupby-app'
+    ]
 
     # set_list = ['1', '2', '3', ]
-    set_list = ['1', '2', '3', '4', '5', '6', ]
-    p2p_set_list = ['11', '12', '13', '14', '15', '16', '17', '18', '19', '20', ]
+    set_list = [
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+    ]
+    p2p_set_list = [
+        '11',
+        '12',
+        '13',
+        '14',
+        '15',
+        '16',
+        '17',
+        '18',
+        '19',
+        '20',
+    ]
 
-    rdr_sending_rate=1
-    p2p_sending_rate=1
+    rdr_sending_rate = 1
+    p2p_sending_rate = 1
+    old_sending_rate = {
+        'app_xcdr': {
+            '1': 1,
+            '2': 2,
+            '3': 10,
+            '4': 20,
+            '5': 50,
+            '6': 100
+        },
+        'app_p2p': {
+            '1': 3,
+            '2': 13,
+            '3': 25,
+            '4': 50,
+            '5': 75,
+            '6': 100
+        },
+        'app_rdr': {
+            '1': rdr_sending_rate,
+            '2': 2,
+            '3': 5,
+            '4': 10,
+            '5': 15,
+            '6': 20
+        },
+        'app_tlsv': {
+            '1': 1,
+            '2': 5,
+            '3': 10,
+            '4': 20,
+            '5': 50,
+            '6': 100
+        },
+        'app_p2p-ext': {
+            '1': 1,
+            '2': 1,
+            '3': 1,
+            '4': 1,
+            '5': 1,
+            '6': 1
+        },
+    }
+    fixed_sending_rate = 3
     sending_rate = {
-        'app_xcdr': {'1': 1, '2':2, '3': 10, '4': 20, '5': 50, '6': 100},
-        'app_p2p': {'1': 3, '2': 13, '3':25, '4':50, '5':75, '6':100},
-        'app_rdr': {'1': rdr_sending_rate, '2': 2, '3': 5, '4': 10, '5': 15, '6':20},
-        'app_tlsv': {'1': 1, '2': 5, '3': 10, '4': 20, '5': 50, '6': 100},
-        'app_p2p-ext': {'1': 1, '2': 1, '3': 1, '4': 1, '5': 1, '6': 1},
+        'app_xcdr': {
+            '1': fixed_sending_rate,
+            '2': fixed_sending_rate,
+            '3': fixed_sending_rate,
+            '4': fixed_sending_rate,
+            '5': fixed_sending_rate,
+            '6': fixed_sending_rate
+        },
+        'app_p2p': {
+            '1': fixed_sending_rate,
+            '2': fixed_sending_rate,
+            '3': fixed_sending_rate,
+            '4': fixed_sending_rate,
+            '5': fixed_sending_rate,
+            '6': fixed_sending_rate
+        },
+        'app_rdr': {
+            '1': fixed_sending_rate,
+            '2': fixed_sending_rate,
+            '3': fixed_sending_rate,
+            '4': fixed_sending_rate,
+            '5': fixed_sending_rate,
+            '6': fixed_sending_rate
+        },
+        'app_tlsv': {
+            '1': fixed_sending_rate,
+            '2': fixed_sending_rate,
+            '3': fixed_sending_rate,
+            '4': fixed_sending_rate,
+            '5': fixed_sending_rate,
+            '6': fixed_sending_rate
+        },
+        'app_p2p-ext': {
+            '1': fixed_sending_rate,
+            '2': fixed_sending_rate,
+            '3': fixed_sending_rate,
+            '4': fixed_sending_rate,
+            '5': fixed_sending_rate,
+            '6': fixed_sending_rate
+        },
     }
 
     # expr is 10 min/600 sec
@@ -177,11 +280,14 @@ def main(expr_list):
             if expr != 'app_p2p-ext':
                 # config the pktgen sending rate
                 for setup in set_list:
-                    pktgen_sess = pktgen_sess_setup(trace[expr], nf, sending_rate[expr][setup])
-                    run_pktgen(pktgen_sess, trace[expr], sending_rate[expr][setup])
+                    pktgen_sess = pktgen_sess_setup(trace[expr], nf,
+                                                    sending_rate[expr][setup])
+                    run_pktgen(pktgen_sess, trace[expr],
+                               sending_rate[expr][setup])
                     # epoch from 0 to 9
                     for epoch in range(5):
-                        netbricks_sess = netbricks_sess_setup(trace[expr], nf, epoch)
+                        netbricks_sess = netbricks_sess_setup(
+                            trace[expr], nf, epoch)
 
                         # run clean up for p2p nf before experiment
                         if nf in p2p_nf_list:
@@ -193,11 +299,14 @@ def main(expr_list):
 
                         # Actual RUN
                         if nf in xcdr_nf_list:
-                            expr_num = epoch * 6 + int(setup) *2
+                            expr_num = epoch * 6 + int(setup) * 2
                             port2 = xcdr_port_base + expr_num
-                            run_netbricks_xcdr(netbricks_sess, trace[expr], nf, epoch, setup, str(port2-1), str(port2), str(expr_num))
+                            run_netbricks_xcdr(netbricks_sess, trace[expr], nf,
+                                               epoch, setup, str(port2 - 1),
+                                               str(port2), str(expr_num))
                         else:
-                            run_netbricks(netbricks_sess, trace[expr], nf, epoch, setup)
+                            run_netbricks(netbricks_sess, trace[expr], nf,
+                                          epoch, setup)
 
                         # run clean up for p2p nf before experiment
                         if nf in p2p_nf_list:
@@ -232,11 +341,13 @@ def main(expr_list):
             elif expr == 'app_p2p-ext':
                 # config the pktgen sending rate
                 for setup in p2p_set_list:
-                    pktgen_sess = pktgen_sess_setup(trace[expr], nf, p2p_sending_rate)
+                    pktgen_sess = pktgen_sess_setup(trace[expr], nf,
+                                                    p2p_sending_rate)
                     run_pktgen(pktgen_sess, trace[expr], p2p_sending_rate)
                     # epoch from 0 to 9
                     for epoch in range(5):
-                        netbricks_sess = netbricks_sess_setup(trace[expr], nf, epoch)
+                        netbricks_sess = netbricks_sess_setup(
+                            trace[expr], nf, epoch)
 
                         # run clean up for p2p nf before experiment
                         if nf in p2p_nf_list:
@@ -248,11 +359,14 @@ def main(expr_list):
 
                         # Actual RUN
                         if nf in xcdr_nf_list:
-                            expr_num = epoch * 6 + int(setup) *2
+                            expr_num = epoch * 6 + int(setup) * 2
                             port2 = xcdr_port_base + expr_num
-                            run_netbricks_xcdr(netbricks_sess, trace[expr], nf, epoch, setup, str(port2-1), str(port2), str(expr_num))
+                            run_netbricks_xcdr(netbricks_sess, trace[expr], nf,
+                                               epoch, setup, str(port2 - 1),
+                                               str(port2), str(expr_num))
                         else:
-                            run_netbricks(netbricks_sess, trace[expr], nf, epoch, setup)
+                            run_netbricks(netbricks_sess, trace[expr], nf,
+                                          epoch, setup)
 
                         # run clean up for p2p nf before experiment
                         if nf in p2p_nf_list:
@@ -283,7 +397,6 @@ def main(expr_list):
 
                     sess_destroy(pktgen_sess)
                     time.sleep(60)
-
 
 
 if __name__ == '__main__':
@@ -320,21 +433,17 @@ if __name__ == '__main__':
     #     'pvn-transcoder-groupby',
     # ]
     # additional_trace = ['1500B']
-    expr_list = [
-        'app_rdr',
+    expr_list = ['app_rdr', 'app_xcdr', 'app_tlsv', 'app_p2p', 'app_p2p-ext']
+    only_xcdr_list = [
         'app_xcdr',
-        'app_tlsv',
-        'app_p2p',
-        'app_p2p-ext'
     ]
-    only_xcdr_list = ['app_xcdr',]
-    only_p2p_list = ['app_p2p-ext',]
-
+    only_p2p_list = [
+        'app_p2p-ext',
+    ]
 
     main(only_xcdr_list)
     # main(expr_list)
     # main(only_p2p_list)
-
 
     # main(simple_nf_list, simple_trace_list)
     # main(test_nf_list, test_trace_list)
