@@ -271,6 +271,9 @@ def main(expr_list):
 
     xcdr_port_base = 7418
 
+
+    num_of_epoch = 3
+
     # app rdr, app p2p ...
     for expr in expr_list:
         print("Running experiments that for {} application NF".format(expr))
@@ -285,7 +288,7 @@ def main(expr_list):
                     run_pktgen(pktgen_sess, trace[expr],
                                sending_rate[expr][setup])
                     # epoch from 0 to 9
-                    for epoch in range(5):
+                    for epoch in range(num_of_epoch):
                         netbricks_sess = netbricks_sess_setup(
                             trace[expr], nf, epoch)
 
@@ -441,8 +444,8 @@ if __name__ == '__main__':
         'app_p2p-ext',
     ]
 
-    main(only_xcdr_list)
-    # main(expr_list)
+    # main(only_xcdr_list)
+    main(expr_list)
     # main(only_p2p_list)
 
     # main(simple_nf_list, simple_trace_list)
