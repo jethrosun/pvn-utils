@@ -38,6 +38,7 @@ INST_LEVEL=off
 
 if [ $2 == 'pvn-transcoder-transform-app' ]; then
 	JSON_STRING=$( jq -n \
+		--arg iter "$3" \
 		--arg setup "$4" \
 		--arg port "$5" \
 		--arg expr_num "$7" \
@@ -67,6 +68,7 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 
 elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	JSON_STRING=$( jq -n \
+		--arg iter "$3" \
 		--arg setup "$4" \
 		--arg port "$5" \
 		--arg expr_num "$7" \
@@ -104,6 +106,7 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 	sudo mkdir -p /data/config /data/downloads
 
 	JSON_STRING=$( jq -n \
+		--arg iter "$3" \
 		--arg setup "$4" \
 		--arg inst "$INST_LEVEL" \
 		'{setup: $setup, inst: $inst}' )
@@ -131,6 +134,7 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 	sudo mkdir -p /data/config /data/downloads
 
 	JSON_STRING=$( jq -n \
+		--arg iter "$3" \
 		--arg setup "$4" \
 		--arg inst "$INST_LEVEL" \
 		'{setup: $setup, inst: $inst}' )
@@ -149,6 +153,7 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 
 elif [ $2 == "pvn-rdr-transform-app" ]; then
 	JSON_STRING=$( jq -n \
+		--arg iter "$3" \
 		--arg setup "$4" \
 		--arg inst "$INST_LEVEL" \
 		'{setup: $setup, inst: $inst}' )
@@ -167,6 +172,7 @@ elif [ $2 == "pvn-rdr-transform-app" ]; then
 
 elif [ $2 == "pvn-rdr-groupby-app" ]; then
 	JSON_STRING=$( jq -n \
+		--arg iter "$3" \
 		--arg setup "$4" \
 		--arg inst "$INST_LEVEL" \
 		'{setup: $setup, inst: $inst}' )
@@ -184,8 +190,8 @@ elif [ $2 == "pvn-rdr-groupby-app" ]; then
 	wait $P1 $P2 $P3 $P4
 
 else
-
 	JSON_STRING=$( jq -n \
+		--arg iter "$3" \
 		--arg setup "$4" \
 		--arg inst "$INST_LEVEL" \
 		'{setup: $setup, inst: $inst}' )
