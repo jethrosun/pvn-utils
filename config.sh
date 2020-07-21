@@ -14,8 +14,8 @@ if [ $HOSTNAME == "tuco" ]; then
 	cd ~/dev/netbricks/scripts
 	sudo ./bind-xl710.sh
 
-	cd ~/dev/netbricks/scripts/tuning
-	sudo ./energy.sh
+	# cd ~/dev/netbricks/scripts/tuning
+	# sudo ./energy.sh
 
 	cd ~/dev/pvn-utils
 	git pull
@@ -38,8 +38,8 @@ elif [ $HOSTNAME == "saul" ]; then
 	cd ~/dev/netbricks/scripts
 	sudo ~/dev/netbricks/scripts/bind-xl710.sh
 
-	cd ~/dev/netbricks/scripts/tuning
-	sudo ~/dev/netbricks/scripts/tuning/energy.sh
+	# cd ~/dev/netbricks/scripts/tuning
+	# sudo ~/dev/netbricks/scripts/tuning/energy.sh
 
 	cd ~/dev/pvn-utils
 	git pull
