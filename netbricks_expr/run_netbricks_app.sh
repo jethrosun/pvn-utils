@@ -43,7 +43,7 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 		--arg port "$5" \
 		--arg expr_num "$7" \
 		--arg inst "$INST_LEVEL" \
-		'{setup: $setup, port: $port, expr_num: $expr_num, inst: $inst}' )
+		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst}' )
 	echo $JSON_STRING > /home/jethros/setup
 
 	docker run -d --cpuset 4 --name faktory_src --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest /faktory -b :7419 -w :7420
@@ -73,7 +73,7 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 		--arg port "$5" \
 		--arg expr_num "$7" \
 		--arg inst "$INST_LEVEL" \
-		'{setup: $setup, port: $port, expr_num: $expr_num, inst: $inst}' )
+		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst}' )
 	echo $JSON_STRING > /home/jethros/setup
 
 	docker run -d --cpuset 4 --name faktory_srv --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest /faktory -b :7419 -w :7420
@@ -109,7 +109,7 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 		--arg iter "$3" \
 		--arg setup "$4" \
 		--arg inst "$INST_LEVEL" \
-		'{setup: $setup, inst: $inst}' )
+		'{setup: $setup, iter: $iter, inst: $inst}' )
 	echo $JSON_STRING > /home/jethros/setup
 
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
@@ -137,7 +137,7 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 		--arg iter "$3" \
 		--arg setup "$4" \
 		--arg inst "$INST_LEVEL" \
-		'{setup: $setup, inst: $inst}' )
+		'{setup: $setup, iter: $iter, inst: $inst}' )
 	echo $JSON_STRING > /home/jethros/setup
 
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
@@ -156,7 +156,7 @@ elif [ $2 == "pvn-rdr-transform-app" ]; then
 		--arg iter "$3" \
 		--arg setup "$4" \
 		--arg inst "$INST_LEVEL" \
-		'{setup: $setup, inst: $inst}' )
+		'{setup: $setup, iter: $iter, inst: $inst}' )
 	echo $JSON_STRING > /home/jethros/setup
 
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
@@ -175,7 +175,7 @@ elif [ $2 == "pvn-rdr-groupby-app" ]; then
 		--arg iter "$3" \
 		--arg setup "$4" \
 		--arg inst "$INST_LEVEL" \
-		'{setup: $setup, inst: $inst}' )
+		'{setup: $setup, iter: $iter, inst: $inst}' )
 	echo $JSON_STRING > /home/jethros/setup
 
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
@@ -194,7 +194,7 @@ else
 		--arg iter "$3" \
 		--arg setup "$4" \
 		--arg inst "$INST_LEVEL" \
-		'{setup: $setup, inst: $inst}' )
+		'{setup: $setup, iter: $iter, inst: $inst}' )
 
 	touch $IPTRAF_LOG
 
