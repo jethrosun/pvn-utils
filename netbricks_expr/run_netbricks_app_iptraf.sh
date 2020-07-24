@@ -50,18 +50,19 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 	# P1=$!
 	docker ps
 	sleep 15
+	# top -b -d 1 -n 700 | tee $MLOG &
 
 	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 $7 &
 	P5=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done > $MLOG &
+	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done > $MLOG &
 	P2=$!
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
-	$TCP_TOP_MONITOR -C > $TCP_LOG &
+	sudo $IPTRAF_MONITOR -B -L $IPTRAF_LOG -d eno1 &
 	P4=$!
-	wait $P1 $P2 $P3 $P4 $P5
+	wait $P1 $P2 $P3 $P4 $P5 $6
 
 elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	JSON_STRING=$( jq -n \
@@ -82,13 +83,13 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	P5=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
+	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done > $MLOG &
 	P2=$!
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
-	$TCP_TOP_MONITOR -C > $TCP_LOG &
+	sudo $IPTRAF_MONITOR -B -L $IPTRAF_LOG -d eno1 &
 	P4=$!
-	wait $P1 $P2 $P3 $P4 $P5
+	wait $P1 $P2 $P3 $P4 $P5 $P6
 
 elif [ $2 == "pvn-p2p-transform-app" ]; then
 	# clean the states of transmission
@@ -109,12 +110,12 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
+	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done > $MLOG &
 	P2=$!
 	# top -b -d 1 -n 700 | tee $MLOG &
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
-	$TCP_TOP_MONITOR -C > $TCP_LOG &
+	sudo $IPTRAF_MONITOR -B -L $IPTRAF_LOG -d eno1 &
 	P4=$!
 	wait $P1 $P2 $P3 $P4
 
@@ -137,12 +138,12 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
+	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done > $MLOG &
 	P2=$!
 	# top -b -d 1 -n 700 | tee $MLOG &
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
-	$TCP_TOP_MONITOR -C > $TCP_LOG &
+	sudo $IPTRAF_MONITOR -B -L $IPTRAF_LOG -d eno1 &
 	P4=$!
 	wait $P1 $P2 $P3 $P4
 
@@ -156,12 +157,12 @@ elif [ $2 == "pvn-rdr-transform-app" ]; then
 
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=1000{print $0}'; done > $MLOG &
+	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done > $MLOG &
 	P2=$!
 	# top -b -d 1 -n 700 | tee $MLOG &
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
-	$TCP_TOP_MONITOR -C > $TCP_LOG &
+	sudo $IPTRAF_MONITOR -B -L $IPTRAF_LOG -d eno1 &
 	P4=$!
 	wait $P1 $P2 $P3 $P4
 
@@ -175,12 +176,12 @@ elif [ $2 == "pvn-rdr-groupby-app" ]; then
 
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=1000{print $0}'; done > $MLOG &
+	while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done > $MLOG &
 	P2=$!
 	# top -b -d 1 -n 700 | tee $MLOG &
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
-	$TCP_TOP_MONITOR -C > $TCP_LOG &
+	sudo $IPTRAF_MONITOR -B -L $IPTRAF_LOG -d eno1 &
 	P4=$!
 	wait $P1 $P2 $P3 $P4
 
@@ -191,14 +192,26 @@ else
 		--arg inst "$INST_LEVEL" \
 		'{setup: $setup, iter: $iter, inst: $inst}' )
 
+	touch $IPTRAF_LOG
+
+	echo $IPTRAF_LOG
+	sudo $IPTRAF_MONITOR -L $IPTRAF_LOG -d eno1 -B &
+	echo $SHORT_IPTRAF_LOG
+	# sudo $IPTRAF_MONITOR -L $SHORT_IPTRAF_LOG -d eno1 &
+	P4=$!
+	# echo 1
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
-	P2=$!
-	$BIO_TOP_MONITOR -C > $BIO_LOG &
-	P3=$!
-	$TCP_TOP_MONITOR -C > $TCP_LOG &
-	P4=$!
+	# echo 2
+	# while sleep 1; do pgrep -P $P1 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;cpu+=$2} END {print memory,cpu}'; done > $MLOG &
+	# P2=$!
+	# echo 3
+	# top -b -d 1 -n 700 | tee $MLOG &
+	# $BIO_TOP_MONITOR -C > $BIO_LOG &
+	# P3=$!
+	# echo 4
 
-	wait $P1 $P2 $P3 $P4
+	# wait $P1 $P2 $P3 $P4
+	wait $P1  $P4
+
 fi
