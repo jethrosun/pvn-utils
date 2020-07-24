@@ -17,10 +17,10 @@ if [ $HOSTNAME == "tuco" ]; then
 	# cd ~/dev/netbricks/scripts/tuning
 	# sudo ./energy.sh
 
-	cd ~/dev/pvn-utils
+	cd ~/dev/pvn/utils
 	git pull
-	sudo ~/dev/pvn-utils/cleanup.sh
-	~/dev/pvn-utils/setup.sh
+	sudo ~/dev/pvn/utils/cleanup.sh
+	~/dev/pvn/utils/setup.sh
 	printf "pvn utils done"
 
 
@@ -41,10 +41,10 @@ elif [ $HOSTNAME == "saul" ]; then
 	# cd ~/dev/netbricks/scripts/tuning
 	# sudo ~/dev/netbricks/scripts/tuning/energy.sh
 
-	cd ~/dev/pvn-utils
+	cd ~/dev/pvn/utils
 	git pull
-	sudo ~/dev/pvn-utils/cleanup.sh
-	~/dev/pvn-utils/setup.sh
+	sudo ~/dev/pvn/utils/cleanup.sh
+	~/dev/pvn/utils/setup.sh
 	printf "pvn utils done"
 
 fi

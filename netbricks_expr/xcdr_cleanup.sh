@@ -7,8 +7,8 @@ set -euo pipefail
 # sudo rm -rf config/*
 # mkdir -p config downloads
 #
-sudo rm -rf ~/dev/pvn-utils/output/output_videos/*
-sudo mkdir -p ~/dev/pvn-utils/output/output_videos/
+sudo rm -rf ~/dev/pvn/utils/output/output_videos/*
+sudo mkdir -p ~/dev/pvn/utils/output/output_videos/
 
 
 # CONTAINER_NAME='faktory_srv'

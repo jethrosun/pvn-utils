@@ -51,7 +51,7 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 	docker ps
 	sleep 15
 
-	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 $7 &
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh $5 $6 $7 &
 	P5=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
@@ -78,7 +78,7 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	docker ps
 	sleep 15
 	# top -b -d 1 -n 700 | tee $MLOG &
-	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 $7 &
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh $5 $6 $7 &
 	P5=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!

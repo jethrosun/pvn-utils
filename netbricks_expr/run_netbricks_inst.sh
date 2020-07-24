@@ -51,7 +51,7 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 	P3=$!
 	$IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
 	P4=$!
-	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 $7 &
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh $5 $6 $7 &
 	P5=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P6=$!
@@ -78,7 +78,7 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	P3=$!
 	$IPTRAF_MONITOR -s eno1 -L $IPTRAF_LOG &
 	P4=$!
-	/home/jethros/dev/pvn-utils/faktory_srv/start_faktory.sh $5 $6 $7 &
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh $5 $6 $7 &
 	P5=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG | tee $LOG &
 	P6=$!

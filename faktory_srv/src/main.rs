@@ -22,11 +22,11 @@ use std::env;
 // only append job
 pub fn append_job(pivot: u128, job_queue: &Arc<RwLock<Vec<(String, String, String)>>>) {
     // println!("enter append with pivot: {}", pivot);
-    let infile = "/home/jethros/dev/pvn-utils/data/tiny.y4m";
+    let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
     // let outfile = "out.y4m";
     let width_height = "360x24";
     for i in 0..1 {
-        let outfile = "/home/jethros/dev/pvn-utils/data/output_videos/".to_owned()
+        let outfile = "/home/jethros/dev/pvn/utils/data/output_videos/".to_owned()
             + &pivot.to_string()
             + "_"
             + &i.to_string()
@@ -89,11 +89,11 @@ pub fn run_transcode_native(pivot: u128) {
 
                 if id.id == 5 as usize {
                     // println!("Working in core {:?} as from 0-5", id);
-                    let infile = "/home/jethros/dev/pvn-utils/data/tiny.y4m";
+                    let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
                     // let outfile = "out.y4m";
                     let width_height = "360x24";
                     for i in 0..10 {
-                        let outfile = "/home/jethros/dev/pvn-utils/data/output_videos/".to_owned()
+                        let outfile = "/home/jethros/dev/pvn/utils/data/output_videos/".to_owned()
                             + &pivot.to_string()
                             + "_"
                             + &i.to_string()
