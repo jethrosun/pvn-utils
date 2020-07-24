@@ -446,9 +446,13 @@ if __name__ == '__main__':
     only_rdr_list = [
         'app_rdr',
     ]
+
     # main(only_xcdr_list)
-    main(only_rdr_list)
+    # main(only_rdr_list)
     # main(only_p2p_list)
+    main(expr_list)
+
+
 
     # main(simple_nf_list, simple_trace_list)
     # main(test_nf_list, test_trace_list)
