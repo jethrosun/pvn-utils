@@ -46,7 +46,7 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst}' )
 	echo $JSON_STRING > /home/jethros/setup
 
-	docker run -d --cpuset 4 --name faktory_src --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest /faktory -b :7419 -w :7420
+	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest /faktory -b :7419 -w :7420
 	# P1=$!
 	docker ps
 	sleep 15
@@ -73,7 +73,7 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst}' )
 	echo $JSON_STRING > /home/jethros/setup
 
-	docker run -d --cpuset 4 --name faktory_srv --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest /faktory -b :7419 -w :7420
+	docker run -d --cpuset-cpus 4 --name faktory_srv --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest /faktory -b :7419 -w :7420
 	# P1=$!
 	docker ps
 	sleep 15
