@@ -436,7 +436,10 @@ if __name__ == '__main__':
     #     'pvn-transcoder-groupby',
     # ]
     # additional_trace = ['1500B']
-    expr_list = ['app_rdr', 'app_xcdr', 'app_tlsv', 'app_p2p', 'app_p2p-ext']
+
+    all_expr_list = ['app_rdr', 'app_xcdr', 'app_tlsv', 'app_p2p', 'app_p2p-ext']
+    expr_list = ['app_rdr', 'app_xcdr', 'app_tlsv', 'app_p2p']
+
     only_xcdr_list = [
         'app_xcdr',
     ]
