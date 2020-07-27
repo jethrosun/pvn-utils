@@ -271,7 +271,6 @@ def main(expr_list):
 
     xcdr_port_base = 7418
 
-
     num_of_epoch = 3
 
     # app rdr, app p2p ...
