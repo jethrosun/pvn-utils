@@ -443,16 +443,16 @@ if __name__ == '__main__':
         'app_xcdr',
     ]
     only_p2p_list = [
-        'app_p2p-ext',
+        'app_p2p',
     ]
     only_rdr_list = [
         'app_rdr',
     ]
 
     # main(only_xcdr_list)
-    # main(only_rdr_list)
+    main(only_rdr_list)
     # main(only_p2p_list)
-    main(expr_list)
+    # main(expr_list)
 
 
 
