@@ -117,9 +117,9 @@ def main(expr_list, batch):
                 # config the pktgen sending rate
                 for setup in set_list:
                     pktgen_sess = pktgen_sess_setup(trace[expr], nf,
-                                                    sending_rate[expr][setup])
+                                                    sending_rate[expr][setup]*batch)
                     run_pktgen(pktgen_sess, trace[expr],
-                               sending_rate[expr][setup])
+                               sending_rate[expr][setup]*batch)
                     # epoch from 0 to 9
                     for epoch in range(num_of_epoch):
                         netbricks_sess = netbricks_sess_setup(
@@ -178,8 +178,8 @@ def main(expr_list, batch):
                 # config the pktgen sending rate
                 for setup in p2p_set_list:
                     pktgen_sess = pktgen_sess_setup(trace[expr], nf,
-                                                    p2p_sending_rate)
-                    run_pktgen(pktgen_sess, trace[expr], p2p_sending_rate)
+                                                    p2p_sending_rate*batch)
+                    run_pktgen(pktgen_sess, trace[expr], p2p_sending_rate*batch)
                     # epoch from 0 to 9
                     for epoch in range(5):
                         netbricks_sess = netbricks_sess_setup(
@@ -238,13 +238,14 @@ def main(expr_list, batch):
 if __name__ == '__main__':
     # for simple test
 
-        # main(only_xcdr_list)
+    # main(only_xcdr_list)
     # main(only_rdr_list)
     # main(only_p2p_list)
-    # main(expr_list)
+    main(expr_list, 2)
 
-    for batch in range(3):
-        print(batch)
+    # for batch in range(3):
+    #     print(batch)
+    #     main(expr_list, batch+1)
 
     # main(simple_nf_list, simple_trace_list)
     # main(test_nf_list, test_trace_list)
