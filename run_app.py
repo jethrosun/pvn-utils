@@ -105,7 +105,7 @@ def xcdr_cleanup(sess):
     sess.send_commands(cmd_str)
 
 
-def main(expr_list):
+def main(expr_list, batch):
     """"""
     # app rdr, app p2p ...
     for expr in expr_list:
@@ -239,11 +239,12 @@ if __name__ == '__main__':
     # for simple test
 
         # main(only_xcdr_list)
-    main(only_rdr_list)
+    # main(only_rdr_list)
     # main(only_p2p_list)
     # main(expr_list)
 
-
+    for batch in range(3):
+        print(batch)
 
     # main(simple_nf_list, simple_trace_list)
     # main(test_nf_list, test_trace_list)
