@@ -94,13 +94,13 @@ def sess_destroy(sess):
 
 
 def p2p_cleanup(sess):
-    cmd_str = "sudo ./p2p_cleanup.sh "
+    cmd_str = "sudo ./misc/p2p_cleanup.sh "
     print("Extra clean up for P2P with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
 
 def xcdr_cleanup(sess):
-    cmd_str = "sudo ./xcdr_cleanup.sh "
+    cmd_str = "sudo ./misc/xcdr_cleanup.sh "
     print("Extra clean up for XCDR with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
