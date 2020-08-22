@@ -1,5 +1,3 @@
-
-
 pvn_nf = {
         'app_rdr': [
             'pvn-rdr-transform-app',
@@ -212,3 +210,4 @@ only_rdr_list = [
         'app_rdr',
         ]
 
+check_list = ['app_rdr', 'app_p2p']

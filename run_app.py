@@ -239,9 +239,9 @@ if __name__ == '__main__':
     # for simple test
 
     # main(only_xcdr_list)
-    # main(only_rdr_list)
-    # main(only_p2p_list)
-    main(expr_list, 2)
+    # main(only_rdr_list, 2)
+    # main(only_p2p_list, 2)
+    main(check_list, 4)
 
     # for batch in range(3):
     #     print(batch)
