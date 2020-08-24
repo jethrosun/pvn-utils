@@ -17,11 +17,11 @@ sudo rm -rf /data/downloads/*
 sudo rm -rf /data/config/*
 sudo mkdir -p /data/config /data/downloads
 
-sudo usermod -a -g debian-transmission jethros
+# sudo usermod -a -g debian-transmission jethros
 sudo chgrp debian-transmission /data/downloads
 sudo chmod 770 /data/downloads
 
-
+sleep 5
 
 # Server string: "host:port --auth username:password"
 SERVER="127.0.0.1:9091 --auth transmission:mypassword"
@@ -30,15 +30,7 @@ SERVER="127.0.0.1:9091 --auth transmission:mypassword"
 DONE_STATES=("Seeding" "Stopped" "Finished" "Idle")
 
 # Get the final server string to use.
-if [[ -n "$TRANSMISSION_SERVER" ]]; then
-    echo -n "Using server string from the environment: "
-    SERVER="$TRANSMISSION_SERVER"
-elif [[ "$#" -gt 0 ]]; then
-    echo -n "Using server string passed through parameters: "
-    SERVER="$*"
-else
-    echo -n "Using hardcoded server string: "
-fi
+echo -n "Using hardcoded server string: "
 echo "${SERVER: : 10}(...)"  # Truncate to not print auth.
 
 # Use transmission-remote to get the torrent list from transmission-remote.
@@ -66,6 +58,7 @@ sudo pkill -HUP transmission-da
 # stop and restart daemon
 sudo /etc/init.d/transmission-daemon stop
 sudo /etc/init.d/transmission-daemon start
+sleep 5
 
 # -------------------------------
 #   operations we want to enable
