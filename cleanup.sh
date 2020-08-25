@@ -2,7 +2,7 @@
 
 set -e
 
-current_date_time="`date "+%Y-%m-%d--%H:%M:%S"`";
+current_date_time="`date "+%Y-%m-%d--%H-%M-%S"`";
 echo $current_date_time;
 
 if [ -e $HOME/netbricks_logs ]; then
