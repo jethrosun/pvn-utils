@@ -241,7 +241,7 @@ if __name__ == '__main__':
     # main(only_xcdr_list)
     # main(only_rdr_list, 2)
     # main(only_p2p_list, 2)
-    main(check_list, 4)
+    main(check_list, 2)
 
     # for batch in range(3):
     #     print(batch)
