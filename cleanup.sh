@@ -10,6 +10,7 @@ if [ -e $HOME/netbricks_logs ]; then
 	mv $HOME/netbricks_logs/ $HOME/logs/netbricks_logs--$current_date_time
 	cd $HOME/logs
 	tar -cvzf netbricks_logs--$current_date_time.tar.gz  netbricks_logs--$current_date_time
+	rm -rf netbricks_logs--$current_date_time
 	printf "Moving all netbricks logs to the backup logs\n"
 fi
 if [ -e $HOME/pktgen_logs ]; then
@@ -26,6 +27,7 @@ if ls $HOME/dev/pvn/utils/*.log >/dev/null 2>&1; then
 	mv $HOME/dev/pvn/utils/pktgen*.log $HOME/logs/pktgen_logs--$current_date_time
 	cd $HOME/logs
 	tar -cvzf pktgen_logs--$current_date_time.tar.gz  pktgen_logs--$current_date_time
+	rm -rf pktgen_logs--$current_date_time
 	printf "Moving just the pvn pktgen logs to the backup logs\n"
 else
 	printf "nothing to be done?"
