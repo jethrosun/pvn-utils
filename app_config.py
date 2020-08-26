@@ -197,17 +197,13 @@ num_of_epoch = 3
 # ]
 # additional_trace = ['1500B']
 
-all_expr_list = ['app_rdr', 'app_xcdr', 'app_tlsv', 'app_p2p', 'app_p2p-ext']
-expr_list = ['app_rdr', 'app_xcdr', 'app_tlsv', 'app_p2p']
 
-only_xcdr_list = [
-        'app_xcdr',
-        ]
-only_p2p_list = [
-        'app_p2p',
-        ]
-only_rdr_list = [
-        'app_rdr',
-        ]
+all_expr_list = ['app_rdr', 'app_xcdr', 'app_tlsv', ]
+expr_list = ['app_rdr', 'app_xcdr', 'app_tlsv' ]
 
-check_list = ['app_rdr', 'app_p2p']
+xcdr = [ 'app_xcdr' ]
+rdr = [ 'app_rdr', ]
+
+
+nuclear_list = [ 'app_p2p' ]
+complete_nuclear_list = [ 'app_p2p', 'app_p2p-ext' ]
