@@ -12,7 +12,6 @@ use std::env;
 use std::fs::File;
 use std::io;
 use std::process;
-use std::sync::{Arc, RwLock};
 use std::time::Instant;
 
 /// Run the transcoding job using threading in crossbeam.
@@ -118,7 +117,9 @@ fn transcode(infile: String, outfile: String, width_height: String) {
 }
 
 fn main() {
+    let mut vcounter = 0;
     let now = Instant::now();
+
     // get the list of ports from cmd args and cast into a Vec
     let params: Vec<String> = env::args().collect();
 
@@ -150,15 +151,14 @@ fn main() {
             let outfile_str = job_args[1].as_str().unwrap();
             let width_height_str = job_args[2].as_str().unwrap();
 
-            println!("job submited");
             run_transcode_crossbeam(infile_str, outfile_str, width_height_str);
             // run_transcode_crossbeam(
             //     infile_str.to_string(),
             //     outfile_str.to_string(),
             //     width_height_str.to_string(),
             // );
+            println!("video transcoded",);
 
-            println!("video transcoded");
             Ok(())
         },
     );
@@ -170,6 +170,8 @@ fn main() {
     if let Err(e) = c.run(&["default"]) {
         println!("worker failed: {}", e);
     }
-    if now.elapsed().as_secs() == 600 {}
+    if now.elapsed().as_secs() == 600 {
+        println!("Metric: ",);
+    }
     // println!("Hello, world!");
 }
