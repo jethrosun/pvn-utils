@@ -15,8 +15,9 @@ def netbricks_sess_setup(trace, nf, epoch):
         netbricks_sess.enable_logs("netbricks--" + trace + "_" + nf + "_" +
                                    str(epoch) + ".log")
         netbricks_sess.send_commands('ssh jethros@tuco')
-        netbricks_sess.send_commands(
-            'cd /home/jethros/dev/netbricks/experiments')
+        netbricks_sess.send_commands('cd /home/jethros/dev/pvn/utils/faktory_srv')
+        netbricks_sess.send_commands('cargo b --release')
+        netbricks_sess.send_commands('cd /home/jethros/dev/netbricks/experiments')
 
         time.sleep(15)
         return netbricks_sess
