@@ -13,8 +13,9 @@ AMLOG=$LOG_DIR/$3_$4_a_measurement.log
 TCP_LOG=$LOG_DIR/$3_$4_tcptop.log
 BIO_LOG=$LOG_DIR/$3_$4_biotop.log
 P2P_PROGRESS_LOG=$LOG_DIR/$3_$4_p2p_progress.log
+FAKTORY_LOG=$LOG_DIR/$3_$4_faktory.log
 IPTRAF_LOG=$LOG_DIR/$3_$4_iptraf.log
-SHORT_IPTRAF_LOG=$3_$4_iptraf.log
+# SHORT_IPTRAF_LOG=$3_$4_iptraf.log
 
 NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
@@ -52,7 +53,7 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 	docker ps
 	sleep 15
 
-	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh $5 $6 $7 &
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh $5 $6 $7 $FAKTORY_LOG &
 	P5=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
@@ -79,7 +80,7 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	docker ps
 	sleep 15
 	# top -b -d 1 -n 700 | tee $MLOG &
-	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh $5 $6 $7 &
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh $5 $6 $7 $FAKTORY_LOG &
 	P5=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
