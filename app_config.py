@@ -126,6 +126,7 @@ num_of_epoch = 3
 
 all_expr_list = ['app_rdr', 'app_xcdr', 'app_tlsv', ]
 expr_list = ['app_rdr', 'app_xcdr', 'app_tlsv' ]
+metric_list = ['app_rdr', 'app_xcdr', ]
 
 xcdr = [ 'app_xcdr' ]
 rdr = [ 'app_rdr', ]

@@ -239,7 +239,7 @@ def main(expr_list, batch):
 if __name__ == '__main__':
     # for simple test
 
-    main(rdr, 5)
+    main(metric_list, 5)
 
     # for batch in range(3):
     #     print(batch)
