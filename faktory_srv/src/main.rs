@@ -3,71 +3,37 @@ extern crate faktory;
 extern crate resize;
 extern crate y4m;
 
-// use core_affinity::{self, CoreId};
 use core_affinity::{self};
 use crossbeam::thread;
 use faktory::ConsumerBuilder;
 use resize::Pixel::Gray8;
 use resize::Type::Triangle;
+use std::env;
+use std::fs::File;
 use std::io;
 use std::process;
 use std::sync::{Arc, RwLock};
-// use serde_json::{from_reader, Value};
-// use std::collections::{HashMap, HashSet};
-use std::fs::File;
-// use std::thread;
-// use std::time::{Duration, Instant};
-use std::env;
-
-// only append job
-pub fn append_job(pivot: u128, job_queue: &Arc<RwLock<Vec<(String, String, String)>>>) {
-    // println!("enter append with pivot: {}", pivot);
-    let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
-    // let outfile = "out.y4m";
-    let width_height = "360x24";
-    for i in 0..1 {
-        let outfile = "/home/jethros/dev/pvn/utils/data/output_videos/".to_owned()
-            + &pivot.to_string()
-            + "_"
-            + &i.to_string()
-            + ".y4m";
-
-        let mut w = job_queue.write().unwrap();
-        w.push((
-            infile.to_string(),
-            outfile.to_string(),
-            width_height.to_string(),
-        ));
-        // println!(
-        //     "appending: {:?} {:?} {:?}",
-        //     infile.to_string(),
-        //     outfile.to_string(),
-        //     width_height.to_string()
-        // );
-    }
-}
+use std::time::Instant;
 
 /// Run the transcoding job using threading in crossbeam.
 pub fn run_transcode_crossbeam(infile_str: &str, outfile_str: &str, width_height_str: &str) {
     thread::scope(|s| {
         let core_ids = core_affinity::get_core_ids().unwrap();
-        let handles = core_ids
-            .into_iter()
-            .map(|id| {
-                s.spawn(move |_| {
-                    core_affinity::set_for_current(id);
+        let handles = core_ids.into_iter().map(|id| {
+            s.spawn(move |_| {
+                core_affinity::set_for_current(id);
 
-                    if id.id == 5 as usize {
-                        // println!("transcode job {:?} in the queue {:?}", pivot, r.len());
-                        transcode(
-                            infile_str.to_string(),
-                            outfile_str.to_string(),
-                            width_height_str.to_string(),
-                        );
-                    }
-                })
+                if id.id == 5 as usize {
+                    // println!("transcode job {:?} in the queue {:?}", pivot, r.len());
+                    transcode(
+                        infile_str.to_string(),
+                        outfile_str.to_string(),
+                        width_height_str.to_string(),
+                    );
+                }
             })
-            .collect::<Vec<_>>();
+        });
+        // .collect::<Vec<_>>();
 
         for handle in handles.into_iter() {
             handle.join().unwrap();
@@ -80,34 +46,32 @@ pub fn run_transcode_crossbeam(infile_str: &str, outfile_str: &str, width_height
 pub fn run_transcode_native(pivot: u128) {
     let core_ids = core_affinity::get_core_ids().unwrap();
 
-    let handles = core_ids
-        .into_iter()
-        .map(|id| {
-            std::thread::spawn(move || {
-                core_affinity::set_for_current(id);
-                // println!("id {:?}", id);
+    let handles = core_ids.into_iter().map(|id| {
+        std::thread::spawn(move || {
+            core_affinity::set_for_current(id);
+            // println!("id {:?}", id);
 
-                if id.id == 5 as usize {
-                    // println!("Working in core {:?} as from 0-5", id);
-                    let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
-                    // let outfile = "out.y4m";
-                    let width_height = "360x24";
-                    for i in 0..10 {
-                        let outfile = "/home/jethros/dev/pvn/utils/data/output_videos/".to_owned()
-                            + &pivot.to_string()
-                            + "_"
-                            + &i.to_string()
-                            + ".y4m";
-                        transcode(
-                            infile.to_string(),
-                            outfile.to_string(),
-                            width_height.to_string(),
-                        );
-                    }
+            if id.id == 5 as usize {
+                // println!("Working in core {:?} as from 0-5", id);
+                let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
+                // let outfile = "out.y4m";
+                let width_height = "360x24";
+                for i in 0..10 {
+                    let outfile = "/home/jethros/dev/pvn/utils/data/output_videos/".to_owned()
+                        + &pivot.to_string()
+                        + "_"
+                        + &i.to_string()
+                        + ".y4m";
+                    transcode(
+                        infile.to_string(),
+                        outfile.to_string(),
+                        width_height.to_string(),
+                    );
                 }
-            })
+            }
         })
-        .collect::<Vec<_>>();
+    });
+    // .collect::<Vec<_>>();
 
     for handle in handles.into_iter() {
         handle.join().unwrap();
@@ -144,21 +108,17 @@ fn transcode(infile: String, outfile: String, width_height: String) {
         .write_header(&mut outfh)
         .unwrap();
 
-    loop {
-        match decoder.read_frame() {
-            Ok(frame) => {
-                resizer.resize(frame.get_y_plane(), &mut dst);
-                let out_frame = y4m::Frame::new([&dst, &[], &[]], None);
-                if encoder.write_frame(&out_frame).is_err() {
-                    break;
-                }
-            }
-            _ => break,
+    while let Ok(frame) = decoder.read_frame() {
+        resizer.resize(frame.get_y_plane(), &mut dst);
+        let out_frame = y4m::Frame::new([&dst, &[], &[]], None);
+        if encoder.write_frame(&out_frame).is_err() {
+            return;
         }
     }
 }
 
 fn main() {
+    let now = Instant::now();
     // get the list of ports from cmd args and cast into a Vec
     let params: Vec<String> = env::args().collect();
 
@@ -190,6 +150,7 @@ fn main() {
             let outfile_str = job_args[1].as_str().unwrap();
             let width_height_str = job_args[2].as_str().unwrap();
 
+            println!("job submited");
             run_transcode_crossbeam(infile_str, outfile_str, width_height_str);
             // run_transcode_crossbeam(
             //     infile_str.to_string(),
@@ -197,7 +158,7 @@ fn main() {
             //     width_height_str.to_string(),
             // );
 
-            // println!("video transcoded");
+            println!("video transcoded");
             Ok(())
         },
     );
@@ -205,15 +166,10 @@ fn main() {
     println!("{:?}", default_faktory_conn);
     let mut c = c.connect(Some(&default_faktory_conn)).unwrap();
 
+    println!("before run");
     if let Err(e) = c.run(&["default"]) {
         println!("worker failed: {}", e);
     }
+    if now.elapsed().as_secs() == 600 {}
     // println!("Hello, world!");
 }
-
-// Parse 2 args
-// [String("/home/jethros/dev/pvn-utils/data/tiny.y4m"), String("/home/jethros/dev/pvn-utils/data/output_videos/4856_0.y4m"), String("360x24")]
-// transcoding
-// thread '<unnamed>' panicked at 'called `Result::unwrap()` on an `Err` value: Os { code: 13, kind: PermissionDenied, message: "Permission denied" }', src/main.rs:122:50
-// note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
-// thread '<unnamed>' panicked at 'called `Result::unwrap()` on an `Err` value: Any', src/main.rs:72:13
