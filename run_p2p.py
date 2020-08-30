@@ -57,14 +57,14 @@ def p2p_sess_setup(node, trace, nf, epoch):
                'tao': '10.200.111.123',
                'sanchez': '10.200.111.122',}
 
-    print("Entering p2p_sess setup for {} as {}".format(node, p2p_nodes(node)))
+    print("Entering p2p_sess setup for {} as {}".format(node, p2p_nodes[node]))
     try:
         p2p_sess = Screen(node, True)
         print("p2p session for {} is spawned".format(node))
 
         p2p_sess.send_commands('bash')
         p2p_sess.enable_logs(node + "--" + trace + "_" + nf + ".log")
-        p2p_sess.send_commands('ssh jethros@' + p2p_ips(node))
+        p2p_sess.send_commands('ssh jethros@' + p2p_ips[node])
         p2p_sess.send_commands('cd /home/jethros/dev/pvn/utils/p2p_expr')
         p2p_sess.send_commands('git pull')
 
@@ -257,13 +257,12 @@ def main(expr_list, batch):
         # app_rdr_g, app_rdr_t; app_p2p_g, app_p2p_t
         if expr == "p2p":
             run_expr_p2p(expr, batch)
-        elif expr == "p2p_controlled":
+        elif expr == "app_p2p-controlled":
             run_expr_p2p_controlled(expr, batch)
-        elif expr == "p2p_ext":
+        elif expr == "app_p2p-ext":
             run_expr_p2p_ext(expr, batch)
 
 
 if __name__ == '__main__':
-    main("p2p_controlled", 5)
-    # main("p2p", 5)
-    # main("p2p_ext", 5)
+    main(p2p_controlled, 2)
+    # main(p2p_ext, 5)
