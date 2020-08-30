@@ -18,7 +18,11 @@ pvn_nf = {
         'app_p2p-ext': [
             'pvn-p2p-transform-app',
             'pvn-p2p-groupby-app',
-            ]
+            ],
+        'app_p2p-controlled': [
+            'pvn-p2p-transform-app',
+            'pvn-p2p-groupby-app',
+            ],
         }
 trace = {
         'app_rdr': 'rdr-trace-re.pcap',
@@ -134,3 +138,7 @@ rdr = [ 'app_rdr', ]
 
 nuclear_list = [ 'app_p2p' ]
 complete_nuclear_list = [ 'app_p2p', 'app_p2p-ext' ]
+
+p2p_controlled = [ 'app_p2p-controlled' ]
+p2p_ext = [ 'app_p2p-ext' ]
+
