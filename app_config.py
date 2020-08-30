@@ -59,7 +59,7 @@ set_list = [
         '5',
         '6',
         ]
-p2p_set_list = [
+p2p_ext_list = [
         '11',
         '12',
         '13',
@@ -71,6 +71,15 @@ p2p_set_list = [
         '19',
         '20',
         ]
+p2p_controlled_list = [
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        ]
+
 
 rdr_sending_rate = 1
 p2p_sending_rate = 1

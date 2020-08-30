@@ -160,9 +160,9 @@ def run_expr_p2p_controlled(expr, batch):
             for epoch in range(5):
                 netbricks_sess = netbricks_sess_setup(trace[expr], nf, epoch)
 
-                leecher1_sess = p2p_sess_setup('flynn', trace[expr], nf,)
-                leecher2_sess = p2p_sess_setup('tao', trace[expr], nf, )
-                leecher3_sess = p2p_sess_setup('sanchez', trace[expr], nf, )
+                leecher1_sess = p2p_sess_setup('flynn', trace[expr], nf, epoch)
+                leecher2_sess = p2p_sess_setup('tao', trace[expr], nf, epoch)
+                leecher3_sess = p2p_sess_setup('sanchez', trace[expr], nf, epoch)
 
                 # run clean up for p2p nf before experiment
                 p2p_cleanup("netbricks", netbricks_sess)
