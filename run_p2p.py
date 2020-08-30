@@ -149,7 +149,7 @@ def run_expr_p2p_controlled(expr, batch):
     for nf in pvn_nf[expr]:
         # we are running the regular NFs
         # config the pktgen sending rate
-        for setup in p2p_set_list:
+        for setup in p2p_controlled_list:
             seeder_sess = p2p_sess_setup('provenza', trace[expr], nf, 10000)
             p2p_cleanup('seeder', seeder_sess)
             run_p2p_node('seeder', seeder_sess, setup)
@@ -202,7 +202,7 @@ def run_expr_p2p_ext(expr, batch):
     for nf in pvn_nf[expr]:
         # we are running the regular NFs
         # config the pktgen sending rate
-        for setup in p2p_set_list:
+        for setup in p2p_ext_list:
             pktgen_sess = pktgen_sess_setup(trace[expr], nf,
                                             p2p_sending_rate*batch)
             run_pktgen(pktgen_sess, trace[expr], p2p_sending_rate*batch)
