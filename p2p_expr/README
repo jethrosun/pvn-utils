@@ -1,3 +1,6 @@
+sudo update-alternatives --config editor
+
+
 jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/p2p_expr/run_p2p_seeder.sh
 jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/p2p_expr/run_p2p_leecher.sh
 jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/p2p_expr/p2p_seeder_cleanup.sh
