@@ -142,9 +142,7 @@ fn main() {
     c.register(
         "app-xcdr_t-".to_owned() + &params[3],
         |job| -> io::Result<()> {
-            // println!("{:?}", job);
-            // Job { jid: "uHZtO6qTxNurjck4", queue: "default", kind: "app-xcdr_t", args: [String("/home/jethros/dev/pvn-utils/data/tiny.y4m"), String("/home/jethros/dev/pvn-utils/data/output_videos/321_0.y4m"), String("360x24")], created_at: Some(2020-05-06T22:34:34.479399561Z), enqueued_at: Some(2020-05-06T22:34:34.479430746Z), at: None, reserve_for: Some(600), retry: Some(25), priority: None, backtrace: None, failure: None, custom: {} }
-            // println!("{:?}", job.args());
+            let now = Instant::now();
             let job_args = job.args();
 
             let infile_str = job_args[0].as_str().unwrap();
@@ -157,7 +155,7 @@ fn main() {
             //     outfile_str.to_string(),
             //     width_height_str.to_string(),
             // );
-            println!("video transcoded",);
+            println!("video transcoded in {:?}", now.elapsed().as_millis());
 
             Ok(())
         },
