@@ -139,7 +139,7 @@ sending_rate = {
         }
 
 # expr is 10 min/600 sec
-expr_wait_time = 675
+expr_wait_time = 800
 
 xcdr_port_base = 7418
 
