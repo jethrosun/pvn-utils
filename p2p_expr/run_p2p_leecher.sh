@@ -2,7 +2,7 @@
 #set -x
 set -euo pipefail
 
-SERVER="127.0.0.1:9091 --auth transmission:tranmission"
+SERVER="127.0.0.1:9091 --auth transmission:transmission"
 
 # Get the final server string to use.
 echo -n "Using hardcoded server string: "
