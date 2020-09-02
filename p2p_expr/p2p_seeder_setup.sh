@@ -37,8 +37,6 @@ do
 	stat p2p_image_${i}.img
 	transmission-create -o ~/torrents/p2p_image_${i}.torrent \
 		-c "PVN p2p image ${i} with only random bytes." \
-		-t http://tracker.openbittorrent.com:80 \
-		--private \
 		p2p_image_${i}.img
 done
 
