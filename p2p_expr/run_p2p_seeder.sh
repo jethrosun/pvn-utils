@@ -9,7 +9,17 @@ SERVER="127.0.0.1:9091 --auth transmission:transmission"
 echo -n "Using hardcoded server string: "
 echo "${SERVER: : 10}(...)"  # Truncate to not print auth.
 
-transmission-daemon -c ~/data
+# ----------------------------------
+#   Check status of transmission
+# ----------------------------------
+
+for (( c=1; c<=10; c++ ))
+do
+	transmission-remote $SERVER -a /home/jethros/data/p2p_image_${c}.torrent
+done
+transmission-remote $SERVER -s
+
+# transmission-daemon -c ~/data
 
 # ----------------------------------
 #   Check status of transmission
