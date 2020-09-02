@@ -15,9 +15,10 @@ echo "${SERVER: : 10}(...)"  # Truncate to not print auth.
 
 for (( c=1; c<=10; c++ ))
 do
-	transmission-remote $SERVER -a /home/jethros/data/p2p_image_${c}.torrent
+	transmission-remote --torrent=/home/jethros/data/p2p_image_${c}.torrent \
+                -a p2p_image_${c}.torrent --verify \
+                --download-dir=/home/jethros/data --start
 done
-transmission-remote $SERVER -s
 
 # transmission-daemon -c ~/data
 
