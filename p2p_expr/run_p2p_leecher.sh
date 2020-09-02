@@ -15,7 +15,7 @@ echo "${SERVER: : 10}(...)"  # Truncate to not print auth.
 echo $1
 for i in {1..$1}
 do
-	transmission-remote $SERVER -a ~/dev/pvn/utils/workloads/torrent_files/p2p_image_${i}.img
+	transmission-remote $SERVER -a ~/dev/pvn/utils/workloads/torrent_files/p2p_image_${i}.torrent
 done
 
 transmission-remote $SERVER -s
