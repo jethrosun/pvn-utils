@@ -9,7 +9,7 @@ SERVER="127.0.0.1:9091 --auth transmission:transmission"
 echo -n "Using hardcoded server string: "
 echo "${SERVER: : 10}(...)"  # Truncate to not print auth.
 
-transmission-daemon -c ~/data
+# transmission-daemon -c ~/data
 
 # ----------------------------------
 #   Check status of transmission

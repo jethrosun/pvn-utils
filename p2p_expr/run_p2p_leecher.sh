@@ -12,10 +12,9 @@ echo "${SERVER: : 10}(...)"  # Truncate to not print auth.
 #   Add torrent jobs
 # ----------------------------------
 
-echo $1
-for i in {1..$1}
+for (( c=1; c<=$1; c++ ))
 do
-	transmission-remote $SERVER -a ~/dev/pvn/utils/workloads/torrent_files/p2p_image_${i}.torrent
+	transmission-remote $SERVER -a ~/dev/pvn/utils/workloads/torrent_files/p2p_image_${c}.torrent
 done
 
 transmission-remote $SERVER -s
