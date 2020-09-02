@@ -29,6 +29,7 @@ sudo chown -R www-data:www-data /var/www/public
 sudo chown debian-transmission.debian-transmission /home/jethros/data
 sudo usermod -aG www-data $USER
 
+# https://www.reddit.com/r/torrents/comments/8likab/how_to_create_a_trackerless_torrent_using_the_dht/
 for i in {1..10}
 do
 	echo "Welcome $i times"
