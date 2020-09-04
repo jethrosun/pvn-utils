@@ -240,14 +240,6 @@ if __name__ == '__main__':
     # for simple test
 
     #main(rdr, 2)
-    main(metric_list, 5)
+    main(all_expr_list, 3)
 
-    # for batch in range(3):
-    #     print(batch)
-    #     main(expr_list, batch+1)
-
-    # main(simple_nf_list, simple_trace_list)
-    # main(test_nf_list, test_trace_list)
-    # main(nf_list, trace_list)
-    # main(nf_list, additional_trace)
     print("All experiments are done")
