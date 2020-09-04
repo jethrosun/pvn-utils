@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Usage:
-#   $ ./run_netbricks.sh trace nf epoch
+#   $ ./run_netbricks.sh trace nf epoch setup expr
+
 
 set -euo pipefail
 
@@ -106,7 +107,8 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 		--arg iter "$3" \
 		--arg setup "$4" \
 		--arg inst "$INST_LEVEL" \
-		'{setup: $setup, iter: $iter, inst: $inst}' )
+		--arg p2p_type "$5" \
+		'{setup: $setup, iter: $iter, inst: $inst, p2p_type: $p2p_type}' )
 	echo $JSON_STRING > /home/jethros/setup
 
 	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh ; done > $P2P_PROGRESS_LOG &
@@ -115,7 +117,6 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 	P2=$!
 	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
 	P3=$!
-	# top -b -d 1 -n 700 | tee $MLOG &
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P4=$!
 	$TCP_TOP_MONITOR -C > $TCP_LOG &
@@ -136,7 +137,8 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 		--arg iter "$3" \
 		--arg setup "$4" \
 		--arg inst "$INST_LEVEL" \
-		'{setup: $setup, iter: $iter, inst: $inst}' )
+		--arg p2p_type "$5" \
+		'{setup: $setup, iter: $iter, inst: $inst, p2p_type: $p2p_type}' )
 	echo $JSON_STRING > /home/jethros/setup
 
 	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh ; done > $P2P_PROGRESS_LOG &
