@@ -81,7 +81,6 @@ pub fn run_transcode_native(pivot: u128) {
 ///
 /// We set up all the parameters for the transcoding job to happen.
 fn transcode(infile: String, outfile: String, width_height: String) {
-    // println!("transcoding");
     let mut infh: Box<dyn io::Read> = Box::new(File::open(&infile).unwrap());
     let mut outfh: Box<dyn io::Write> = Box::new(File::create(&outfile).unwrap());
     let dst_dims: Vec<_> = width_height
@@ -155,7 +154,10 @@ fn main() {
             //     outfile_str.to_string(),
             //     width_height_str.to_string(),
             // );
-            println!("video transcoded in {:?}", now.elapsed().as_millis());
+            println!(
+                "faktory: transcoded in {:?} millis",
+                now.elapsed().as_millis()
+            );
 
             Ok(())
         },
@@ -164,12 +166,16 @@ fn main() {
     println!("{:?}", default_faktory_conn);
     let mut c = c.connect(Some(&default_faktory_conn)).unwrap();
 
-    println!("before run");
     if let Err(e) = c.run(&["default"]) {
         println!("worker failed: {}", e);
     }
     if now.elapsed().as_secs() == 600 {
-        println!("Metric: ",);
+        println!("Metric: Running for 600 seconds ",);
     }
-    // println!("Hello, world!");
+    if now.elapsed().as_secs() == 800 {
+        println!("Metric: Running for 800 seconds",);
+    }
+    if now.elapsed().as_secs() == 1000 {
+        println!("Metric: Running for 1000 seconds",);
+    }
 }
