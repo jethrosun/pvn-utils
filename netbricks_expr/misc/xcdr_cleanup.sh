@@ -1,6 +1,6 @@
 #!/bin/bash
-#set -x
-set -euo pipefail
+set -ex
+# set -euo pipefail
 
 # clean the states of transmission
 # sudo rm -rf downloads/*
