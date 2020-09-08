@@ -240,6 +240,7 @@ if __name__ == '__main__':
     # for simple test
 
     #main(rdr, 2)
-    main(all_expr_list, 3)
+    main(xcdr, 3)
+    # main(all_expr_list, 3)
 
     print("All experiments are done")
