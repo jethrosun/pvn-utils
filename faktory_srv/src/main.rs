@@ -3,7 +3,7 @@ extern crate faktory;
 extern crate resize;
 extern crate y4m;
 
-use core_affinity::{self};
+use core_affinity;
 use crossbeam::thread;
 use faktory::ConsumerBuilder;
 use resize::Pixel::Gray8;
@@ -134,8 +134,8 @@ fn main() {
         process::exit(0x0100);
     }
 
-    // let default_faktory_conn = "tcp://:some_password@localhost:".to_string() + &params[1];
-    let default_faktory_conn = "tcp://localhost:7419";
+    let default_faktory_conn = "tcp://:some_password@localhost:".to_string() + &params[1];
+    // let default_faktory_conn = "tcp://localhost:7419";
 
     let mut c = ConsumerBuilder::default();
     c.register(
