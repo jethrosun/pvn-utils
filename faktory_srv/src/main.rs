@@ -134,8 +134,8 @@ fn main() {
         process::exit(0x0100);
     }
 
-    let default_faktory_conn = "tcp://:some_password@localhost:".to_string() + &params[1];
-    // let default_faktory_conn = "tcp://localhost:7419";
+    // let default_faktory_conn = "tcp://localhost:".to_string() + &params[1];
+    let default_faktory_conn = "tcp://localhost:7419";
 
     let mut c = ConsumerBuilder::default();
     c.register(

@@ -1,10 +1,10 @@
 #!/bin/bash
-set -ex
+set -e
+# set -euo pipefail
+
 # Usage:
 #   $ ./run_netbricks.sh trace nf epoch setup expr
 
-
-set -euo pipefail
 
 LOG_DIR=$HOME/netbricks_logs/$2/$1
 
@@ -49,8 +49,9 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst}' )
 	echo $JSON_STRING > /home/jethros/setup
 
-	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:$5:$5 -p 127.0.0.1:$6:$6 contribsys/faktory:latest
+	# docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:$5:$5 -p 127.0.0.1:$6:$6 contribsys/faktory:latest
 	# docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:$5:$5 -p 127.0.0.1:$6:$6 contribsys/faktory:latest /faktory -b :$5 -w :$6
+	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
 	# P1=$!
 	docker ps
 	sleep 15
@@ -77,8 +78,9 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst}' )
 	echo $JSON_STRING > /home/jethros/setup
 
-	docker run -d --cpuset-cpus 4 --name faktory_srv --rm -it -p 127.0.0.1:$5:$5 -p 127.0.0.1:$6:$6 contribsys/faktory:latest
+	# docker run -d --cpuset-cpus 4 --name faktory_srv --rm -it -p 127.0.0.1:$5:$5 -p 127.0.0.1:$6:$6 contribsys/faktory:latest
 	# docker run -d --cpuset-cpus 4 --name faktory_srv --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:$5:$5 -p 127.0.0.1:$6:$6 contribsys/faktory:latest /faktory -b :$5 -w $6
+	docker run -d --cpuset-cpus 4 --name faktory_srv --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
 	# P1=$!
 	docker ps
 	sleep 15
