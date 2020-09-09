@@ -86,7 +86,7 @@ p2p_sending_rate = 1
 
 batch = 2
 
-fixed_sending_rate = 3
+fixed_sending_rate = 10
 sending_rate = {
         'app_xcdr': {
             '1': fixed_sending_rate,
