@@ -3,7 +3,7 @@
 from screenutils import list_screens, Screen
 import sys
 import time
-from app_config import *
+import app_config as app
 
 def netbricks_sess_setup(trace, nf, epoch):
     print("Entering netbricks_sess setup")
@@ -236,11 +236,4 @@ def main(expr_list, batch):
                     time.sleep(60)
 
 
-if __name__ == '__main__':
-    # for simple test
-
-    #main(rdr, 2)
-    main(xcdr, 3)
-    # main(all_expr_list, 3)
-
-    print("All experiments are done")
+main(app.metric_list, 3)
