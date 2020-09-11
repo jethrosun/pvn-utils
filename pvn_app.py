@@ -236,4 +236,4 @@ def main(expr_list, batch):
                     time.sleep(60)
 
 
-main(app.metric_list, 3)
+main(app.metric_list, 1)
