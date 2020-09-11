@@ -6,3 +6,5 @@ sudo apt install qbittorrent qbittorrent-nox -y
 
 sudo rm -rf ~/data
 mkdir -p ~/data
+
+qbittorrent-nox --profile $HOME/data
