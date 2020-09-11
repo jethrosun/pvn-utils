@@ -83,8 +83,11 @@ def run_netbricks(sess, trace, nf, epoch, setup):
 
 
 def run_netbricks_xcdr(sess, trace, nf, epoch, setup, port1, port2, expr_num):
+    # cmd_str = "sudo ./run_netbricks_app.sh " + trace + " " + nf + " " + str(
+    #     epoch) + " " + setup + " " + port1 + " " + port2 + " " + expr_num
     cmd_str = "sudo ./run_netbricks_app.sh " + trace + " " + nf + " " + str(
-        epoch) + " " + setup + " " + port1 + " " + port2 + " " + expr_num
+        epoch) + " " + setup + " " + str(7419) + " " + str(7420) + " " + expr_num
+
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
@@ -236,4 +239,5 @@ def main(expr_list, batch):
                     time.sleep(60)
 
 
-main(app.metric_list, 1)
+# main(app.metric_list, 1)
+main(app.xcdr, 1)
