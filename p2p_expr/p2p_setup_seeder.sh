@@ -2,16 +2,21 @@
 
 set -ex
 
-sudo add-apt-repository ppa:transmissionbt/ppa -y
-sudo apt-get update -y
-sudo apt-get install transmission-cli transmission-common transmission-daemon -y
+sudo add-apt-repository ppa:qbittorrent-team/qbittorrent-stable -y
+sudo apt install qbittorrent qbittorrent-nox -y
 
-sudo cp  /var/lib/transmission-daemon/info/settings.json  /var/lib/transmission-daemon/info/settings.json.bak
+# sudo adduser --system --group qbittorrent-nox
+# sudo adduser qbittorrent-nox qbittorrent-nox
+#
+# sudo cp /etc/systemd/system/qbittorrent-nox.service /etc/systemd/system/qbittorrent-nox.service.backup
+# sudo wget https://raw.githubusercontent.com/Sonic3R/Scripts/master/bash_scripts/qbit.service -O /home/qbit.service
+#
+# sudo cp /home/qbit.service /etc/systemd/system/qbittorrent-nox.service
+sudo systemctl start qbittorrent-nox
+sudo systemctl daemon-reload
+sudo systemctl enable qbittorrent-nox
 
-sudo service transmission-daemon stop
-sudo usermod --append -G debian-transmission jethros
-sudo service transmission-daemon start
-
+echo "url is :8088"
 
 
 # seeder setup
@@ -20,14 +25,9 @@ sudo service transmission-daemon start
 # https://superuser.com/questions/470949/how-do-i-create-a-1gb-random-file-in-linux
 sudo rm -rf ~/data
 mkdir -p ~/data
+# sudo setfacl -R -m "u:qbittorrent-nox:rwx" /home/data
 mkdir -p ~/torrents
 cd ~/data
-
-# sudo mkdir -p /var/www/public
-# sudo chown -R www-data:www-data /var/www/public
-#
-# sudo chown debian-transmission.debian-transmission /home/jethros/data
-# sudo usermod -aG www-data $USER
 
 # https://www.reddit.com/r/torrents/comments/8likab/how_to_create_a_trackerless_torrent_using_the_dht/
 for i in {1..10}
@@ -36,13 +36,7 @@ do
 	sudo fallocate -l 1G p2p_image_${i}.img
 	sudo dd if=/dev/random of=p2p_image_${i}.img bs=1 count=0 seek=1G
 	stat p2p_image_${i}.img
-	transmission-create -o /home/jethros/data/p2p_image_${i}.torrent \
-		-c "PVN p2p image ${i} with only random bytes." \
-		/home/jethros/data/p2p_image_${i}.img
 done
 
-cp ~/torrents/* ~/dev/pvn/utils/workloads/torrent_files
 
-# sudo chown debian-transmission.debian-transmission /home/jethros/data
-
-# https://www.cnx-software.com/2012/06/08/how-to-create-and-seed-a-torrent-in-ubuntu-using-transmission-command-line/
+echo "To create torrents and start seeding them, a qBitTorrent GUI must be used."
