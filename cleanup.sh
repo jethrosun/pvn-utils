@@ -31,6 +31,6 @@ if ls $HOME/dev/pvn/utils/*.log >/dev/null 2>&1; then
 	rm -rf pktgen_logs--$current_date_time
 	printf "Moving just the pvn pktgen logs to the backup logs\n"
 else
-	printf "nothing to be done?"
+	printf "nothing to be done?\n"
 fi
 
