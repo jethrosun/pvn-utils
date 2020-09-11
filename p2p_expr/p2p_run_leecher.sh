@@ -5,7 +5,7 @@ TORRENTS=" "
 
 for (( c=1; c<=$1; c++ ))
 do
-	TORRENTS+=" p2p_image_${c}.img.torrent"
+	TORRENTS+=" img${c}_secret.torrent"
 done
 
 echo $TORRENTS
