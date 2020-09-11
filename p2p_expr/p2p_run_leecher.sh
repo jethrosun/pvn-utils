@@ -11,4 +11,4 @@ done
 echo $TORRENTS
 
 cd $HOME/dev/pvn/utils/workloads/torrent_files
-qbittorrent-nox --profile=/home/jethros/data $TORRENTS &
+qbittorrent-nox --profile=/home/jethros/data $TORRENTS
