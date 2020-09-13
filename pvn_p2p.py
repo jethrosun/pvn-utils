@@ -6,7 +6,7 @@ import time
 import app_config as app
 
 
-def netbricks_sess_setup(trace, nf, epoch):
+def netbricks_sess_setup(trace, nf, epoch, expr):
     print("Entering netbricks_sess setup")
     try:
         netbricks_sess = Screen("netbricks", True)
@@ -191,6 +191,7 @@ def run_expr_p2p(expr, batch):
 
 
 def run_expr_p2p_controlled(expr, batch):
+    print("running controlled")
     for nf in app.pvn_nf[expr]:
         # we are running the regular NFs
         # config the pktgen sending rate
