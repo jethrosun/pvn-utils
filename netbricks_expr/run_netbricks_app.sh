@@ -115,8 +115,11 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 		'{setup: $setup, iter: $iter, inst: $inst, p2p_type: $p2p_type}' )
 	echo $JSON_STRING > /home/jethros/setup
 
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh ; done > $P2P_PROGRESS_LOG &
-	P1=$!
+	if [ $5 != "p2p_controlled" ]
+	then
+		while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh ; done > $P2P_PROGRESS_LOG &
+		P1=$!
+	fi
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P2=$!
 	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
@@ -145,8 +148,11 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 		'{setup: $setup, iter: $iter, inst: $inst, p2p_type: $p2p_type}' )
 	echo $JSON_STRING > /home/jethros/setup
 
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh ; done > $P2P_PROGRESS_LOG &
-	P1=$!
+	if [ $5 != "p2p_controlled" ]
+	then
+		while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh ; done > $P2P_PROGRESS_LOG &
+		P1=$!
+	fi
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P2=$!
 	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
