@@ -113,12 +113,8 @@ def run_netbricks(sess, trace, nf, epoch, setup, expr):
 
 
 def run_p2p_node(typ, sess, setup):
-    if typ == "seeder":
-        cmd_str = "sudo ./run_p2p_seeder.sh " + setup
-        print("Run P2P Seeder \n\tCmd: {}".format(cmd_str))
-        sess.send_commands(cmd_str)
-    elif typ == "leecher":
-        cmd_str = "sudo ./run_p2p_leecher.sh " + setup
+    if typ == "leecher":
+        cmd_str = "sudo ./p2p_run_leecher.sh " + setup + "&"
         print("Run P2P Leecher \n\tCmd: {}".format(cmd_str))
         sess.send_commands(cmd_str)
     else:
@@ -135,14 +131,12 @@ def p2p_cleanup(typ, sess):
         cmd_str = "sudo ./misc/p2p_cleanup.sh "
         sess.send_commands(cmd_str)
         print("NetBricks P2P clean up with cmd: {}".format(cmd_str))
-    elif typ == "seeder":
-        cmd_str = "sudo ./p2p_seeder_cleanup.sh "
-        print("Seeder P2P clean up with cmd: {}".format(cmd_str))
-        sess.send_commands(cmd_str)
     elif typ == "leecher":
         cmd_str = "sudo ./p2p_leecher_cleanup.sh "
         print("Leecher P2P clean up with cmd: {}".format(cmd_str))
         sess.send_commands(cmd_str)
+    else:
+        print("Unknown p2p node type {}".format(typ))
 
 
 def run_expr_p2p_controlled(expr, batch):
@@ -150,15 +144,13 @@ def run_expr_p2p_controlled(expr, batch):
         # we are running the regular NFs
         # config the pktgen sending rate
         for setup in p2p_controlled_list:
-            seeder_sess = p2p_sess_setup('provenza', trace[expr], nf, 10000)
-            p2p_cleanup('seeder', seeder_sess)
-            run_p2p_node('seeder', seeder_sess, setup)
             pktgen_sess = pktgen_sess_setup(trace[expr], nf,
                                             p2p_sending_rate*batch)
             run_pktgen(pktgen_sess, trace[expr], p2p_sending_rate*batch)
             # epoch from 0 to 9
             for epoch in range(5):
-                netbricks_sess = netbricks_sess_setup(trace[expr], nf, epoch)
+                netbricks_sess = netbricks_sess_setup(trace[expr], nf, epoch,
+                                                      expr)
 
                 leecher1_sess = p2p_sess_setup('flynn', trace[expr], nf, epoch)
                 leecher2_sess = p2p_sess_setup('tao', trace[expr], nf, epoch)
@@ -175,7 +167,8 @@ def run_expr_p2p_controlled(expr, batch):
                 run_p2p_node('leecher', leecher1_sess, setup)
                 run_p2p_node('leecher', leecher2_sess, setup)
                 run_p2p_node('leecher', leecher3_sess, setup)
-                run_netbricks(netbricks_sess, trace[expr], nf, epoch, setup)
+                run_netbricks(netbricks_sess, trace[expr], nf, epoch, setup,
+                              expr)
 
                 time.sleep(expr_wait_time)
 
@@ -194,7 +187,6 @@ def run_expr_p2p_controlled(expr, batch):
                 time.sleep(60)
 
             sess_destroy(pktgen_sess)
-            sess_destroy(seeder_sess)
             time.sleep(60)
 
 
