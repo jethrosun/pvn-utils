@@ -10,4 +10,4 @@ done
 
 echo $TORRENTS
 
-qbittorrent-nox --profile=/home/jethros/data $TORRENTS
+qbittorrent-nox --profile=/home/jethros/qbt_data $TORRENTS

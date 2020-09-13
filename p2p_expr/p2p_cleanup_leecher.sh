@@ -1,5 +1,5 @@
 #!/bin/bash
 set -ex
 
-sudo rm -rf ~/data
-mkdir -p ~/data
+sudo rm -rf ~/qbt_data
+mkdir -p ~/qbt_data

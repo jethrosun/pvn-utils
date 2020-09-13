@@ -27,7 +27,7 @@ echo "${SERVER: : 10}(...)"  # Truncate to not print auth.
 # Disable uTP for peer connections. If current torrent(s) are selected this operates on them. Otherwise, it changes the global setting.
 transmission-remote $SERVER --no-utp
 # Use directory as the default location for newly added torrents to download files to.
-transmission-remote $SERVER --download-dir=/home/jethros/data/downloads
+transmission-remote $SERVER --download-dir=/home/jethros/qbt_data/downloads
 
 # ----------------------------------
 #   Check status of transmission

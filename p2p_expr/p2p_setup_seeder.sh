@@ -3,15 +3,15 @@
 set -ex
 
 sudo add-apt-repository ppa:qbittorrent-team/qbittorrent-stable -y
-sudo apt install qbittorrent qbittorrent-nox -y
+sudo apt install qbittorrent-nox -y
 
-# sudo adduser --system --group qbittorrent-nox
-# sudo adduser qbittorrent-nox qbittorrent-nox
-#
-# sudo cp /etc/systemd/system/qbittorrent-nox.service /etc/systemd/system/qbittorrent-nox.service.backup
-# sudo wget https://raw.githubusercontent.com/Sonic3R/Scripts/master/bash_scripts/qbit.service -O /home/qbit.service
-#
-# sudo cp /home/qbit.service /etc/systemd/system/qbittorrent-nox.service
+sudo adduser --system --group qbittorrent-nox
+sudo adduser qbittorrent-nox qbittorrent-nox
+
+sudo cp /etc/systemd/system/qbittorrent-nox.service /etc/systemd/system/qbittorrent-nox.service.backup
+sudo wget https://raw.githubusercontent.com/Sonic3R/Scripts/master/bash_scripts/qbit.service -O /home/qbit.service
+
+sudo cp /home/qbit.service /etc/systemd/system/qbittorrent-nox.service
 sudo systemctl start qbittorrent-nox
 sudo systemctl daemon-reload
 sudo systemctl enable qbittorrent-nox
@@ -25,7 +25,7 @@ echo "url is :8088"
 # https://superuser.com/questions/470949/how-do-i-create-a-1gb-random-file-in-linux
 sudo rm -rf ~/data
 mkdir -p ~/data
-# sudo setfacl -R -m "u:qbittorrent-nox:rwx" /home/data
+sudo setfacl -R -m "u:qbittorrent-nox:rwx" /home/data
 mkdir -p ~/torrents
 cd ~/data
 
