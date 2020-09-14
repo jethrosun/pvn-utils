@@ -132,7 +132,7 @@ def p2p_cleanup(typ, sess):
         sess.send_commands(cmd_str)
         print("NetBricks P2P clean up with cmd: {}".format(cmd_str))
     elif typ == "leecher":
-        cmd_str = "sudo ./p2p_leecher_cleanup.sh "
+        cmd_str = "sudo ./p2p_cleanup_leecher.sh "
         print("Leecher P2P clean up with cmd: {}".format(cmd_str))
         sess.send_commands(cmd_str)
     else:
