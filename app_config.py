@@ -82,7 +82,7 @@ p2p_controlled_list = [
 
 
 rdr_sending_rate = 1
-p2p_sending_rate = 1
+p2p_sending_rate = 5
 
 batch = 2
 
