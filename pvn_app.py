@@ -239,5 +239,4 @@ def main(expr_list, batch):
                     time.sleep(60)
 
 
-# main(app.metric_list, 1)
-main(app.xcdr, 1)
+main(app.metric_list, 3)

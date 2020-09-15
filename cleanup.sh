@@ -25,7 +25,7 @@ if ls $HOME/dev/pvn/utils/*.log >/dev/null 2>&1; then
 	mv $HOME/dev/pvn/utils/netbricks*.log $HOME/logs/pktgen_logs--$current_date_time
 	printf "Moving just the pvn netbricks logs to the backup logs\n"
 	mkdir -p $HOME/logs/pktgen_logs--$current_date_time
-	mv $HOME/dev/pvn/utils/pktgen*.log $HOME/logs/pktgen_logs--$current_date_time
+	mv $HOME/dev/pvn/utils/*.log $HOME/logs/pktgen_logs--$current_date_time
 	cd $HOME/logs
 	tar -cvzf pktgen_logs--$current_date_time.tar.gz  pktgen_logs--$current_date_time
 	rm -rf pktgen_logs--$current_date_time
