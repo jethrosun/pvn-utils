@@ -2,7 +2,7 @@
 set -ex
 
 # bad idea?
-sudo add-apt-repository ppa:deluge-team/stable -y
+# sudo add-apt-repository ppa:deluge-team/stable -y
 sudo apt-get update -y
 sudo apt-get install deluge -y
 
