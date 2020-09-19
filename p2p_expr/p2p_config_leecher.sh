@@ -30,10 +30,10 @@ if [ ! -e ~/bt_data/config/auth ]; then
 	#view it with: deluge-console -c /config "config allow_remote"
 
 	#setup the paths
-	deluge-console -c ~/bt_data/config "config -s move_completed_path ~/bt_data/Complete"
-	deluge-console -c ~/bt_data/config "config -s torrentfiles_location ~/bt_data/Torrents"
-	deluge-console -c ~/bt_data/config "config -s download_location ~/bt_data/InProgress"
-	deluge-console -c ~/bt_data/config "config -s autoadd_location ~/bt_data/Drop"
+	deluge-console -c ~/bt_data/config "config -s move_completed_path /home/jethros/bt_data/Complete"
+	deluge-console -c ~/bt_data/config "config -s torrentfiles_location /home/jethros/bt_data/Torrents"
+	deluge-console -c ~/bt_data/config "config -s download_location /home/jethros/bt_data/InProgress"
+	deluge-console -c ~/bt_data/config "config -s autoadd_location /home/jethros/bt_data/Drop"
 
 	#daemon port which the WEB ui connects to
 	deluge-console -c ~/bt_data/config "config -s daemon_port 58846"
