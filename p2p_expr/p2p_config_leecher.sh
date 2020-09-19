@@ -56,5 +56,6 @@ if [ ! -e ~/bt_data/config/auth ]; then
 	deluge-console -c ~/bt_data/config "halt"
 fi
 
-echo Starting up now ...
+echo "Starting up now ..."
 deluged -c ~/bt_data/config
+deluge-web -c ~/bt_data/config
