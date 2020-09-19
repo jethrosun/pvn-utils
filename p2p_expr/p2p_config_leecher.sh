@@ -39,19 +39,19 @@ if [ ! -e ~/bt_data/config/auth ]; then
 	deluge-console -c ~/bt_data/config "config -s daemon_port 58846"
 
 	deluge-console -c ~/bt_data/config "config -s upnp False"
-	deluge-console -c ~/bt_data/config "config -s compact_allocation False"
+	#deluge-console -c ~/bt_data/config "config -s compact_allocation False"
 	deluge-console -c ~/bt_data/config "config -s add_paused False"
 	deluge-console -c ~/bt_data/config "config -s move_completed True"
 	deluge-console -c ~/bt_data/config "config -s copy_torrent_file True"
-	deluge-console -c ~/bt_data/config "config -s autoadd_enable True"
+	#deluge-console -c ~/bt_data/config "config -s autoadd_enable True"
 
 	#BT port:
 	deluge-console -c ~/bt_data/config "config -s listen_ports (58332, 58333)"
 	#default is (6881, 6891)
 	deluge-console -c ~/bt_data/config "config -s random_port False"
 
-        deluge-console 'config -s max_upload_speed 1.5'
-        deluge-console 'config -s max_download_speed 1.5'
+    deluge-console -c ~/bt_data/config 'config -s max_upload_speed 1.5'
+    deluge-console -c ~/bt_data/config 'config -s max_download_speed 1.5'
 
 	deluge-console -c ~/bt_data/config "halt"
 fi
