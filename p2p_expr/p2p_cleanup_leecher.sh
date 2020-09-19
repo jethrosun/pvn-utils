@@ -4,15 +4,67 @@ set -ex
 P2P_PID=`ps -eaf | grep p2p_run_leecher | grep -v grep | awk '{print $2}'`
 if [[ "" !=  "$P2P_PID" ]]; then
   echo "killing $P2P_PID"
-  kill -9 $P2P_PID
+  sudo kill -9 $P2P_PID
 fi
 
-QBT_PID=`ps -eaf | grep qbittorrent | grep -v grep | awk '{print $2}'`
-if [[ "" !=  "$QBT_PID" ]]; then
-  echo "killing $QBT_PID"
-  kill -9 $QBT_PID
+BT_PID=`ps -eaf | grep deluged | grep -v grep | awk '{print $2}'`
+if [[ "" !=  "$BT_PID" ]]; then
+  echo "killing $BT_PID"
+  sudo kill -9 $BT_PID
 fi
 
 
-sudo rm -rf ~/qbt_data
-mkdir -p ~/qbt_data
+sudo rm -rf ~/bt_data
+
+mkdir -p ~/bt_data
+#prep the output dirs
+if [ ! -e ~/bt_data/Complete ]; then
+	mkdir -p ~/bt_data/Complete
+	mkdir -p ~/bt_data/Torrents
+	mkdir -p ~/bt_data/InProgress
+	mkdir -p ~/bt_data/Drop
+fi
+
+mkdir ~/bt_data/config
+
+# check if config exists in /config and set it up if not
+if [ ! -e ~/bt_data/config/auth ]; then
+	#create a default user (apart from admin/deluge)
+	#echo "user:Password1:10" >> /config/auth
+
+	#daemon must be running to setup
+	deluged -c ~/bt_data/config
+
+	#need a small delay here or the first config setting fails
+	sleep 1
+
+	#enable report connections (for webui to connect to backend)
+	deluge-console -c ~/bt_data/config "config -s allow_remote True"
+	#view it with: deluge-console -c /config "config allow_remote"
+
+	#setup the paths
+	deluge-console -c ~/bt_data/config "config -s move_completed_path ~/bt_data/Complete"
+	deluge-console -c ~/bt_data/config "config -s torrentfiles_location ~/bt_data/Torrents"
+	deluge-console -c ~/bt_data/config "config -s download_location ~/bt_data/InProgress"
+	deluge-console -c ~/bt_data/config "config -s autoadd_location ~/bt_data/Drop"
+
+	#daemon port which the WEB ui connects to
+	deluge-console -c ~/bt_data/config "config -s daemon_port 58846"
+
+	deluge-console -c ~/bt_data/config "config -s upnp False"
+	deluge-console -c ~/bt_data/config "config -s compact_allocation False"
+	deluge-console -c ~/bt_data/config "config -s add_paused False"
+	deluge-console -c ~/bt_data/config "config -s move_completed True"
+	deluge-console -c ~/bt_data/config "config -s copy_torrent_file True"
+	deluge-console -c ~/bt_data/config "config -s autoadd_enable True"
+
+	#BT port:
+	deluge-console -c ~/bt_data/config "config -s listen_ports (58332, 58333)"
+	#default is (6881, 6891)
+	deluge-console -c ~/bt_data/config "config -s random_port False"
+
+	deluge-console -c ~/bt_data/config "halt"
+fi
+
+echo Starting up now ...
+deluged -c ~/bt_data/config
