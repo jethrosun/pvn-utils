@@ -16,3 +16,7 @@ fi
 
 
 sudo rm -rf /home/jethros/bt_data
+sudo rm -rf /home/jethros/Downloads
+
+mkdir -p /home/jethros/bt_data
+mkdir -p /home/jethros/Downloads
