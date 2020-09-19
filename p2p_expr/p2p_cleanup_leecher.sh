@@ -15,4 +15,4 @@ if [[ "" !=  "$BT_PID" ]]; then
 fi
 
 
-sudo rm -rf ~/bt_data
+sudo rm -rf /home/jethros/bt_data
