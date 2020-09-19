@@ -114,7 +114,7 @@ def run_netbricks(sess, trace, nf, epoch, setup, expr):
 
 def run_p2p_node(typ, sess, setup):
     if typ == "leecher":
-        cmd_str = "sudo ./p2p_run_leecher.sh " + setup + " &"
+        cmd_str = "./p2p_run_leecher.sh " + setup
         print("Run P2P Leecher \n\tCmd: {}".format(cmd_str))
         sess.send_commands(cmd_str)
     else:
@@ -130,13 +130,22 @@ def p2p_cleanup(typ, sess):
     if typ == "netbricks":
         cmd_str = "sudo ./misc/p2p_cleanup.sh "
         sess.send_commands(cmd_str)
+        print("NetBricks P2P clean up with cmd: {}".format(cmd_str))
+
         p2p_cmd_str = "sudo ./../p2p_expr/p2p_cleanup_leecher.sh"
         sess.send_commands(p2p_cmd_str)
-        print("NetBricks P2P clean up with cmd: {}".format(cmd_str))
+        print("NetBricks P2P cmd: {}".format(p2p_cmd_str))
+
+        config_cmd_str = "./../p2p_expr/p2p_config_leecher.sh"
+        sess.send_commands(config_cmd_str)
+        print("NetBricks P2P cmd: {}".format(config_cmd_str))
     elif typ == "leecher":
         cmd_str = "sudo ./p2p_cleanup_leecher.sh "
-        print("Leecher P2P clean up with cmd: {}".format(cmd_str))
         sess.send_commands(cmd_str)
+        print("Leecher P2P clean up with cmd: {}".format(cmd_str))
+        config_str = "./p2p_config_leecher.sh "
+        sess.send_commands(config_str)
+        print("Leecher P2P config with cmd: {}".format(config_str))
     else:
         print("Unknown p2p node type {}".format(typ))
 
