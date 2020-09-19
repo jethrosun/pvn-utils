@@ -3,6 +3,7 @@ set -ex
 
 
 mkdir -p ~/bt_data
+
 #prep the output dirs
 if [ ! -e ~/bt_data/Complete ]; then
 	mkdir -p ~/bt_data/Complete
@@ -54,16 +55,3 @@ fi
 
 echo Starting up now ...
 deluged -c ~/bt_data/config
-
-
-
-TORRENTS=" "
-
-for (( c=1; c<=$1; c++ ))
-do
-	TORRENTS+=" $HOME/dev/pvn/utils/workloads/torrent_files/img${c}_secret.torrent"
-done
-
-echo $TORRENTS
-
-qbittorrent-nox --profile=/home/jethros/qbt_data $TORRENTS
