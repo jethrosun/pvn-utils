@@ -98,14 +98,20 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	wait $P1 $P2 $P3 $P4 $P5
 
 elif [ $2 == "pvn-p2p-transform-app" ]; then
-	# clean the states of transmission
-	sudo rm -rf downloads/*
-	sudo rm -rf config/*
-	mkdir -p config downloads
+	if [ $5 == "app_p2p-controlled" ]; then
+		sudo rm -rf $HOME/Downloads
+		sudo rm -rf $HOME/.config/deluge
+		mkdir -p $HOME/Downloads  $HOME/.config/deluge
+	else
+		# clean the states of transmission
+		sudo rm -rf downloads/*
+		sudo rm -rf config/*
+		mkdir -p config downloads
 
-	sudo rm -rf /data/downloads/*
-	sudo rm -rf /data/config/*
-	sudo mkdir -p /data/config /data/downloads
+		sudo rm -rf /data/downloads/*
+		sudo rm -rf /data/config/*
+		sudo mkdir -p /data/config /data/downloads
+	fi
 
 	JSON_STRING=$( jq -n \
 		--arg iter "$3" \
@@ -134,14 +140,20 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 	wait $P1 $P2 $P3 $P4 $P5
 
 elif [ $2 == "pvn-p2p-groupby-app" ]; then
-	# clean the states of transmission
-	sudo rm -rf downloads/*
-	sudo rm -rf config/*
-	mkdir -p config downloads
+	if [ $5 == "app_p2p-controlled" ]; then
+		sudo rm -rf $HOME/Downloads
+		sudo rm -rf $HOME/.config/deluge
+		mkdir -p $HOME/Downloads  $HOME/.config/deluge
+	else
+		# clean the states of transmission
+		sudo rm -rf downloads/*
+		sudo rm -rf config/*
+		mkdir -p config downloads
 
-	sudo rm -rf /data/downloads/*
-	sudo rm -rf /data/config/*
-	sudo mkdir -p /data/config /data/downloads
+		sudo rm -rf /data/downloads/*
+		sudo rm -rf /data/config/*
+		sudo mkdir -p /data/config /data/downloads
+	fi
 
 	JSON_STRING=$( jq -n \
 		--arg iter "$3" \
