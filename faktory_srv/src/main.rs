@@ -164,7 +164,8 @@ fn main() {
     );
 
     println!("{:?}", default_faktory_conn);
-    let mut c = c.connect(Some(&default_faktory_conn)).unwrap();
+    // let mut c = c.connect(Some(&default_faktory_conn)).unwrap();
+    let mut c = c.connect(None).unwrap();
 
     if let Err(e) = c.run(&["default"]) {
         println!("worker failed: {}", e);
