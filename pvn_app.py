@@ -185,7 +185,7 @@ def main(expr_list):
                                                     app.p2p_sending_rate*app.batch)
                     run_pktgen(pktgen_sess, app.trace[expr], app.p2p_sending_rate*app.batch)
                     # epoch from 0 to 9
-                    for epoch in range(5):
+                    for epoch in range(app.num_of_epoch):
                         netbricks_sess = netbricks_sess_setup(
                             app.trace[expr], nf, epoch)
 
