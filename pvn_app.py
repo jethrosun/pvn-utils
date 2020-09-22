@@ -109,7 +109,7 @@ def xcdr_cleanup(sess):
     sess.send_commands(cmd_str)
 
 
-def main(expr_list, batch):
+def main(expr_list):
     """"""
     # app rdr, app p2p ...
     for expr in expr_list:
@@ -121,9 +121,9 @@ def main(expr_list, batch):
                 # config the pktgen sending rate
                 for setup in app.set_list:
                     pktgen_sess = pktgen_sess_setup(app.trace[expr], nf,
-                                                    app.sending_rate[expr][setup]*batch)
+                                                    app.sending_rate[expr][setup]*app.batch)
                     run_pktgen(pktgen_sess, app.trace[expr],
-                               app.sending_rate[expr][setup]*batch)
+                               app.sending_rate[expr][setup]*app.batch)
                     # epoch from 0 to 9
                     for epoch in range(app.num_of_epoch):
                         netbricks_sess = netbricks_sess_setup(
@@ -182,8 +182,8 @@ def main(expr_list, batch):
                 # config the pktgen sending rate
                 for setup in app.p2p_set_list:
                     pktgen_sess = pktgen_sess_setup(app.trace[expr], nf,
-                                                    app.p2p_sending_rate*batch)
-                    run_pktgen(pktgen_sess, app.trace[expr], app.p2p_sending_rate*batch)
+                                                    app.p2p_sending_rate*app.batch)
+                    run_pktgen(pktgen_sess, app.trace[expr], app.p2p_sending_rate*app.batch)
                     # epoch from 0 to 9
                     for epoch in range(5):
                         netbricks_sess = netbricks_sess_setup(
@@ -239,5 +239,4 @@ def main(expr_list, batch):
                     time.sleep(60)
 
 
-# main(app.metric_list, 3)
-main(app.xcdr, 3)
+main(app.xcdr)

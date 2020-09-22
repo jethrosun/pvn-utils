@@ -151,14 +151,14 @@ def p2p_cleanup(typ, sess):
         print("Unknown p2p node type {}".format(typ))
 
 
-def run_expr_p2p(expr, batch):
+def run_expr_p2p(expr):
     for nf in app.pvn_nf[expr]:
         # we are running the regular NFs
         # config the pktgen sending rate
         for setup in app.p2p_controlled_list:
             pktgen_sess = pktgen_sess_setup(app.trace[expr], nf,
-                                            app.p2p_sending_rate*batch)
-            run_pktgen(pktgen_sess, app.trace[expr], app.p2p_sending_rate*batch)
+                                            app.p2p_sending_rate*app.batch)
+            run_pktgen(pktgen_sess, app.trace[expr], app.p2p_sending_rate*app.batch)
             # epoch from 0 to 9
             for epoch in range(5):
                 netbricks_sess = netbricks_sess_setup(app.trace[expr], nf, epoch,
@@ -202,17 +202,17 @@ def run_expr_p2p(expr, batch):
             time.sleep(60)
 
 
-def run_expr_p2p_controlled(expr, batch):
+def run_expr_p2p_controlled(expr):
     print("running controlled")
     for nf in app.pvn_nf[expr]:
         # we are running the regular NFs
         # config the pktgen sending rate
         for setup in app.p2p_controlled_list:
             pktgen_sess = pktgen_sess_setup(app.trace[expr], nf,
-                                            app.p2p_sending_rate*batch)
-            run_pktgen(pktgen_sess, app.trace[expr], app.p2p_sending_rate*batch)
+                                            app.p2p_sending_rate*app.batch)
+            run_pktgen(pktgen_sess, app.trace[expr], app.p2p_sending_rate*app.batch)
             # epoch from 0 to 9
-            for epoch in range(5):
+            for epoch in range(app.num_of_epoch):
                 netbricks_sess = netbricks_sess_setup(app.trace[expr], nf, epoch,
                                                       expr)
 
@@ -254,16 +254,16 @@ def run_expr_p2p_controlled(expr, batch):
             time.sleep(60)
 
 
-def run_expr_p2p_ext(expr, batch):
+def run_expr_p2p_ext(expr):
     for nf in app.pvn_nf[expr]:
         # we are running the regular NFs
         # config the pktgen sending rate
         for setup in app.p2p_ext_list:
             pktgen_sess = pktgen_sess_setup(app.trace[expr], nf,
-                                            app.p2p_sending_rate*batch)
-            run_pktgen(pktgen_sess, app.trace[expr], app.p2p_sending_rate*batch)
+                                            app.p2p_sending_rate*app.batch)
+            run_pktgen(pktgen_sess, app.trace[expr], app.p2p_sending_rate*app.batch)
             # epoch from 0 to 9
-            for epoch in range(5):
+            for epoch in range(app.num_of_epoch):
                 netbricks_sess = netbricks_sess_setup(app.trace[expr], nf, epoch)
 
                 # run clean up for p2p nf before experiment
@@ -294,20 +294,20 @@ def run_expr_p2p_ext(expr, batch):
             time.sleep(60)
 
 
-def main(expr_list, batch):
+def main(expr_list):
     """"""
     # app rdr, app p2p ...
     for expr in expr_list:
         print("Running experiments that for {} application NF".format(expr))
         # app_rdr_g, app_rdr_t; app_p2p_g, app_p2p_t
         if expr == "p2p":
-            run_expr_p2p(expr, batch)
+            run_expr_p2p(expr)
         elif expr == "app_p2p-controlled":
-            run_expr_p2p_controlled(expr, batch)
+            run_expr_p2p_controlled(expr)
         elif expr == "app_p2p-ext":
-            run_expr_p2p_ext(expr, batch)
+            run_expr_p2p_ext(expr)
 
 
 if __name__ == '__main__':
-    main(app.p2p_controlled, 2)
+    main(app.p2p_controlled)
     # main(p2p_ext, 5)

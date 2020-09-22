@@ -84,8 +84,6 @@ p2p_controlled_list = [
 rdr_sending_rate = 1
 p2p_sending_rate = 5
 
-batch = 2
-
 fixed_sending_rate = 10
 sending_rate = {
         'app_xcdr': {
@@ -144,6 +142,7 @@ expr_wait_time = 875
 xcdr_port_base = 7418
 
 num_of_epoch = 3
+batch = 1
 
 
 # expr list....
