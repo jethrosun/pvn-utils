@@ -81,8 +81,8 @@ p2p_controlled_list = [
         ]
 
 
-rdr_sending_rate = 1
-p2p_sending_rate = 5
+rdr_sending_rate = 10
+p2p_sending_rate = 10
 
 fixed_sending_rate = 10
 sending_rate = {
