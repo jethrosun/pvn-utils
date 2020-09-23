@@ -20,8 +20,8 @@ pvn_nf = {
             'pvn-p2p-groupby-app',
             ],
         'app_p2p-controlled': [
-            'pvn-p2p-transform-app',
             'pvn-p2p-groupby-app',
+            'pvn-p2p-transform-app',
             ],
         }
 trace = {
