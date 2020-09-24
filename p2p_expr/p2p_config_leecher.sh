@@ -47,11 +47,12 @@ if [ ! -e ~/bt_data/config/auth ]; then
 	# deluge-console -c ~/bt_data/config "config -s copy_torrent_file True"
 	# deluge-console -c ~/bt_data/config "config -s autoadd_enable True"
 
-	deluge-console -c ~/bt_data/config 'config -s max_download_speed_per_torrent 1500'
 	deluge-console -c ~/bt_data/config 'config -s max_active_limit 10'
 	deluge-console -c ~/bt_data/config 'config -s max_active_downloading 10'
 	deluge-console -c ~/bt_data/config 'config -s max_active_seeding 10'
-	deluge-console -c ~/bt_data/config 'config -s max_upload_speed_per_torrent 2000'
+	deluge-console -c ~/bt_data/config 'config -s max_download_speed_per_torrent 2500'
+	deluge-console -c ~/bt_data/config 'config -s max_upload_speed_per_torrent 2500'
+	deluge-console -c ~/bt_data/config 'config -s max_seed_speed_per_torrent 2500'
 
 	deluge-console -c ~/bt_data/config "halt"
 fi
