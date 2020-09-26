@@ -27,7 +27,7 @@ pub fn run_transcode_crossbeam(
             s.spawn(move |_| {
                 core_affinity::set_for_current(id);
 
-                if id.id <= (setup - 1) {
+                if id.id < setup {
                     let now_2 = Instant::now();
                     println!("transcode with core {:?} ", id.id);
                     transcode(
