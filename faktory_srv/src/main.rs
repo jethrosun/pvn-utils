@@ -126,7 +126,6 @@ fn transcode(infile: String, outfile: String, width_height: String) {
 }
 
 fn main() {
-    let mut vcounter = 0;
     let now = Instant::now();
 
     // get the list of ports from cmd args and cast into a Vec
