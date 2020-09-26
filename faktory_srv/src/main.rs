@@ -20,16 +20,26 @@ pub fn run_transcode_crossbeam(infile_str: &str, outfile_str: &str, width_height
         let core_ids = core_affinity::get_core_ids().unwrap();
         let handles = core_ids.into_iter().map(|id| {
             s.spawn(move |_| {
+                let now = Instant::now();
                 core_affinity::set_for_current(id);
 
                 if id.id <= 5 as usize {
+                    let now_2 = Instant::now();
                     println!("transcode with core {:?} ", id.id);
                     transcode(
                         infile_str.to_string(),
                         outfile_str.to_string(),
                         width_height_str.to_string(),
                     );
+                    println!(
+                        "inner: transcoded in {:?} millis",
+                        now_2.elapsed().as_millis()
+                    );
                 }
+                println!(
+                    "outter: transcoded in {:?} millis",
+                    now.elapsed().as_millis()
+                );
             })
         });
         // .collect::<Vec<_>>();
