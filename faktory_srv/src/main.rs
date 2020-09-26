@@ -3,7 +3,7 @@ extern crate faktory;
 extern crate resize;
 extern crate y4m;
 
-use core_affinity;
+// use core_affinity;
 use crossbeam::thread;
 use faktory::ConsumerBuilder;
 use resize::Pixel::Gray8;
@@ -15,15 +15,19 @@ use std::process;
 use std::time::Instant;
 
 /// Run the transcoding job using threading in crossbeam.
-pub fn run_transcode_crossbeam(infile_str: &str, outfile_str: &str, width_height_str: &str) {
+pub fn run_transcode_crossbeam(
+    setup: usize,
+    infile_str: &str,
+    outfile_str: &str,
+    width_height_str: &str,
+) {
     thread::scope(|s| {
         let core_ids = core_affinity::get_core_ids().unwrap();
         let handles = core_ids.into_iter().map(|id| {
             s.spawn(move |_| {
-                let now = Instant::now();
                 core_affinity::set_for_current(id);
 
-                if id.id <= 5 as usize {
+                if id.id <= (setup - 1) {
                     let now_2 = Instant::now();
                     println!("transcode with core {:?} ", id.id);
                     transcode(
@@ -32,14 +36,11 @@ pub fn run_transcode_crossbeam(infile_str: &str, outfile_str: &str, width_height
                         width_height_str.to_string(),
                     );
                     println!(
-                        "inner: transcoded in {:?} millis",
-                        now_2.elapsed().as_millis()
+                        "inner: transcoded in {:?} millis with core: {:?}",
+                        now_2.elapsed().as_millis(),
+                        id.id
                     );
                 }
-                println!(
-                    "outter: transcoded in {:?} millis",
-                    now.elapsed().as_millis()
-                );
             })
         });
         // .collect::<Vec<_>>();
@@ -58,12 +59,9 @@ pub fn run_transcode_native(pivot: u128) {
     let handles = core_ids.into_iter().map(|id| {
         std::thread::spawn(move || {
             core_affinity::set_for_current(id);
-            // println!("id {:?}", id);
 
             if id.id == 5 as usize {
-                // println!("Working in core {:?} as from 0-5", id);
                 let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
-                // let outfile = "out.y4m";
                 let width_height = "360x24";
                 for i in 0..10 {
                     let outfile = "/home/jethros/dev/pvn/utils/data/output_videos/".to_owned()
@@ -131,38 +129,34 @@ fn main() {
     // get the list of ports from cmd args and cast into a Vec
     let params: Vec<String> = env::args().collect();
 
-    if params.len() == 4 {
-        println!("Parse 3 args");
-        println!("{:?} {:?} {:?} ", params[1], params[2], params[3]);
-    } else if params.len() < 4 {
-        println!("Less than 3 args are provided. Run it with *PORT1 PORT2 expr_num*");
-        process::exit(0x0100);
+    if params.len() == 5 {
+        println!("Parse 4 args");
+        println!(
+            "Setup: {:?}, Port1: {:?}, Port2: {:?}, Expr: {:?}",
+            params[1], params[2], params[3], params[4],
+        );
     } else {
-        println!("More than 2 args are provided. Run it with *PORT1 PORT2 expr_num*");
+        println!("More or less than 4 args are provided. Run it with *PORT1 PORT2 expr_num*");
         // println!("{:?}", ports);
         process::exit(0x0100);
     }
 
     // let default_faktory_conn = "tcp://localhost:".to_string() + &params[1];
-    let default_faktory_conn = "tcp://localhost:7419";
+    // let default_faktory_conn = "tcp://localhost:7419";
 
     let mut c = ConsumerBuilder::default();
     c.register(
-        "app-xcdr_t-".to_owned() + &params[3],
-        |job| -> io::Result<()> {
+        "app-xcdr_t-".to_owned() + &params[4],
+        move |job| -> io::Result<()> {
             let now = Instant::now();
             let job_args = job.args();
+            let setup = params[1].parse::<usize>().unwrap();
 
             let infile_str = job_args[0].as_str().unwrap();
             let outfile_str = job_args[1].as_str().unwrap();
             let width_height_str = job_args[2].as_str().unwrap();
 
-            run_transcode_crossbeam(infile_str, outfile_str, width_height_str);
-            // run_transcode_crossbeam(
-            //     infile_str.to_string(),
-            //     outfile_str.to_string(),
-            //     width_height_str.to_string(),
-            // );
+            run_transcode_crossbeam(setup, infile_str, outfile_str, width_height_str);
             println!(
                 "faktory: transcoded in {:?} millis",
                 now.elapsed().as_millis()
@@ -172,7 +166,6 @@ fn main() {
         },
     );
 
-    println!("{:?}", default_faktory_conn);
     // let mut c = c.connect(Some(&default_faktory_conn)).unwrap();
     let mut c = c.connect(None).unwrap();
 

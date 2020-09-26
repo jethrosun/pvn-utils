@@ -35,9 +35,6 @@ mkdir -p $LOG_DIR
 
 INST_LEVEL=off
 
-# example ps command
-# pgrep -P 6639 | xargs ps -o %mem,%cpu,cmd -p | awk '{memory+=$1;^Cu+=$2} END {print memory,cpu}'
-
 
 if [ $2 == 'pvn-transcoder-transform-app' ]; then
 	JSON_STRING=$( jq -n \
@@ -49,14 +46,12 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst}' )
 	echo $JSON_STRING > /home/jethros/setup
 
-	# docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:$5:$5 -p 127.0.0.1:$6:$6 contribsys/faktory:latest
-	# docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:$5:$5 -p 127.0.0.1:$6:$6 contribsys/faktory:latest /faktory -b :$5 -w :$6
 	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
 	# P1=$!
 	docker ps
 	sleep 15
 
-	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh $5 $6 $7 $FAKTORY_LOG &
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh $4 $5 $6 $7 $FAKTORY_LOG &
 	P5=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
@@ -78,14 +73,12 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst}' )
 	echo $JSON_STRING > /home/jethros/setup
 
-	# docker run -d --cpuset-cpus 4 --name faktory_srv --rm -it -p 127.0.0.1:$5:$5 -p 127.0.0.1:$6:$6 contribsys/faktory:latest
-	# docker run -d --cpuset-cpus 4 --name faktory_srv --rm -it -v faktory-data:/var/lib/faktory  -p 127.0.0.1:$5:$5 -p 127.0.0.1:$6:$6 contribsys/faktory:latest /faktory -b :$5 -w $6
 	docker run -d --cpuset-cpus 4 --name faktory_srv --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
 	# P1=$!
 	docker ps
 	sleep 15
 	# top -b -d 1 -n 700 | tee $MLOG &
-	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh $5 $6 $7 $FAKTORY_LOG &
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh $4 $5 $6 $7 $FAKTORY_LOG &
 	P5=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
