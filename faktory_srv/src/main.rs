@@ -22,8 +22,8 @@ pub fn run_transcode_crossbeam(infile_str: &str, outfile_str: &str, width_height
             s.spawn(move |_| {
                 core_affinity::set_for_current(id);
 
-                if id.id == 5 as usize {
-                    // println!("transcode job {:?} in the queue {:?}", pivot, r.len());
+                if id.id <= 5 as usize {
+                    println!("transcode with core {:?} ", id.id);
                     transcode(
                         infile_str.to_string(),
                         outfile_str.to_string(),
