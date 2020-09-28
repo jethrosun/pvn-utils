@@ -314,6 +314,6 @@ def main(expr_list):
             run_expr_p2p_ext(expr)
 
 
-if __name__ == '__main__':
-    main(app.p2p_controlled)
-    # main(p2p_ext, 5)
+main(app.p2p_controlled)
+# main(p2p_ext, 5)
+print("All experiment finished {}".format(app.p2p_controlled))

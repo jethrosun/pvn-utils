@@ -239,4 +239,6 @@ def main(expr_list):
                     time.sleep(60)
 
 
-main(app.xcdr)
+# main(app.xcdr)
+main(app.rdr)
+print("All experiment finished {}".format(app.rdr))
