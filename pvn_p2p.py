@@ -36,8 +36,7 @@ def pktgen_sess_setup(trace, nf, epoch):
 
         pktgen_sess.send_commands('bash')
         pktgen_sess.enable_logs("pktgen--" + trace + "_" + nf + ".log")
-        pktgen_sess.send_commands(
-            'cd /home/jethros/dev/pktgen-dpdk/experiments')
+        pktgen_sess.send_commands('cd /home/jethros/dev/pktgen-dpdk/experiments')
 
         time.sleep(20)
         return pktgen_sess
@@ -117,6 +116,8 @@ def run_p2p_node(typ, sess, setup):
         cmd_str = "./p2p_run_leecher.sh " + setup
         print("Run P2P Leecher \n\tCmd: {}".format(cmd_str))
         sess.send_commands(cmd_str)
+
+        time.sleep(5)
     else:
         print("Unknown type: {}".format(typ))
 
@@ -136,17 +137,22 @@ def p2p_cleanup(typ, sess):
         p2p_cmd_str = "sudo ./../p2p_expr/p2p_cleanup_leecher.sh"
         sess.send_commands(p2p_cmd_str)
         print("NetBricks P2P cmd: {}".format(p2p_cmd_str))
+        time.sleep(5)
 
         config_cmd_str = "./../p2p_expr/p2p_config_leecher.sh"
         sess.send_commands(config_cmd_str)
         print("NetBricks P2P cmd: {}".format(config_cmd_str))
+        time.sleep(15)
     elif typ == "leecher":
         cmd_str = "sudo ./p2p_cleanup_leecher.sh "
         sess.send_commands(cmd_str)
         print("Leecher P2P clean up with cmd: {}".format(cmd_str))
+        time.sleep(5)
+
         config_str = "./p2p_config_leecher.sh "
         sess.send_commands(config_str)
         print("Leecher P2P config with cmd: {}".format(config_str))
+        time.sleep(15)
     else:
         print("Unknown p2p node type {}".format(typ))
 
