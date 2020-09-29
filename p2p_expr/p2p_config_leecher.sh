@@ -57,5 +57,5 @@ if [ ! -e /home/jethros/bt_data/config/auth ]; then
 fi
 
 echo "Starting up now ..."
-deluged -c /home/jethros/bt_data/config
+nice deluged -c /home/jethros/bt_data/config
 # deluge-web -c ~/bt_data/config
