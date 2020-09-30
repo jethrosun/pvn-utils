@@ -15,6 +15,8 @@ elif [ $1 == "6" ]; then
 	setup=10
 else
 	printf "Unknown setup: %s" $1
+fi 
+
 
 for (( c=1; c<=setup; c++ ))
 do
