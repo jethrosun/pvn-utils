@@ -13,6 +13,7 @@ if [ -e $HOME/netbricks_logs ]; then
 	tar -cvzf netbricks_logs--$current_date_time.tar.gz  netbricks_logs--$current_date_time
 	rm -rf netbricks_logs--$current_date_time
 	printf "Moving all netbricks logs to the backup logs\n"
+	rm -rf $HOME/data/cargo-target
 fi
 if [ -e $HOME/pktgen_logs ]; then
 	mkdir -p $HOME/logs/pktgen_logs--$current_date_time
