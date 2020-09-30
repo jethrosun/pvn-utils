@@ -116,7 +116,7 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 	echo $JSON_STRING > /home/jethros/setup
 
 	if [ $5 == "app_p2p-controlled" ]; then
-		while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > $P2P_PROGRESS_LOG &
+		while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > $P2P_PROGRESS_LOG &
 		P1=$!
 	else
 		while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh ; done > $P2P_PROGRESS_LOG &
