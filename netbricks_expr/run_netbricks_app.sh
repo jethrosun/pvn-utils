@@ -14,6 +14,7 @@ AMLOG=$LOG_DIR/$3_$4_a_measurement.log
 TCP_LOG=$LOG_DIR/$3_$4_tcptop.log
 BIO_LOG=$LOG_DIR/$3_$4_biotop.log
 P2P_PROGRESS_LOG=$LOG_DIR/$3_$4_p2p_progress.log
+P2P_WRAPPER_LOG=$LOG_DIR/$3_$4_p2p_run.log
 FAKTORY_LOG=$LOG_DIR/$3_$4_faktory.log
 IPTRAF_LOG=$LOG_DIR/$3_$4_iptraf.log
 # SHORT_IPTRAF_LOG=$3_$4_iptraf.log
@@ -124,13 +125,17 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P2=$!
+	if [ $5 == "app_p2p-controlled" ]; then
+		/home/jethros/dev/pvn/utils/p2p_expr/p2p_run_leecher_wrapper.sh $4 > $P2P_WRAPPER_LOG &
+		P6=$!
+	fi
 	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
 	P3=$!
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P4=$!
 	$TCP_TOP_MONITOR -C > $TCP_LOG &
 	P5=$!
-	wait $P1 $P2 $P3 $P4 $P5
+	wait $P1 $P2 $P3 $P4 $P5 $P6
 
 elif [ $2 == "pvn-p2p-groupby-app" ]; then
 	if [ $5 == "app_p2p-controlled" ]; then
@@ -165,6 +170,10 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 	fi
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P2=$!
+	if [ $5 == "app_p2p-controlled" ]; then
+		/home/jethros/dev/pvn/utils/p2p_expr/p2p_run_leecher_wrapper.sh $4 > $P2P_WRAPPER_LOG &
+		P6=$!
+	fi
 	while sleep 1; do ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
 	P3=$!
 	# top -b -d 1 -n 700 | tee $MLOG &
@@ -172,7 +181,7 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 	P4=$!
 	$TCP_TOP_MONITOR -C > $TCP_LOG &
 	P5=$!
-	wait $P1 $P2 $P3 $P4 $P5
+	wait $P1 $P2 $P3 $P4 $P5 $P6
 
 elif [ $2 == "pvn-rdr-transform-app" ]; then
 	JSON_STRING=$( jq -n \
