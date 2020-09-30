@@ -15,10 +15,11 @@ elif [ $1 == "6" ]; then
 	setup=10
 else
 	printf "Unknown setup: %s" $1
-fi 
+fi
 
 
 for (( c=1; c<=setup; c++ ))
 do
+	echo $c
 	deluge-console -c /home/jethros/bt_data/config "add /home/jethros/dev/pvn/utils/workloads/torrent_files/p2p_image_${c}.img.torrent"
 done
