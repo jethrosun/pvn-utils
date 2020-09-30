@@ -1,6 +1,8 @@
 #!/bin/bash
 set -ex
 
+sleep 10
+
 if [ $1 == "1" ]; then
 	setup=1
 elif [ $1 == "2" ]; then
