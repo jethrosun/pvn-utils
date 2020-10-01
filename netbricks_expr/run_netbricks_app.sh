@@ -94,8 +94,8 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 elif [ $2 == "pvn-p2p-transform-app" ]; then
 	if [ $5 == "app_p2p-controlled" ]; then
 		sudo rm -rf $HOME/Downloads
-		sudo rm -rf $HOME/.config/deluge
-		mkdir -p $HOME/Downloads  $HOME/.config/deluge
+		sudo rm -rf /data/bt/config
+		mkdir -p $HOME/Downloads  /data/bt/config
 	else
 		# clean the states of transmission
 		sudo rm -rf downloads/*
@@ -117,6 +117,7 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 
 	if [ $5 == "app_p2p-controlled" ]; then
 		while sleep 2; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > $P2P_PROGRESS_LOG &
+		# while sleep 2; do sudo deluge-console -c /data/bt/config "info"; done > $P2P_PROGRESS_LOG &
 		P1=$!
 	else
 		while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh ; done > $P2P_PROGRESS_LOG &
@@ -140,8 +141,8 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 elif [ $2 == "pvn-p2p-groupby-app" ]; then
 	if [ $5 == "app_p2p-controlled" ]; then
 		sudo rm -rf $HOME/Downloads
-		sudo rm -rf $HOME/.config/deluge
-		mkdir -p $HOME/Downloads  $HOME/.config/deluge
+		sudo rm -rf /data/bt/config
+		mkdir -p $HOME/Downloads  /data/bt/config
 	else
 		# clean the states of transmission
 		sudo rm -rf downloads/*
@@ -163,6 +164,7 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 
 	if [ $5 == "app_p2p-controlled" ]; then
 		while sleep 2; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > $P2P_PROGRESS_LOG &
+		# while sleep 2; do sudo deluge-console -c /data/bt/config "info"; done > $P2P_PROGRESS_LOG &
 		P1=$!
 	else
 		while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh ; done > $P2P_PROGRESS_LOG &

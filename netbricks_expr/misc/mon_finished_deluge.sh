@@ -1,4 +1,4 @@
 #!/bin/bash
 
 echo "second"
-deluge-console -c /home/jethros/bt_data/config "info"
+sudo -u jethros deluge-console -c /data/bt/config "info"

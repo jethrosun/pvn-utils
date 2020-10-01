@@ -2,7 +2,7 @@
 set -ex
 
 sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
-/home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
+sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
 
 
 if [ $1 == "1" ]; then
@@ -25,5 +25,5 @@ fi
 for (( c=1; c<=setup; c++ ))
 do
 	echo $c
-	deluge-console -c /data/bt/config "add /home/jethros/dev/pvn/utils/workloads/torrent_files/p2p_image_${c}.img.torrent"
+	sudo -u jethros deluge-console -c /data/bt/config "add /home/jethros/dev/pvn/utils/workloads/torrent_files/p2p_image_${c}.img.torrent"
 done
