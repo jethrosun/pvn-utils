@@ -1,7 +1,9 @@
 #!/bin/bash
 set -ex
 
-sleep 10
+sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_leecher.sh
+/home/jethros/dev/pvn/utils/p2p_expr/p2p_config_leecher.sh
+
 
 if [ $1 == "1" ]; then
 	setup=1
