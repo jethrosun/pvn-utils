@@ -137,12 +137,12 @@ def p2p_cleanup(typ, sess):
         p2p_cmd_str = "sudo ./../p2p_expr/p2p_cleanup_leecher.sh"
         sess.send_commands(p2p_cmd_str)
         print("NetBricks P2P cmd: {}".format(p2p_cmd_str))
-        time.sleep(5)
+        time.sleep(15)
 
         config_cmd_str = "./../p2p_expr/p2p_config_leecher.sh"
         sess.send_commands(config_cmd_str)
         print("NetBricks P2P cmd: {}".format(config_cmd_str))
-        time.sleep(15)
+        time.sleep(25)
     elif typ == "leecher":
         cmd_str = "sudo ./p2p_cleanup_leecher.sh "
         sess.send_commands(cmd_str)
@@ -175,13 +175,14 @@ def run_expr_p2p(expr):
                 leecher3_sess = p2p_sess_setup('sanchez', app.trace[expr], nf, epoch)
 
                 # run clean up for p2p nf before experiment
-                p2p_cleanup("netbricks", netbricks_sess)
                 p2p_cleanup("leecher", leecher1_sess)
                 p2p_cleanup("leecher", leecher2_sess)
                 p2p_cleanup("leecher", leecher2_sess)
-                time.sleep(60)
+                p2p_cleanup("netbricks", netbricks_sess)
+                time.sleep(20)
 
                 # Actual RUN
+                p2p_cleanup("netbricks", netbricks_sess)
                 run_p2p_node('leecher', leecher1_sess, setup)
                 run_p2p_node('leecher', leecher2_sess, setup)
                 run_p2p_node('leecher', leecher3_sess, setup)
@@ -191,18 +192,18 @@ def run_expr_p2p(expr):
                 time.sleep(app.expr_wait_time)
 
                 # run clean up for p2p nf before experiment
-                p2p_cleanup("netbricks", netbricks_sess)
                 p2p_cleanup("leecher", leecher1_sess)
                 p2p_cleanup("leecher", leecher2_sess)
                 p2p_cleanup("leecher", leecher3_sess)
-                time.sleep(60)
+                p2p_cleanup("netbricks", netbricks_sess)
+                time.sleep(20)
 
                 sess_destroy(netbricks_sess)
                 sess_destroy(leecher1_sess)
                 sess_destroy(leecher2_sess)
                 sess_destroy(leecher3_sess)
 
-                time.sleep(60)
+                time.sleep(20)
 
             sess_destroy(pktgen_sess)
             time.sleep(60)
