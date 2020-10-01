@@ -1,4 +1,4 @@
 #!/bin/bash
 
 echo "second"
-deluge-console -c ~/bt_data/config "info --sort-reverse=file_progress"
+deluge-console -c /home/jethros/bt_data/config "info"
