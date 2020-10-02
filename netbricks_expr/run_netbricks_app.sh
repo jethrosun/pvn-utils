@@ -115,15 +115,16 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 		'{setup: $setup, iter: $iter, inst: $inst, p2p_type: $p2p_type}' )
 	echo $JSON_STRING > /home/jethros/setup
 
+	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
+	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
+
 	if [ $5 == "app_p2p-controlled" ]; then
 		while sleep 2; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > $P2P_PROGRESS_LOG &
-		# while sleep 2; do sudo deluge-console -c /data/bt/config "info"; done > $P2P_PROGRESS_LOG &
 		P1=$!
 	else
 		while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh ; done > $P2P_PROGRESS_LOG &
 		P1=$!
 	fi
-
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P2=$!
 	# if [ $5 == "app_p2p-controlled" ]; then
@@ -162,9 +163,12 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 		'{setup: $setup, iter: $iter, inst: $inst, p2p_type: $p2p_type}' )
 	echo $JSON_STRING > /home/jethros/setup
 
+
+	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
+	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
+
 	if [ $5 == "app_p2p-controlled" ]; then
 		while sleep 2; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > $P2P_PROGRESS_LOG &
-		# while sleep 2; do sudo deluge-console -c /data/bt/config "info"; done > $P2P_PROGRESS_LOG &
 		P1=$!
 	else
 		while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh ; done > $P2P_PROGRESS_LOG &
@@ -172,6 +176,7 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 	fi
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P2=$!
+
 	# if [ $5 == "app_p2p-controlled" ]; then
 	#     /home/jethros/dev/pvn/utils/p2p_expr/p2p_run_leecher_wrapper.sh $4 & > $P2P_WRAPPER_LOG &
 	#     P6=$!
@@ -183,6 +188,7 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 	P4=$!
 	$TCP_TOP_MONITOR -C > $TCP_LOG &
 	P5=$!
+
 	wait $P1 $P2 $P3 $P4 $P5 #$P6
 
 elif [ $2 == "pvn-rdr-transform-app" ]; then

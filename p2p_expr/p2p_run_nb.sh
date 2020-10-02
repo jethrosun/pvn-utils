@@ -1,8 +1,8 @@
 #!/bin/bash
-set -ex
+set -x
 
-sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
-sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
+# sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
+# sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
 
 
 if [ $1 == "1" ]; then
