@@ -15,6 +15,7 @@ mkdir -p /data/bt
 # fix the gettext error: https://git.deluge-torrent.org/deluge/commit/?h=develop&id=d6c96d629183e8bab2167ef56457f994017e7c85
 sudo sed -i '/gettext.install(I18N_DOMAIN, translations_path, names='ngettext', **kwargs)/c\gettext.install(I18N_DOMAIN, translations_path, names=['ngettext'], **kwargs)' /usr/lib/python3/dist-packages/deluge/i18n/util.py
 
+echo "To fix the string decode error, use the patch here: https://github.com/deluge-torrent/deluge/pull/268/files"
 
 # echo "move all the deluge systemd file to where they belong"
 # sudo cp systemd_files/deluged.service       /etc/systemd/system/deluged.service

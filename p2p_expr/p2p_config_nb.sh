@@ -2,8 +2,9 @@
 set -ex
 
 
-sudo -u jethros mkdir -p /data/bt/config
 sudo -u jethros mkdir -p /home/jethros/Downloads
+sudo -u jethros mkdir -p /data/bt/config
+sudo -u jethros mkdir -p /data/bt/deluge_data
 
 #prep the output dirs
 # if [ ! -e ~/bt_data/Complete ]; then
@@ -30,10 +31,10 @@ if [ ! -e /data/bt/config/auth ]; then
 
 	#setup the paths (broken due to a str decode bug)
 
-	# sudo -u jethros deluge-console -c ~/bt_data/config "config -s move_completed_path /home/jethros/bt_data/Complete"
-	# sudo -u jethros deluge-console -c ~/bt_data/config "config -s torrentfiles_location /home/jethros/bt_data/Torrents"
-	# sudo -u jethros deluge-console -c ~/bt_data/config "config -s download_location /home/jethros/bt_data/InProgress"
-	# sudo -u jethros deluge-console -c ~/bt_data/config "config -s autoadd_location /home/jethros/bt_data/Drop"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s move_completed_path /data/bt/deluge_data/Complete"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s torrentfiles_location /data/bt/deluge_data/Torrents"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s download_location /data/bt/deluge_data/InProgress"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s autoadd_location /data/bt/deluge_data/Drop"
 
 	#daemon port which the WEB ui connects to
 	#sudo -u jethros deluge-console -c ~/bt_data/config "config -s daemon_port 58846"
