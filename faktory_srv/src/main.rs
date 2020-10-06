@@ -29,7 +29,7 @@ pub fn run_transcode_crossbeam(
 
                 if id.id < setup {
                     let now_2 = Instant::now();
-                    println!("transcode with core {:?} ", id.id);
+                    // println!("transcode with core {:?} ", id.id);
                     transcode(
                         infile_str.to_string(),
                         outfile_str.to_string(),
@@ -137,7 +137,6 @@ fn main() {
         );
     } else {
         println!("More or less than 4 args are provided. Run it with *PORT1 PORT2 expr_num*");
-        // println!("{:?}", ports);
         process::exit(0x0100);
     }
 
@@ -148,7 +147,6 @@ fn main() {
     c.register(
         "app-xcdr_t-".to_owned() + &params[4],
         move |job| -> io::Result<()> {
-            let now = Instant::now();
             let job_args = job.args();
             let setup = params[1].parse::<usize>().unwrap();
 
@@ -157,16 +155,11 @@ fn main() {
             let width_height_str = job_args[2].as_str().unwrap();
 
             run_transcode_crossbeam(setup, infile_str, outfile_str, width_height_str);
-            println!(
-                "faktory: transcoded in {:?} millis",
-                now.elapsed().as_millis()
-            );
 
             Ok(())
         },
     );
 
-    // let mut c = c.connect(Some(&default_faktory_conn)).unwrap();
     let mut c = c.connect(None).unwrap();
 
     if let Err(e) = c.run(&["default"]) {
