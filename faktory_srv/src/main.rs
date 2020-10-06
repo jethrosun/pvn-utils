@@ -14,77 +14,6 @@ use std::io;
 use std::process;
 use std::time::Instant;
 
-/// Run the transcoding job using threading in crossbeam.
-pub fn run_transcode_crossbeam(
-    setup: usize,
-    infile_str: &str,
-    outfile_str: &str,
-    width_height_str: &str,
-) {
-    thread::scope(|s| {
-        let core_ids = core_affinity::get_core_ids().unwrap();
-        let handles = core_ids.into_iter().map(|id| {
-            s.spawn(move |_| {
-                core_affinity::set_for_current(id);
-
-                if id.id < setup {
-                    let now_2 = Instant::now();
-                    // println!("transcode with core {:?} ", id.id);
-                    transcode(
-                        infile_str.to_string(),
-                        outfile_str.to_string(),
-                        width_height_str.to_string(),
-                    );
-                    println!(
-                        "inner: transcoded in {:?} millis with core: {:?}",
-                        now_2.elapsed().as_millis(),
-                        id.id
-                    );
-                }
-            })
-        });
-        // .collect::<Vec<_>>();
-
-        for handle in handles.into_iter() {
-            handle.join().unwrap();
-        }
-    })
-    .unwrap();
-}
-
-/// Run the transcoding job using native threading.
-pub fn run_transcode_native(pivot: u128) {
-    let core_ids = core_affinity::get_core_ids().unwrap();
-
-    let handles = core_ids.into_iter().map(|id| {
-        std::thread::spawn(move || {
-            core_affinity::set_for_current(id);
-
-            if id.id == 5 as usize {
-                let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
-                let width_height = "360x24";
-                for i in 0..10 {
-                    let outfile = "/home/jethros/dev/pvn/utils/data/output_videos/".to_owned()
-                        + &pivot.to_string()
-                        + "_"
-                        + &i.to_string()
-                        + ".y4m";
-                    transcode(
-                        infile.to_string(),
-                        outfile.to_string(),
-                        width_height.to_string(),
-                    );
-                }
-            }
-        })
-    });
-    // .collect::<Vec<_>>();
-
-    for handle in handles.into_iter() {
-        handle.join().unwrap();
-    }
-}
-
 /// Actual video transcoding.
 ///
 /// We set up all the parameters for the transcoding job to happen.
@@ -124,8 +53,6 @@ fn transcode(infile: String, outfile: String, width_height: String) {
 }
 
 fn main() {
-    let now = Instant::now();
-
     // get the list of ports from cmd args and cast into a Vec
     let params: Vec<String> = env::args().collect();
 
@@ -147,6 +74,7 @@ fn main() {
     c.register(
         "app-xcdr_t-".to_owned() + &params[4],
         move |job| -> io::Result<()> {
+            let now = Instant::now();
             let job_args = job.args();
             let setup = params[1].parse::<usize>().unwrap();
 
@@ -154,7 +82,39 @@ fn main() {
             let outfile_str = job_args[1].as_str().unwrap();
             let width_height_str = job_args[2].as_str().unwrap();
 
-            run_transcode_crossbeam(setup, infile_str, outfile_str, width_height_str);
+            thread::scope(|s| {
+                let core_ids = core_affinity::get_core_ids().unwrap();
+                let handles = core_ids.into_iter().map(|id| {
+                    s.spawn(move |_| {
+                        core_affinity::set_for_current(id);
+
+                        if id.id < setup {
+                            let now_2 = Instant::now();
+                            // println!("transcode with core {:?} ", id.id);
+                            transcode(
+                                infile_str.to_string(),
+                                outfile_str.to_string(),
+                                width_height_str.to_string(),
+                            );
+                            println!(
+                                "inner: transcoded in {:?} millis with core: {:?}",
+                                now_2.elapsed().as_millis(),
+                                id.id
+                            );
+                        }
+                    })
+                });
+                // .collect::<Vec<_>>();
+
+                for handle in handles.into_iter() {
+                    handle.join().unwrap();
+                }
+            })
+            .unwrap();
+
+            if now.elapsed().as_secs() >= 600 {
+                println!("Got here");
+            }
 
             Ok(())
         },
@@ -164,14 +124,5 @@ fn main() {
 
     if let Err(e) = c.run(&["default"]) {
         println!("worker failed: {}", e);
-    }
-    if now.elapsed().as_secs() == 600 {
-        println!("Metric: Running for 600 seconds ",);
-    }
-    if now.elapsed().as_secs() == 800 {
-        println!("Metric: Running for 800 seconds",);
-    }
-    if now.elapsed().as_secs() == 1000 {
-        println!("Metric: Running for 1000 seconds",);
     }
 }
