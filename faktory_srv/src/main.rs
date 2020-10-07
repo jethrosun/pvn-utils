@@ -66,29 +66,35 @@ fn main() {
         println!("More or less than 4 args are provided. Run it with *PORT1 PORT2 expr_num*");
         process::exit(0x0100);
     }
+    // println!(
+    //     "faktory: {:?}",
+    //     "app-xcdr_".to_owned() + &setup.to_string() + "-" + &expr.to_string(),
+    // );
+    let setup = params[1].parse::<usize>().unwrap();
+    let expr = params[4].parse::<usize>().unwrap();
+    println!(
+        "faktory: {:?}",
+        "app-xcdr_".to_owned() + &setup.to_string() + "-" + &expr.to_string(),
+    );
 
-    // let default_faktory_conn = "tcp://localhost:".to_string() + &params[1];
-    // let default_faktory_conn = "tcp://localhost:7419";
+    thread::scope(|s| {
+        let core_ids = core_affinity::get_core_ids().unwrap();
+        let handles = core_ids.into_iter().map(|id| {
+            s.spawn(move |_| {
+                core_affinity::set_for_current(id);
 
-    let mut c = ConsumerBuilder::default();
-    c.register(
-        "app-xcdr_t-".to_owned() + &params[4],
-        move |job| -> io::Result<()> {
-            let now = Instant::now();
-            let job_args = job.args();
-            let setup = params[1].parse::<usize>().unwrap();
+                if id.id < setup {
+                    let mut c = ConsumerBuilder::default();
+                    c.register(
+                        "app-xcdr_".to_owned() + &id.id.to_string() + "-" + &expr.to_string(),
+                        move |job| -> io::Result<()> {
+                            let now = Instant::now();
+                            let job_args = job.args();
 
-            let infile_str = job_args[0].as_str().unwrap();
-            let outfile_str = job_args[1].as_str().unwrap();
-            let width_height_str = job_args[2].as_str().unwrap();
+                            let infile_str = job_args[0].as_str().unwrap();
+                            let outfile_str = job_args[1].as_str().unwrap();
+                            let width_height_str = job_args[2].as_str().unwrap();
 
-            thread::scope(|s| {
-                let core_ids = core_affinity::get_core_ids().unwrap();
-                let handles = core_ids.into_iter().map(|id| {
-                    s.spawn(move |_| {
-                        core_affinity::set_for_current(id);
-
-                        if id.id < setup {
                             let now_2 = Instant::now();
                             // println!("transcode with core {:?} ", id.id);
                             transcode(
@@ -101,28 +107,31 @@ fn main() {
                                 now_2.elapsed().as_millis(),
                                 id.id
                             );
-                        }
-                    })
-                });
-                // .collect::<Vec<_>>();
 
-                for handle in handles.into_iter() {
-                    handle.join().unwrap();
+                            if now.elapsed().as_secs() >= 600 {
+                                println!("Got here");
+                            }
+
+                            Ok(())
+                        },
+                    );
+
+                    let mut c = c.connect(None).unwrap();
+
+                    if let Err(e) = c.run(&["default"]) {
+                        println!("worker failed: {}", e);
+                    }
                 }
             })
-            .unwrap();
+        });
+        // .collect::<Vec<_>>();
 
-            if now.elapsed().as_secs() >= 600 {
-                println!("Got here");
-            }
+        for handle in handles.into_iter() {
+            handle.join().unwrap();
+        }
+    })
+    .unwrap();
 
-            Ok(())
-        },
-    );
-
-    let mut c = c.connect(None).unwrap();
-
-    if let Err(e) = c.run(&["default"]) {
-        println!("worker failed: {}", e);
-    }
+    // let default_faktory_conn = "tcp://localhost:".to_string() + &params[1];
+    // let default_faktory_conn = "tcp://localhost:7419";
 }
