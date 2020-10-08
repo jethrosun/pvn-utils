@@ -67,62 +67,62 @@ fn main() {
         process::exit(0x0100);
     }
 
-    // let default_faktory_conn = "tcp://localhost:".to_string() + &params[1];
-    // let default_faktory_conn = "tcp://localhost:7419";
+    let setup = params[1].parse::<usize>().unwrap();
+    let expr = params[4].parse::<usize>().unwrap();
+    for core_id in 0..setup {
+        let mut c = ConsumerBuilder::default();
+        c.register(
+            "app-xcdr_".to_owned() + &core_id.to_string() + "-" + &expr.to_string(),
+            move |job| -> io::Result<()> {
+                let now = Instant::now();
+                let job_args = job.args();
 
-    let mut c = ConsumerBuilder::default();
-    c.register(
-        "app-xcdr_t-".to_owned() + &params[4],
-        move |job| -> io::Result<()> {
-            let now = Instant::now();
-            let job_args = job.args();
-            let setup = params[1].parse::<usize>().unwrap();
+                let infile_str = job_args[0].as_str().unwrap();
+                let outfile_str = job_args[1].as_str().unwrap();
+                let width_height_str = job_args[2].as_str().unwrap();
 
-            let infile_str = job_args[0].as_str().unwrap();
-            let outfile_str = job_args[1].as_str().unwrap();
-            let width_height_str = job_args[2].as_str().unwrap();
+                thread::scope(|s| {
+                    let core_ids = core_affinity::get_core_ids().unwrap();
+                    let handles = core_ids.into_iter().map(|id| {
+                        s.spawn(move |_| {
+                            core_affinity::set_for_current(id);
 
-            thread::scope(|s| {
-                let core_ids = core_affinity::get_core_ids().unwrap();
-                let handles = core_ids.into_iter().map(|id| {
-                    s.spawn(move |_| {
-                        core_affinity::set_for_current(id);
+                            if id.id == core_id {
+                                let now_2 = Instant::now();
+                                // println!("transcode with core {:?} ", id.id);
+                                transcode(
+                                    infile_str.to_string(),
+                                    outfile_str.to_string(),
+                                    width_height_str.to_string(),
+                                );
+                                println!(
+                                    "inner: transcoded in {:?} millis with core: {:?}",
+                                    now_2.elapsed().as_millis(),
+                                    id.id
+                                );
+                            }
+                        })
+                    });
+                    // .collect::<Vec<_>>();
 
-                        if id.id < setup {
-                            let now_2 = Instant::now();
-                            // println!("transcode with core {:?} ", id.id);
-                            transcode(
-                                infile_str.to_string(),
-                                outfile_str.to_string(),
-                                width_height_str.to_string(),
-                            );
-                            println!(
-                                "inner: transcoded in {:?} millis with core: {:?}",
-                                now_2.elapsed().as_millis(),
-                                id.id
-                            );
-                        }
-                    })
-                });
-                // .collect::<Vec<_>>();
+                    for handle in handles.into_iter() {
+                        handle.join().unwrap();
+                    }
+                })
+                .unwrap();
 
-                for handle in handles.into_iter() {
-                    handle.join().unwrap();
+                if now.elapsed().as_secs() >= 600 {
+                    println!("Got here");
                 }
-            })
-            .unwrap();
 
-            if now.elapsed().as_secs() >= 600 {
-                println!("Got here");
-            }
+                Ok(())
+            },
+        );
 
-            Ok(())
-        },
-    );
+        let mut c = c.connect(None).unwrap();
 
-    let mut c = c.connect(None).unwrap();
-
-    if let Err(e) = c.run(&["default"]) {
-        println!("worker failed: {}", e);
+        if let Err(e) = c.run(&["default"]) {
+            println!("worker failed: {}", e);
+        }
     }
 }
