@@ -95,7 +95,11 @@ fn main() {
                             width_height_str.to_string(),
                         );
                         // tx.send(now_2.elapsed().as_millis());
-                        println!("inner: transcoded in {:?} millis with core: {:?}", core.id);
+                        println!(
+                            "inner: transcoded in {:?} millis with core: {:?}",
+                            now_2.elapsed().as_millis(),
+                            core.id
+                        );
                         Ok(())
                     },
                 );
