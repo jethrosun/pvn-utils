@@ -3,8 +3,9 @@ extern crate faktory;
 extern crate resize;
 extern crate y4m;
 
-// use core_affinity;
+use core_affinity::{self, CoreId};
 use crossbeam::thread;
+use crossbeam_channel::{bounded, unbounded};
 use faktory::ConsumerBuilder;
 use resize::Pixel::Gray8;
 use resize::Type::Triangle;
@@ -12,7 +13,8 @@ use std::env;
 use std::fs::File;
 use std::io;
 use std::process;
-use std::time::Instant;
+// use std::thread;
+use std::time::{Duration, Instant};
 
 /// Actual video transcoding.
 ///
@@ -69,60 +71,47 @@ fn main() {
 
     let setup = params[1].parse::<usize>().unwrap();
     let expr = params[4].parse::<usize>().unwrap();
-    for core_id in 0..setup {
-        let mut c = ConsumerBuilder::default();
-        c.register(
-            "app-xcdr_".to_owned() + &core_id.to_string() + "-" + &expr.to_string(),
-            move |job| -> io::Result<()> {
-                let now = Instant::now();
-                let job_args = job.args();
+    let cores = core_affinity::get_core_ids().unwrap();
+    for core in cores {
+        let (tx, rx) = unbounded();
+        if core.id < setup {
+            thread::scope(|_| {
+                core_affinity::set_for_current(core);
+                let mut c = ConsumerBuilder::default();
+                c.register(
+                    "app-xcdr_".to_owned() + &core.id.to_string() + "-" + &expr.to_string(),
+                    move |job| -> io::Result<()> {
+                        let job_args = job.args();
 
-                let infile_str = job_args[0].as_str().unwrap();
-                let outfile_str = job_args[1].as_str().unwrap();
-                let width_height_str = job_args[2].as_str().unwrap();
+                        let infile_str = job_args[0].as_str().unwrap();
+                        let outfile_str = job_args[1].as_str().unwrap();
+                        let width_height_str = job_args[2].as_str().unwrap();
 
-                thread::scope(|s| {
-                    let core_ids = core_affinity::get_core_ids().unwrap();
-                    let handles = core_ids.into_iter().map(|id| {
-                        s.spawn(move |_| {
-                            core_affinity::set_for_current(id);
+                        let now_2 = Instant::now();
+                        // println!("transcode with core {:?} ", id.id);
+                        transcode(
+                            infile_str.to_string(),
+                            outfile_str.to_string(),
+                            width_height_str.to_string(),
+                        );
+                        tx.send(now_2.elapsed().as_millis());
+                        // println!("inner: transcoded in {:?} millis with core: {:?}", core.id);
+                        Ok(())
+                    },
+                );
 
-                            if id.id == core_id {
-                                let now_2 = Instant::now();
-                                // println!("transcode with core {:?} ", id.id);
-                                transcode(
-                                    infile_str.to_string(),
-                                    outfile_str.to_string(),
-                                    width_height_str.to_string(),
-                                );
-                                println!(
-                                    "inner: transcoded in {:?} millis with core: {:?}",
-                                    now_2.elapsed().as_millis(),
-                                    id.id
-                                );
-                            }
-                        })
-                    });
-                    // .collect::<Vec<_>>();
+                let mut c = c.connect(None).unwrap();
 
-                    for handle in handles.into_iter() {
-                        handle.join().unwrap();
-                    }
-                })
-                .unwrap();
-
-                if now.elapsed().as_secs() >= 600 {
-                    println!("Got here");
+                if let Err(e) = c.run(&["default"]) {
+                    println!("worker failed: {}", e);
                 }
+            });
 
-                Ok(())
-            },
-        );
-
-        let mut c = c.connect(None).unwrap();
-
-        if let Err(e) = c.run(&["default"]) {
-            println!("worker failed: {}", e);
+            if rx.len() >= 10000 {
+                for n in rx {
+                    println!("n: {:?}", n);
+                }
+            }
         }
     }
 }
