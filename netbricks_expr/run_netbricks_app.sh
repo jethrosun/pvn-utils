@@ -56,11 +56,11 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 	P5=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 1; do nice ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done > $MLOG &
+	while sleep 5; do nice ps aux --sort=-%mem | awk 'NR<=10{print $0}'; done > $MLOG &
 	P2=$!
-	nice $BIO_TOP_MONITOR -C > $BIO_LOG &
+	nice $BIO_TOP_MONITOR -C 5 > $BIO_LOG &
 	P3=$!
-	nice $TCP_TOP_MONITOR -C > $TCP_LOG &
+	nice $TCP_TOP_MONITOR -C 5 > $TCP_LOG &
 	P4=$!
 	while sleep 60; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/xcdr_mk_space.sh; done  &
 	P6=$!
@@ -85,11 +85,11 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	P5=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 1; do nice ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
+	while sleep 5; do nice ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
 	P2=$!
-	nice $BIO_TOP_MONITOR -C > $BIO_LOG &
+	nice $BIO_TOP_MONITOR -C 5 > $BIO_LOG &
 	P3=$!
-	nice $TCP_TOP_MONITOR -C > $TCP_LOG &
+	nice $TCP_TOP_MONITOR -C 5 > $TCP_LOG &
 	P4=$!
 	while sleep 60; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/xcdr_mk_space.sh; done  &
 	P6=$!
@@ -126,7 +126,7 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 		while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > $P2P_PROGRESS_LOG &
 		P1=$!
 	else
-		while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh ; done > $P2P_PROGRESS_LOG &
+		while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh ; done > $P2P_PROGRESS_LOG &
 		P1=$!
 	fi
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
@@ -135,11 +135,11 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 	#     /home/jethros/dev/pvn/utils/p2p_expr/p2p_run_leecher_wrapper.sh $4 & > $P2P_WRAPPER_LOG &
 	#     P6=$!
 	# fi
-	while sleep 1; do nice ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
+	while sleep 5; do nice ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
 	P3=$!
-	nice $BIO_TOP_MONITOR -C > $BIO_LOG &
+	nice $BIO_TOP_MONITOR -C 5 > $BIO_LOG &
 	P4=$!
-	nice $TCP_TOP_MONITOR -C > $TCP_LOG &
+	nice $TCP_TOP_MONITOR -C 5 > $TCP_LOG &
 	P5=$!
 	wait $P1 $P2 $P3 $P4 $P5 #$P6
 
@@ -174,7 +174,7 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 		while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > $P2P_PROGRESS_LOG &
 		P1=$!
 	else
-		while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh ; done > $P2P_PROGRESS_LOG &
+		while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh ; done > $P2P_PROGRESS_LOG &
 		P1=$!
 	fi
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
@@ -184,12 +184,11 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 	#     /home/jethros/dev/pvn/utils/p2p_expr/p2p_run_leecher_wrapper.sh $4 & > $P2P_WRAPPER_LOG &
 	#     P6=$!
 	# fi
-	while sleep 1; do nice ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
+	while sleep 5; do nice ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
 	P3=$!
-	# top -b -d 1 -n 700 | tee $MLOG &
-	nice $BIO_TOP_MONITOR -C > $BIO_LOG &
+	nice $BIO_TOP_MONITOR -C 5 > $BIO_LOG &
 	P4=$!
-	nice $TCP_TOP_MONITOR -C > $TCP_LOG &
+	nice $TCP_TOP_MONITOR -C 5 > $TCP_LOG &
 	P5=$!
 
 	wait $P1 $P2 $P3 $P4 $P5 #$P6
@@ -204,11 +203,11 @@ elif [ $2 == "pvn-rdr-transform-app" ]; then
 
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 1; do nice ps aux --sort=-%mem | awk 'NR<=1000{print $0}'; done > $MLOG &
+	while sleep 5; do nice ps aux --sort=-%mem | awk 'NR<=1000{print $0}'; done > $MLOG &
 	P2=$!
-	nice $BIO_TOP_MONITOR -C > $BIO_LOG &
+	nice $BIO_TOP_MONITOR -C 5 > $BIO_LOG &
 	P3=$!
-	nice $TCP_TOP_MONITOR -C > $TCP_LOG &
+	nice $TCP_TOP_MONITOR -C 5 > $TCP_LOG &
 	P4=$!
 	wait $P1 $P2 $P3 $P4
 
@@ -222,12 +221,11 @@ elif [ $2 == "pvn-rdr-groupby-app" ]; then
 
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 1; do nice ps aux --sort=-%mem | awk 'NR<=1000{print $0}'; done > $MLOG &
+	while sleep 5; do nice ps aux --sort=-%mem | awk 'NR<=1000{print $0}'; done > $MLOG &
 	P2=$!
-	# top -b -d 1 -n 700 | tee $MLOG &
-	nice $BIO_TOP_MONITOR -C > $BIO_LOG &
+	nice $BIO_TOP_MONITOR -C 5 > $BIO_LOG &
 	P3=$!
-	nice $TCP_TOP_MONITOR -C > $TCP_LOG &
+	nice $TCP_TOP_MONITOR -C 5 > $TCP_LOG &
 	P4=$!
 	wait $P1 $P2 $P3 $P4
 
@@ -240,11 +238,11 @@ else
 
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 1; do nice ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
+	while sleep 5; do nice ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
 	P2=$!
-	nice $BIO_TOP_MONITOR -C > $BIO_LOG &
+	nice $BIO_TOP_MONITOR -C 5 > $BIO_LOG &
 	P3=$!
-	nice $TCP_TOP_MONITOR -C > $TCP_LOG &
+	nice $TCP_TOP_MONITOR -C 5 > $TCP_LOG &
 	P4=$!
 
 	wait $P1 $P2 $P3 $P4
