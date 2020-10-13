@@ -62,9 +62,9 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 	P3=$!
 	$TCP_TOP_MONITOR -C 5 > $TCP_LOG &
 	P4=$!
-	while sleep 60; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/xcdr_mk_space.sh; done  &
-	P6=$!
-	wait $P1 $P2 $P3 $P4 $P5 $P6
+	# while sleep 60; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/xcdr_mk_space.sh; done  &
+	# P6=$!
+	wait $P1 $P2 $P3 $P4 $P5 #$P6
 
 elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	JSON_STRING=$( jq -n \
@@ -91,9 +91,9 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	P3=$!
 	$TCP_TOP_MONITOR -C 5 > $TCP_LOG &
 	P4=$!
-	while sleep 60; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/xcdr_mk_space.sh; done  &
-	P6=$!
-	wait $P1 $P2 $P3 $P4 $P5 $P6
+	# while sleep 60; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/xcdr_mk_space.sh; done  &
+	# P6=$!
+	wait $P1 $P2 $P3 $P4 $P5 #$P6
 
 elif [ $2 == "pvn-p2p-transform-app" ]; then
 	if [ $5 == "app_p2p-controlled" ]; then

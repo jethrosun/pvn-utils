@@ -70,7 +70,9 @@ fn main() {
     let expr = params[4].parse::<usize>().unwrap();
     let mut c = ConsumerBuilder::default();
 
-    c.workers(setup);
+    // TODO: test multi workers which might leads to issues regarding running out of disk space
+    // c.workers(setup);
+    // c.workers(setup);
 
     c.register(
         "app-xcdr_".to_owned() + &expr.to_string(),
