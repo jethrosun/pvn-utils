@@ -3,9 +3,6 @@ extern crate faktory;
 extern crate resize;
 extern crate y4m;
 
-use core_affinity::{self, CoreId};
-use crossbeam::thread;
-use crossbeam_channel::{bounded, unbounded};
 use faktory::ConsumerBuilder;
 use resize::Pixel::Gray8;
 use resize::Type::Triangle;
@@ -71,51 +68,38 @@ fn main() {
 
     let setup = params[1].parse::<usize>().unwrap();
     let expr = params[4].parse::<usize>().unwrap();
-    let cores = core_affinity::get_core_ids().unwrap();
-    for core in cores {
-        // let (tx, rx) = unbounded();
-        if core.id < setup {
-            thread::scope(|_| {
-                core_affinity::set_for_current(core);
-                let mut c = ConsumerBuilder::default();
-                c.register(
-                    "app-xcdr_".to_owned() + &core.id.to_string() + "-" + &expr.to_string(),
-                    move |job| -> io::Result<()> {
-                        let job_args = job.args();
+    let mut c = ConsumerBuilder::default();
 
-                        let infile_str = job_args[0].as_str().unwrap();
-                        let outfile_str = job_args[1].as_str().unwrap();
-                        let width_height_str = job_args[2].as_str().unwrap();
+    c.workers(setup);
 
-                        let now_2 = Instant::now();
-                        // println!("transcode with core {:?} ", id.id);
-                        transcode(
-                            infile_str.to_string(),
-                            outfile_str.to_string(),
-                            width_height_str.to_string(),
-                        );
-                        // tx.send(now_2.elapsed().as_millis());
-                        println!(
-                            "inner: transcoded in {:?} millis with core: {:?}",
-                            now_2.elapsed().as_millis(),
-                            core.id
-                        );
-                        Ok(())
-                    },
-                );
+    c.register(
+        "app-xcdr_".to_owned() + &expr.to_string(),
+        move |job| -> io::Result<()> {
+            let job_args = job.args();
 
-                let mut c = c.connect(None).unwrap();
+            let infile_str = job_args[0].as_str().unwrap();
+            let outfile_str = job_args[1].as_str().unwrap();
+            let width_height_str = job_args[2].as_str().unwrap();
 
-                if let Err(e) = c.run(&["default"]) {
-                    println!("worker failed: {}", e);
-                }
-            });
+            let now_2 = Instant::now();
+            // println!("transcode with core {:?} ", id.id);
+            transcode(
+                infile_str.to_string(),
+                outfile_str.to_string(),
+                width_height_str.to_string(),
+            );
+            println!(
+                "inner: transcoded in {:?} millis with core: {:?}",
+                now_2.elapsed().as_millis(),
+                0
+            );
+            Ok(())
+        },
+    );
 
-            // if rx.len() >= 10000 {
-            //     for n in rx {
-            //         println!("n: {:?}", n);
-            //     }
-            // }
-        }
+    let mut c = c.connect(None).unwrap();
+
+    if let Err(e) = c.run(&["default"]) {
+        println!("worker failed: {}", e);
     }
 }
