@@ -180,10 +180,6 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P2=$!
 
-	# if [ $5 == "app_p2p-controlled" ]; then
-	#     /home/jethros/dev/pvn/utils/p2p_expr/p2p_run_leecher_wrapper.sh $4 & > $P2P_WRAPPER_LOG &
-	#     P6=$!
-	# fi
 	while sleep 5; do ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
 	P3=$!
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
