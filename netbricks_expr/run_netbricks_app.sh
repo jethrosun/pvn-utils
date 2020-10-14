@@ -58,9 +58,9 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 	P1=$!
 	while sleep 5; do ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
 	P2=$!
-	$BIO_TOP_MONITOR -C 5 > $BIO_LOG &
+	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
-	$TCP_TOP_MONITOR -C 5 > $TCP_LOG &
+	$TCP_TOP_MONITOR -C > $TCP_LOG &
 	P4=$!
 	# while sleep 60; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/xcdr_mk_space.sh; done  &
 	# P6=$!
@@ -87,9 +87,9 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	P1=$!
 	while sleep 5; do ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
 	P2=$!
-	$BIO_TOP_MONITOR -C 5 > $BIO_LOG &
+	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
-	$TCP_TOP_MONITOR -C 5 > $TCP_LOG &
+	$TCP_TOP_MONITOR -C > $TCP_LOG &
 	P4=$!
 	# while sleep 60; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/xcdr_mk_space.sh; done  &
 	# P6=$!
@@ -137,9 +137,9 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 	# fi
 	while sleep 5; do ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
 	P3=$!
-	$BIO_TOP_MONITOR -C 5 > $BIO_LOG &
+	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P4=$!
-	$TCP_TOP_MONITOR -C 5 > $TCP_LOG &
+	$TCP_TOP_MONITOR -C > $TCP_LOG &
 	P5=$!
 	wait $P1 $P2 $P3 $P4 $P5 #$P6
 
@@ -186,9 +186,9 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 	# fi
 	while sleep 5; do ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
 	P3=$!
-	$BIO_TOP_MONITOR -C 5 > $BIO_LOG &
+	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P4=$!
-	$TCP_TOP_MONITOR -C 5 > $TCP_LOG &
+	$TCP_TOP_MONITOR -C > $TCP_LOG &
 	P5=$!
 
 	wait $P1 $P2 $P3 $P4 $P5 #$P6
@@ -205,9 +205,9 @@ elif [ $2 == "pvn-rdr-transform-app" ]; then
 	P1=$!
 	while sleep 5; do ps aux --sort=-%mem | awk 'NR<=1000{print $0}'; done > $MLOG &
 	P2=$!
-	$BIO_TOP_MONITOR -C 5 > $BIO_LOG &
+	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
-	$TCP_TOP_MONITOR -C 5 > $TCP_LOG &
+	$TCP_TOP_MONITOR -C > $TCP_LOG &
 	P4=$!
 	wait $P1 $P2 $P3 $P4
 
@@ -223,9 +223,9 @@ elif [ $2 == "pvn-rdr-groupby-app" ]; then
 	P1=$!
 	while sleep 5; do ps aux --sort=-%mem | awk 'NR<=1000{print $0}'; done > $MLOG &
 	P2=$!
-	$BIO_TOP_MONITOR -C 5 > $BIO_LOG &
+	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
-	$TCP_TOP_MONITOR -C 5 > $TCP_LOG &
+	$TCP_TOP_MONITOR -C > $TCP_LOG &
 	P4=$!
 	wait $P1 $P2 $P3 $P4
 
@@ -240,9 +240,9 @@ else
 	P1=$!
 	while sleep 5; do ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
 	P2=$!
-	$BIO_TOP_MONITOR -C 5 > $BIO_LOG &
+	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
-	$TCP_TOP_MONITOR -C 5 > $TCP_LOG &
+	$TCP_TOP_MONITOR -C > $TCP_LOG &
 	P4=$!
 
 	wait $P1 $P2 $P3 $P4
