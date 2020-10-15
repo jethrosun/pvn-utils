@@ -46,6 +46,9 @@ if [ ! -e /data/bt/config/auth ]; then
 	# sudo -u jethros deluge-console -c ~/bt_data/config "config -s copy_torrent_file True"
 	# sudo -u jethros deluge-console -c ~/bt_data/config "config -s autoadd_enable True"
 
+	sudo -u jethros deluge-console -c /data/bt/config 'config -s dht false'
+	sudo -u jethros deluge-console -c /data/bt/config 'config -s utpex false'
+
 	sudo -u jethros deluge-console -c /data/bt/config 'config -s max_active_limit 10'
 	sudo -u jethros deluge-console -c /data/bt/config 'config -s max_active_downloading 10'
 
