@@ -206,7 +206,7 @@ def run_expr_p2p(expr):
                 time.sleep(20)
 
             sess_destroy(pktgen_sess)
-            time.sleep(60)
+            time.sleep(30)
 
 
 def run_expr_p2p_controlled(expr):
@@ -232,7 +232,7 @@ def run_expr_p2p_controlled(expr):
                 p2p_cleanup("leecher", leecher1_sess)
                 p2p_cleanup("leecher", leecher2_sess)
                 p2p_cleanup("leecher", leecher2_sess)
-                time.sleep(60)
+                time.sleep(30)
 
                 # Actual RUN
                 run_p2p_node('leecher', leecher1_sess, setup)
@@ -248,17 +248,17 @@ def run_expr_p2p_controlled(expr):
                 p2p_cleanup("leecher", leecher1_sess)
                 p2p_cleanup("leecher", leecher2_sess)
                 p2p_cleanup("leecher", leecher3_sess)
-                time.sleep(60)
+                time.sleep(30)
 
                 sess_destroy(netbricks_sess)
                 sess_destroy(leecher1_sess)
                 sess_destroy(leecher2_sess)
                 sess_destroy(leecher3_sess)
 
-                time.sleep(60)
+                time.sleep(30)
 
             sess_destroy(pktgen_sess)
-            time.sleep(60)
+            time.sleep(30)
 
 
 def run_expr_p2p_ext(expr):
@@ -275,7 +275,7 @@ def run_expr_p2p_ext(expr):
 
                 # run clean up for p2p nf before experiment
                 p2p_cleanup(netbricks_sess)
-                time.sleep(60)
+                time.sleep(30)
 
                 # Actual RUN
                 run_netbricks(netbricks_sess, app.trace[expr], nf, epoch, setup)
@@ -284,7 +284,7 @@ def run_expr_p2p_ext(expr):
                 if nf in app.p2p_nf_list:
                     time.sleep(app.expr_wait_time)
                     p2p_cleanup(netbricks_sess)
-                    time.sleep(60)
+                    time.sleep(30)
                 else:
                     print("Unknown nf?")
                     sys.exit(1)
@@ -293,12 +293,12 @@ def run_expr_p2p_ext(expr):
                 # sess_destroy(netbricks_sess)
 
                 if nf in app.p2p_nf_list:
-                    time.sleep(60)
+                    time.sleep(30)
                 else:
                     time.sleep(10)
 
             sess_destroy(pktgen_sess)
-            time.sleep(60)
+            time.sleep(30)
 
 
 def main(expr_list):

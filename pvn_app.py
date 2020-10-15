@@ -96,6 +96,9 @@ def sess_destroy(sess):
     if sess.exists:
         sess.kill()
 
+def sess_reboot(sess):
+    cmd_str = "sudo reboot"
+    sess.send_commands(cmd_str)
 
 def p2p_cleanup(sess):
     cmd_str = "sudo ./misc/p2p_cleanup.sh "
@@ -132,10 +135,10 @@ def main(expr_list):
                         # run clean up for p2p nf before experiment
                         if nf in app.p2p_nf_list:
                             p2p_cleanup(netbricks_sess)
-                            time.sleep(60)
+                            time.sleep(30)
                         elif nf in app.xcdr_nf_list:
                             xcdr_cleanup(netbricks_sess)
-                            time.sleep(60)
+                            time.sleep(30)
 
                         # Actual RUN
                         if nf in app.xcdr_nf_list:
@@ -152,11 +155,11 @@ def main(expr_list):
                         if nf in app.p2p_nf_list:
                             time.sleep(app.expr_wait_time)
                             p2p_cleanup(netbricks_sess)
-                            time.sleep(60)
+                            time.sleep(30)
                         elif nf in app.xcdr_nf_list:
                             time.sleep(app.expr_wait_time)
                             xcdr_cleanup(netbricks_sess)
-                            time.sleep(60)
+                            time.sleep(30)
                         elif nf in app.pvn_nf_list:
                             time.sleep(app.expr_wait_time)
                         else:
@@ -167,16 +170,16 @@ def main(expr_list):
                         # sess_destroy(netbricks_sess)
 
                         if nf in app.p2p_nf_list:
-                            time.sleep(60)
+                            time.sleep(30)
                         elif nf in app.xcdr_nf_list:
-                            time.sleep(60)
+                            time.sleep(30)
                         elif nf in app.pvn_nf_list:
                             time.sleep(30)
                         else:
                             time.sleep(10)
 
                     sess_destroy(pktgen_sess)
-                    time.sleep(60)
+                    time.sleep(30)
 
             elif expr == 'app_p2p-ext':
                 # config the pktgen sending rate
@@ -192,10 +195,10 @@ def main(expr_list):
                         # run clean up for p2p nf before experiment
                         if nf in app.p2p_nf_list:
                             p2p_cleanup(netbricks_sess)
-                            time.sleep(60)
+                            time.sleep(30)
                         elif nf in app.xcdr_nf_list:
                             xcdr_cleanup(netbricks_sess)
-                            time.sleep(60)
+                            time.sleep(30)
 
                         # Actual RUN
                         if nf in app.xcdr_nf_list:
@@ -212,31 +215,32 @@ def main(expr_list):
                         if nf in app.p2p_nf_list:
                             time.sleep(app.expr_wait_time)
                             p2p_cleanup(netbricks_sess)
-                            time.sleep(60)
+                            time.sleep(30)
                         elif nf in app.xcdr_nf_list:
                             time.sleep(app.expr_wait_time)
                             xcdr_cleanup(netbricks_sess)
-                            time.sleep(60)
+                            time.sleep(30)
                         elif nf in app.pvn_nf_list:
                             time.sleep(app.expr_wait_time)
                         else:
                             print("Unknown nf?")
                             sys.exit(1)
 
+                        # sess_reboot(netbricks_sess)
                         sess_destroy(netbricks_sess)
-                        # sess_destroy(netbricks_sess)
 
                         if nf in app.p2p_nf_list:
-                            time.sleep(60)
+                            time.sleep(30)
                         elif nf in app.xcdr_nf_list:
-                            time.sleep(60)
+                            time.sleep(30)
                         elif nf in app.pvn_nf_list:
                             time.sleep(30)
                         else:
                             time.sleep(10)
 
+                    # sess_reboot(pktgen_sess)
                     sess_destroy(pktgen_sess)
-                    time.sleep(60)
+                    time.sleep(30)
 
 
 # main(app.tmp_list) # rdr, xcdr
