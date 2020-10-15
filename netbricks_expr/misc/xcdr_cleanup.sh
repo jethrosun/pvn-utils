@@ -8,7 +8,7 @@ set -ex
 # mkdir -p config downloads
 #
 sudo rm -rf ~/dev/pvn/utils/output/output_videos/
-sudo -u jethros mkdir -p ~/dev/pvn/utils/output/output_videos/
+sudo mkdir -p ~/dev/pvn/utils/output/output_videos/
 
 
 # CONTAINER_NAME='faktory_srv'
