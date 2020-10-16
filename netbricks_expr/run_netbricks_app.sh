@@ -5,6 +5,11 @@ set -e
 # Usage:
 #   $ ./run_netbricks.sh trace nf epoch setup expr
 
+# PS to collect long running processes' stat
+# https://unix.stackexchange.com/questions/215671/can-i-use-ps-aux-along-with-o-etime
+# https://unix.stackexchange.com/questions/58539/top-and-ps-not-showing-the-same-cpu-result
+#
+# ps -e -o user,pid,%cpu,%mem,vsz,rss,start,time,command,etime,etimes,euid --sort=-%mem
 
 LOG_DIR=$HOME/netbricks_logs/$2/$1
 
@@ -56,7 +61,7 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 	P5=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 5; do ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
+	while sleep 5; do ps -e -o user,pid,%cpu,%mem,vsz,rss,start,time,command,etime,etimes,euid --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
 	P2=$!
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
@@ -85,7 +90,7 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	P5=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 5; do ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
+	while sleep 5; do ps -e -o user,pid,%cpu,%mem,vsz,rss,start,time,command,etime,etimes,euid --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
 	P2=$!
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
@@ -135,7 +140,7 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 	#     /home/jethros/dev/pvn/utils/p2p_expr/p2p_run_leecher_wrapper.sh $4 & > $P2P_WRAPPER_LOG &
 	#     P6=$!
 	# fi
-	while sleep 5; do ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
+	while sleep 5; do ps -e -o user,pid,%cpu,%mem,vsz,rss,start,time,command,etime,etimes,euid --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
 	P3=$!
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P4=$!
@@ -180,7 +185,7 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P2=$!
 
-	while sleep 5; do ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
+	while sleep 5; do ps -e -o user,pid,%cpu,%mem,vsz,rss,start,time,command,etime,etimes,euid --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
 	P3=$!
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P4=$!
@@ -199,7 +204,7 @@ elif [ $2 == "pvn-rdr-transform-app" ]; then
 
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 5; do ps aux --sort=-%mem | awk 'NR<=1000{print $0}'; done > $MLOG &
+	while sleep 5; do ps -e -o user,pid,%cpu,%mem,vsz,rss,start,time,command,etime,etimes,euid --sort=-%mem | awk 'NR<=1000{print $0}'; done > $MLOG &
 	P2=$!
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
@@ -217,7 +222,7 @@ elif [ $2 == "pvn-rdr-groupby-app" ]; then
 
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 5; do ps aux --sort=-%mem | awk 'NR<=1000{print $0}'; done > $MLOG &
+	while sleep 5; do ps -e -o user,pid,%cpu,%mem,vsz,rss,start,time,command,etime,etimes,euid --sort=-%mem | awk 'NR<=1000{print $0}'; done > $MLOG &
 	P2=$!
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
@@ -234,7 +239,7 @@ else
 
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 5; do ps aux --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
+	while sleep 5; do ps -e -o user,pid,%cpu,%mem,vsz,rss,start,time,command,etime,etimes,euid --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
 	P2=$!
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
