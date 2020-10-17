@@ -29,6 +29,7 @@ MLOG=$LOG_DIR/$3_$4_mem.log
 
 NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
+TCP_LIFE_MONITOR=/usr/share/bcc/tools/tcplife
 BIO_TOP_MONITOR=/usr/share/bcc/tools/biotop
 IPTRAF_MONITOR=/usr/sbin/iptraf-ng
 
