@@ -1,4 +1,4 @@
-#!/bin/bassh
+#!/bin/bash
 
 echo "$@"
 ps -eo size,command --sort -size | grep "$@"| awk '{ hr=$1/1024 ; sum +=hr} END {print sum}'
