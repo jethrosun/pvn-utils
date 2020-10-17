@@ -24,6 +24,9 @@ FAKTORY_LOG=$LOG_DIR/$3_$4_faktory.log
 IPTRAF_LOG=$LOG_DIR/$3_$4_iptraf.log
 # SHORT_IPTRAF_LOG=$3_$4_iptraf.log
 
+CLOG=$LOG_DIR/$3_$4_cpu.log
+MLOG=$LOG_DIR/$3_$4_mem.log
+
 NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
 BIO_TOP_MONITOR=/usr/share/bcc/tools/biotop
@@ -61,14 +64,13 @@ if [ $2 == 'pvn-transcoder-transform-app' ]; then
 	P5=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 5; do ps -e -o user,pid,%cpu,%mem,vsz,rss,start,time,command,etime,etimes,euid --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/measure.sh $2; done > $MLOG &
 	P2=$!
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
 	$TCP_TOP_MONITOR -C > $TCP_LOG &
 	P4=$!
 	# while sleep 60; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/xcdr_mk_space.sh; done  &
-	# P6=$!
 	wait $P1 $P2 $P3 $P4 $P5 #$P6
 
 elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
@@ -90,7 +92,7 @@ elif  [ $2 == 'pvn-transcoder-groupby-app' ]; then
 	P5=$!
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 5; do ps -e -o user,pid,%cpu,%mem,vsz,rss,start,time,command,etime,etimes,euid --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/measure.sh $2; done > $MLOG &
 	P2=$!
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
@@ -140,7 +142,7 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 	#     /home/jethros/dev/pvn/utils/p2p_expr/p2p_run_leecher_wrapper.sh $4 & > $P2P_WRAPPER_LOG &
 	#     P6=$!
 	# fi
-	while sleep 5; do ps -e -o user,pid,%cpu,%mem,vsz,rss,start,time,command,etime,etimes,euid --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/measure.sh $2; done > $MLOG &
 	P3=$!
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P4=$!
@@ -185,7 +187,7 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P2=$!
 
-	while sleep 5; do ps -e -o user,pid,%cpu,%mem,vsz,rss,start,time,command,etime,etimes,euid --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/measure.sh $2; done > $MLOG &
 	P3=$!
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P4=$!
@@ -204,7 +206,7 @@ elif [ $2 == "pvn-rdr-transform-app" ]; then
 
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 5; do ps -e -o user,pid,%cpu,%mem,vsz,rss,start,time,command,etime,etimes,euid --sort=-%mem | awk 'NR<=1000{print $0}'; done > $MLOG &
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/measure.sh $2; done > $MLOG &
 	P2=$!
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
@@ -222,7 +224,7 @@ elif [ $2 == "pvn-rdr-groupby-app" ]; then
 
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 5; do ps -e -o user,pid,%cpu,%mem,vsz,rss,start,time,command,etime,etimes,euid --sort=-%mem | awk 'NR<=1000{print $0}'; done > $MLOG &
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/measure.sh $2; done > $MLOG &
 	P2=$!
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
@@ -239,7 +241,7 @@ else
 
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
-	while sleep 5; do ps -e -o user,pid,%cpu,%mem,vsz,rss,start,time,command,etime,etimes,euid --sort=-%mem | awk 'NR<=50{print $0}'; done > $MLOG &
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/measure.sh $2; done > $MLOG &
 	P2=$!
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P3=$!
