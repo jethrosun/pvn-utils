@@ -18,14 +18,17 @@ MLOG=$LOG_DIR/$3_$4_measurement.log
 AMLOG=$LOG_DIR/$3_$4_a_measurement.log
 TCP_LOG=$LOG_DIR/$3_$4_tcptop.log
 BIO_LOG=$LOG_DIR/$3_$4_biotop.log
+TCPLIFE_LOG=$LOG_DIR/$3_$4_tcptop.log
 P2P_PROGRESS_LOG=$LOG_DIR/$3_$4_p2p_progress.log
 P2P_WRAPPER_LOG=$LOG_DIR/$3_$4_p2p_run.log
 FAKTORY_LOG=$LOG_DIR/$3_$4_faktory.log
 IPTRAF_LOG=$LOG_DIR/$3_$4_iptraf.log
 # SHORT_IPTRAF_LOG=$3_$4_iptraf.log
 
-CLOG=$LOG_DIR/$3_$4_cpu.log
-MLOG=$LOG_DIR/$3_$4_mem.log
+CPULOG1=$LOG_DIR/$3_$4_cpu1.log
+CPULOG2=$LOG_DIR/$3_$4_cpu2.log
+MEMLOG1=$LOG_DIR/$3_$4_mem1.log
+MEMLOG2=$LOG_DIR/$3_$4_mem2.log
 
 NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
@@ -139,17 +142,21 @@ elif [ $2 == "pvn-p2p-transform-app" ]; then
 	fi
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P2=$!
-	# if [ $5 == "app_p2p-controlled" ]; then
-	#     /home/jethros/dev/pvn/utils/p2p_expr/p2p_run_leecher_wrapper.sh $4 & > $P2P_WRAPPER_LOG &
-	#     P6=$!
-	# fi
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/measure.sh $2; done > $MLOG &
-	P3=$!
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh pvn; done > $CPULOG1 &
+	P7=$!
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > $MEMLOG1 &
+	P8=$!
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh deluge; done > $CPULOG2 &
+	P9=$!
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh deluge; done > $MEMLOG2 &
+	P10=$!
+	$TCP_LIFE_MONITOR > $TCPLIFE_LOG &
+	P6=$!
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P4=$!
 	$TCP_TOP_MONITOR -C > $TCP_LOG &
 	P5=$!
-	wait $P1 $P2 $P3 $P4 $P5 #$P6
+	wait $P1 $P2 $P3 $P4 $P5 $P6  $P7 $P8 $P9 $P10
 
 elif [ $2 == "pvn-p2p-groupby-app" ]; then
 	if [ $5 == "app_p2p-controlled" ]; then
@@ -187,15 +194,22 @@ elif [ $2 == "pvn-p2p-groupby-app" ]; then
 	fi
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P2=$!
-
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/measure.sh $2; done > $MLOG &
-	P3=$!
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh pvn; done > $CPULOG1 &
+	P7=$!
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > $MEMLOG1 &
+	P8=$!
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh deluge; done > $CPULOG2 &
+	P9=$!
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh deluge; done > $MEMLOG2 &
+	P10=$!
 	$BIO_TOP_MONITOR -C > $BIO_LOG &
 	P4=$!
 	$TCP_TOP_MONITOR -C > $TCP_LOG &
 	P5=$!
+	$TCP_LIFE_MONITOR > $TCPLIFE_LOG &
+	P6=$!
 
-	wait $P1 $P2 $P3 $P4 $P5 #$P6
+	wait $P1 $P2 $P3 $P4 $P5 $P6  $P7 $P8 $P9 $P10
 
 elif [ $2 == "pvn-rdr-transform-app" ]; then
 	JSON_STRING=$( jq -n \
