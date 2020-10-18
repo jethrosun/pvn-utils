@@ -147,9 +147,9 @@ batch = 1
 
 # expr list....
 
-all_expr_list = ['app_rdr', 'app_xcdr', 'app_tlsv', ]
 expr_list = ['app_rdr', 'app_xcdr', 'app_tlsv' ]
 tmp_list = ['app_rdr', 'app_xcdr', ]
+rdr_xcdr_tlsv = ['app_rdr', 'app_xcdr', 'app_tlsv', ]
 
 xcdr = [ 'app_xcdr' ]
 rdr = [ 'app_rdr', ]
