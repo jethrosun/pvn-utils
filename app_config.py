@@ -156,6 +156,15 @@ sending_rate = {
             '5': fixed_sending_rate,
             '6': fixed_sending_rate
             },
+    # chain
+    'chain_rdr_tlsv': {
+            '1': fixed_sending_rate,
+            '2': fixed_sending_rate,
+            '3': fixed_sending_rate,
+            '4': fixed_sending_rate,
+            '5': fixed_sending_rate,
+            '6': fixed_sending_rate
+            },
         }
 
 # expr is 10 min/600 sec
