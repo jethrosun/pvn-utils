@@ -1,106 +1,121 @@
 pvn_nf = {
     # nf app
-        'app_rdr': [
-            'pvn-rdr-transform-app',
-            'pvn-rdr-groupby-app',
-            ],
-        'app_xcdr': [
-            'pvn-transcoder-transform-app',
-            'pvn-transcoder-groupby-app',
-            ],
-        'app_tlsv': [
-            'pvn-tlsv-transform-app',
-            'pvn-tlsv-groupby-app',
-            ],
-        'app_p2p': [
-            'pvn-p2p-transform-app',
-            'pvn-p2p-groupby-app',
-            ],
-        'app_p2p-ext': [
-            'pvn-p2p-transform-app',
-            'pvn-p2p-groupby-app',
-            ],
-        'app_p2p-controlled': [
-            'pvn-p2p-groupby-app',
-            'pvn-p2p-transform-app',
-            ],
-    # chain
-    'chain_rdr_tlsv': [
-            'pvn-rdr-tlsv-transform-chain',
-            'pvn-rdr-tlsv-groupby-chain',
-            ],
-        }
-trace = {
-    # nf
-        'app_rdr': 'rdr-trace-re.pcap',
-        'app_xcdr': 'video_trace_2_re.pcap',
-        'app_tlsv': 'tls_handshake_trace.pcap',
-        'app_p2p': 'p2p-small-re.pcap',
-        'app_p2p-ext': 'p2p-small-re.pcap',
-        'app_p2p-controlled': 'p2p-small-re.pcap',
-    # chain
-        'chain_rdr_tlsv': 'rdr-trace-re.pcap',
-        }
-
-pvn_nf_list = [
-        'pvn-tlsv-transform-app',
-        'pvn-tlsv-groupby-app',
-        'pvn-p2p-transform-app',
-        'pvn-p2p-groupby-app',
+    'app_rdr': [
         'pvn-rdr-transform-app',
         'pvn-rdr-groupby-app',
+    ],
+    'app_xcdr': [
         'pvn-transcoder-transform-app',
         'pvn-transcoder-groupby-app',
-        ]
-
-pvn_chain_list = [
+    ],
+    'app_tlsv': [
+        'pvn-tlsv-transform-app',
+        'pvn-tlsv-groupby-app',
+    ],
+    'app_p2p': [
+        'pvn-p2p-transform-app',
+        'pvn-p2p-groupby-app',
+    ],
+    'app_p2p-ext': [
+        'pvn-p2p-transform-app',
+        'pvn-p2p-groupby-app',
+    ],
+    'app_p2p-controlled': [
+        'pvn-p2p-groupby-app',
+        'pvn-p2p-transform-app',
+    ],
+    # chain
+    'chain_rdr_tlsv': [
         'pvn-rdr-tlsv-transform-chain',
         'pvn-rdr-tlsv-groupby-chain',
-        'pvn-rdr-p2p-transform-app',
-        'pvn-rdr-p2p-groupby-app',
-        'pvn-rdr-p2p-transform-app',
-        'pvn-rdr-p2p-groupby-app',
-        'pvn-rdr-xcdr-transform-app',
-        'pvn-rdr-xcdr-groupby-app',
-        ]
+    ],
+}
+trace = {
+    # nf
+    'app_rdr': 'rdr-trace-re.pcap',
+    'app_xcdr': 'video_trace_2_re.pcap',
+    'app_tlsv': 'tls_handshake_trace.pcap',
+    'app_p2p': 'p2p-small-re.pcap',
+    'app_p2p-ext': 'p2p-small-re.pcap',
+    'app_p2p-controlled': 'p2p-small-re.pcap',
+    # chain
+    'chain_rdr_tlsv': 'rdr-trace-re.pcap',
+}
+
+pvn_nf_list = [
+    'pvn-tlsv-transform-app',
+    'pvn-tlsv-groupby-app',
+    'pvn-p2p-transform-app',
+    'pvn-p2p-groupby-app',
+    'pvn-rdr-transform-app',
+    'pvn-rdr-groupby-app',
+    'pvn-transcoder-transform-app',
+    'pvn-transcoder-groupby-app',
+]
+
+pvn_chain_list = [
+    'pvn-rdr-tlsv-transform-chain',
+    'pvn-rdr-tlsv-groupby-chain',
+    'pvn-rdr-p2p-transform-chain',
+    'pvn-rdr-p2p-groupby-chain',
+    'pvn-rdr-p2p-transform-chain',
+    'pvn-rdr-p2p-groupby-chain',
+    'pvn-rdr-xcdr-transform-chain',
+    'pvn-rdr-xcdr-groupby-chain',
+]
 
 
 p2p_nf_list = [
-        'pvn-p2p-transform-app',
-        'pvn-p2p-groupby-app',
-        ]
+    'pvn-p2p-transform-app',
+    'pvn-p2p-groupby-app',
+]
+p2p_chain_list = [
+    'pvn-tlsv-p2p-transform-chain',
+    'pvn-tlsv-p2p-groupby-chain',
+    'pvn-rdr-p2p-transform-chain',
+    'pvn-rdr-p2p-groupby-chain',
+]
+
 xcdr_nf_list = [
-        'pvn-transcoder-transform-app', 'pvn-transcoder-groupby-app'
-        ]
+    'pvn-transcoder-transform-app',
+    'pvn-transcoder-groupby-app'
+]
+xcdr_chain_list = [
+    'pvn-rdr-xcdr-transform-chain',
+    'pvn-rdr-xcdr-groupby-chain',
+    'pvn-tlsv-xcdr-transform-chain',
+    'pvn-tlsv-xcdr-groupby-chain',
+]
+
 
 set_list = [
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        ]
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+]
 p2p_ext_list = [
-        '11',
-        '12',
-        '13',
-        '14',
-        '15',
-        '16',
-        '17',
-        '18',
-        '19',
-        '20',
-        ]
+    '11',
+    '12',
+    '13',
+    '14',
+    '15',
+    '16',
+    '17',
+    '18',
+    '19',
+    '20',
+]
 p2p_controlled_list = [
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        ]
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+]
 
 
 rdr_sending_rate = 10
@@ -108,64 +123,64 @@ p2p_sending_rate = 10
 
 fixed_sending_rate = 10
 sending_rate = {
-        'app_xcdr': {
-            '1': fixed_sending_rate,
-            '2': fixed_sending_rate,
-            '3': fixed_sending_rate,
-            '4': fixed_sending_rate,
-            '5': fixed_sending_rate,
-            '6': fixed_sending_rate
-            },
-        'app_p2p': {
-            '1': fixed_sending_rate,
-            '2': fixed_sending_rate,
-            '3': fixed_sending_rate,
-            '4': fixed_sending_rate,
-            '5': fixed_sending_rate,
-            '6': fixed_sending_rate
-            },
-        'app_rdr': {
-            '1': fixed_sending_rate,
-            '2': fixed_sending_rate,
-            '3': fixed_sending_rate,
-            '4': fixed_sending_rate,
-            '5': fixed_sending_rate,
-            '6': fixed_sending_rate
-            },
-        'app_tlsv': {
-            '1': 1,
-            '2': 5,
-            '3': 10,
-            '4': 15,
-            '5': 20,
-            '6': 50
-            },
-        'app_p2p-ext': {
-            '1': fixed_sending_rate,
-            '2': fixed_sending_rate,
-            '3': fixed_sending_rate,
-            '4': fixed_sending_rate,
-            '5': fixed_sending_rate,
-            '6': fixed_sending_rate
-            },
-        'app_p2p-controlled': {
-            '1': fixed_sending_rate,
-            '2': fixed_sending_rate,
-            '3': fixed_sending_rate,
-            '4': fixed_sending_rate,
-            '5': fixed_sending_rate,
-            '6': fixed_sending_rate
-            },
+    'app_xcdr': {
+        '1': fixed_sending_rate,
+        '2': fixed_sending_rate,
+        '3': fixed_sending_rate,
+        '4': fixed_sending_rate,
+        '5': fixed_sending_rate,
+        '6': fixed_sending_rate
+    },
+    'app_p2p': {
+        '1': fixed_sending_rate,
+        '2': fixed_sending_rate,
+        '3': fixed_sending_rate,
+        '4': fixed_sending_rate,
+        '5': fixed_sending_rate,
+        '6': fixed_sending_rate
+    },
+    'app_rdr': {
+        '1': fixed_sending_rate,
+        '2': fixed_sending_rate,
+        '3': fixed_sending_rate,
+        '4': fixed_sending_rate,
+        '5': fixed_sending_rate,
+        '6': fixed_sending_rate
+    },
+    'app_tlsv': {
+        '1': 1,
+        '2': 5,
+        '3': 10,
+        '4': 15,
+        '5': 20,
+        '6': 50
+    },
+    'app_p2p-ext': {
+        '1': fixed_sending_rate,
+        '2': fixed_sending_rate,
+        '3': fixed_sending_rate,
+        '4': fixed_sending_rate,
+        '5': fixed_sending_rate,
+        '6': fixed_sending_rate
+    },
+    'app_p2p-controlled': {
+        '1': fixed_sending_rate,
+        '2': fixed_sending_rate,
+        '3': fixed_sending_rate,
+        '4': fixed_sending_rate,
+        '5': fixed_sending_rate,
+        '6': fixed_sending_rate
+    },
     # chain
     'chain_rdr_tlsv': {
-            '1': fixed_sending_rate,
-            '2': fixed_sending_rate,
-            '3': fixed_sending_rate,
-            '4': fixed_sending_rate,
-            '5': fixed_sending_rate,
-            '6': fixed_sending_rate
-            },
-        }
+        '1': fixed_sending_rate,
+        '2': fixed_sending_rate,
+        '3': fixed_sending_rate,
+        '4': fixed_sending_rate,
+        '5': fixed_sending_rate,
+        '6': fixed_sending_rate
+    },
+}
 
 # expr is 10 min/600 sec
 expr_wait_time = 875
