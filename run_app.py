@@ -76,16 +76,14 @@ def run_pktgen(sess, trace, setup):
 
 
 def run_netbricks(sess, trace, nf, epoch, setup):
-    cmd_str = "sudo ./run_netbricks_app.sh " + trace + " " + nf + " " + str(
+    cmd_str = "sudo ./run_pvnf_app.sh " + trace + " " + nf + " " + str(
         epoch) + " " + setup
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
 
 def run_netbricks_xcdr(sess, trace, nf, epoch, setup, port1, port2, expr_num):
-    # cmd_str = "sudo ./run_netbricks_app.sh " + trace + " " + nf + " " + str(
-    #     epoch) + " " + setup + " " + port1 + " " + port2 + " " + expr_num
-    cmd_str = "sudo ./run_netbricks_app.sh " + trace + " " + nf + " " + str(
+    cmd_str = "sudo ./run_pvnf_app.sh " + trace + " " + nf + " " + str(
         epoch) + " " + setup + " " + str(7419) + " " + str(7420) + " " + expr_num
 
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
