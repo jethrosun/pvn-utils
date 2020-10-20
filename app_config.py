@@ -1,4 +1,5 @@
 pvn_nf = {
+    # nf app
         'app_rdr': [
             'pvn-rdr-transform-app',
             'pvn-rdr-groupby-app',
@@ -23,15 +24,24 @@ pvn_nf = {
             'pvn-p2p-groupby-app',
             'pvn-p2p-transform-app',
             ],
+    # chain
+    'chain_rdr_tlsv': [
+            'pvn-rdr-tlsv-transform-chain',
+            'pvn-rdr-tlsv-groupby-chain',
+            ],
         }
 trace = {
+    # nf
         'app_rdr': 'rdr-trace-re.pcap',
         'app_xcdr': 'video_trace_2_re.pcap',
         'app_tlsv': 'tls_handshake_trace.pcap',
         'app_p2p': 'p2p-small-re.pcap',
         'app_p2p-ext': 'p2p-small-re.pcap',
-        'app_p2p-controlled': 'p2p-small-re.pcap'
+        'app_p2p-controlled': 'p2p-small-re.pcap',
+    # chain
+        'chain_rdr_tlsv': 'rdr-trace-re.pcap',
         }
+
 pvn_nf_list = [
         'pvn-tlsv-transform-app',
         'pvn-tlsv-groupby-app',
@@ -42,6 +52,18 @@ pvn_nf_list = [
         'pvn-transcoder-transform-app',
         'pvn-transcoder-groupby-app',
         ]
+
+pvn_chain_list = [
+        'pvn-rdr-tlsv-transform-chain',
+        'pvn-rdr-tlsv-groupby-chain',
+        'pvn-rdr-p2p-transform-app',
+        'pvn-rdr-p2p-groupby-app',
+        'pvn-rdr-p2p-transform-app',
+        'pvn-rdr-p2p-groupby-app',
+        'pvn-rdr-xcdr-transform-app',
+        'pvn-rdr-xcdr-groupby-app',
+        ]
+
 
 p2p_nf_list = [
         'pvn-p2p-transform-app',
@@ -145,7 +167,7 @@ num_of_epoch = 3
 batch = 1
 
 
-# expr list....
+# app
 
 expr_list = ['app_rdr', 'app_xcdr', 'app_tlsv' ]
 tmp_list = ['app_rdr', 'app_xcdr', ]
@@ -154,10 +176,14 @@ rdr_xcdr_tlsv = ['app_rdr', 'app_xcdr', 'app_tlsv', ]
 xcdr = [ 'app_xcdr' ]
 rdr = [ 'app_rdr', ]
 
-
 nuclear_list = [ 'app_p2p' ]
 complete_nuclear_list = [ 'app_p2p', 'app_p2p-ext' ]
 
 p2p_controlled = [ 'app_p2p-controlled' ]
 p2p_ext = [ 'app_p2p-ext' ]
+
+# chain
+
+rdr_tlsv = [ 'chain_rdr_tlsv', ]
+
 
