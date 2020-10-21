@@ -32,14 +32,20 @@ pvn_nf = {
 }
 trace = {
     # nf
-    'app_rdr': 'rdr-trace-re.pcap',
-    'app_xcdr': 'video_trace_2_re.pcap',
-    'app_tlsv': 'tls_handshake_trace.pcap',
-    'app_p2p': 'p2p-small-re.pcap',
-    'app_p2p-ext': 'p2p-small-re.pcap',
-    'app_p2p-controlled': 'p2p-small-re.pcap',
+    'app_rdr': 'pvn_rdr.pcap',
+    'app_xcdr': 'pvn_xcdr.pcap',
+    'app_tlsv': 'pvn_tlsv.pcap',
+    'app_p2p': 'pvn_p2p.pcap',
+    'app_p2p-ext': 'pvn_p2p.pcap',
+    'app_p2p-controlled': 'pvn_p2p.pcap',
     # chain
-    'chain_rdr_tlsv': 'rdr-trace-re.pcap',
+    'chain_rdr_tlsv': 'pvn_rdr_tlsv.pcap',
+    'chain_rdr_p2p': 'pvn_rdr_p2p.pcap',
+    'chain_rdr_xcdr': 'pvn_rdr_xcdr.pcap',
+    'chain_tlsv_p2p': 'pvn_tlsv_p2p.pcap',
+
+    'chain_tlsv_xcdr': 'pvn_tlsv_xcdr.pcap',
+    'chain_xcdr_p2p': 'pvn_xcdr_p2p.pcap',
 }
 
 pvn_nf_list = [
