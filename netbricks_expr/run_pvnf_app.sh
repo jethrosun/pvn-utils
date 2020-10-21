@@ -134,12 +134,14 @@ elif [ $2 == "pvn-p2p-transform-app" ] || [ $2 == "pvn-p2p-groupby-app" ]; then
 	$TCP_TOP_MONITOR -C > $TCP_LOG &
 	P5=$!
 	wait $P1 $P2  $P4 $P5 $P6 $P7 $P8 $P9 $P10
+
 else
 	JSON_STRING=$( jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
 		--arg inst "$INST_LEVEL" \
 		'{setup: $setup, iter: $iter, inst: $inst}' )
+	echo $JSON_STRING > /home/jethros/setup
 
 	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
 	P1=$!
