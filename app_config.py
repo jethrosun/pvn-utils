@@ -29,7 +29,28 @@ pvn_nf = {
         'pvn-rdr-tlsv-transform-chain',
         'pvn-rdr-tlsv-groupby-chain',
     ],
+    'chain_rdr_p2p': [
+        'pvn-rdr-p2p-transform-chain',
+        'pvn-rdr-p2p-groupby-chain',
+    ],
+    'chain_rdr_xcdr': [
+        'pvn-rdr-xcdr-transform-chain',
+        'pvn-rdr-xcdr-groupby-chain',
+    ],
+    'chain_tlsv_p2p': [
+        'pvn-tlsv-p2p-transform-chain',
+        'pvn-tlsv-p2p-groupby-chain',
+    ],
+    'chain_tlsv_xcdr': [
+        'pvn-tlsv-xcdr-transform-chain',
+        'pvn-tlsv-xcdr-groupby-chain',
+    ],
+    'chain_xcdr_p2p':[
+        'pvn-xcdr-p2p-transform-chain',
+        'pvn-xcdr-p2p-groupby-chain',
+    ]
 }
+
 trace = {
     # nf
     'app_rdr': 'pvn_rdr.pcap',
@@ -43,7 +64,6 @@ trace = {
     'chain_rdr_p2p': 'pvn_rdr_p2p.pcap',
     'chain_rdr_xcdr': 'pvn_rdr_xcdr.pcap',
     'chain_tlsv_p2p': 'pvn_tlsv_p2p.pcap',
-
     'chain_tlsv_xcdr': 'pvn_tlsv_xcdr.pcap',
     'chain_xcdr_p2p': 'pvn_xcdr_p2p.pcap',
 }
@@ -62,10 +82,6 @@ pvn_nf_list = [
 pvn_chain_list = [
     'pvn-rdr-tlsv-transform-chain',
     'pvn-rdr-tlsv-groupby-chain',
-    'pvn-rdr-p2p-transform-chain',
-    'pvn-rdr-p2p-groupby-chain',
-    'pvn-rdr-p2p-transform-chain',
-    'pvn-rdr-p2p-groupby-chain',
     'pvn-rdr-xcdr-transform-chain',
     'pvn-rdr-xcdr-groupby-chain',
 ]
@@ -91,6 +107,11 @@ xcdr_chain_list = [
     'pvn-rdr-xcdr-groupby-chain',
     'pvn-tlsv-xcdr-transform-chain',
     'pvn-tlsv-xcdr-groupby-chain',
+]
+
+xcdr_p2p_chain_list = [
+    'pvn-xcdr-p2p-transform-chain',
+    'pvn-xcdr-p2p-groupby-chain',
 ]
 
 
@@ -215,5 +236,15 @@ p2p_ext = [ 'app_p2p-ext' ]
 # chain
 
 rdr_tlsv = [ 'chain_rdr_tlsv', ]
+
+complete_chain = [
+    'chain_rdr_tlsv',
+    'chain_rdr_p2p',
+    'chain_rdr_xcdr',
+    'chain_tlsv_p2p',
+    'chain_tlsv_xcdr',
+    'chain_xcdr_p2p',
+]
+
 
 
