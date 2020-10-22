@@ -71,9 +71,9 @@ if [ $2 == 'pvn-transcoder-transform-app' ] || [ $2 == 'pvn-transcoder-groupby-a
 	P7=$!
 	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > $MEMLOG1 &
 	P8=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh deluge; done > $CPULOG2 &
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh faktory; done > $CPULOG2 &
 	P9=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh deluge; done > $MEMLOG2 &
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh faktory; done > $MEMLOG2 &
 	P10=$!
 	$TCP_LIFE_MONITOR > $TCPLIFE_LOG &
 	P6=$!
@@ -136,6 +136,8 @@ elif [ $2 == "pvn-p2p-transform-app" ] || [ $2 == "pvn-p2p-groupby-app" ]; then
 	wait $P1 $P2  $P4 $P5 $P6 $P7 $P8 $P9 $P10
 
 else
+	# we don't need to check resource usage for tlsv so we just grep chrom here
+	# as well
 	JSON_STRING=$( jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
@@ -149,9 +151,9 @@ else
 	P7=$!
 	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > $MEMLOG1 &
 	P8=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh deluge; done > $CPULOG2 &
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh chrom; done > $CPULOG2 &
 	P9=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh deluge; done > $MEMLOG2 &
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > $MEMLOG2 &
 	P10=$!
 	$TCP_LIFE_MONITOR > $TCPLIFE_LOG &
 	P6=$!
