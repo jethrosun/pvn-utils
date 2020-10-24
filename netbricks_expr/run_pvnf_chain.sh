@@ -83,7 +83,33 @@ if [ $2 == 'pvn-rdr-xcdr-transform-chain' ] || [ $2 == 'pvn-rdr-xcdr-groupby-cha
 	P4=$!
 	wait $P1  $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10
 
-elif [ $2 == 'pvn-tlsv-p2p-transform-chain' ] || [ $2 == 'pvn-tlsv-p2p-groupby-chain' ] || [ $2 == 'pvn-rdr-p2p-transform-chain' ] || [ $2 == 'pvn-rdr-p2p-groupby-chain' ]; then
+elif [ $2 == 'pvn-tlsv-rdr-coexist-app' ] ; then
+	JSON_STRING=$( jq -n \
+		--arg iter "$3" \
+		--arg setup "$4" \
+		--arg inst "$INST_LEVEL" \
+		'{setup: $setup, iter: $iter, inst: $inst }' )
+	echo $JSON_STRING > /home/jethros/setup
+
+	$NETBRICKS_BUILD run $2 -f $TMP_NB_CONFIG > $LOG &
+	P1=$!
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh pvn; done > $CPULOG1 &
+	P7=$!
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > $MEMLOG1 &
+	P8=$!
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh chrom; done > $CPULOG2 &
+	P9=$!
+	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > $MEMLOG2 &
+	P10=$!
+	$TCP_LIFE_MONITOR > $TCPLIFE_LOG &
+	P4=$!
+	$BIO_TOP_MONITOR -C > $BIO_LOG &
+	P5=$!
+	$TCP_TOP_MONITOR -C > $TCP_LOG &
+	P6=$!
+	wait $P1  $P4 $P5 $P6 $P7 $P8 $P9 $P10
+
+elif [ $2 == 'pvn-tlsv-p2p-transform-chain' ] ; then
 	if [ $5 == "app_p2p-controlled" ]; then
 		sudo rm -rf $HOME/Downloads
 		sudo rm -rf /data/bt/config

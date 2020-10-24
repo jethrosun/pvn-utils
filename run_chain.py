@@ -181,6 +181,6 @@ def main(expr_list):
                 time.sleep(30)
 
 # main(app.tmp_list) # rdr, xcdr
-main(app.rdr_tlsv) # rdr, xcdr
+main(app.chain_tlsv_rdr) # rdr, xcdr
 
 print("All experiment finished {}".format(app.xcdr))

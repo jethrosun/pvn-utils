@@ -25,9 +25,8 @@ pvn_nf = {
         'pvn-p2p-transform-app',
     ],
     # chain
-    'chain_rdr_tlsv': [
-        'pvn-rdr-tlsv-transform-chain',
-        'pvn-rdr-tlsv-groupby-chain',
+    'chain_tlsv_rdr': [
+        'pvn-tlsv-rdr-coexist-app',
     ],
     'chain_rdr_p2p': [
         'pvn-rdr-p2p-transform-chain',
@@ -235,16 +234,13 @@ p2p_ext = [ 'app_p2p-ext' ]
 
 # chain
 
-rdr_tlsv = [ 'chain_rdr_tlsv', ]
+chain_tlsv_rdr = [ 'chain_tlsv_rdr', ]
 
 complete_chain = [
-    'chain_rdr_tlsv',
+    'chain_tlsv_rdr',
     'chain_rdr_p2p',
     'chain_rdr_xcdr',
     'chain_tlsv_p2p',
     'chain_tlsv_xcdr',
     'chain_xcdr_p2p',
 ]
-
-
-
