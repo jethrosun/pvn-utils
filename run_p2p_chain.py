@@ -112,7 +112,7 @@ def run_netbricks_xcdr_p2p(sess, trace, nf, epoch, setup, expr_num, expr):
 
 
 def run_netbricks(sess, trace, nf, epoch, setup, expr):
-    cmd_str = "sudo ./run_netbricks_app.sh " + trace + " " + nf + " " + str(
+    cmd_str = "sudo ./run_pvnf_chain.sh " + trace + " " + nf + " " + str(
         epoch) + " " + setup + " " + expr
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)

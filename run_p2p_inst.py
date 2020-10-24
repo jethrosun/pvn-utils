@@ -105,7 +105,7 @@ def run_pktgen(sess, trace, rate):
 
 
 def run_netbricks(sess, trace, nf, epoch, setup, expr):
-    cmd_str = "sudo ./run_pvnf_app.sh " + trace + " " + nf + " " + str(
+    cmd_str = "sudo ./run_pvnf_inst.sh " + trace + " " + nf + " " + str(
         epoch) + " " + setup + " " + expr
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
