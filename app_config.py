@@ -185,7 +185,47 @@ sending_rate = {
         '6': fixed_sending_rate
     },
     # chain
-    'chain_rdr_tlsv': {
+    'chain_tlsv_rdr': {
+        '1': fixed_sending_rate,
+        '2': fixed_sending_rate,
+        '3': fixed_sending_rate,
+        '4': fixed_sending_rate,
+        '5': fixed_sending_rate,
+        '6': fixed_sending_rate
+    },
+    'chain_rdr_p2p': {
+        '1': fixed_sending_rate,
+        '2': fixed_sending_rate,
+        '3': fixed_sending_rate,
+        '4': fixed_sending_rate,
+        '5': fixed_sending_rate,
+        '6': fixed_sending_rate
+    },
+    'chain_rdr_xcdr': {
+        '1': fixed_sending_rate,
+        '2': fixed_sending_rate,
+        '3': fixed_sending_rate,
+        '4': fixed_sending_rate,
+        '5': fixed_sending_rate,
+        '6': fixed_sending_rate
+    },
+    'chain_tlsv_p2p': {
+        '1': fixed_sending_rate,
+        '2': fixed_sending_rate,
+        '3': fixed_sending_rate,
+        '4': fixed_sending_rate,
+        '5': fixed_sending_rate,
+        '6': fixed_sending_rate
+    },
+    'chain_tlsv_xcdr': {
+        '1': fixed_sending_rate,
+        '2': fixed_sending_rate,
+        '3': fixed_sending_rate,
+        '4': fixed_sending_rate,
+        '5': fixed_sending_rate,
+        '6': fixed_sending_rate
+    },
+    'chain_xcdr_p2p': {
         '1': fixed_sending_rate,
         '2': fixed_sending_rate,
         '3': fixed_sending_rate,
