@@ -85,6 +85,7 @@ p2p_nf_list = [
 p2p_chain_list = [
     'pvn-tlsv-p2p-coexist-app',
     'pvn-rdr-p2p-coexist-app',
+    'pvn-xcdr-p2p-coexist-app',
 ]
 
 xcdr_nf_list = [
@@ -94,10 +95,6 @@ xcdr_nf_list = [
 xcdr_chain_list = [
     'pvn-rdr-xcdr-coexist-app',
     'pvn-tlsv-xcdr-coexist-app',
-]
-
-xcdr_p2p_chain_list = [
-    'pvn-xcdr-p2p-coexist-app',
 ]
 
 

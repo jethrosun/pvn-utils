@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#/!/usr/bin/env python
 
 from screenutils import list_screens, Screen
 import sys
@@ -103,6 +103,13 @@ def run_pktgen(sess, trace, rate):
         time.sleep(10)
         print("Pktgen\nRUN pktgen")
 
+def run_netbricks_xcdr_p2p(sess, trace, nf, epoch, setup, expr_num, expr):
+    cmd_str = "sudo ./run_pvnf_chain.sh " + trace + " " + nf + " " \
+        + str(epoch) + " " + setup + " " + str(7419) + " " + str(7420) + " " \
+        + expr_num + " " + expr
+    print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
+    sess.send_commands(cmd_str)
+
 
 def run_netbricks(sess, trace, nf, epoch, setup, expr):
     cmd_str = "sudo ./run_netbricks_app.sh " + trace + " " + nf + " " + str(
@@ -157,163 +164,185 @@ def p2p_cleanup(typ, sess):
         print("Unknown p2p node type {}".format(typ))
 
 
-def run_expr_p2p(expr):
-    for nf in app.pvn_nf[expr]:
-        # we are running the regular NFs
-        # config the pktgen sending rate
-        for setup in app.p2p_controlled_list:
-            pktgen_sess = pktgen_sess_setup(app.trace[expr], nf,
-                                            app.p2p_sending_rate*app.batch)
-            run_pktgen(pktgen_sess, app.trace[expr], app.p2p_sending_rate*app.batch)
-            # epoch from 0 to 9
-            for epoch in range(app.num_of_epoch):
-                netbricks_sess = netbricks_sess_setup(app.trace[expr], nf, epoch,
-                                                      expr)
-
-                leecher1_sess = p2p_sess_setup('flynn', app.trace[expr], nf, epoch)
-                leecher2_sess = p2p_sess_setup('tao', app.trace[expr], nf, epoch)
-                leecher3_sess = p2p_sess_setup('sanchez', app.trace[expr], nf, epoch)
-
-                # run clean up for p2p nf before experiment
-                p2p_cleanup("leecher", leecher1_sess)
-                p2p_cleanup("leecher", leecher2_sess)
-                p2p_cleanup("leecher", leecher2_sess)
-                p2p_cleanup("netbricks", netbricks_sess)
-                time.sleep(20)
-
-                # Actual RUN
-                p2p_cleanup("netbricks", netbricks_sess)
-                run_p2p_node('leecher', leecher1_sess, setup)
-                run_p2p_node('leecher', leecher2_sess, setup)
-                run_p2p_node('leecher', leecher3_sess, setup)
-                run_netbricks(netbricks_sess, app.trace[expr], nf, epoch, setup,
-                              expr)
-
-                time.sleep(app.expr_wait_time)
-
-                # run clean up for p2p nf before experiment
-                p2p_cleanup("leecher", leecher1_sess)
-                p2p_cleanup("leecher", leecher2_sess)
-                p2p_cleanup("leecher", leecher3_sess)
-                p2p_cleanup("netbricks", netbricks_sess)
-                time.sleep(20)
-
-                sess_destroy(netbricks_sess)
-                sess_destroy(leecher1_sess)
-                sess_destroy(leecher2_sess)
-                sess_destroy(leecher3_sess)
-
-                time.sleep(20)
-
-            sess_destroy(pktgen_sess)
-            time.sleep(30)
+def xcdr_cleanup(sess):
+    cmd_str = "sudo ./misc/xcdr_cleanup.sh "
+    print("Extra clean up for XCDR with cmd: {}".format(cmd_str))
+    sess.send_commands(cmd_str)
 
 
-def run_expr_p2p_controlled(expr):
-    print("running controlled")
-    for nf in app.pvn_nf[expr]:
-        # we are running the regular NFs
-        # config the pktgen sending rate
-        for setup in app.p2p_controlled_list:
-            pktgen_sess = pktgen_sess_setup(app.trace[expr], nf,
-                                            app.p2p_sending_rate*app.batch)
-            run_pktgen(pktgen_sess, app.trace[expr], app.p2p_sending_rate*app.batch)
-            # epoch from 0 to 9
-            for epoch in range(app.num_of_epoch):
-                netbricks_sess = netbricks_sess_setup(app.trace[expr], nf, epoch,
-                                                      expr)
+def run_expr_p2p(expr_list):
+    for expr in expr_list:
+        for nf in app.p2p_chain_nf[expr]:
+            # we are running the regular NFs
+            # config the pktgen sending rate
+            for setup in app.p2p_controlled_list:
+                pktgen_sess = pktgen_sess_setup(app.trace[expr], nf,
+                                                app.p2p_sending_rate*app.batch)
+                run_pktgen(pktgen_sess, app.trace[expr], app.p2p_sending_rate*app.batch)
+                # epoch from 0 to 9
+                for epoch in range(app.num_of_epoch):
+                    netbricks_sess = netbricks_sess_setup(app.trace[expr], nf, epoch,
+                                                          expr)
 
-                leecher1_sess = p2p_sess_setup('flynn', app.trace[expr], nf, epoch)
-                leecher2_sess = p2p_sess_setup('tao', app.trace[expr], nf, epoch)
-                leecher3_sess = p2p_sess_setup('sanchez', app.trace[expr], nf, epoch)
+                    leecher1_sess = p2p_sess_setup('flynn', app.trace[expr], nf, epoch)
+                    leecher2_sess = p2p_sess_setup('tao', app.trace[expr], nf, epoch)
+                    leecher3_sess = p2p_sess_setup('sanchez', app.trace[expr], nf, epoch)
 
-                # run clean up for p2p nf before experiment
-                p2p_cleanup("netbricks", netbricks_sess)
-                p2p_cleanup("leecher", leecher1_sess)
-                p2p_cleanup("leecher", leecher2_sess)
-                p2p_cleanup("leecher", leecher2_sess)
-                time.sleep(30)
+                    # run clean up for p2p nf before experiment
+                    p2p_cleanup("leecher", leecher1_sess)
+                    p2p_cleanup("leecher", leecher2_sess)
+                    p2p_cleanup("leecher", leecher2_sess)
+                    p2p_cleanup("netbricks", netbricks_sess)
+                    if expr == 'chain_xcdr_p2p':
+                        xcdr_cleanup(netbricks_sess)
+                    time.sleep(20)
 
-                # Actual RUN
-                run_p2p_node('leecher', leecher1_sess, setup)
-                run_p2p_node('leecher', leecher2_sess, setup)
-                run_p2p_node('leecher', leecher3_sess, setup)
-                run_netbricks(netbricks_sess, app.trace[expr], nf, epoch, setup,
-                              expr)
+                    # Actual RUN
+                    p2p_cleanup("netbricks", netbricks_sess)
+                    run_p2p_node('leecher', leecher1_sess, setup)
+                    run_p2p_node('leecher', leecher2_sess, setup)
+                    run_p2p_node('leecher', leecher3_sess, setup)
+                    if expr == 'chain_xcdr_p2p':
+                        expr_num = epoch * 6 + int(setup) * 2
+                        run_netbricks_xcdr_p2p(netbricks_sess, app.trace[expr], nf, epoch, setup, expr_num, expr)
+                    else:
+                        run_netbricks(netbricks_sess, app.trace[expr], nf, epoch, setup, expr)
 
-                time.sleep(app.expr_wait_time)
-
-                # run clean up for p2p nf before experiment
-                p2p_cleanup("netbricks", netbricks_sess)
-                p2p_cleanup("leecher", leecher1_sess)
-                p2p_cleanup("leecher", leecher2_sess)
-                p2p_cleanup("leecher", leecher3_sess)
-                time.sleep(30)
-
-                sess_destroy(netbricks_sess)
-                sess_destroy(leecher1_sess)
-                sess_destroy(leecher2_sess)
-                sess_destroy(leecher3_sess)
-
-                time.sleep(30)
-
-            sess_destroy(pktgen_sess)
-            time.sleep(30)
-
-
-def run_expr_p2p_ext(expr):
-    for nf in app.pvn_nf[expr]:
-        # we are running the regular NFs
-        # config the pktgen sending rate
-        for setup in app.p2p_ext_list:
-            pktgen_sess = pktgen_sess_setup(app.trace[expr], nf,
-                                            app.p2p_sending_rate*app.batch)
-            run_pktgen(pktgen_sess, app.trace[expr], app.p2p_sending_rate*app.batch)
-            # epoch from 0 to 9
-            for epoch in range(app.num_of_epoch):
-                netbricks_sess = netbricks_sess_setup(app.trace[expr], nf, epoch)
-
-                # run clean up for p2p nf before experiment
-                p2p_cleanup(netbricks_sess)
-                time.sleep(30)
-
-                # Actual RUN
-                run_netbricks(netbricks_sess, app.trace[expr], nf, epoch, setup)
-
-                # run clean up for p2p nf before experiment
-                if nf in app.p2p_nf_list:
                     time.sleep(app.expr_wait_time)
+
+                    # run clean up for p2p nf before experiment
+                    p2p_cleanup("leecher", leecher1_sess)
+                    p2p_cleanup("leecher", leecher2_sess)
+                    p2p_cleanup("leecher", leecher3_sess)
+                    p2p_cleanup("netbricks", netbricks_sess)
+                    if expr == 'chain_xcdr_p2p':
+                        xcdr_cleanup(netbricks_sess)
+                    time.sleep(20)
+
+                    sess_destroy(netbricks_sess)
+                    sess_destroy(leecher1_sess)
+                    sess_destroy(leecher2_sess)
+                    sess_destroy(leecher3_sess)
+
+                    time.sleep(20)
+
+                sess_destroy(pktgen_sess)
+                time.sleep(30)
+
+
+def run_expr_p2p_controlled(expr_list):
+    for expr in expr_list:
+        print("running controlled")
+        for nf in app.p2p_chain_nf[expr]:
+            # we are running the regular NFs
+            # config the pktgen sending rate
+            for setup in app.p2p_controlled_list:
+                pktgen_sess = pktgen_sess_setup(app.trace[expr], nf,
+                                                app.p2p_sending_rate*app.batch)
+                run_pktgen(pktgen_sess, app.trace[expr], app.p2p_sending_rate*app.batch)
+                # epoch from 0 to 9
+                for epoch in range(app.num_of_epoch):
+                    netbricks_sess = netbricks_sess_setup(app.trace[expr], nf, epoch,
+                                                          expr)
+
+                    leecher1_sess = p2p_sess_setup('flynn', app.trace[expr], nf, epoch)
+                    leecher2_sess = p2p_sess_setup('tao', app.trace[expr], nf, epoch)
+                    leecher3_sess = p2p_sess_setup('sanchez', app.trace[expr], nf, epoch)
+
+                    # run clean up for p2p nf before experiment
+                    p2p_cleanup("netbricks", netbricks_sess)
+                    p2p_cleanup("leecher", leecher1_sess)
+                    p2p_cleanup("leecher", leecher2_sess)
+                    p2p_cleanup("leecher", leecher2_sess)
+                    if expr == 'chain_xcdr_p2p':
+                        xcdr_cleanup(netbricks_sess)
+                    time.sleep(30)
+
+                    # Actual RUN
+                    run_p2p_node('leecher', leecher1_sess, setup)
+                    run_p2p_node('leecher', leecher2_sess, setup)
+                    run_p2p_node('leecher', leecher3_sess, setup)
+                    if expr == 'chain_xcdr_p2p':
+                        expr_num = epoch * 6 + int(setup) * 2
+                        run_netbricks_xcdr_p2p(netbricks_sess, app.trace[expr], nf, epoch, setup, expr_num, expr)
+                    else:
+                        run_netbricks(netbricks_sess, app.trace[expr], nf, epoch, setup, expr)
+
+                    time.sleep(app.expr_wait_time)
+
+                    # run clean up for p2p nf before experiment
+                    p2p_cleanup("netbricks", netbricks_sess)
+                    p2p_cleanup("leecher", leecher1_sess)
+                    p2p_cleanup("leecher", leecher2_sess)
+                    p2p_cleanup("leecher", leecher3_sess)
+                    if expr == 'chain_xcdr_p2p':
+                        xcdr_cleanup(netbricks_sess)
+                    time.sleep(30)
+
+                    sess_destroy(netbricks_sess)
+                    sess_destroy(leecher1_sess)
+                    sess_destroy(leecher2_sess)
+                    sess_destroy(leecher3_sess)
+
+                    time.sleep(30)
+
+                sess_destroy(pktgen_sess)
+                time.sleep(30)
+
+
+def run_expr_p2p_ext(expr_list):
+    for expr in expr_list:
+        for nf in app.p2p_chain_nf[expr]:
+            # we are running the regular NFs
+            # config the pktgen sending rate
+            for setup in app.p2p_ext_list:
+                pktgen_sess = pktgen_sess_setup(app.trace[expr], nf,
+                                                app.p2p_sending_rate*app.batch)
+                run_pktgen(pktgen_sess, app.trace[expr], app.p2p_sending_rate*app.batch)
+                # epoch from 0 to 9
+                for epoch in range(app.num_of_epoch):
+                    netbricks_sess = netbricks_sess_setup(app.trace[expr], nf, epoch)
+
+                    # run clean up for p2p nf before experiment
                     p2p_cleanup(netbricks_sess)
                     time.sleep(30)
-                else:
-                    print("Unknown nf?")
-                    sys.exit(1)
 
-                sess_destroy(netbricks_sess)
-                # sess_destroy(netbricks_sess)
+                    # Actual RUN
+                    run_netbricks(netbricks_sess, app.trace[expr], nf, epoch, setup)
 
-                if nf in app.p2p_nf_list:
-                    time.sleep(30)
-                else:
-                    time.sleep(10)
+                    # run clean up for p2p nf before experiment
+                    if nf in app.p2p_nf_list:
+                        time.sleep(app.expr_wait_time)
+                        p2p_cleanup(netbricks_sess)
+                        time.sleep(30)
+                    else:
+                        print("Unknown nf?")
+                        sys.exit(1)
 
-            sess_destroy(pktgen_sess)
-            time.sleep(30)
+                    sess_destroy(netbricks_sess)
+                    # sess_destroy(netbricks_sess)
+
+                    if nf in app.p2p_nf_list:
+                        time.sleep(30)
+                    else:
+                        time.sleep(10)
+
+                sess_destroy(pktgen_sess)
+                time.sleep(30)
 
 
-def main(chain_nf, expr_typ_list):
+def main(expr_list, p2p_types):
     """"""
     # app rdr, app p2p ...
-    for nf in chain_nf:
-        for expr in expr_typ_list:
-            print("Running experiments that for {} application NF".format(expr))
-            # app_rdr_g, app_rdr_t; app_p2p_g, app_p2p_t
-            if expr == "p2p":
-                run_expr_p2p(expr)
-            elif expr == "app_p2p-controlled":
-                run_expr_p2p_controlled(expr)
-            elif expr == "app_p2p-ext":
-                run_expr_p2p_ext(expr)
+    for typ in p2p_types:
+        print("Running experiments that for P2P with type {} ".format(typ))
+        # app_rdr_g, app_rdr_t; app_p2p_g, app_p2p_t
+        if typ == "p2p":
+            run_expr_p2p(expr_list)
+        elif typ == "app_p2p-controlled":
+            run_expr_p2p_controlled(expr_list)
+        elif typ == "app_p2p-ext":
+            run_expr_p2p_ext(expr_list)
 
 
 main(app.p2p_chain, ["app_p2p-controlled"])
