@@ -74,10 +74,7 @@ pvn_nf_list = [
 ]
 
 pvn_chain_list = [
-    'pvn-rdr-tlsv-transform-chain',
-    'pvn-rdr-tlsv-groupby-chain',
-    'pvn-rdr-xcdr-transform-chain',
-    'pvn-rdr-xcdr-groupby-chain',
+    'pvn-tlsv-rdr-coexist-app',
 ]
 
 
@@ -86,10 +83,8 @@ p2p_nf_list = [
     'pvn-p2p-groupby-app',
 ]
 p2p_chain_list = [
-    'pvn-tlsv-p2p-transform-chain',
-    'pvn-tlsv-p2p-groupby-chain',
-    'pvn-rdr-p2p-transform-chain',
-    'pvn-rdr-p2p-groupby-chain',
+    'pvn-tlsv-p2p-coexist-app',
+    'pvn-rdr-p2p-coexist-app',
 ]
 
 xcdr_nf_list = [
@@ -97,15 +92,12 @@ xcdr_nf_list = [
     'pvn-transcoder-groupby-app'
 ]
 xcdr_chain_list = [
-    'pvn-rdr-xcdr-transform-chain',
-    'pvn-rdr-xcdr-groupby-chain',
-    'pvn-tlsv-xcdr-transform-chain',
-    'pvn-tlsv-xcdr-groupby-chain',
+    'pvn-rdr-xcdr-coexist-app',
+    'pvn-tlsv-xcdr-coexist-app',
 ]
 
 xcdr_p2p_chain_list = [
-    'pvn-xcdr-p2p-transform-chain',
-    'pvn-xcdr-p2p-groupby-chain',
+    'pvn-xcdr-p2p-coexist-app',
 ]
 
 
@@ -231,11 +223,13 @@ p2p_ext = [ 'app_p2p-ext' ]
 
 chain_tlsv_rdr = [ 'chain_tlsv_rdr', ]
 
-complete_chain = [
-    'chain_tlsv_rdr',
+p2p_chain = [
     'chain_rdr_p2p',
-    'chain_rdr_xcdr',
     'chain_tlsv_p2p',
-    'chain_tlsv_xcdr',
     'chain_xcdr_p2p',
+]
+non_p2p_chain = [
+    'chain_tlsv_rdr',
+    'chain_rdr_xcdr',
+    'chain_tlsv_xcdr',
 ]

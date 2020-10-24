@@ -138,6 +138,11 @@ def main(expr_list):
                     elif nf in app.xcdr_chain_list:
                         xcdr_cleanup(netbricks_sess)
                         time.sleep(30)
+                    elif nf in app.xcdr_p2p_chain_list:
+                        p2p_cleanup(netbricks_sess)
+                        xcdr_cleanup(netbricks_sess)
+                        time.sleep(30)
+
 
                     # Actual RUN
                     if nf in app.xcdr_chain_list:
@@ -159,6 +164,11 @@ def main(expr_list):
                         time.sleep(app.expr_wait_time)
                         xcdr_cleanup(netbricks_sess)
                         time.sleep(30)
+                    elif nf in app.xcdr_p2p_chain_list:
+                        time.sleep(app.expr_wait_time)
+                        xcdr_cleanup(netbricks_sess)
+                        p2p_cleanup(netbricks_sess)
+                        time.sleep(30)
                     elif nf in app.pvn_chain_list:
                         time.sleep(app.expr_wait_time)
                     else:
@@ -172,6 +182,8 @@ def main(expr_list):
                         time.sleep(30)
                     elif nf in app.xcdr_chain_list:
                         time.sleep(30)
+                    elif nf in app.xcdr_p2p_chain_list:
+                        time.sleep(30)
                     elif nf in app.pvn_chain_list:
                         time.sleep(30)
                     else:
@@ -181,6 +193,6 @@ def main(expr_list):
                 time.sleep(30)
 
 # main(app.tmp_list) # rdr, xcdr
-main(app.complete_chain) # rdr, xcdr
+main(app.non_p2p_chain) # rdr, xcdr
 
 print("All experiment finished {}".format(app.xcdr))
