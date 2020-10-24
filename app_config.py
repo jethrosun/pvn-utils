@@ -29,24 +29,19 @@ pvn_nf = {
         'pvn-tlsv-rdr-coexist-app',
     ],
     'chain_rdr_p2p': [
-        'pvn-rdr-p2p-transform-chain',
-        'pvn-rdr-p2p-groupby-chain',
+        'pvn-rdr-p2p-coexist-app',
     ],
     'chain_rdr_xcdr': [
-        'pvn-rdr-xcdr-transform-chain',
-        'pvn-rdr-xcdr-groupby-chain',
+        'pvn-rdr-xcdr-coexist-app',
     ],
     'chain_tlsv_p2p': [
-        'pvn-tlsv-p2p-transform-chain',
-        'pvn-tlsv-p2p-groupby-chain',
+        'pvn-tlsv-p2p-coexist-app',
     ],
     'chain_tlsv_xcdr': [
-        'pvn-tlsv-xcdr-transform-chain',
-        'pvn-tlsv-xcdr-groupby-chain',
+        'pvn-tlsv-xcdr-coexist-app',
     ],
     'chain_xcdr_p2p':[
-        'pvn-xcdr-p2p-transform-chain',
-        'pvn-xcdr-p2p-groupby-chain',
+        'pvn-xcdr-p2p-coexist-app',
     ]
 }
 
@@ -59,7 +54,7 @@ trace = {
     'app_p2p-ext': 'pvn_p2p.pcap',
     'app_p2p-controlled': 'pvn_p2p.pcap',
     # chain
-    'chain_rdr_tlsv': 'pvn_rdr_tlsv.pcap',
+    'chain_tlsv_rdr': 'pvn_rdr_tlsv.pcap',
     'chain_rdr_p2p': 'pvn_rdr_p2p.pcap',
     'chain_rdr_xcdr': 'pvn_rdr_xcdr.pcap',
     'chain_tlsv_p2p': 'pvn_tlsv_p2p.pcap',
@@ -213,7 +208,7 @@ expr_wait_time = 875
 
 xcdr_port_base = 7418
 
-num_of_epoch = 3
+num_of_epoch = 1
 batch = 1
 
 
