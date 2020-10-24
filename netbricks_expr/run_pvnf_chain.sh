@@ -50,6 +50,7 @@ mkdir -p $LOG_DIR
 
 INST_LEVEL=off
 
+echo $2
 if [ $2 == 'pvn-tlsv-rdr-coexist-app' ]  ; then
 	JSON_STRING=$( jq -n \
 		--arg iter "$3" \
@@ -138,7 +139,7 @@ elif [ $2 == 'pvn-rdr-p2p-coexist-app' ] ; then
 	P11=$!
 	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11
 
-if [ $2 == 'pvn-rdr-xcdr-coexist-app' ] ; then
+elif [ $2 == 'pvn-rdr-xcdr-coexist-app' ] ; then
 	JSON_STRING=$( jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
@@ -333,7 +334,4 @@ elif [ $2 == 'pvn-xcdr-p2p-coexist-app' ] ; then
 	$TCP_TOP_MONITOR -C > $TCP_LOG &
 	P11=$!
 	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12
-
-else
-	echo "Not matched against any app" > $LOG
 fi
