@@ -11,6 +11,7 @@ set -e
 #
 # ps -e -o user,pid,%cpu,%mem,vsz,rss,start,time,command,etime,etimes,euid --sort=-%mem
 
+SLEEP_INTERVAL=5
 LOG_DIR=$HOME/netbricks_logs/$2/$1
 
 LOG=$LOG_DIR/$3_$4.log
@@ -58,22 +59,21 @@ if [ "$(2)" == 'pvn-tlsv-rdr-coexist-app' ]; then
 		--arg expr_num "$7" \
 		--arg inst "$INST_LEVEL" \
 		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst}')
-
-	cat "${JSON_STRING}" >"/home/jethros/setup"
+	echo "${JSON_STRING}" >"/home/jethros/setup"
 
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" >"$LOG" &
 	P1=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh pvn; done >"${CPULOG1}" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done >"${CPULOG1}" &
 	P3=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done >"${MEMLOG1}" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done >"${MEMLOG1}" &
 	P4=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh faktory; done >"${CPULOG2}" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh faktory; done >"${CPULOG2}" &
 	P5=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh faktory; done >"${MEMLOG2}" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh faktory; done >"${MEMLOG2}" &
 	P6=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh chrom; done >"${CPULOG3}" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done >"${CPULOG3}" &
 	P7=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done >"${MEMLOG3}" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done >"${MEMLOG3}" &
 	P8=$!
 	$TCP_LIFE_MONITOR >"${TCPLIFE_LOG}" &
 	P9=$!
@@ -119,17 +119,17 @@ elif [ "${2}" == 'pvn-rdr-p2p-coexist-app' ]; then
 	fi
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P2=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh pvn; done > "$(CPULOG1)" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$(CPULOG1)" &
 	P3=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$(MEMLOG1)" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$(MEMLOG1)" &
 	P4=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh chrom; done > "$(CPULOG2)" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$(CPULOG2)" &
 	P5=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$(MEMLOG2)" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$(MEMLOG2)" &
 	P6=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh deluge; done > "$(CPULOG3)" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh deluge; done > "$(CPULOG3)" &
 	P7=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh deluge; done > "$(MEMLOG3)" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh deluge; done > "$(MEMLOG3)" &
 	P8=$!
 	$TCP_LIFE_MONITOR > "${TCPLIFE_LOG}" &
 	P9=$!
@@ -158,17 +158,17 @@ elif [ "${2}" == 'pvn-rdr-xcdr-coexist-app' ]; then
 	P2=$!
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P1=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh pvn; done > "$CPULOG1" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
 	P3=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
 	P4=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh chrom; done > "$CPULOG2" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG2" &
 	P5=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
 	P6=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh faktory; done > "$CPULOG3" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh faktory; done > "$CPULOG3" &
 	P7=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh faktory; done > "$MEMLOG3" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh faktory; done > "$MEMLOG3" &
 	P8=$!
 	$TCP_LIFE_MONITOR > "$TCPLIFE_LOG" &
 	P9=$!
@@ -214,17 +214,17 @@ elif [ "$2" == 'pvn-tlsv-p2p-coexist-app' ]; then
 	fi
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P2=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh pvn; done > "$CPULOG1" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
 	P3=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
 	P4=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh chrom; done > "$CPULOG2" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG2" &
 	P5=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
 	P6=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh deluge; done > "$CPULOG3" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh deluge; done > "$CPULOG3" &
 	P7=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh deluge; done > "$MEMLOG3" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh deluge; done > "$MEMLOG3" &
 	P8=$!
 	"$TCP_LIFE_MONITOR" > "$TCPLIFE_LOG" &
 	P9=$!
@@ -253,17 +253,17 @@ elif [ "$2" == 'pvn-tlsv-xcdr-coexist-app' ]; then
 	P2=$!
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P1=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh pvn; done > "$CPULOG1" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
 	P3=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
 	P4=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh chrom; done > "$CPULOG2" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG2" &
 	P5=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
 	P6=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh faktory; done > "$CPULOG3" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh faktory; done > "$CPULOG3" &
 	P7=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh faktory; done > "$MEMLOG3" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh faktory; done > "$MEMLOG3" &
 	P8=$!
 	"$TCP_LIFE_MONITOR" > "$TCPLIFE_LOG" &
 	P9=$!
@@ -315,17 +315,17 @@ elif [ "$2" == 'pvn-xcdr-p2p-coexist-app' ]; then
 	P1=$!
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P2=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh pvn; done > "$CPULOG1" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
 	P3=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
 	P4=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh chrom; done > "$CPULOG2" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG2" &
 	P5=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
 	P6=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh faktory; done > "$CPULOG3" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh faktory; done > "$CPULOG3" &
 	P7=$!
-	while sleep 1; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh faktory; done > "$MEMLOG3" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh faktory; done > "$MEMLOG3" &
 	P8=$!
 	"$TCP_LIFE_MONITOR" > "$TCPLIFE_LOG" &
 	P9=$!
