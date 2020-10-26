@@ -8,8 +8,8 @@ set -ex
 # printf "Resetting netbricks\n"
 # git clone git@github.com:jethrosun/NetBricks.git -b expr $HOME/dev/netbricks
 
-cd $HOME/dev/netbricks
+cd "$HOME/dev/netbricks" || exit
 git pull
 
-$HOME/dev/netbricks/build.sh
+"$HOME/dev/netbricks/build.sh"
 printf "netbricks building done\n"
