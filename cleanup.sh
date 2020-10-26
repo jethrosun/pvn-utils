@@ -7,6 +7,7 @@ echo $current_date_time;
 
 if [ -e $HOME/netbricks_logs ]; then
 	rm -rf $HOME/dev/pvn/utils/data/output_videos
+	rm -rf /tmp/*
 	mkdir -p $HOME/logs/netbricks_logs--$current_date_time
 	mv $HOME/netbricks_logs/ $HOME/logs/netbricks_logs--$current_date_time
 	cd $HOME/logs
