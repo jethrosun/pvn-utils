@@ -242,7 +242,7 @@ def main(expr_list):
 
 
 # main(app.tmp_list) # rdr, xcdr
-main(app.rdr_xcdr_tlsv) # rdr, xcdr
-# main(app.rdr)
+# main(app.rdr_xcdr_tlsv) # rdr, xcdr
+main(app.rdr_xcdr)
 
 print("All experiment finished {}".format(app.xcdr))
