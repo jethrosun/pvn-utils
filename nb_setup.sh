@@ -7,6 +7,8 @@ set -ex
 # rm -rf $HOME/dev/netbricks
 # printf "Resetting netbricks\n"
 # git clone git@github.com:jethrosun/NetBricks.git -b expr $HOME/dev/netbricks
+cd "$HOME/dev/pvn/utils" || exit
+git pull
 
 cd "$HOME/dev/netbricks" || exit
 git pull
