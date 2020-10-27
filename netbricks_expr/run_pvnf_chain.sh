@@ -47,7 +47,7 @@ sed "/duration = 750/i log_path = '${LOG}'" "${NB_CONFIG_LONG}" >"${TMP_NB_CONFI
 
 # echo "$(LOG_DIR)"
 # echo $LOG
-mkdir -p "$(LOG_DIR)"
+mkdir -p "$LOG_DIR"
 
 INST_LEVEL=off
 
