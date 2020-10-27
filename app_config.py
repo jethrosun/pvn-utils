@@ -96,7 +96,9 @@ xcdr_chain_list = [
     'pvn-rdr-xcdr-coexist-app',
     'pvn-tlsv-xcdr-coexist-app',
 ]
-
+xcdr_p2p_chain_list = [
+    'pvn-xcdr-p2p-coexist-app',
+]
 
 set_list = [
     '1',
