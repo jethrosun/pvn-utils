@@ -51,7 +51,7 @@ mkdir -p "$LOG_DIR"
 
 INST_LEVEL=off
 
-if [ "$(2)" == 'pvn-tlsv-rdr-coexist-app' ]; then
+if [ "$2" == 'pvn-tlsv-rdr-coexist-app' ]; then
 	JSON_STRING=$(jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
@@ -83,7 +83,7 @@ if [ "$(2)" == 'pvn-tlsv-rdr-coexist-app' ]; then
 	P11=$!
 	wait $P1 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11
 
-elif [ "${2}" == 'pvn-rdr-p2p-coexist-app' ]; then
+elif [ "$2" == 'pvn-rdr-p2p-coexist-app' ]; then
 	if [ "${5}" == "app_p2p-controlled" ]; then
 		sudo rm -rf "$HOME/Downloads"
 		sudo rm -rf /data/bt/config
@@ -110,7 +110,7 @@ elif [ "${2}" == 'pvn-rdr-p2p-coexist-app' ]; then
 	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
 	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
 
-	if [ "${5}" == "app_p2p-controlled" ]; then
+	if [ "$5" == "app_p2p-controlled" ]; then
 		while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh; done >"${P2P_PROGRESS_LOG}" &
 		P1=$!
 	else
@@ -119,17 +119,17 @@ elif [ "${2}" == 'pvn-rdr-p2p-coexist-app' ]; then
 	fi
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P2=$!
-	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$(CPULOG1)" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
 	P3=$!
-	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$(MEMLOG1)" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
 	P4=$!
-	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$(CPULOG2)" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG2" &
 	P5=$!
-	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$(MEMLOG2)" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
 	P6=$!
-	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh deluge; done > "$(CPULOG3)" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh deluge; done > "$CPULOG3" &
 	P7=$!
-	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh deluge; done > "$(MEMLOG3)" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh deluge; done > "$MEMLOG3" &
 	P8=$!
 	$TCP_LIFE_MONITOR > "${TCPLIFE_LOG}" &
 	P9=$!
@@ -139,7 +139,7 @@ elif [ "${2}" == 'pvn-rdr-p2p-coexist-app' ]; then
 	P11=$!
 	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11
 
-elif [ "${2}" == 'pvn-rdr-xcdr-coexist-app' ]; then
+elif [ "$2" == 'pvn-rdr-xcdr-coexist-app' ]; then
 	JSON_STRING=$(jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
