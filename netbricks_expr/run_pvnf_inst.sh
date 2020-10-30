@@ -37,10 +37,11 @@ BIO_TOP_MONITOR=/usr/share/bcc/tools/biotop
 # IPTRAF_MONITOR=/usr/sbin/iptraf-ng
 
 NB_CONFIG=$HOME/dev/netbricks/experiments/config_2core.toml
-# NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_2core_long.toml
+NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_2core_long.toml
 TMP_NB_CONFIG=$HOME/config.toml
 
-sed "/duration = 350/i log_path = '$LOG'" "$NB_CONFIG" > "$TMP_NB_CONFIG"
+# sed "/duration = 350/i log_path = '$LOG'" "$NB_CONFIG" > "$TMP_NB_CONFIG"
+sed "/duration = 750/i log_path = '$LOG'" "$NB_CONFIG_LONG" > "$TMP_NB_CONFIG"
 
 # echo "$LOG_DIR"
 # echo $LOG
