@@ -129,6 +129,8 @@ p2p_controlled_list = [
     '6',
 ]
 
+def fetch_tlsv_trace(setup):
+    return 'pvn_tlsv_' + setup + '.pcap'
 
 rdr_sending_rate = 10
 p2p_sending_rate = 10
