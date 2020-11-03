@@ -80,9 +80,9 @@ def run_pktgen(sess, trace, rate):
     if trace in ['64B', '128B', '256B', '1500B']:
         size = trace[:-1]
         cmd_str = "sudo ./run_pktgen.sh " + trace
-        set_rate_str = "set 0 rate 100"
-        set_size_str = "set 0 size " + size
-        start_str = "start 0"
+        set_rate_str = "set 1 rate 100"
+        set_size_str = "set 1 size " + size
+        start_str = "start 1"
 
         time.sleep(30)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
@@ -93,8 +93,8 @@ def run_pktgen(sess, trace, rate):
     else:
         cmd_str = "sudo ./run_pktgen.sh " + trace
         print(cmd_str)
-        set_port_str = "set 0 rate " + str(rate)
-        start_str = "start 0"
+        set_port_str = "set 1 rate " + str(rate)
+        start_str = "start 1"
 
         time.sleep(30)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
