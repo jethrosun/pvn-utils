@@ -241,25 +241,23 @@ expr_wait_time = 875
 
 xcdr_port_base = 7418
 
-num_of_epoch = 3
+num_of_epoch = 10
 batch = 1
 
 
 # app
 
-expr_list = ['app_rdr', 'app_xcdr', 'app_tlsv' ]
-tmp_list = ['app_rdr', 'app_xcdr', ]
-rdr_xcdr_tlsv = ['app_rdr', 'app_xcdr', 'app_tlsv', ]
-
 xcdr = [ 'app_xcdr' ]
 rdr = [ 'app_rdr', ]
-rdr_xcdr = [ 'app_rdr', 'app_xcdr' ]
+rdr_xcdr = ['app_rdr', 'app_xcdr', ]
+rdr_xcdr_tlsv = ['app_rdr', 'app_xcdr', 'app_tlsv', ]
 
 nuclear_list = [ 'app_p2p' ]
 complete_nuclear_list = [ 'app_p2p', 'app_p2p-ext' ]
 
 p2p_controlled = [ 'app_p2p-controlled' ]
 p2p_ext = [ 'app_p2p-ext' ]
+
 
 # chain
 
