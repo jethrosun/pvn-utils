@@ -10,6 +10,7 @@ if [ -e "$HOME/netbricks_logs" ]; then
 	mkdir -p "$HOME/dev/pvn/utils/data/output_videos"
 	rm -rf /tmp/
 	mkdir -p /tmp/
+	chmod 1777 /tmp
 	mkdir -p "$HOME/logs/netbricks_logs--$current_date_time"
 	mv "$HOME/netbricks_logs" "$HOME/logs/netbricks_logs--$current_date_time"
 	cd "$HOME/logs"
