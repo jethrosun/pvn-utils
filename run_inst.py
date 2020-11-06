@@ -115,6 +115,12 @@ def xcdr_cleanup(sess):
     sess.send_commands(cmd_str)
 
 
+def rdr_cleanup(sess):
+    cmd_str = "sudo ./misc/rdr_cleanup.sh "
+    print("Extra clean up for RDR with cmd: {}".format(cmd_str))
+    sess.send_commands(cmd_str)
+
+
 def main(expr_list):
     """"""
     # app rdr, app p2p ...
@@ -137,7 +143,6 @@ def main(expr_list):
                 else:
                     run_pktgen(pktgen_sess, app.trace[expr],
                                app.sending_rate[expr][setup] * app.batch)
-
 
                 # epoch from 0 to 9
                 for epoch in range(app.num_of_epoch):
@@ -171,6 +176,10 @@ def main(expr_list):
                     elif nf in app.xcdr_nf_list:
                         time.sleep(app.expr_wait_time)
                         xcdr_cleanup(netbricks_sess)
+                        time.sleep(30)
+                    elif nf in app.rdr_nf_list:
+                        time.sleep(app.expr_wait_time)
+                        rdr_cleanup(netbricks_sess)
                         time.sleep(30)
                     elif nf in app.pvn_nf_list:
                         time.sleep(app.expr_wait_time)
