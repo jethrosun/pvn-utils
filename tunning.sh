@@ -1,7 +1,9 @@
 #!/bin/bash
 set -ex
 
-# rm -rf /home/jethros/data/cargo-target
+rm -rf /tmp/
+mkdir -p /tmp/
+chmod 1777 /tmp
 
 printf "OS param tuning"
 echo 0 > /proc/sys/kernel/numa_balancing

@@ -6,11 +6,8 @@ current_date_time="$(date '+%Y-%m-%d--%H-%M-%S')";
 echo "$current_date_time";
 
 if [ -e "$HOME/netbricks_logs" ]; then
-	rm -rf "$HOME/dev/pvn/utils/data/output_videos"
-	mkdir -p "$HOME/dev/pvn/utils/data/output_videos"
-	rm -rf /tmp/
-	mkdir -p /tmp/
-	chmod 1777 /tmp
+	# rm -rf "$HOME/dev/pvn/utils/data/output_videos"
+	# mkdir -p "$HOME/dev/pvn/utils/data/output_videos"
 	mkdir -p "$HOME/logs/netbricks_logs--$current_date_time"
 	mv "$HOME/netbricks_logs" "$HOME/logs/netbricks_logs--$current_date_time"
 	cd "$HOME/logs"
