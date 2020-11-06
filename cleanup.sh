@@ -2,16 +2,18 @@
 
 set -e
 
-current_date_time="`date "+%Y-%m-%d--%H-%M-%S"`";
-echo $current_date_time;
+current_date_time="$(date '+%Y-%m-%d--%H-%M-%S')";
+echo "$current_date_time";
 
-if [ -e $HOME/netbricks_logs ]; then
-	rm -rf $HOME/dev/pvn/utils/data/output_videos
-	rm -rf /tmp/*
-	mkdir -p $HOME/logs/netbricks_logs--$current_date_time
-	mv $HOME/netbricks_logs/ $HOME/logs/netbricks_logs--$current_date_time
-	cd $HOME/logs
-	tar -cvzf netbricks_logs--$current_date_time.tar.gz  netbricks_logs--$current_date_time
+if [ -e "$HOME/netbricks_logs" ]; then
+	rm -rf "$HOME/dev/pvn/utils/data/output_videos"
+	mkdir -p "$HOME/dev/pvn/utils/data/output_videos"
+	rm -rf /tmp/
+	mkdir -p /tmp/
+	mkdir -p "$HOME/logs/netbricks_logs--$current_date_time"
+	mv "$HOME/netbricks_logs" "$HOME/logs/netbricks_logs--$current_date_time"
+	cd "$HOME/logs"
+	tar -cvzf "netbricks_logs--$current_date_time.tar.gz"  "netbricks_logs--$current_date_time"
 	rm -rf netbricks_logs--$current_date_time
 	printf "Moving all netbricks logs to the backup logs\n"
 fi

@@ -7,7 +7,8 @@ set -ex
 # sudo rm -rf config/*
 # mkdir -p config downloads
 #
-sudo rm -rf /tmp/*
+sudo rm -rf /tmp/
+sudo mkdir -p /tmp/
 
 sudo rm -rf ~/dev/pvn/utils/output/output_videos/
 sudo mkdir -p ~/dev/pvn/utils/output/output_videos/
@@ -28,8 +29,8 @@ sudo mkdir -p ~/dev/pvn/utils/output/output_videos/
 
 
 
-for a in `docker ps -a -q`
+for a in $(docker ps -a -q)
 do
   echo "Stopping container - $a"
-  docker stop $a
+  docker stop "$a"
 done
