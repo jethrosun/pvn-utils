@@ -62,6 +62,11 @@ trace = {
     'chain_xcdr_p2p': 'pvn_xcdr_p2p.pcap',
 }
 
+rdr_nf_list = [
+    'pvn-rdr-transform-app',
+    'pvn-rdr-groupby-app',
+]
+
 pvn_nf_list = [
     'pvn-tlsv-transform-app',
     'pvn-tlsv-groupby-app',
