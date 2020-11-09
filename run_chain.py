@@ -5,6 +5,7 @@ import sys
 import time
 import app_config as app
 
+
 def netbricks_sess_setup(trace, nf, epoch):
     print("Entering netbricks_sess setup")
     try:
@@ -15,9 +16,11 @@ def netbricks_sess_setup(trace, nf, epoch):
         netbricks_sess.enable_logs("netbricks--" + trace + "_" + nf + "_" +
                                    str(epoch) + ".log")
         netbricks_sess.send_commands('ssh jethros@tuco')
-        netbricks_sess.send_commands('cd /home/jethros/dev/pvn/utils/faktory_srv')
+        netbricks_sess.send_commands(
+            'cd /home/jethros/dev/pvn/utils/faktory_srv')
         netbricks_sess.send_commands('cargo b --release')
-        netbricks_sess.send_commands('cd /home/jethros/dev/netbricks/experiments')
+        netbricks_sess.send_commands(
+            'cd /home/jethros/dev/netbricks/experiments')
 
         time.sleep(15)
         return netbricks_sess
@@ -51,9 +54,9 @@ def run_pktgen(sess, trace, setup):
     if trace in ['64B', '128B', '256B', '1500B']:
         size = trace[:-1]
         cmd_str = "sudo ./run_pktgen.sh " + trace
-        set_rate_str = "set 1 rate 100"
-        set_size_str = "set 1 size " + size
-        start_str = "start 1"
+        set_rate_str = "set 0 rate 100"
+        set_size_str = "set 0 size " + size
+        start_str = "start 0"
 
         time.sleep(30)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
@@ -64,8 +67,8 @@ def run_pktgen(sess, trace, setup):
     else:
         cmd_str = "sudo ./run_pktgen.sh " + trace
         print(cmd_str)
-        set_port_str = "set 1 rate " + str(setup)
-        start_str = "start 1"
+        set_port_str = "set 0 rate " + str(setup)
+        start_str = "start 0"
 
         time.sleep(30)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
@@ -86,7 +89,8 @@ def run_netbricks_xcdr(sess, trace, nf, epoch, setup, port1, port2, expr_num):
     # cmd_str = "sudo ./run_netbricks_app.sh " + trace + " " + nf + " " + str(
     #     epoch) + " " + setup + " " + port1 + " " + port2 + " " + expr_num
     cmd_str = "sudo ./run_pvnf_chain.sh " + trace + " " + nf + " " + str(
-        epoch) + " " + setup + " " + str(7419) + " " + str(7420) + " " + expr_num
+        epoch) + " " + setup + " " + str(7419) + " " + str(
+            7420) + " " + expr_num
 
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
@@ -96,9 +100,11 @@ def sess_destroy(sess):
     if sess.exists:
         sess.kill()
 
+
 def sess_reboot(sess):
     cmd_str = "sudo reboot"
     sess.send_commands(cmd_str)
+
 
 def p2p_cleanup(sess):
     cmd_str = "sudo ./misc/p2p_cleanup.sh "
@@ -122,10 +128,11 @@ def main(expr_list):
             # we are running the regular NFs
             # config the pktgen sending rate
             for setup in app.set_list:
-                pktgen_sess = pktgen_sess_setup(app.trace[expr], nf,
-                                                app.sending_rate[expr][setup]*app.batch)
+                pktgen_sess = pktgen_sess_setup(
+                    app.trace[expr], nf,
+                    app.sending_rate[expr][setup] * app.batch)
                 run_pktgen(pktgen_sess, app.trace[expr],
-                           app.sending_rate[expr][setup]*app.batch)
+                           app.sending_rate[expr][setup] * app.batch)
                 # epoch from 0 to 9
                 for epoch in range(app.num_of_epoch):
                     netbricks_sess = netbricks_sess_setup(
@@ -142,7 +149,6 @@ def main(expr_list):
                         p2p_cleanup(netbricks_sess)
                         xcdr_cleanup(netbricks_sess)
                         time.sleep(30)
-
 
                     # Actual RUN
                     if nf in app.xcdr_chain_list:
@@ -192,7 +198,8 @@ def main(expr_list):
                 sess_destroy(pktgen_sess)
                 time.sleep(30)
 
+
 # main(app.tmp_list) # rdr, xcdr
-main(app.non_p2p_chain) # rdr, xcdr
+main(app.non_p2p_chain)  # rdr, xcdr
 
 print("All experiment finished {}".format(app.xcdr))
