@@ -2,27 +2,27 @@ pvn_nf = {
     # nf app
     'app_rdr': [
         'pvn-rdr-transform-app',
-        'pvn-rdr-groupby-app',
+        # 'pvn-rdr-groupby-app',
     ],
     'app_xcdr': [
         'pvn-transcoder-transform-app',
-        'pvn-transcoder-groupby-app',
+        # 'pvn-transcoder-groupby-app',
     ],
     'app_tlsv': [
         'pvn-tlsv-transform-app',
-        'pvn-tlsv-groupby-app',
+        # 'pvn-tlsv-groupby-app',
     ],
     'app_p2p': [
         'pvn-p2p-transform-app',
-        'pvn-p2p-groupby-app',
+        # 'pvn-p2p-groupby-app',
     ],
     'app_p2p-ext': [
         'pvn-p2p-transform-app',
-        'pvn-p2p-groupby-app',
+        # 'pvn-p2p-groupby-app',
     ],
     'app_p2p-controlled': [
-        'pvn-p2p-groupby-app',
         'pvn-p2p-transform-app',
+        # 'pvn-p2p-groupby-app',
     ],
     # chain
     'chain_tlsv_rdr': [
