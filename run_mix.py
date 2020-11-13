@@ -173,8 +173,8 @@ def main():
                     elif nf in mix.pvn_nf_list:
                         time.sleep(mix.expr_wait_time)
                     else:
-                        print("Unknown nf?")
-                        sys.exit(1)
+                        time.sleep(mix.expr_wait_time)
+                        time.sleep(30)
 
                     sess_destroy(netbricks_sess)
                     # sess_destroy(netbricks_sess)
