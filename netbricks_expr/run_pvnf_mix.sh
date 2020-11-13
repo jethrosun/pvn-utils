@@ -36,18 +36,16 @@ TCP_LIFE_MONITOR=/usr/share/bcc/tools/tcplife
 BIO_TOP_MONITOR=/usr/share/bcc/tools/biotop
 # IPTRAF_MONITOR=/usr/sbin/iptraf-ng
 
-# NB_CONFIG=$HOME/dev/netbricks/experiments/config_2core.toml
-NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_2core_long.toml
+NB_CONFIG=$HOME/dev/netbricks/experiments/config_1core.toml
+# NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_2core_long.toml
 TMP_NB_CONFIG=$HOME/config.toml
 
-sed "/duration = 750/i log_path = '$LOG'" "$NB_CONFIG_LONG" > "$TMP_NB_CONFIG"
+sed "/duration = 350/i log_path = '$LOG'" "$NB_CONFIG" > "$TMP_NB_CONFIG"
 
-# echo "$LOG_DIR"
-# echo $LOG
 mkdir -p "$LOG_DIR"
 
-INST_LEVEL=off
-
+INST_LEVEL=on
+EXPR_MODE=short
 
 if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-groupby-app' ]; then
 	JSON_STRING=$( jq -n \
@@ -56,7 +54,8 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 		--arg port "$5" \
 		--arg expr_num "$7" \
 		--arg inst "$INST_LEVEL" \
-		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst}' )
+		--arg mode "$EXPR_MODE" \
+		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}' )
 	echo "$JSON_STRING" > /home/jethros/setup
 
 	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
@@ -105,7 +104,8 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 		--arg setup "$4" \
 		--arg inst "$INST_LEVEL" \
 		--arg p2p_type "$5" \
-		'{setup: $setup, iter: $iter, inst: $inst, p2p_type: $p2p_type}' )
+		--arg mode "$EXPR_MODE" \
+		'{setup: $setup, iter: $iter, inst: $inst, p2p_type: $p2p_type, mode: $mode}' )
 	echo "$JSON_STRING" > /home/jethros/setup
 
 	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
@@ -143,7 +143,8 @@ else
 		--arg iter "$3" \
 		--arg setup "$4" \
 		--arg inst "$INST_LEVEL" \
-		'{setup: $setup, iter: $iter, inst: $inst}' )
+		--arg mode "$EXPR_MODE" \
+		'{setup: $setup, iter: $iter, inst: $inst, mode: $mode}' )
 	echo "$JSON_STRING" > /home/jethros/setup
 
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &

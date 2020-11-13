@@ -1,16 +1,16 @@
 secondary = false
-primary_core = 2
-cores = [2]
+primary_core = 3
+cores = [3]
 strict = false
 pool_size = 3072
 cache_size = 32
-duration = 100
+duration = 350
 [[ports]]
-  name = "0000:01:00.0"
+  name = "0000:01:00.1"
   rxq = 0
   txq = 0
-  rx_cores = [2]
-  tx_cores = [2]
+  rx_cores = [3]
+  tx_cores = [3]
   rxd = 128
   txd = 128
   loopback = false
