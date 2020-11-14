@@ -47,7 +47,7 @@ mkdir -p "$LOG_DIR"
 INST_LEVEL=on
 EXPR_MODE=short
 
-if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-groupby-app' ]; then
+if [ "$2" == 'pvn-transcoder-transform-app' ]; then
 	JSON_STRING=$( jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
@@ -83,7 +83,7 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 	P4=$!
 	wait $P1 $P2 $P3 $P4  $P6 $P7 $P8 $P9 $P10
 
-elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; then
+elif [ "$2" == "pvn-p2p-transform-app" ]; then
 	if [ "$5" == "app_p2p-controlled" ]; then
 		sudo rm -rf "$HOME/Downloads"
 		sudo rm -rf /data/bt/config
@@ -136,7 +136,7 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 	P5=$!
 	wait $P1 $P2  $P4 $P5 $P6 $P7 $P8 $P9 $P10
 
-else
+elif [ "$2" == 'pvn-rdr-transform-app' ] || [ "$2" == 'pvn-tlsv-transform-app' ]; then
 	# we don't need to check resource usage for tlsv so we just grep chrom here
 	# as well
 	JSON_STRING=$( jq -n \
@@ -152,6 +152,35 @@ else
 	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
 	P7=$!
 	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
+	P8=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG2" &
+	P9=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
+	P10=$!
+	"$TCP_LIFE_MONITOR" > "$TCPLIFE_LOG" &
+	P6=$!
+	"$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+	P3=$!
+	"$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
+	P4=$!
+
+	wait $P1  $P3 $P4  $P6 $P7 $P8 $P9 $P10
+else
+	# we don't need to check resource usage for tlsv so we just grep chrom here
+	# as well
+	JSON_STRING=$( jq -n \
+		--arg iter "$3" \
+		--arg setup "$4" \
+		--arg inst "$INST_LEVEL" \
+		--arg mode "$EXPR_MODE" \
+		'{setup: $setup, iter: $iter, inst: $inst, mode: $mode}' )
+	echo "$JSON_STRING" > /home/jethros/setup
+
+	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
+	P1=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh zcsi; done > "$CPULOG1" &
+	P7=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh zcsi; done > "$MEMLOG1" &
 	P8=$!
 	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG2" &
 	P9=$!
