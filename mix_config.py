@@ -94,5 +94,5 @@ expr_wait_time = 400
 
 xcdr_port_base = 7418
 
-num_of_epoch = 2
+num_of_epoch = 1
 batch = 1
