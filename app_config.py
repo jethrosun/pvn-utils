@@ -167,12 +167,12 @@ sending_rate = {
         '6': fixed_sending_rate
     },
     'app_tlsv': {
-        '1': 1,
-        '2': 5,
-        '3': 10,
-        '4': 15,
-        '5': 20,
-        '6': 50
+        '1': fixed_sending_rate,
+        '2': fixed_sending_rate,
+        '3': fixed_sending_rate,
+        '4': fixed_sending_rate,
+        '5': fixed_sending_rate,
+        '6': fixed_sending_rate
     },
     'app_p2p-ext': {
         '1': fixed_sending_rate,
