@@ -131,3 +131,5 @@ dmypy.json
 *.log
 
 data/output_videos/*
+
+*.py.*.py
