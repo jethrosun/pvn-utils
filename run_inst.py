@@ -51,7 +51,7 @@ def pktgen_sess_setup(trace, nf, setup):
 
 def run_pktgen(sess, trace, setup):
     # never here
-    if trace in ['64B', '128B', '256B', '1500B']:
+    if trace in ['64B', '128B', '256B', '512B', '1500B']:
         size = trace[:-1]
         cmd_str = "sudo ./run_pktgen.sh " + trace
         set_rate_str = "set 0 rate 100"
@@ -209,3 +209,5 @@ main(app.rdr_xcdr_tlsv)  # rdr, xcdr
 # main(app.xcdr)  # rdr, xcdr
 
 print("All experiment finished {}".format(app.xcdr))
+
+# FIXME: we want to reboot here

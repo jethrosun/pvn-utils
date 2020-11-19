@@ -84,7 +84,7 @@ def p2p_sess_setup(node, trace, nf, epoch):
 
 def run_pktgen(sess, trace, rate):
     # never here
-    if trace in ['64B', '128B', '256B', '1500B']:
+    if trace in ['64B', '128B', '256B', '512B', '1500B']:
         size = trace[:-1]
         cmd_str = "sudo ./run_pktgen.sh " + trace
         set_rate_str = "set 0 rate 100"
