@@ -5,6 +5,7 @@
 # sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
 
 args=("$@")
+printf "args %s" "$@"
 
 if [ "$1" == "1" ]; then
 	setup=1
