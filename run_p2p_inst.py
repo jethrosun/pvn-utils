@@ -118,9 +118,9 @@ def run_netbricks(sess, trace, nf, epoch, setup, expr):
     sess.send_commands(cmd_str)
 
 
-def run_p2p_node(typ, sess, setup):
+def run_p2p_node(typ, sess, setup, epoch):
     if typ == "leecher":
-        cmd_str = "./p2p_run_leecher.sh " + setup
+        cmd_str = "./p2p_run_leecher.py " + setup + " " + epoch
         print("Run P2P Leecher \n\tCmd: {}".format(cmd_str))
         sess.send_commands(cmd_str)
 
@@ -194,9 +194,9 @@ def run_expr_p2p(expr):
 
                 # Actual RUN
                 p2p_cleanup("netbricks", netbricks_sess)
-                run_p2p_node('leecher', leecher1_sess, setup)
-                run_p2p_node('leecher', leecher2_sess, setup)
-                run_p2p_node('leecher', leecher3_sess, setup)
+                run_p2p_node('leecher', leecher1_sess, setup, epoch)
+                run_p2p_node('leecher', leecher2_sess, setup, epoch)
+                run_p2p_node('leecher', leecher3_sess, setup, epoch)
                 run_netbricks(netbricks_sess, app.trace[expr], nf, epoch,
                               setup, expr)
 
@@ -250,9 +250,9 @@ def run_expr_p2p_controlled(expr):
                 time.sleep(30)
 
                 # Actual RUN
-                run_p2p_node('leecher', leecher1_sess, setup)
-                run_p2p_node('leecher', leecher2_sess, setup)
-                run_p2p_node('leecher', leecher3_sess, setup)
+                run_p2p_node('leecher', leecher1_sess, setup, epoch)
+                run_p2p_node('leecher', leecher2_sess, setup.epoch)
+                run_p2p_node('leecher', leecher3_sess, setup, epoch)
                 run_netbricks(netbricks_sess, app.trace[expr], nf, epoch,
                               setup, expr)
 
