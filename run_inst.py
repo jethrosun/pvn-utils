@@ -51,7 +51,7 @@ def pktgen_sess_setup(trace, nf, setup):
 
 def run_pktgen(sess, trace, setup):
     # never here
-    if trace in ['64B', '128B', '256B', '512B', '1500B']:
+    if trace in ['64B', '128B', '256B', '512B', '1024B', '1280B', '1518B']:
         size = trace[:-1]
         cmd_str = "sudo ./run_pktgen.sh " + trace
         set_rate_str = "set 0 rate 100"
