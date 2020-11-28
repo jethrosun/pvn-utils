@@ -26,7 +26,4 @@ for x in imgs:
     torrent_path = "add /home/jethros/dev/pvn/utils/workloads/torrent_files/p2p_image_" + str(
         x) + ".img.torrent"
     print(torrent_path)
-    subprocess.run([
-        "sudo", "-u", "jethros", "deluge-console", "-c", "/data/bt/config",
-        torrent_path
-    ])
+    subprocess.run(["deluge-console", "-c", "~/bt_data/config", torrent_path])
