@@ -251,7 +251,7 @@ def run_expr_p2p_controlled(expr):
 
                 # Actual RUN
                 run_p2p_node('leecher', leecher1_sess, setup, epoch)
-                run_p2p_node('leecher', leecher2_sess, setup.epoch)
+                run_p2p_node('leecher', leecher2_sess, setup, epoch)
                 run_p2p_node('leecher', leecher3_sess, setup, epoch)
                 run_netbricks(netbricks_sess, app.trace[expr], nf, epoch,
                               setup, expr)
