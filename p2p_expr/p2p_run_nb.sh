@@ -7,23 +7,25 @@
 args=("$@")
 printf "args %s" "$@"
 
-if [ "$1" == "1" ]; then
-	setup=1
-elif [ "$1" == "2" ]; then
-	setup=2
-elif [ "$1" == "3" ]; then
-	setup=4
-elif [ "$1" == "4" ]; then
-	setup=6
-elif [ "$1" == "5" ]; then
-	setup=8
-elif [ "$1" == "6" ]; then
-	setup=10
-else
-	printf "Unknown setup: %s"  "$1"
-fi
+# if [ "$1" == "1" ]; then
+#     setup=1
+# elif [ "$1" == "2" ]; then
+#     setup=2
+# elif [ "$1" == "3" ]; then
+#     setup=4
+# elif [ "$1" == "4" ]; then
+#     setup=6
+# elif [ "$1" == "5" ]; then
+#     setup=8
+# elif [ "$1" == "6" ]; then
+#     setup=10
+# else
+#     printf "Unknown setup: %s"  "$1"
+# fi
 
-printf "Running expr %s with setup %s"  "$1" "$setup"
+setup=${args[0]}
+
+printf "\nRunning expr %s with setup %s"  "$1" "$setup"
 echo Number of arguments: $#
 
 for (( c=1; c<=setup; c++ ))
