@@ -163,7 +163,7 @@ expr_wait_time = 630
 
 xcdr_port_base = 7418
 
-num_of_epoch = 3
+num_of_epoch = 1
 
 # Total NF and traces
 # nf_list = [
