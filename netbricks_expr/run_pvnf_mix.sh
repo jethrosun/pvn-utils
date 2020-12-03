@@ -110,6 +110,7 @@ elif [ "$2" == "pvn-p2p-transform-app" ]; then
 
 	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
 	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
+	sleep 15
 
 	if [ "$5" == "app_p2p-controlled" ]; then
 		while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > "$P2P_PROGRESS_LOG" &
