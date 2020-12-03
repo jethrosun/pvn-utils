@@ -137,7 +137,7 @@ def main(expr_list):
                     app.trace[expr], nf,
                     app.sending_rate[expr][setup] * app.batch)
 
-                if nf == "app_tlsv":
+                if nf == "pvn-tlsv-transform-app":
                     tls_trace = app.fetch_tlsv_trace(setup)
                     run_pktgen(pktgen_sess, tls_trace,
                                app.sending_rate[expr][setup] * app.batch)

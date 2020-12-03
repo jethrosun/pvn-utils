@@ -129,7 +129,7 @@ def main():
                 pktgen_sess = pktgen_sess_setup(trace, nf,
                                                 mix.fixed_sending_rate)
 
-                if nf == "app_tlsv":
+                if nf == 'pvn-tlsv-transform-app':
                     tls_trace = mix.fetch_tlsv_trace(setup)
                     run_pktgen(pktgen_sess, tls_trace, mix.fixed_sending_rate)
                 else:
