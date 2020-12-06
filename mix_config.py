@@ -13,14 +13,14 @@ mix_match_nfs = [
 traces = [
     # pktgen
     '64B',
-    # '128B',
+    '128B',
     '512B',
-    # '1500B',
+    '1500B',
     'net-2009-11-23-16:54-re.pcap',
-    # 'net-2009-12-07-11:59-re.pcap',
+    'net-2009-12-07-11:59-re.pcap',
     # 'net-2009-12-08-11:59-re.pcap',
     'ictf2010-0-re.pcap',
-    # 'ictf2010-1-re.pcap',
+    'ictf2010-1-re.pcap',
     # 'ictf2010-10-re.pcap',
     # 'ictf2010-11-re.pcap',
     # 'ictf2010-12-re.pcap',
@@ -99,5 +99,5 @@ expr_wait_time = 400
 
 xcdr_port_base = 7418
 
-num_of_epoch = 3
+num_of_epoch = 10
 batch = 1
