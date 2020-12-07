@@ -254,10 +254,10 @@ batch = 1
 
 xcdr = [ 'app_xcdr' ]
 rdr = [ 'app_rdr', ]
+tlsv = [ 'app_tlsv', ]
 rdr_xcdr = ['app_rdr', 'app_xcdr', ]
 rdr_xcdr_tlsv = ['app_rdr', 'app_xcdr', 'app_tlsv', ]
 
-nuclear_list = [ 'app_p2p' ]
 complete_nuclear_list = [ 'app_p2p', 'app_p2p-ext' ]
 
 p2p_controlled = [ 'app_p2p-controlled' ]
