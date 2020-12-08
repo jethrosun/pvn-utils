@@ -89,7 +89,7 @@ p2p_ext = ['app_p2p-ext']
 
 
 def fetch_tlsv_trace(setup):
-    return 'pvn_tlsv_' + setup + '.pcap'
+    return 'pvn_tlsv' + setup + '.pcap'
 
 
 fixed_sending_rate = 100
