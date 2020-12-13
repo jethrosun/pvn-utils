@@ -111,6 +111,7 @@ elif [ "$2" == 'pvn-rdr-p2p-coexist-app' ]; then
 	echo "${JSON_STRING}" >/home/jethros/setup
 
 	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
+	sleep 5
 	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
 	sleep 15
 
@@ -209,6 +210,7 @@ elif [ "$2" == 'pvn-tlsv-p2p-coexist-app' ]; then
 	echo "$JSON_STRING" >/home/jethros/setup
 
 	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
+	sleep 5
 	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
 	sleep 15
 
@@ -311,6 +313,11 @@ elif [ "$2" == 'pvn-xcdr-p2p-coexist-app' ]; then
 	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
 	# P1=$!
 	docker ps
+	sleep 15
+
+	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
+	sleep 5
+	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
 	sleep 15
 
 	if [ "$5" == "app_p2p-controlled" ]; then
