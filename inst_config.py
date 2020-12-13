@@ -106,8 +106,9 @@ xcdr_p2p_chain_list = [
 ]
 
 
-
-
+set_test_list = [
+    '1',
+]
 set_list = [
     '1',
     '2',
@@ -127,17 +128,6 @@ p2p_ext_list = [
     '18',
     '19',
     '20',
-]
-p2p_test_list = [
-    '1',
-]
-p2p_controlled_list = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
 ]
 
 def fetch_tlsv_trace(setup):

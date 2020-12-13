@@ -215,7 +215,7 @@ def run_expr_p2p(expr):
     for nf in mix.pvn_nf[expr]:
         # we are running the regular NFs
         # config the pktgen sending rate
-        for setup in mix.p2p_controlled_list:
+        for setup in mix.set_list:
             pktgen_sess = pktgen_sess_setup(app.trace[expr], nf,
                                             app.p2p_sending_rate * app.batch)
             run_pktgen(pktgen_sess, app.trace[expr],
@@ -275,7 +275,7 @@ def run_expr_p2p_controlled(expr):
     for trace in mix.traces:
         # we are running the regular NFs
         # config the pktgen sending rate
-        for setup in mix.p2p_controlled_list:
+        for setup in mix.set_list:
             pktgen_sess = pktgen_sess_setup(trace, nf, mix.fixed_sending_rate)
             run_pktgen(pktgen_sess, trace, mix.fixed_sending_rate)
             # epoch from 0 to 9

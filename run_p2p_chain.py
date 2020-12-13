@@ -183,7 +183,7 @@ def run_expr_p2p(expr_list):
         for nf in inst.pvn_nf[expr]:
             # we are running the regular NFs
             # config the pktgen sending rate
-            for setup in inst.p2p_controlled_list:
+            for setup in inst.set_list:
                 pktgen_sess = pktgen_sess_setup(
                     inst.trace[expr], nf, inst.p2p_sending_rate * inst.batch)
                 run_pktgen(pktgen_sess, inst.trace[expr],
@@ -252,7 +252,7 @@ def run_expr_p2p_controlled(expr_list):
         for nf in inst.pvn_nf[expr]:
             # we are running the regular NFs
             # config the pktgen sending rate
-            for setup in inst.p2p_controlled_list:
+            for setup in inst.set_list:
                 pktgen_sess = pktgen_sess_setup(
                     inst.trace[expr], nf, inst.p2p_sending_rate * inst.batch)
                 run_pktgen(pktgen_sess, inst.trace[expr],

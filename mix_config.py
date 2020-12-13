@@ -75,14 +75,6 @@ p2p_ext_list = [
     '19',
     '20',
 ]
-p2p_controlled_list = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-]
 
 p2p_controlled = ['app_p2p-controlled']
 p2p_ext = ['app_p2p-ext']
