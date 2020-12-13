@@ -128,6 +128,9 @@ p2p_ext_list = [
     '19',
     '20',
 ]
+p2p_test_list = [
+    '1',
+]
 p2p_controlled_list = [
     '1',
     '2',
