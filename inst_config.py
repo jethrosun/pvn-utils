@@ -108,15 +108,12 @@ xcdr_p2p_chain_list = [
 
 set_list = [
     '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
 ]
-# set_list = [
-#     '1',
-#     '2',
-#     '3',
-#     '4',
-#     '5',
-#     '6',
-# ]
 
 p2p_ext_list = [
     '11',
@@ -266,8 +263,8 @@ p2p_ext = [ 'app_p2p-ext' ]
 chain_tlsv_rdr = [ 'chain_tlsv_rdr', ]
 
 p2p_chain = [
-    # 'chain_rdr_p2p',
-    # 'chain_tlsv_p2p',
+    'chain_rdr_p2p',
+    'chain_tlsv_p2p',
     'chain_xcdr_p2p',
 ]
 non_p2p_chain = [
