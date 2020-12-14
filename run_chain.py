@@ -127,7 +127,7 @@ def main(expr_list):
         for nf in inst.pvn_nf[expr]:
             # we are running the regular NFs
             # config the pktgen sending rate
-            for setup in inst.p2p_test_list:
+            for setup in inst.set_list:
                 pktgen_sess = pktgen_sess_setup(
                     inst.trace[expr], nf,
                     inst.sending_rate[expr][setup] * inst.batch)
