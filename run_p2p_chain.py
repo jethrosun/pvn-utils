@@ -113,8 +113,7 @@ def run_pktgen(sess, trace, rate):
 
 def run_netbricks_xcdr_p2p(sess, trace, nf, epoch, setup, expr_num, expr):
     cmd_str = "sudo ./run_pvnf_chain.sh " + trace + " " + nf + " " \
-        + str(epoch) + " " + setup + " " + str(7419) + " " + str(7420) + " " \
-        + expr_num + " " + expr
+        + str(epoch) + " " + setup + " " + str(7419) + " " + str(7420) + " " + str(expr_num) + " " + str(expr)
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
