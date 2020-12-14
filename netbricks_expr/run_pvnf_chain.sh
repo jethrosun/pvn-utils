@@ -284,8 +284,7 @@ elif [ "$2" == 'pvn-tlsv-xcdr-coexist-app' ]; then
 	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11
 
 elif [ "$2" == 'pvn-xcdr-p2p-coexist-app' ]; then
-	echo "$8"
-	if [ "$10" == "chain_xcdr_p2p" ]; then
+	if [ "$8" == "chain_xcdr_p2p" ]; then
 		sudo rm -rf "$HOME/Downloads"
 		sudo rm -rf /data/bt/config
 		mkdir -p "$HOME/Downloads" /data/bt/config
@@ -321,7 +320,7 @@ elif [ "$2" == 'pvn-xcdr-p2p-coexist-app' ]; then
 	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
 	sleep 15
 
-	if [ "$10" == "chain_xcdr_p2p" ]; then
+	if [ "$8" == "chain_xcdr_p2p" ]; then
 		while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh; done > "$P2P_PROGRESS_LOG" &
 		P12=$!
 	else
