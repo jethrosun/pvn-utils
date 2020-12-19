@@ -263,12 +263,12 @@ p2p_ext = [ 'app_p2p-ext' ]
 chain_tlsv_rdr = [ 'chain_tlsv_rdr', ]
 
 p2p_chain = [
-    'chain_rdr_p2p',
-    'chain_tlsv_p2p',
+    # 'chain_rdr_p2p',
+    # 'chain_tlsv_p2p',
     'chain_xcdr_p2p',
 ]
 non_p2p_chain = [
-    'chain_tlsv_rdr',
+    # 'chain_tlsv_rdr',
     'chain_rdr_xcdr',
     'chain_tlsv_xcdr',
 ]
