@@ -14,6 +14,7 @@ traces = [
     # pktgen
     '64B',
     '128B',
+    '256B',
     '512B',
     '1500B',
     'net-2009-11-23-16:54-re.pcap',
@@ -25,6 +26,7 @@ traces = [
     # 'ictf2010-11-re.pcap',
     # 'ictf2010-12-re.pcap',
     # 'ictf2010-13-re.pcap',
+    'univ1_pt1_4.pcap',
     # pvn nf
     'pvn_rdr.pcap',
     'pvn_xcdr.pcap',
