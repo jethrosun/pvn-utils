@@ -118,6 +118,12 @@ def xcdr_cleanup(sess):
     sess.send_commands(cmd_str)
 
 
+def rdr_cleanup(sess):
+    cmd_str = "sudo ./misc/rdr_cleanup.sh "
+    print("Extra clean up for RDR with cmd: {}".format(cmd_str))
+    sess.send_commands(cmd_str)
+
+
 def main(expr_list):
     """"""
     # app rdr, app p2p ...
@@ -138,17 +144,10 @@ def main(expr_list):
                     netbricks_sess = netbricks_sess_setup(
                         inst.trace[expr], nf, epoch)
 
-                    # run clean up for p2p nf before experiment
-                    if nf in inst.p2p_chain_list:
-                        p2p_cleanup(netbricks_sess)
-                        time.sleep(30)
-                    elif nf in inst.xcdr_chain_list:
-                        xcdr_cleanup(netbricks_sess)
-                        time.sleep(30)
-                    elif nf in inst.xcdr_p2p_chain_list:
-                        p2p_cleanup(netbricks_sess)
-                        xcdr_cleanup(netbricks_sess)
-                        time.sleep(30)
+                    rdr_cleanup(netbricks_sess)
+                    p2p_cleanup(netbricks_sess)
+                    xcdr_cleanup(netbricks_sess)
+                    time.sleep(30)
 
                     # Actual RUN
                     if nf in inst.xcdr_chain_list:
