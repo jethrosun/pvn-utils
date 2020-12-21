@@ -25,24 +25,12 @@ pvn_nf = {
         # 'pvn-p2p-groupby-app',
     ],
     # chain
-    'chain_tlsv_rdr': [
-        'pvn-tlsv-rdr-coexist-app',
-    ],
-    'chain_rdr_p2p': [
-        'pvn-rdr-p2p-coexist-app',
-    ],
-    'chain_rdr_xcdr': [
-        'pvn-rdr-xcdr-coexist-app',
-    ],
-    'chain_tlsv_p2p': [
-        'pvn-tlsv-p2p-coexist-app',
-    ],
-    'chain_tlsv_xcdr': [
-        'pvn-tlsv-xcdr-coexist-app',
-    ],
-    'chain_xcdr_p2p':[
-        'pvn-xcdr-p2p-coexist-app',
-    ]
+    'chain_tlsv_rdr': ['pvn-tlsv-rdr-coexist-app',],
+    'chain_rdr_p2p': ['pvn-rdr-p2p-coexist-app',],
+    'chain_rdr_xcdr': ['pvn-rdr-xcdr-coexist-app',],
+    'chain_tlsv_p2p': ['pvn-tlsv-p2p-coexist-app',],
+    'chain_tlsv_xcdr': ['pvn-tlsv-xcdr-coexist-app',],
+    'chain_xcdr_p2p': ['pvn-xcdr-p2p-coexist-app',]
 }
 
 trace = {
@@ -82,7 +70,6 @@ pvn_chain_list = [
     'pvn-tlsv-rdr-coexist-app',
 ]
 
-
 p2p_nf_list = [
     'pvn-p2p-transform-app',
     'pvn-p2p-groupby-app',
@@ -93,10 +80,7 @@ p2p_chain_list = [
     'pvn-xcdr-p2p-coexist-app',
 ]
 
-xcdr_nf_list = [
-    'pvn-transcoder-transform-app',
-    'pvn-transcoder-groupby-app'
-]
+xcdr_nf_list = ['pvn-transcoder-transform-app', 'pvn-transcoder-groupby-app']
 xcdr_chain_list = [
     'pvn-rdr-xcdr-coexist-app',
     'pvn-tlsv-xcdr-coexist-app',
@@ -104,7 +88,6 @@ xcdr_chain_list = [
 xcdr_p2p_chain_list = [
     'pvn-xcdr-p2p-coexist-app',
 ]
-
 
 set_list = [
     '1',
@@ -128,8 +111,10 @@ p2p_ext_list = [
     '20',
 ]
 
+
 def fetch_tlsv_trace(setup):
     return 'pvn_tlsv' + setup + '.pcap'
+
 
 rdr_sending_rate = 10
 p2p_sending_rate = 10
@@ -236,31 +221,42 @@ sending_rate = {
 }
 
 # expr is 10 min/600 sec
-expr_wait_time = 875
+expr_wait_time = 925
 
 xcdr_port_base = 7418
 
 num_of_epoch = 10
 batch = 1
 
-
 # app
 
-xcdr = [ 'app_xcdr' ]
-rdr = [ 'app_rdr', ]
-tlsv = [ 'app_tlsv', ]
-rdr_xcdr = ['app_rdr', 'app_xcdr', ]
-rdr_xcdr_tlsv = ['app_rdr', 'app_xcdr', 'app_tlsv', ]
+xcdr = ['app_xcdr']
+rdr = [
+    'app_rdr',
+]
+tlsv = [
+    'app_tlsv',
+]
+rdr_xcdr = [
+    'app_rdr',
+    'app_xcdr',
+]
+rdr_xcdr_tlsv = [
+    'app_rdr',
+    'app_xcdr',
+    'app_tlsv',
+]
 
-complete_nuclear_list = [ 'app_p2p', 'app_p2p-ext' ]
+complete_nuclear_list = ['app_p2p', 'app_p2p-ext']
 
-p2p_controlled = [ 'app_p2p-controlled' ]
-p2p_ext = [ 'app_p2p-ext' ]
-
+p2p_controlled = ['app_p2p-controlled']
+p2p_ext = ['app_p2p-ext']
 
 # chain
 
-chain_tlsv_rdr = [ 'chain_tlsv_rdr', ]
+chain_tlsv_rdr = [
+    'chain_tlsv_rdr',
+]
 
 p2p_chain = [
     # 'chain_rdr_p2p',
