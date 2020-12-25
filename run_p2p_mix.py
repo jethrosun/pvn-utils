@@ -13,14 +13,11 @@ def netbricks_sess_setup(trace, nf, epoch, expr):
         print("netbricks session is spawned")
 
         netbricks_sess.send_commands('bash')
-        netbricks_sess.enable_logs("netbricks--" + trace + "_" + nf + "_" +
-                                   str(epoch) + ".log")
+        netbricks_sess.enable_logs("netbricks--" + trace + "_" + nf + "_" + str(epoch) + ".log")
         netbricks_sess.send_commands('ssh jethros@tuco')
-        netbricks_sess.send_commands(
-            'cd /home/jethros/dev/pvn/utils/faktory_srv')
+        netbricks_sess.send_commands('cd /home/jethros/dev/pvn/utils/faktory_srv')
         netbricks_sess.send_commands('cargo b --release')
-        netbricks_sess.send_commands(
-            'cd /home/jethros/dev/netbricks/experiments')
+        netbricks_sess.send_commands('cd /home/jethros/dev/netbricks/experiments')
 
         time.sleep(15)
         return netbricks_sess
@@ -38,8 +35,7 @@ def pktgen_sess_setup(trace, nf, epoch):
 
         pktgen_sess.send_commands('bash')
         pktgen_sess.enable_logs("pktgen--" + trace + "_" + nf + ".log")
-        pktgen_sess.send_commands(
-            'cd /home/jethros/dev/pktgen-dpdk/experiments')
+        pktgen_sess.send_commands('cd /home/jethros/dev/pktgen-dpdk/experiments')
 
         time.sleep(20)
         return pktgen_sess
@@ -112,8 +108,7 @@ def run_pktgen(sess, trace, rate):
 
 
 def run_netbricks(sess, trace, nf, epoch, setup, expr):
-    cmd_str = "sudo ./run_pvnf_inst.sh " + trace + " " + nf + " " + str(
-        epoch) + " " + setup + " " + expr
+    cmd_str = "sudo ./run_pvnf_inst.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + expr
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
@@ -141,9 +136,9 @@ def p2p_cleanup(typ, sess):
         # sess.send_commands(cmd_str)
         # print("NetBricks P2P clean up with cmd: {}".format(cmd_str))
 
-        # p2p_cmd_str = "sudo ./../p2p_expr/p2p_cleanup_nb.sh"
-        # sess.send_commands(p2p_cmd_str)
-        # print("NetBricks P2P cmd: {}".format(p2p_cmd_str))
+        p2p_cmd_str = "sudo ./misc/p2p_cleanup_nb.sh"
+        sess.send_commands(p2p_cmd_str)
+        print("NetBricks P2P cmd: {}".format(p2p_cmd_str))
         time.sleep(15)
 
         # config_cmd_str = "./../p2p_expr/p2p_config_nb.sh"

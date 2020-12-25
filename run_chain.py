@@ -100,7 +100,7 @@ def sess_reboot(sess):
 
 
 def p2p_cleanup(sess):
-    cmd_str = "sudo ./p2p_expr/p2p_cleanup_nb.sh "
+    cmd_str = "sudo ./misc/p2p_cleanup_nb.sh "
     print("Extra clean up for P2P with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 

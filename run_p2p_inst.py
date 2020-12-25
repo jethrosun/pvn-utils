@@ -136,7 +136,7 @@ def p2p_cleanup(typ, sess):
         # sess.send_commands(cmd_str)
         # print("NetBricks P2P clean up with cmd: {}".format(cmd_str))
 
-        p2p_cmd_str = "sudo ./../p2p_expr/p2p_cleanup_nb.sh"
+        p2p_cmd_str = "sudo ./misc/p2p_cleanup_nb.sh"
         sess.send_commands(p2p_cmd_str)
         print("NetBricks P2P cmd: {}".format(p2p_cmd_str))
         time.sleep(15)
