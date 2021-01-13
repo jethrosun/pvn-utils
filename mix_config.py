@@ -14,29 +14,28 @@ traces = [
     # batch 1
     # --------------------------
     'net-2009-11-23-16:54-re.pcap',
-    # 'net-2009-12-07-11:59-re.pcap',
-    ## 'net-2009-12-08-11:59-re.pcap',
     'ictf2010-0-re.pcap',
-    # 'ictf2010-1-re.pcap',
-    ## 'ictf2010-10-re.pcap',
-    ## 'ictf2010-11-re.pcap',
-    ## 'ictf2010-12-re.pcap',
-    ## 'ictf2010-13-re.pcap',
     # pvn nf
     'pvn_rdr.pcap',
     'pvn_xcdr.pcap',
     'pvn_tlsv.pcap',
     'pvn_p2p.pcap',
-
+    # 'net-2009-12-07-11:59-re.pcap',
+    ## 'net-2009-12-08-11:59-re.pcap',
+    # 'ictf2010-1-re.pcap',
+    ## 'ictf2010-10-re.pcap',
+    ## 'ictf2010-11-re.pcap',
+    ## 'ictf2010-12-re.pcap',
+    ## 'ictf2010-13-re.pcap',
     # batch 2
     # --------------------------
     # pktgen
-    # '64B',
-    # '128B',
-    # '256B',
+    '64B',
+    '128B',
+    '256B',
     # '512B',
-    # '1500B',
-    'univ1_pt1_4.pcap',
+    '1500B',
+    # 'univ1_pt1_4.pcap',
 ]
 
 rdr_nf_list = [
