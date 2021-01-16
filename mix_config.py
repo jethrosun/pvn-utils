@@ -13,13 +13,13 @@ mix_match_nfs = [
 traces = [
     # batch 1
     # --------------------------
-    'net-2009-11-23-16:54-re.pcap',
-    'ictf2010-0-re.pcap',
+    # 'net-2009-11-23-16:54-re.pcap',
+    # 'ictf2010-0-re.pcap',
+    # 'pvn_rdr.pcap',
+    # 'pvn_xcdr.pcap',
+    # 'pvn_tlsv.pcap',
+    # 'pvn_p2p.pcap',
     # pvn nf
-    'pvn_rdr.pcap',
-    'pvn_xcdr.pcap',
-    'pvn_tlsv.pcap',
-    'pvn_p2p.pcap',
     # 'net-2009-12-07-11:59-re.pcap',
     ## 'net-2009-12-08-11:59-re.pcap',
     # 'ictf2010-1-re.pcap',
