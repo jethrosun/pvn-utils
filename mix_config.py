@@ -7,6 +7,7 @@ mix_match_nfs = [
     'pvn-rdr-transform-app',
     'pvn-transcoder-transform-app',
     'pvn-tlsv-transform-app',
+    # TORUN
     # 'pvn-p2p-transform-app',
 ]
 
@@ -63,10 +64,10 @@ xcdr_nf_list = ['pvn-transcoder-transform-app', 'pvn-transcoder-groupby-app']
 
 set_list = [
     '1',
-    '2',
-    '3',
-    '4',
-    '5',
+    # '2',
+    # '3',
+    # '4',
+    # '5',
     '6',
 ]
 p2p_ext_list = [
