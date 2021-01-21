@@ -1,14 +1,14 @@
 mix_match_nfs = [
-    'zcsi-nat',
-    'zcsi-lpm',
-    'zcsi-maglev',
-    'zcsi-aclfw',
+    # 'zcsi-nat',
+    # 'zcsi-lpm',
+    # 'zcsi-maglev',
+    # 'zcsi-aclfw',
     # pvn nf app
-    'pvn-rdr-transform-app',
-    'pvn-transcoder-transform-app',
-    'pvn-tlsv-transform-app',
+    # 'pvn-rdr-transform-app',
+    # 'pvn-transcoder-transform-app',
+    # 'pvn-tlsv-transform-app',
     # TORUN
-    # 'pvn-p2p-transform-app',
+    'pvn-p2p-transform-app',
 ]
 
 traces = [
@@ -16,10 +16,10 @@ traces = [
     # --------------------------
     # 'net-2009-11-23-16:54-re.pcap',
     # 'ictf2010-0-re.pcap',
-    # 'pvn_rdr.pcap',
-    # 'pvn_xcdr.pcap',
-    # 'pvn_tlsv.pcap',
-    # 'pvn_p2p.pcap',
+    'pvn_rdr.pcap',
+    'pvn_xcdr.pcap',
+    'pvn_tlsv.pcap',
+    'pvn_p2p.pcap',
     # pvn nf
     # 'net-2009-12-07-11:59-re.pcap',
     ## 'net-2009-12-08-11:59-re.pcap',
@@ -30,12 +30,12 @@ traces = [
     ## 'ictf2010-13-re.pcap',
     # batch 2
     # --------------------------
-    # pktgen
-    '64B',
-    '128B',
-    '256B',
     # '512B',
-    '1500B',
+    # pktgen
+    # '64B',
+    # '128B',
+    # '256B',
+    # '1500B',
     # 'univ1_pt1_4.pcap',
 ]
 
