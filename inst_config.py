@@ -116,10 +116,10 @@ def fetch_tlsv_trace(setup):
     return 'pvn_tlsv' + setup + '.pcap'
 
 
-rdr_sending_rate = 10
-p2p_sending_rate = 10
+# rdr_sending_rate = 10
+# p2p_sending_rate = 10
 
-fixed_sending_rate = 10
+fixed_sending_rate = 100
 sending_rate = {
     'app_xcdr': {
         '1': fixed_sending_rate,
