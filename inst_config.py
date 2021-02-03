@@ -50,10 +50,7 @@ trace = {
     'chain_xcdr_p2p': 'pvn_xcdr_p2p.pcap',
 }
 
-rdr_nf_list = [
-    'pvn-rdr-transform-app',
-    'pvn-rdr-groupby-app',
-]
+rdr_nf_list = ['pvn-rdr-transform-app', 'pvn-rdr-groupby-app']
 
 pvn_nf_list = [
     'pvn-tlsv-transform-app',
@@ -66,60 +63,27 @@ pvn_nf_list = [
     'pvn-transcoder-groupby-app',
 ]
 
-pvn_chain_list = [
-    'pvn-tlsv-rdr-coexist-app',
-]
+pvn_chain_list = ['pvn-tlsv-rdr-coexist-app']
 
-p2p_nf_list = [
-    'pvn-p2p-transform-app',
-    'pvn-p2p-groupby-app',
-]
-p2p_chain_list = [
-    'pvn-tlsv-p2p-coexist-app',
-    'pvn-rdr-p2p-coexist-app',
-    'pvn-xcdr-p2p-coexist-app',
-]
+p2p_nf_list = ['pvn-p2p-transform-app', 'pvn-p2p-groupby-app']
+p2p_chain_list = ['pvn-tlsv-p2p-coexist-app', 'pvn-rdr-p2p-coexist-app', 'pvn-xcdr-p2p-coexist-app']
 
 xcdr_nf_list = ['pvn-transcoder-transform-app', 'pvn-transcoder-groupby-app']
-xcdr_chain_list = [
-    'pvn-rdr-xcdr-coexist-app',
-    'pvn-tlsv-xcdr-coexist-app',
-]
-xcdr_p2p_chain_list = [
-    'pvn-xcdr-p2p-coexist-app',
-]
+xcdr_chain_list = ['pvn-rdr-xcdr-coexist-app', 'pvn-tlsv-xcdr-coexist-app']
+xcdr_p2p_chain_list = ['pvn-xcdr-p2p-coexist-app']
 
-set_list = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-]
+set_list = ['1', '2', '3', '4', '5', '6']
 
-p2p_ext_list = [
-    '11',
-    '12',
-    '13',
-    '14',
-    '15',
-    '16',
-    '17',
-    '18',
-    '19',
-    '20',
-]
+p2p_ext_list = ['11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
 
 
 def fetch_tlsv_trace(setup):
     return 'pvn_tlsv' + setup + '.pcap'
 
 
-rdr_sending_rate = 100
-p2p_sending_rate = 100
-
-fixed_sending_rate = 100
+rdr_sending_rate = 10
+p2p_sending_rate = 10
+fixed_sending_rate = 10
 sending_rate = {
     'app_xcdr': {
         '1': fixed_sending_rate,
@@ -231,21 +195,10 @@ batch = 1
 # app
 
 xcdr = ['app_xcdr']
-rdr = [
-    'app_rdr',
-]
-tlsv = [
-    'app_tlsv',
-]
-rdr_xcdr = [
-    'app_rdr',
-    'app_xcdr',
-]
-rdr_xcdr_tlsv = [
-    'app_rdr',
-    'app_xcdr',
-    'app_tlsv',
-]
+rdr = ['app_rdr']
+tlsv = ['app_tlsv']
+rdr_xcdr = ['app_rdr', 'app_xcdr']
+rdr_xcdr_tlsv = ['app_rdr', 'app_xcdr', 'app_tlsv']
 
 complete_nuclear_list = ['app_p2p', 'app_p2p-ext']
 
