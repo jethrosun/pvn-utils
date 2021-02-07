@@ -1,3 +1,7 @@
+def fetch_tlsv_trace(setup):
+    return 'pvn_tlsv' + setup + '.pcap'
+
+
 pvn_nf = {
     # nf app
     'app_rdr': [
@@ -73,13 +77,7 @@ xcdr_chain_list = ['pvn-rdr-xcdr-coexist-app', 'pvn-tlsv-xcdr-coexist-app']
 xcdr_p2p_chain_list = ['pvn-xcdr-p2p-coexist-app']
 
 set_list = ['1', '2', '3', '4', '5', '6']
-
 p2p_ext_list = ['11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
-
-
-def fetch_tlsv_trace(setup):
-    return 'pvn_tlsv' + setup + '.pcap'
-
 
 rdr_sending_rate = 10
 p2p_sending_rate = 10
@@ -217,7 +215,7 @@ p2p_chain = [
     'chain_xcdr_p2p',
 ]
 non_p2p_chain = [
-    # 'chain_tlsv_rdr',
+    'chain_tlsv_rdr',
     'chain_rdr_xcdr',
     'chain_tlsv_xcdr',
 ]

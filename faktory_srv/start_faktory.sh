@@ -3,6 +3,9 @@ set -ex
 
 sudo rm -rf /home/jethros/dev/pvn/utils/data/output_videos/
 mkdir /home/jethros/dev/pvn/utils/data/output_videos/
+
+sudo rm -rf /data/bt
+
 sudo rm -rf /data/output_videos/
 mkdir /data/output_videos/
 

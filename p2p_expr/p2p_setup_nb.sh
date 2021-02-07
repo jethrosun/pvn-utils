@@ -10,6 +10,7 @@ sudo apt-get install deluged deluge-web deluge-console -y
 
 
 sudo rm -rf /data/bt
+sudo rm -rf /data/output_videos
 mkdir -p /data/bt
 
 # fix the gettext error: https://git.deluge-torrent.org/deluge/commit/?h=develop&id=d6c96d629183e8bab2167ef56457f994017e7c85
