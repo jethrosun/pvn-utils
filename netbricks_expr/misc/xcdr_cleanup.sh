@@ -13,9 +13,8 @@ sudo chmod 1777 /tmp
 
 sudo rm -rf ~/dev/pvn/utils/output/output_videos/
 sudo mkdir -p ~/dev/pvn/utils/output/output_videos/
-sudo rm -rf /data/output_videos/
 sudo mkdir -p /data/output_videos/
-
+sudo rm -rf /data/output_videos/
 
 
 # CONTAINER_NAME='faktory_srv'

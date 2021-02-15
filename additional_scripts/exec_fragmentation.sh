@@ -2,14 +2,19 @@
 
 # TOTAL_NUM_OF_FILES=100
 TOTAL_NUM_OF_FILES=1887436
-RATIO=15
+RATIO=36
 target="fragmented_files"
 
 start=`date +%s`
 
-
+mkdir -p output_videos
+mkdir -p bt
 mkdir -p $target
+
+rm -rf output_videos
+rm -rf bt
 rm -rf $target
+
 mkdir -p $target
 
 NUM_FILES_TO_DETELE=$(($TOTAL_NUM_OF_FILES * $RATIO / 100))
