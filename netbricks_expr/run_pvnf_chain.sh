@@ -122,7 +122,6 @@ elif [ "$2" == 'pvn-rdr-p2p-coexist-app' ]; then
 		while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh; done >"${P2P_PROGRESS_LOG}" &
 		P1=$!
 	fi
-	sleep 15
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P2=$!
 	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
@@ -222,7 +221,6 @@ elif [ "$2" == 'pvn-tlsv-p2p-coexist-app' ]; then
 		while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh; done > "$P2P_PROGRESS_LOG" &
 		P1=$!
 	fi
-	sleep 15
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P2=$!
 	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
@@ -316,6 +314,8 @@ elif [ "$2" == 'pvn-xcdr-p2p-coexist-app' ]; then
 	# P1=$!
 	docker ps
 	sleep 15
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$5" "$6" "$7" "$FAKTORY_LOG" &
+	P1=$!
 
 	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
 	sleep 5
@@ -329,9 +329,6 @@ elif [ "$2" == 'pvn-xcdr-p2p-coexist-app' ]; then
 		while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh; done > "$P2P_PROGRESS_LOG" &
 		P12=$!
 	fi
-	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$5" "$6" "$7" "$FAKTORY_LOG" &
-	P1=$!
-	sleep 15
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P2=$!
 	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
