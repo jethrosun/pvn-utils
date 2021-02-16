@@ -45,7 +45,8 @@ sed "/duration = 750/i log_path = '$LOG'" "$NB_CONFIG_LONG" > "$TMP_NB_CONFIG"
 
 mkdir -p "$LOG_DIR"
 
-INST_LEVEL=on
+# INST_LEVEL=on
+INST_LEVEL=off
 EXPR_MODE=long
 
 
