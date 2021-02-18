@@ -53,7 +53,7 @@ fn transcode_prev(infile: String, outfile: String, width_height: String) {
 /// We set up all the parameters for the transcoding job to happen.
 fn transcode(mut infh: Box<dyn io::Read>, width_height: String) {
     // let mut infh: Box<dyn io::Read> = Box::new(File::open(&infile).unwrap());
-    let mut outfh = io::stdout();
+    let mut out = Vec::new();
     let dst_dims: Vec<_> = width_height
         .split("x")
         .map(|s| s.parse().unwrap())
@@ -74,7 +74,7 @@ fn transcode(mut infh: Box<dyn io::Read>, width_height: String) {
 
     let mut encoder = y4m::encode(w2, h2, decoder.get_framerate())
         .with_colorspace(y4m::Colorspace::Cmono)
-        .write_header(&mut outfh)
+        .write_header(&mut out)
         .unwrap();
 
     while let Ok(frame) = decoder.read_frame() {
