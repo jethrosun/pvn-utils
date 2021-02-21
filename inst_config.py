@@ -194,7 +194,8 @@ batch = 1
 
 xcdr = ['app_xcdr']
 rdr = ['app_rdr']
-tlsv = ['app_tlsv']
+tlsv = ['app_tlsv', 'app_rdr']
+tlsv_rdr = ['app_tlsv']
 rdr_xcdr = ['app_rdr', 'app_xcdr']
 rdr_xcdr_tlsv = ['app_rdr', 'app_xcdr', 'app_tlsv']
 
