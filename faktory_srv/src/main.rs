@@ -87,6 +87,7 @@ fn transcode(mut infh: Box<dyn io::Read>, width_height: String) {
 }
 
 fn main() {
+    let start = Instant::now();
     // get the list of ports from cmd args and cast into a Vec
     let params: Vec<String> = env::args().collect();
 
@@ -120,6 +121,9 @@ fn main() {
 
             let mut infh: Box<dyn io::Read> = Box::new(File::open(infile_str).unwrap());
 
+            if start.elapsed().as_secs() > 600 {
+                println!("reached 600 seconds, hard stop");
+            }
             let now_2 = Instant::now();
             // println!("transcode with core {:?} ", id.id);
             // transcode(
