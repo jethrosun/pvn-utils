@@ -40,13 +40,12 @@ BIO_TOP_MONITOR=/usr/share/bcc/tools/biotop
 NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_1core_long.toml
 TMP_NB_CONFIG=$HOME/config.toml
 
-# sed "/duration = 350/i log_path = '$LOG'" "$NB_CONFIG" > "$TMP_NB_CONFIG"
-sed "/duration = 850/i log_path = '$LOG'" "$NB_CONFIG_LONG" > "$TMP_NB_CONFIG"
+# INST_LEVEL=on
+INST_LEVEL=off
+sed "/duration = 750/i log_path = '$LOG'" "$NB_CONFIG_LONG" > "$TMP_NB_CONFIG"
 
 mkdir -p "$LOG_DIR"
 
-INST_LEVEL=on
-# INST_LEVEL=off
 EXPR_MODE=long
 
 
