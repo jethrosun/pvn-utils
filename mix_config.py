@@ -1,8 +1,8 @@
 mix_match_nfs = [
-    # 'zcsi-nat',
-    # 'zcsi-lpm',
-    # 'zcsi-maglev',
-    # 'zcsi-aclfw',
+    'zcsi-nat',
+    'zcsi-lpm',
+    'zcsi-maglev',
+    'zcsi-aclfw',
     # pvn nf app
     # 'pvn-rdr-transform-app',
     # 'pvn-transcoder-transform-app',

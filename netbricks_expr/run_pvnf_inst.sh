@@ -41,7 +41,7 @@ NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_1core_long.toml
 TMP_NB_CONFIG=$HOME/config.toml
 
 # sed "/duration = 350/i log_path = '$LOG'" "$NB_CONFIG" > "$TMP_NB_CONFIG"
-sed "/duration = 800/i log_path = '$LOG'" "$NB_CONFIG_LONG" > "$TMP_NB_CONFIG"
+sed "/duration = 850/i log_path = '$LOG'" "$NB_CONFIG_LONG" > "$TMP_NB_CONFIG"
 
 mkdir -p "$LOG_DIR"
 

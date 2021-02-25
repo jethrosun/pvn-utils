@@ -4,7 +4,7 @@ cores = [3]
 strict = false
 pool_size = 3072
 cache_size = 32
-duration = 800
+duration = 850
 [[ports]]
   name = "0000:01:00.1"
   rxq = 0
