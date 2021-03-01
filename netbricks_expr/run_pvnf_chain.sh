@@ -11,7 +11,7 @@ set -e
 #
 # ps -e -o user,pid,%cpu,%mem,vsz,rss,start,time,command,etime,etimes,euid --sort=-%mem
 
-SLEEP_INTERVAL=1
+SLEEP_INTERVAL=2
 LOG_DIR=$HOME/netbricks_logs/$2/$1
 
 LOG=$LOG_DIR/$3_$4.log
