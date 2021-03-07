@@ -8,7 +8,7 @@ mix_match_nfs = [
     # 'pvn-transcoder-transform-app',
     # 'pvn-tlsv-transform-app',
     # TORUN
-    'pvn-p2p-transform-app',
+    # 'pvn-p2p-transform-app',
 ]
 
 traces = [
