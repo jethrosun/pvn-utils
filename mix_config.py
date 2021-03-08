@@ -17,9 +17,10 @@ traces = [
     # 'net-2009-11-23-16:54-re.pcap',
     # 'ictf2010-0-re.pcap',
     'pvn_rdr.pcap',
-    'pvn_xcdr.pcap',
-    'pvn_tlsv.pcap',
-    'pvn_p2p.pcap',
+    # 'pvn_xcdr.pcap',
+    # 'pvn_tlsv.pcap',
+    # 'pvn_p2p.pcap',
+
     # pvn nf
     # 'net-2009-12-07-11:59-re.pcap',
     ## 'net-2009-12-08-11:59-re.pcap',
@@ -63,7 +64,7 @@ p2p_nf_list = [
 xcdr_nf_list = ['pvn-transcoder-transform-app', 'pvn-transcoder-groupby-app']
 
 set_list = [
-    '1',
+    # '1',
     # '2',
     # '3',
     # '4',
