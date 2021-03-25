@@ -178,7 +178,7 @@ def run_expr_p2p_controlled(expr):
                 p2p_cleanup("netbricks", netbricks_sess)
                 p2p_cleanup("leecher", leecher1_sess)
                 p2p_cleanup("leecher", leecher2_sess)
-                p2p_cleanup("leecher", leecher2_sess)
+                p2p_cleanup("leecher", leecher3_sess)
                 time.sleep(30)
 
                 # Actual RUN
