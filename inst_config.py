@@ -76,13 +76,11 @@ xcdr_nf_list = ['pvn-transcoder-transform-app', 'pvn-transcoder-groupby-app']
 xcdr_chain_list = ['pvn-rdr-xcdr-coexist-app', 'pvn-tlsv-xcdr-coexist-app']
 xcdr_p2p_chain_list = ['pvn-xcdr-p2p-coexist-app']
 
-# set_list = ['1', '2', '3', '4', '5', '6']
-set_list = ['6']
+set_list = ['1', '2', '3', '4', '5', '6']
 p2p_ext_list = ['11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
 
-rdr_sending_rate = 10
-p2p_sending_rate = 10
 fixed_sending_rate = 10
+coresident_sending_rate = 20
 sending_rate = {
     'app_xcdr': {
         '1': fixed_sending_rate,
@@ -134,52 +132,52 @@ sending_rate = {
     },
     # chain
     'chain_tlsv_rdr': {
-        '1': fixed_sending_rate,
-        '2': fixed_sending_rate,
-        '3': fixed_sending_rate,
-        '4': fixed_sending_rate,
-        '5': fixed_sending_rate,
-        '6': fixed_sending_rate
+        '1': coresident_sending_rate,
+        '2': coresident_sending_rate,
+        '3': coresident_sending_rate,
+        '4': coresident_sending_rate,
+        '5': coresident_sending_rate,
+        '6': coresident_sending_rate
     },
     'chain_rdr_p2p': {
-        '1': fixed_sending_rate,
-        '2': fixed_sending_rate,
-        '3': fixed_sending_rate,
-        '4': fixed_sending_rate,
-        '5': fixed_sending_rate,
-        '6': fixed_sending_rate
+        '1': coresident_sending_rate,
+        '2': coresident_sending_rate,
+        '3': coresident_sending_rate,
+        '4': coresident_sending_rate,
+        '5': coresident_sending_rate,
+        '6': coresident_sending_rate
     },
     'chain_rdr_xcdr': {
-        '1': fixed_sending_rate,
-        '2': fixed_sending_rate,
-        '3': fixed_sending_rate,
-        '4': fixed_sending_rate,
-        '5': fixed_sending_rate,
-        '6': fixed_sending_rate
+        '1': coresident_sending_rate,
+        '2': coresident_sending_rate,
+        '3': coresident_sending_rate,
+        '4': coresident_sending_rate,
+        '5': coresident_sending_rate,
+        '6': coresident_sending_rate
     },
     'chain_tlsv_p2p': {
-        '1': fixed_sending_rate,
-        '2': fixed_sending_rate,
-        '3': fixed_sending_rate,
-        '4': fixed_sending_rate,
-        '5': fixed_sending_rate,
-        '6': fixed_sending_rate
+        '1': coresident_sending_rate,
+        '2': coresident_sending_rate,
+        '3': coresident_sending_rate,
+        '4': coresident_sending_rate,
+        '5': coresident_sending_rate,
+        '6': coresident_sending_rate
     },
     'chain_tlsv_xcdr': {
-        '1': fixed_sending_rate,
-        '2': fixed_sending_rate,
-        '3': fixed_sending_rate,
-        '4': fixed_sending_rate,
-        '5': fixed_sending_rate,
-        '6': fixed_sending_rate
+        '1': coresident_sending_rate,
+        '2': coresident_sending_rate,
+        '3': coresident_sending_rate,
+        '4': coresident_sending_rate,
+        '5': coresident_sending_rate,
+        '6': coresident_sending_rate
     },
     'chain_xcdr_p2p': {
-        '1': fixed_sending_rate,
-        '2': fixed_sending_rate,
-        '3': fixed_sending_rate,
-        '4': fixed_sending_rate,
-        '5': fixed_sending_rate,
-        '6': fixed_sending_rate
+        '1': coresident_sending_rate,
+        '2': coresident_sending_rate,
+        '3': coresident_sending_rate,
+        '4': coresident_sending_rate,
+        '5': coresident_sending_rate,
+        '6': coresident_sending_rate
     },
 }
 
@@ -212,9 +210,9 @@ chain_tlsv_rdr = [
 ]
 
 p2p_chain = [
-    # 'chain_rdr_p2p',
+    'chain_rdr_p2p',
     'chain_tlsv_p2p',
-    # 'chain_xcdr_p2p',
+    'chain_xcdr_p2p',
 ]
 non_p2p_chain = [
     'chain_tlsv_rdr',
