@@ -215,7 +215,7 @@ p2p_chain = [
     'chain_xcdr_p2p',
 ]
 non_p2p_chain = [
-    # 'chain_tlsv_rdr',
-    # 'chain_rdr_xcdr',
+    'chain_tlsv_rdr',
+    'chain_rdr_xcdr',
     'chain_tlsv_xcdr',
 ]
