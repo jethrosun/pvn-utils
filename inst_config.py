@@ -79,7 +79,8 @@ xcdr_p2p_chain_list = ['pvn-xcdr-p2p-coexist-app']
 set_list = ['1', '2', '3', '4', '5', '6']
 p2p_ext_list = ['11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
 
-fixed_sending_rate = 10
+# 10, 20, 50, 100
+fixed_sending_rate = 20
 coresident_sending_rate = 20
 sending_rate = {
     'app_xcdr': {

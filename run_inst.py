@@ -190,7 +190,8 @@ def main(expr_list):
 
 
 # main(inst.xcdr)  #rdr, xcdr
-main(inst.rdr_xcdr_tlsv)  # rdr, xcdr
+# main(inst.rdr_xcdr_tlsv)  # rdr, xcdr
+main(inst.tlsv)  # rdr, xcdr
 
 print("All experiment finished {}".format(inst.xcdr))
 
