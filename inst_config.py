@@ -80,7 +80,7 @@ set_list = ['1', '2', '3', '4', '5', '6']
 p2p_ext_list = ['11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
 
 # 10, 20, 50, 100
-fixed_sending_rate = 50
+fixed_sending_rate = 100
 coresident_sending_rate = 20
 sending_rate = {
     'app_xcdr': {
