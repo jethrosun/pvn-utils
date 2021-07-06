@@ -10,11 +10,11 @@ pvn_nf = {
         }
 
 trace = {
-        'co_tlsv_rdr_p2p': 'pvn_tlsv_rdr_p2p.pcap',
-        'co_tlsv_p2p_xcdr': 'pvn_tlsv_p2p_xcdr.pcap',
-        'co_tlsv_rdr_xcdr': 'pvn_tlsv_rdr_xcdr.pcap',
-        'co_rdr_xcdr_p2p': 'pvn_rdr_xcdr_p2p.pcap',
-        'co_tlsv_rdr_p2p_xcdr': 'pvn_tlsv_rdr_p2p_xcdr.pcap',
+        'co_tlsv_rdr_p2p': 'pvn-tlsv_rdr_p2p.pcap',
+        'co_tlsv_p2p_xcdr': 'pvn-tlsv_p2p_xcdr.pcap',
+        'co_tlsv_rdr_xcdr': 'pvn-tlsv_rdr_xcdr.pcap',
+        'co_rdr_xcdr_p2p': 'pvn-rdr_xcdr_p2p.pcap',
+        'co_tlsv_rdr_p2p_xcdr': 'pvn-tlsv_rdr_p2p_xcdr.pcap',
         }
 
 
@@ -40,7 +40,7 @@ sending_rate = {
             '4': coresident_sending_rate3,
             '5': coresident_sending_rate3,
             '6': coresident_sending_rate3
-            },
+            }begin,
 
         'co_tlsv_p2p_xcdr':  {
             '1': coresident_sending_rate3,
