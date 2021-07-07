@@ -40,7 +40,7 @@ sending_rate = {
             '4': coresident_sending_rate3,
             '5': coresident_sending_rate3,
             '6': coresident_sending_rate3
-            }begin,
+            },
 
         'co_tlsv_p2p_xcdr':  {
             '1': coresident_sending_rate3,
