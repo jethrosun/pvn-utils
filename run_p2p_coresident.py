@@ -177,8 +177,7 @@ def run_expr_p2p_controlled(expr_list):
                     p2p_cleanup("leecher", leecher1_sess)
                     p2p_cleanup("leecher", leecher2_sess)
                     p2p_cleanup("leecher", leecher3_sess)
-                    if expr == 'chain_xcdr_p2p':
-                        xcdr_cleanup(netbricks_sess)
+                    xcdr_cleanup(netbricks_sess)
                     time.sleep(30)
 
                     # Actual RUN
@@ -198,8 +197,7 @@ def run_expr_p2p_controlled(expr_list):
                     p2p_cleanup("leecher", leecher1_sess)
                     p2p_cleanup("leecher", leecher2_sess)
                     p2p_cleanup("leecher", leecher3_sess)
-                    if expr == 'chain_xcdr_p2p':
-                        xcdr_cleanup(netbricks_sess)
+                    xcdr_cleanup(netbricks_sess)
                     time.sleep(30)
 
                     sess_destroy(netbricks_sess)
