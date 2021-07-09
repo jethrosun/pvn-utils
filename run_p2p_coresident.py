@@ -99,10 +99,7 @@ def run_netbricks_xcdr_p2p(sess, trace, nf, epoch, setup, expr_num, expr):
 
 
 def run_netbricks(sess, trace, nf, epoch, setup, expr):
-    cmd_str = "sudo ./run_pvnf_coresident.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + expr
-    print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
-    sess.send_commands(cmd_str)
-
+    print("non existing")
 
 def run_p2p_node(typ, sess, setup, epoch):
     if typ == "leecher":
@@ -184,11 +181,8 @@ def run_expr_p2p_controlled(expr_list):
                     run_p2p_node('leecher', leecher1_sess, setup, epoch)
                     run_p2p_node('leecher', leecher2_sess, setup, epoch)
                     run_p2p_node('leecher', leecher3_sess, setup, epoch)
-                    if expr == 'chain_xcdr_p2p':
-                        expr_num = epoch * 6 + int(setup) * 2
-                        run_netbricks_xcdr_p2p(netbricks_sess, coresident.trace[expr], nf, epoch, setup, expr_num, expr)
-                    else:
-                        run_netbricks(netbricks_sess, coresident.trace[expr], nf, epoch, setup, expr)
+                    expr_num = epoch * 6 + int(setup) * 2
+                    run_netbricks_xcdr_p2p(netbricks_sess, coresident.trace[expr], nf, epoch, setup, expr_num, expr)
 
                     time.sleep(coresident.expr_wait_time)
 
