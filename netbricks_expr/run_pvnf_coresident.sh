@@ -103,7 +103,7 @@ elif [ "$2" == 'pvn-tlsv-rdr-p2p-coexist-app' ]; then
 		--arg iter "$3" \
 		--arg setup "$4" \
 		--arg inst "$INST_LEVEL" \
-		--arg p2p_type "$5" \
+		--arg p2p_type "$8" \
 		--arg mode "$EXPR_MODE" \
 		'{setup: $setup, iter: $iter, inst: $inst, p2p_type: $p2p_type, mode: $mode}')
 	echo "${JSON_STRING}" >/home/jethros/setup
