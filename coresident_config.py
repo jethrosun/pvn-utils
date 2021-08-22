@@ -1,7 +1,7 @@
 
 pvn_nf = {
         # New coresident cases
-        # 
+        #
         'co_tlsv_rdr_p2p': ['pvn-tlsv-rdr-p2p-coexist-app',],
         'co_tlsv_p2p_xcdr': ['pvn-tlsv-p2p-xcdr-coexist-app',],
         'co_tlsv_rdr_xcdr': ['pvn-tlsv-rdr-xcdr-coexist-app',],
@@ -85,19 +85,14 @@ expr_wait_time = 925
 batch = 1
 xcdr_port_base = 7418
 
-# num_of_epoch = 10
-num_of_epoch = 2
+num_of_epoch = 10
 
 p2p_co = [
         'co_tlsv_rdr_p2p',
         'co_tlsv_p2p_xcdr',
         'co_rdr_xcdr_p2p',
         'co_tlsv_rdr_p2p_xcdr'
-
         ]
 non_p2p_co = [
         'co_tlsv_rdr_xcdr'
         ]
-
-
-
