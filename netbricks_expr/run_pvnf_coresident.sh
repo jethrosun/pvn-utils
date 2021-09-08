@@ -167,7 +167,7 @@ elif [ "$2" == 'pvn-rdr-xcdr-p2p-coexist-app' ]; then
 	sleep 15
 
 	while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh; done > "$P2P_PROGRESS_LOG" &
-	P12=$!
+	P14=$!
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P2=$!
 	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
@@ -182,13 +182,17 @@ elif [ "$2" == 'pvn-rdr-xcdr-p2p-coexist-app' ]; then
 	P7=$!
 	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh deluge; done > "$MEMLOG3" &
 	P8=$!
-	"$TCP_LIFE_MONITOR" > "$TCPLIFE_LOG" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG4" &
 	P9=$!
-	"$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG4" &
 	P10=$!
-	"$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
+	"$TCP_LIFE_MONITOR" > "$TCPLIFE_LOG" &
 	P11=$!
-	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12
+	"$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+	P12=$!
+	"$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
+	P13=$!
+	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13 $P14
 
 elif [ "$2" == 'pvn-tlsv-p2p-xcdr-coexist-app' ]; then
 	sudo rm -rf "$HOME/Downloads"
