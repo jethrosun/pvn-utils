@@ -25,7 +25,7 @@ xcdr_p2p_co_list = ['pvn-tlsv-p2p-xcdr-coexist-app', 'pvn-rdr-xcdr-p2p-coexist-a
 set_list = ['1', '2', '3', '4', '5', '6']
 
 # 10, 20, 50, 100
-fixed_sending_rate = 100
+fixed_sending_rate = 10
 coresident_sending_rate2 = 20
 coresident_sending_rate3 = 30
 coresident_sending_rate4 = 40
