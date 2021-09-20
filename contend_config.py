@@ -80,7 +80,8 @@ sending_rate = {
 
 contention_setup = []
 zero = '0'
-for i in ['1', '2', '3']:
+# for i in ['1', '2', '3']:
+for i in ['1']:
     setup.append(i, zero, zero)
     setup.append(zero,i, zero)
     setup.append(zero, zero, i)
