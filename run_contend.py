@@ -146,7 +146,7 @@ def main(expr_list):
             # we are running the regular NFs
             #
             # config the pktgen sending rate
-            for contention in contend.contention_setup:
+            for contention in contend.setup:
                 pktgen_sess = pktgen_sess_setup(contend.trace[expr], nf, contend.sending_rate[expr][contend.nf_set[expr]])
 
                 if nf == "pvn-tlsv-transform-app":
