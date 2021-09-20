@@ -78,7 +78,7 @@ sending_rate = {
     },
 }
 
-contention_setup = []
+setup = []
 zero = '0'
 # for i in ['1', '2', '3']:
 for i in ['1']:
