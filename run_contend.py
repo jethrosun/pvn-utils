@@ -172,7 +172,7 @@ def main(expr_list):
 
                     # Actual RUN
                     if nf in contend.xcdr_nf_list:
-                        expr_num = epoch * 6 + int(setup) * 2
+                        expr_num = epoch * 6 + int(contend.nf_set[expr]) * 2
                         port2 = contend.xcdr_port_base + expr_num
                         run_netbricks_xcdr(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr], str(port2 - 1), str(port2), str(expr_num), contention[0], contention[1], contention[2])
                     elif nf in contend.p2p_nf_list:
