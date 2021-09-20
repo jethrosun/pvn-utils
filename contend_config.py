@@ -82,13 +82,13 @@ setup = []
 zero = '0'
 # for i in ['1', '2', '3']:
 for i in ['1']:
-    setup.append(i, zero, zero)
-    setup.append(zero,i, zero)
-    setup.append(zero, zero, i)
-    setup.append(i, i, zero)
-    setup.append(i, zero, i)
-    setup.append(zero, i, i)
-    setup.append(i, i, i)
+    setup.append([i, zero, zero])
+    setup.append([zero,i, zero])
+    setup.append([zero, zero, i])
+    setup.append([i, i, zero])
+    setup.append([i, zero, i])
+    setup.append([zero, i, i])
+    setup.append([i, i, i])
 
 
 # expr is 10 min/600 sec
