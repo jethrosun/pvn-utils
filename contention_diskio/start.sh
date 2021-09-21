@@ -11,4 +11,4 @@ if [[ $1 -eq $zero ]]; then
   echo "no disk I/O contention";
   exit;
 fi
-sudo /home/jethros/data/cargo-target/release/contention_diskio $1 > $5
+sudo /home/jethros/data/cargo-target/release/contention_diskio $1 > $2
