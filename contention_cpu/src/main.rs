@@ -40,7 +40,8 @@ fn main() {
     let run_time = read_setup(&setup).unwrap();
 
     let cores = core_affinity::get_core_ids().unwrap();
-    let occupied_cores = vec![3];
+    // let occupied_cores = vec![3];
+    let occupied_cores = vec![1, 2, 3, 4, 5, 6];
     for core in cores {
         if occupied_cores.contains(&core.id) {
             let _ = crossbeam::thread::scope(|_| {
@@ -57,20 +58,20 @@ fn main() {
                     if run_time == 1000 {
                         loop {}
                     } else {
-                        println!("start");
+                        // println!("start");
                         let mut _now = Instant::now();
                         thread::sleep(_sleep_time);
-                        println!("\tsleeped {:?}", _now.elapsed());
+                        // println!("\tsleeped {:?}", _now.elapsed());
                         loop {
                             let _ = rng.gen_range(0..10);
                             if _now.elapsed() >= _sleep_time + _run_time {
                                 _now = Instant::now();
-                                println!("\tbreak");
+                                // println!("\tbreak");
                                 break;
                             }
                         }
                     }
-                    println!("start elapsed {:?}", start.elapsed());
+                    // println!("start elapsed {:?}", start.elapsed());
                 }
             });
         }
