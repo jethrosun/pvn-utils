@@ -20,26 +20,22 @@ set -e
 SLEEP_INTERVAL=2
 LOG_DIR=$HOME/netbricks_logs/$2/$1
 
-LOG=$LOG_DIR/$3_$4.log
-# MLOG=$LOG_DIR/$3_$4_measurement.log
-# AMLOG=$LOG_DIR/$3_$4_a_measurement.log
-TCP_LOG=$LOG_DIR/$3_$4_tcptop.log
-BIO_LOG=$LOG_DIR/$3_$4_biotop.log
-TCPLIFE_LOG=$LOG_DIR/$3_$4_tcplife.log
-P2P_PROGRESS_LOG=$LOG_DIR/$3_$4_p2p_progress.log
-# P2P_WRAPPER_LOG=$LOG_DIR/$3_$4_p2p_run.log
-FAKTORY_LOG=$LOG_DIR/$3_$4_faktory.log
-# IPTRAF_LOG=$LOG_DIR/$3_$4_iptraf.log
-CPU_LOG=$LOG_DIR/$3_$4_cpu.log
-MEM_LOG=$LOG_DIR/$3_$4_mem.log
-DISKIO_LOG=$LOG_DIR/$3_$4_diskio.log
+LOG=$LOG_DIR/$3_$4__$5$6$7.log
+TCP_LOG=$LOG_DIR/$3_$4__$5$6$7_tcptop.log
+BIO_LOG=$LOG_DIR/$3_$4__$5$6$7_biotop.log
+TCPLIFE_LOG=$LOG_DIR/$3_$4__$5$6$7_tcplife$5$6$7.log
+P2P_PROGRESS_LOG=$LOG_DIR/$3_$4__$5$6$7_p2p_progress.log
+FAKTORY_LOG=$LOG_DIR/$3_$4__$5$6$7_faktory.log
+CPU_LOG=$LOG_DIR/$3_$4__$5$6$7_cpu.log
+MEM_LOG=$LOG_DIR/$3_$4__$5$6$7_mem.log
+DISKIO_LOG=$LOG_DIR/$3_$4__$5$6$7_diskio.log
 
-CPULOG1=$LOG_DIR/$3_$4_cpu1.log
-CPULOG2=$LOG_DIR/$3_$4_cpu2.log
-CPULOG3=$LOG_DIR/$3_$4_cpu3.log
-MEMLOG1=$LOG_DIR/$3_$4_mem1.log
-MEMLOG2=$LOG_DIR/$3_$4_mem2.log
-MEMLOG3=$LOG_DIR/$3_$4_mem3.log
+CPULOG1=$LOG_DIR/$3_$4__$5$6$7_cpu1.log
+CPULOG2=$LOG_DIR/$3_$4__$5$6$7_cpu2.log
+CPULOG3=$LOG_DIR/$3_$4__$5$6$7_cpu3.log
+MEMLOG1=$LOG_DIR/$3_$4__$5$6$7_mem1.log
+MEMLOG2=$LOG_DIR/$3_$4__$5$6$7_mem2.log
+MEMLOG3=$LOG_DIR/$3_$4__$5$6$7_mem3.log
 
 NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
