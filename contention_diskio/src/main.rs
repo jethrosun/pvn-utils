@@ -14,7 +14,7 @@ fn read_setup(setup: &usize) -> Option<usize> {
     let mut map = HashMap::new();
     map.insert(1, 50);
     map.insert(2, 100);
-    map.insert(3, 500);
+    map.insert(3, 200);
 
     map.remove(&setup)
 }
@@ -60,7 +60,7 @@ fn main() {
 
     loop {
         let start = Instant::now();
-        println!("start");
+        // println!("start");
         let mut _now = Instant::now();
         loop {
             // write sets * 50mb to file
@@ -75,14 +75,14 @@ fn main() {
             //
             if _now.elapsed() >= _second {
                 _now = Instant::now();
-                println!("continue");
+                // println!("continue");
                 break;
             } else {
                 thread::sleep(_sleep_time);
                 continue;
             }
         }
-        println!("start elapsed {:?}", start.elapsed());
+        // println!("start elapsed {:?}", start.elapsed());
     }
     // TODO: we need to consider our core affinity case
 }
