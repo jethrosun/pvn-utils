@@ -34,6 +34,10 @@ fn main() {
 
     let setup = params[1].parse::<usize>().unwrap();
 
+    // counting the iterations
+    let mut counter = 0;
+    let now = Instant::now();
+
     // read setup and translate to vector size
     let vec_size = read_setup(&setup).unwrap() / 16;
 
@@ -46,7 +50,11 @@ fn main() {
         thread::sleep(_sleep_time);
         for i in 0..vec_size / 256 {
             let _ = large_vec[i * 256];
+            counter += 1;
             // println!("current value: {:?}", t);
+        }
+        if counter % 1_000 == 0 {
+            println!("{} * k since {:?}", counter, now.elapsed());
         }
     }
 }

@@ -59,7 +59,7 @@ fn main() {
     let mut file = open_file();
 
     loop {
-        let start = Instant::now();
+        let _start = Instant::now();
         // println!("start");
         let mut _now = Instant::now();
         loop {
@@ -82,7 +82,6 @@ fn main() {
                 continue;
             }
         }
-        // println!("start elapsed {:?}", start.elapsed());
+        // println!("start elapsed {:?}", _start.elapsed());
     }
-    // TODO: we need to consider our core affinity case
 }
