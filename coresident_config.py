@@ -85,7 +85,8 @@ expr_wait_time = 925
 batch = 1
 xcdr_port_base = 7418
 
-num_of_epoch = 10
+# num_of_epoch = 10
+num_of_epoch = 5
 
 p2p_co = [
         'co_tlsv_rdr_p2p',

@@ -14,7 +14,7 @@ fn read_setup(setup: &usize) -> Option<usize> {
     let mut map = HashMap::new();
     map.insert(1, 10 * GB_SIZE); // 10GB
     map.insert(2, 20 * GB_SIZE); // 20GB
-    map.insert(3, 50 * GB_SIZE); // 50GB
+    map.insert(3, 30 * GB_SIZE); // 50GB
 
     map.remove(&setup)
 }
