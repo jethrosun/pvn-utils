@@ -1,10 +1,12 @@
+extern crate crossbeam;
 extern crate rand;
+
 use std::collections::HashMap;
 use std::env;
 use std::fs::{File, OpenOptions};
 use std::io::{Read, Seek, SeekFrom, Write};
 use std::process;
-use std::thread;
+use std::thread::sleep;
 use std::time::{Duration, Instant};
 
 /// Map different setup to disk I/O intensiveness. We are mapping these setups to disk I/O per
@@ -19,13 +21,15 @@ fn read_setup(setup: &usize) -> Option<usize> {
     map.remove(&setup)
 }
 
-fn open_file() -> File {
-    OpenOptions::new()
-        .write(true)
-        .read(true)
-        .create(true)
-        .open("/data/tmp/foobar.bin")
-        .unwrap()
+fn file_io(f: &mut File, mut buf: Box<[u8]>) {
+    // write sets * 50mb to file
+    f.write_all(&buf).unwrap();
+    f.flush().unwrap();
+
+    // measure read throughput
+    f.seek(SeekFrom::Start(0)).unwrap();
+    // read sets * 50mb mb from file
+    f.read_exact(&mut buf).unwrap();
 }
 
 fn main() {
@@ -48,29 +52,48 @@ fn main() {
     let _sleep_time = Duration::from_millis(50);
     let _second = Duration::from_secs(1);
 
-    // io
-    // 50mb with random data
+    // use buffer to store random data
     let mut buf: Vec<u8> = Vec::with_capacity(buf_size * 1_000_000); // B to MB
     for _ in 0..buf.capacity() {
         buf.push(rand::random())
     }
-    let mut buf = buf.into_boxed_slice();
+    let buf = buf.into_boxed_slice();
 
-    let mut file = open_file();
+    let mut buf2: Vec<u8> = Vec::with_capacity(buf_size * 1_000_000); // B to MB
+    for _ in 0..buf2.capacity() {
+        buf2.push(rand::random())
+    }
+    let buf2 = buf2.into_boxed_slice();
+
+    let mut file = OpenOptions::new()
+        .write(true)
+        .read(true)
+        .create(true)
+        .open("/data/tmp/foobar.bin")
+        .unwrap();
+
+    let mut file2 = OpenOptions::new()
+        .write(true)
+        .read(true)
+        .create(true)
+        .open("/data/tmp/foobar2.bin")
+        .unwrap();
 
     loop {
         let _start = Instant::now();
         // println!("start");
         let mut _now = Instant::now();
         loop {
-            // write sets * 50mb to file
-            file.write_all(&mut buf).unwrap();
-            file.flush().unwrap();
+            crossbeam::scope(|s| {
+                let thread_l = s.spawn(|_| file_io(&mut file, buf.clone()));
+                let thread_r = s.spawn(|_| file_io(&mut file2, buf2.clone()));
 
-            // measure read throughput
-            file.seek(SeekFrom::Start(0)).unwrap();
-            // read sets * 50mb mb from file
-            file.read_exact(&mut buf).unwrap();
+                let max_l = thread_l.join().unwrap();
+                let max_r = thread_r.join().unwrap();
+
+                Some(max_l.max(max_r))
+            })
+            .unwrap();
 
             //
             if _now.elapsed() >= _second {
@@ -78,10 +101,9 @@ fn main() {
                 // println!("continue");
                 break;
             } else {
-                thread::sleep(_sleep_time);
+                sleep(_sleep_time);
                 continue;
             }
         }
-        // println!("start elapsed {:?}", _start.elapsed());
     }
 }

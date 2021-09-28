@@ -135,3 +135,6 @@ data/output_videos/*
 *.py.*.py
 
 ~
+
+*/target/
+*/Cargo.lock
