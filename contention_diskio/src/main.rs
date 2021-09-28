@@ -1,3 +1,5 @@
+//! Simple Rust program that can generate enough Disk I/O contention. We have to use two files to
+//! generate enough I/O.
 extern crate crossbeam;
 extern crate rand;
 
@@ -65,6 +67,7 @@ fn main() {
     }
     let buf2 = buf2.into_boxed_slice();
 
+    // files for both cases
     let mut file = OpenOptions::new()
         .write(true)
         .read(true)
@@ -88,10 +91,10 @@ fn main() {
                 let thread_l = s.spawn(|_| file_io(&mut file, buf.clone()));
                 let thread_r = s.spawn(|_| file_io(&mut file2, buf2.clone()));
 
-                let max_l = thread_l.join().unwrap();
-                let max_r = thread_r.join().unwrap();
+                let io_l = thread_l.join().unwrap();
+                let io_r = thread_r.join().unwrap();
 
-                Some(max_l.max(max_r))
+                ()
             })
             .unwrap();
 

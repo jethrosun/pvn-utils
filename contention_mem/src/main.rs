@@ -1,3 +1,4 @@
+//! Simple Rust program that generate memory contention.
 use std::collections::HashMap;
 use std::env;
 use std::process;
