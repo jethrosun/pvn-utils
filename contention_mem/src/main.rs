@@ -6,7 +6,7 @@ use std::thread;
 use std::time::{Duration, Instant};
 use std::vec;
 
-const GB_SIZE: usize = 1073741824;
+const GB_SIZE: usize = 1_000_000_000;
 
 /// Map different setup to memory resource intensiveness. We are mapping setup into size of u128,
 /// which is the largest size we can use
@@ -14,8 +14,8 @@ const GB_SIZE: usize = 1073741824;
 fn read_setup(setup: &usize) -> Option<usize> {
     let mut map = HashMap::new();
     map.insert(1, 10 * GB_SIZE); // 10GB
-    map.insert(2, 20 * GB_SIZE); // 20GB
-    map.insert(3, 30 * GB_SIZE); // 50GB
+    map.insert(2, 30 * GB_SIZE); // 20GB
+    map.insert(3, 50 * GB_SIZE); // 50GB
 
     map.remove(&setup)
 }

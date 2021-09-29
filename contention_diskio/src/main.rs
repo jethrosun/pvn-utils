@@ -91,8 +91,8 @@ fn main() {
                 let thread_l = s.spawn(|_| file_io(&mut file, buf.clone()));
                 let thread_r = s.spawn(|_| file_io(&mut file2, buf2.clone()));
 
-                let io_l = thread_l.join().unwrap();
-                let io_r = thread_r.join().unwrap();
+                let _io_l = thread_l.join().unwrap();
+                let _io_r = thread_r.join().unwrap();
 
                 ()
             })
