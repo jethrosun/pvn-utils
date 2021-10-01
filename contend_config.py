@@ -86,23 +86,21 @@ for i in ['3']:
     setup.append([i, zero, zero])
     setup.append([zero,i, zero])
     setup.append([zero, zero, i])
-    setup.append([i, i, zero])
-    setup.append([i, zero, i])
-    setup.append([zero, i, i])
-    setup.append([i, i, i])
+    # setup.append([i, i, zero])
+    # setup.append([i, zero, i])
+    # setup.append([zero, i, i])
+    # setup.append([i, i, i])
+num_of_epoch = 1
+# num_of_epoch = 10
 
 
 # expr is 10 min/600 sec
 expr_wait_time = 925
-
 xcdr_port_base = 7418
-
-# num_of_epoch = 10
-num_of_epoch = 3
 batch = 1
 
-# app
 
+# app
 xcdr = ['app_xcdr']
 rdr = ['app_rdr']
 tlsv = ['app_tlsv', 'app_rdr']
