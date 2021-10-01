@@ -9,13 +9,13 @@ use std::time::{Duration, Instant};
 
 /// Map different setup to CPU resource intensiveness. We are mapping these time into millisecond
 /// in a second that need to run loop
-/// setup: 25%, 50%, 100%
+/// setup: 25%, 50%, 90%
 fn read_setup(setup: &usize) -> Option<u64> {
     let mut map = HashMap::new();
     map.insert(0, 0);
     map.insert(1, 250);
     map.insert(2, 500);
-    map.insert(3, 1000);
+    map.insert(3, 900);
 
     map.remove(&setup)
 }
