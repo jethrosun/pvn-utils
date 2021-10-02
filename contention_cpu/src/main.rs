@@ -12,12 +12,12 @@ use std::time::{Duration, Instant};
 /// setup: 25%, 50%, 90%
 fn read_setup(setup: &usize) -> Option<u64> {
     let mut map = HashMap::new();
-    map.insert(0, 0);
-    map.insert(1, 250);
+    map.insert(0, 1);
+    map.insert(1, 50);
     map.insert(2, 500);
     map.insert(3, 900);
 
-    map.remove(&setup)
+    map.remove(setup)
 }
 
 /// This function simply occupies the thread for a given fraction of the time.
