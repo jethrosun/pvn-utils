@@ -40,8 +40,9 @@ fn main() {
     let run_time = read_setup(&setup).unwrap();
 
     let cores = core_affinity::get_core_ids().unwrap();
+    // We want to cause equal pressure to all of the cores for CPU contention
+    let occupied_cores = vec![0, 1, 2, 3, 4, 5];
     // let occupied_cores = vec![3];
-    let occupied_cores = vec![1, 2, 3, 4, 5, 6];
     for core in cores {
         if occupied_cores.contains(&core.id) {
             let _ = crossbeam::thread::scope(|_| {

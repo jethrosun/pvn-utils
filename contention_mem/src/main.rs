@@ -49,15 +49,28 @@ fn main() {
 
     let large_vec = vec![42u128; vec_size];
 
-    loop {
-        thread::sleep(_sleep_time);
-        for i in 0..vec_size / 256 {
-            let _ = large_vec[i * 256];
-            counter += 1;
-            // println!("current value: {:?}", t);
-        }
-        if counter % 1_000 == 0 {
-            println!("{} * k since {:?}", counter, now.elapsed());
+    let cores = core_affinity::get_core_ids().unwrap();
+    // We want to use core # 3 for causing memory contention
+    let occupied_cores = vec![3];
+    // let occupied_cores = vec![3];
+    for core in cores {
+        if occupied_cores.contains(&core.id) {
+            let _ = crossbeam::thread::scope(|_| {
+                // pin our work to the core
+                core_affinity::set_for_current(core);
+
+                loop {
+                    thread::sleep(_sleep_time);
+                    for i in 0..vec_size / 256 {
+                        let _ = large_vec[i * 256];
+                        counter += 1;
+                        // println!("current value: {:?}", t);
+                    }
+                    if counter % 1_000 == 0 {
+                        println!("{} * k since {:?}", counter, now.elapsed());
+                    }
+                }
+            });
         }
     }
 }
