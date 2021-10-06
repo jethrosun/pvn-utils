@@ -1,5 +1,5 @@
 //! Simple Rust program that can generate enough Disk I/O contention. We have to use two files to
-//! generate enough I/O.
+//! generate enough I/O. To isolate the impact we also want cpu pining.
 extern crate crossbeam;
 extern crate rand;
 
