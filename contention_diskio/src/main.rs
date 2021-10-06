@@ -55,59 +55,49 @@ fn main() {
     let _sleep_time = Duration::from_millis(50);
     let _second = Duration::from_secs(1);
 
-    // use buffer to store random data
-    let mut buf: Vec<u8> = Vec::with_capacity(buf_size * 1_000_000); // B to MB
-    for _ in 0..buf.capacity() {
-        buf.push(rand::random())
-    }
-    let buf = buf.into_boxed_slice();
+    let cores = core_affinity::get_core_ids().unwrap();
 
-    let mut buf2: Vec<u8> = Vec::with_capacity(buf_size * 1_000_000); // B to MB
-    for _ in 0..buf2.capacity() {
-        buf2.push(rand::random())
-    }
-    let buf2 = buf2.into_boxed_slice();
+    // We want to use core #3 and #4 to cause disk I/O contention
+    let occupied_cores = vec![3, 4];
+    for core in cores {
+        if occupied_cores.contains(&core.id) {
+            let _ = crossbeam::thread::scope(|_| {
+                // pin our work to the core
+                core_affinity::set_for_current(core);
 
-    // files for both cases
-    let mut file = OpenOptions::new()
-        .write(true)
-        .read(true)
-        .create(true)
-        .open("/data/tmp/foobar.bin")
-        .unwrap();
+                // use buffer to store random data
+                let mut buf: Vec<u8> = Vec::with_capacity(buf_size * 1_000_000); // B to MB
+                for _ in 0..buf.capacity() {
+                    buf.push(rand::random())
+                }
+                let buf = buf.into_boxed_slice();
 
-    let mut file2 = OpenOptions::new()
-        .write(true)
-        .read(true)
-        .create(true)
-        .open("/data/tmp/foobar2.bin")
-        .unwrap();
+                let file_name = "/data/tmp/foobar".to_owned() + &core.id.to_string() + ".bin";
 
-    loop {
-        let _start = Instant::now();
-        // println!("start");
-        let mut _now = Instant::now();
-        loop {
-            crossbeam::scope(|s| {
-                let thread_l = s.spawn(|_| file_io(&mut file, buf.clone()));
-                let thread_r = s.spawn(|_| file_io(&mut file2, buf2.clone()));
+                // files for both cases
+                let mut file = OpenOptions::new()
+                    .write(true)
+                    .read(true)
+                    .create(true)
+                    .open(file_name)
+                    .unwrap();
 
-                let _io_l = thread_l.join().unwrap();
-                let _io_r = thread_r.join().unwrap();
+                loop {
+                    let _start = Instant::now();
+                    let mut _now = Instant::now();
 
-                ()
-            })
-            .unwrap();
+                    // actual file IO
+                    let _ = file_io(&mut file, buf.clone());
 
-            //
-            if _now.elapsed() >= _second {
-                _now = Instant::now();
-                // println!("continue");
-                break;
-            } else {
-                sleep(_sleep_time);
-                continue;
-            }
+                    if _now.elapsed() >= _second {
+                        _now = Instant::now();
+                        break;
+                    } else {
+                        sleep(_sleep_time);
+                        continue;
+                    }
+                }
+            });
         }
     }
 }
