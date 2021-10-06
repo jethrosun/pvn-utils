@@ -137,13 +137,8 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
 	sleep 15
 
-	if [ "$5" == "app_p2p-controlled" ]; then
-		while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > "$P2P_PROGRESS_LOG" &
-		P1=$!
-	else
-		while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh ; done > "$P2P_PROGRESS_LOG" &
-		P1=$!
-	fi
+	while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > "$P2P_PROGRESS_LOG" &
+	P1=$!
 
 	# config contention
 	/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
