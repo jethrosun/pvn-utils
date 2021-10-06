@@ -15,5 +15,9 @@ else
 	cd "$HOME/dev/"; git clone git@github.com:jethrosun/NetBricks.git -b expr netbricks;
 fi
 
+rustup toolchain install nightly
+rustup default nightly
+rustup override set nightly
+
 "$HOME/dev/netbricks/build.sh"
 printf "netbricks building done\n"
