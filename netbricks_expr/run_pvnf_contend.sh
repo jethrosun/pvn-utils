@@ -6,15 +6,13 @@ set -e
 
 # Usage:
 # for transcoder
-#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=port $6=xxx
-#		$7=expr_num $8=cpu $9=mem $10=diskio
+#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio $8=port $9=expr_num
 #
 # for p2p
-#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=p2p_type
-#		$6=cpu $7=mem $8=diskio
+#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio $8=p2p_type
 #
 # for tlsv and rdr
-#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup	$5=cpu $6=mem $7=diskio
+#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio
 
 
 SLEEP_INTERVAL=2
@@ -55,17 +53,15 @@ mkdir -p "$LOG_DIR"
 
 EXPR_MODE=long
 
-
 if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-groupby-app' ]; then
-	#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=port $6=xxx
-	#		$7=expr_num $8=cpu $9=mem $10=diskio
+	#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio $8=port $9=expr_num
 
 	# setup toml file for NetBricks
 	JSON_STRING=$( jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
-		--arg port "$5" \
-		--arg expr_num "$7" \
+		--arg port "$8" \
+		--arg expr_num "$9" \
 		--arg inst "$INST_LEVEL" \
 		--arg mode "$EXPR_MODE" \
 		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}' )
@@ -78,14 +74,14 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 	sleep 15
 
 	# config contention
-	/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$8" "$CPU_LOG" &
+	/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
 	P1=$!
-	/home/jethros/dev/pvn/utils/contention_mem/start.sh "$9" "$MEM_LOG" &
+	/home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
 	P2=$!
-	/home/jethros/dev/pvn/utils/contention_diskio/start.sh "${10}" "$DISKIO_LOG" &
+	/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG" &
 	P3=$!
 
-	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$5" "$6" "$7" "$FAKTORY_LOG" &
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$8" "$8" "$9" "$FAKTORY_LOG" &
 	P4=$!
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P5=$!
@@ -110,8 +106,8 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13 $P14
 
 elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; then
-	#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=p2p_type
-	#		$6=cpu $7=mem $8=diskio
+	#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio $8=p2p_type
+
 	if [ "$5" == "app_p2p-controlled" ]; then
 		sudo rm -rf "$HOME/Downloads"
 		sudo rm -rf /data/bt/config
@@ -131,7 +127,7 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 		--arg iter "$3" \
 		--arg setup "$4" \
 		--arg inst "$INST_LEVEL" \
-		--arg p2p_type "$5" \
+		--arg p2p_type "$8" \
 		--arg mode "$EXPR_MODE" \
 		'{setup: $setup, iter: $iter, inst: $inst, p2p_type: $p2p_type, mode: $mode}' )
 	echo "$JSON_STRING" > /home/jethros/setup
@@ -150,11 +146,11 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 	fi
 
 	# config contention
-	/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$6" "$CPU_LOG" &
+	/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
 	P2=$!
-	/home/jethros/dev/pvn/utils/contention_mem/start.sh "$7" "$MEM_LOG" &
+	/home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
 	P3=$!
-	/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$8" "$DISKIO_LOG" &
+	/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG" &
 	P4=$!
 
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
@@ -181,7 +177,7 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 
 else
 	# for tlsv and rdr
-	#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup	$5=cpu $6=mem $7=diskio
+	#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio
 	#
 	# we don't need to check resource usage for tlsv and rdr so we just grep chrom here
 	# as well
