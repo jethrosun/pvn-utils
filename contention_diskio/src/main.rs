@@ -59,45 +59,47 @@ fn main() {
 
     // We want to use core #3 and #4 to cause disk I/O contention
     let occupied_cores = vec![3, 4];
-    for core in cores {
-        if occupied_cores.contains(&core.id) {
-            let _ = crossbeam::thread::scope(|_| {
-                // pin our work to the core
-                core_affinity::set_for_current(core);
+    loop {
+        for core in cores {
+            if occupied_cores.contains(&core.id) {
+                let _ = crossbeam::thread::scope(|_| {
+                    // pin our work to the core
+                    core_affinity::set_for_current(core);
 
-                // use buffer to store random data
-                let mut buf: Vec<u8> = Vec::with_capacity(buf_size * 1_000_000); // B to MB
-                for _ in 0..buf.capacity() {
-                    buf.push(rand::random())
-                }
-                let buf = buf.into_boxed_slice();
-
-                let file_name = "/data/tmp/foobar".to_owned() + &core.id.to_string() + ".bin";
-
-                // files for both cases
-                let mut file = OpenOptions::new()
-                    .write(true)
-                    .read(true)
-                    .create(true)
-                    .open(file_name)
-                    .unwrap();
-
-                loop {
-                    let _start = Instant::now();
-                    let mut _now = Instant::now();
-
-                    // actual file IO
-                    let _ = file_io(&mut file, buf.clone());
-
-                    if _now.elapsed() >= _second {
-                        _now = Instant::now();
-                        break;
-                    } else {
-                        sleep(_sleep_time);
-                        continue;
+                    // use buffer to store random data
+                    let mut buf: Vec<u8> = Vec::with_capacity(buf_size * 1_000_000); // B to MB
+                    for _ in 0..buf.capacity() {
+                        buf.push(rand::random())
                     }
-                }
-            });
+                    let buf = buf.into_boxed_slice();
+
+                    let file_name = "/data/tmp/foobar".to_owned() + &core.id.to_string() + ".bin";
+
+                    // files for both cases
+                    let mut file = OpenOptions::new()
+                        .write(true)
+                        .read(true)
+                        .create(true)
+                        .open(file_name)
+                        .unwrap();
+
+                    loop {
+                        let _start = Instant::now();
+                        let mut _now = Instant::now();
+
+                        // actual file IO
+                        let _ = file_io(&mut file, buf.clone());
+
+                        if _now.elapsed() >= _second {
+                            _now = Instant::now();
+                            break;
+                        } else {
+                            sleep(_sleep_time);
+                            continue;
+                        }
+                    }
+                });
+            }
         }
     }
 }
