@@ -60,11 +60,11 @@ fn main() {
     // We want to use core #3 and #4 to cause disk I/O contention
     let occupied_cores = vec![3, 4];
     loop {
-        for core in cores {
+        for core in &cores {
             if occupied_cores.contains(&core.id) {
                 let _ = crossbeam::thread::scope(|_| {
                     // pin our work to the core
-                    core_affinity::set_for_current(core);
+                    core_affinity::set_for_current(*core);
 
                     // use buffer to store random data
                     let mut buf: Vec<u8> = Vec::with_capacity(buf_size * 1_000_000); // B to MB

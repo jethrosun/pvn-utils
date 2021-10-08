@@ -48,7 +48,7 @@ xcdr_nf_list = ['pvn-transcoder-transform-app', 'pvn-transcoder-groupby-app']
 nf_set = {
     'app_xcdr': '4',
     'app_p2p': '4',
-    'app_rdr': '4',
+    'app_rdr': '3',
     'app_tlsv': '6',
     'app_p2p-ext': '4',
     'app_p2p-controlled': '4',

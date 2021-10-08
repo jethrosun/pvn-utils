@@ -54,11 +54,11 @@ fn main() {
     let occupied_cores = vec![3];
     // let occupied_cores = vec![3];
     loop {
-        for core in cores {
+        for core in &cores {
             if occupied_cores.contains(&core.id) {
                 let _ = crossbeam::thread::scope(|_| {
                     // pin our work to the core
-                    core_affinity::set_for_current(core);
+                    core_affinity::set_for_current(*core);
 
                     loop {
                         thread::sleep(_sleep_time);
