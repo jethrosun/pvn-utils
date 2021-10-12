@@ -218,6 +218,7 @@ def main(expr_list):
                 time.sleep(30)
 
 
+print(contend.nf_list)  # just run all
 main(contend.nf_list)  # just run all
 
 print("All experiment finished {}".format(contend.nf_list))
