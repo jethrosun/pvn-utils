@@ -9,12 +9,14 @@ else
 	cd "$HOME/dev/pvn/"; git clone git@github.com:jethrosun/pvn-utils utils;
 fi
 
+# always remove and re-clone NetBricks
 if [ -e "$HOME/dev/netbricks" ]; then
-	cd "$HOME/dev/netbricks"
-	git pull
+        rm -rf "$HOME/dev/netbricks"
+	cd "$HOME/dev/"; git clone git@github.com:jethrosun/NetBricks.git -b expr netbricks;
 else
 	cd "$HOME/dev/"; git clone git@github.com:jethrosun/NetBricks.git -b expr netbricks;
 fi
+
 
 # we will want to always reinstal Rust due to time traveral consequences
 rm -rf $HOME/.rustup
