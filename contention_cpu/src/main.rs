@@ -1,5 +1,5 @@
-extern crate crossbeam;
-
+/// CPU contention: we want to use this Rust program to cause CPU contention on all the cores we
+/// have.
 use rand::Rng;
 use std::collections::HashMap;
 use std::env;
@@ -14,8 +14,8 @@ fn read_setup(setup: &usize) -> Option<u64> {
     let mut map = HashMap::new();
     map.insert(0, 1);
     map.insert(1, 100); // 10% work done
-    map.insert(2, 400); // 30% to 50% work done
-    map.insert(3, 900); // no work done
+    map.insert(2, 300); // 30% to 50% work done
+    map.insert(3, 600); // no work done
 
     map.remove(setup)
 }
@@ -39,42 +39,39 @@ fn main() {
     // read setup and translate to CPU contention in milliseconds
     let run_time = read_setup(&setup).unwrap();
 
-    let cores = core_affinity::get_core_ids().unwrap();
+    // Retrieve the IDs of all active CPU cores.
+    let core_ids = core_affinity::get_core_ids().unwrap();
     // We want to cause equal pressure to all of the cores for CPU contention
-    let occupied_cores = vec![0, 1, 2, 3, 4, 5];
-    // let occupied_cores = vec![3];
-    for core in cores {
-        if occupied_cores.contains(&core.id) {
-            let _ = crossbeam::thread::scope(|_| {
-                // pin our work to the core
-                core_affinity::set_for_current(core);
+    // let occupied_cores = vec![0, 1, 2, 3, 4, 5];
 
-                // loop to execute job
-                let _sleep_time = Duration::from_millis(1000 - run_time);
-                let _run_time = Duration::from_millis(run_time);
-                let mut rng = rand::thread_rng();
+    // Create a thread for each active CPU core.
+    for handle in core_ids.into_iter().map(|id| {
+        thread::spawn(move || {
+            // Pin this thread to a single CPU core.
+            core_affinity::set_for_current(id);
+            // Do more work after this.
+            // loop to execute job
+            let _sleep_time = Duration::from_millis(1000 - run_time);
+            let _run_time = Duration::from_millis(run_time);
+            let mut rng = rand::thread_rng();
 
+            loop {
+                // let start = Instant::now();
+                let mut _now = Instant::now();
+                thread::sleep(_sleep_time);
+                // println!("\tsleeped {:?}", _now.elapsed());
                 loop {
-                    let start = Instant::now();
-                    if run_time == 1000 {
-                        loop {}
-                    } else {
-                        // println!("start");
-                        let mut _now = Instant::now();
-                        thread::sleep(_sleep_time);
-                        // println!("\tsleeped {:?}", _now.elapsed());
-                        loop {
-                            let _ = rng.gen_range(0..10);
-                            if _now.elapsed() >= _sleep_time + _run_time {
-                                _now = Instant::now();
-                                // println!("\tbreak");
-                                break;
-                            }
-                        }
+                    let _ = rng.gen_range(0..10);
+                    if _now.elapsed() >= _sleep_time + _run_time {
+                        _now = Instant::now();
+                        // println!("\tbreak");
+                        break;
                     }
-                    // println!("start elapsed {:?}", start.elapsed());
                 }
-            });
-        }
+                // println!("start elapsed {:?}", start.elapsed());
+            }
+        })
+    }) {
+        handle.join().unwrap();
     }
 }
