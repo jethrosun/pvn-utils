@@ -17,7 +17,7 @@ fn read_setup(setup: &usize) -> Option<u64> {
     map.insert(0, 1);
     map.insert(1, 100); // 10% work done
     map.insert(2, 300); // 30% to 50% work done
-    map.insert(3, 900); // no work done
+    map.insert(3, 750); // no work done
 
     map.remove(setup)
 }

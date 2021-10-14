@@ -19,7 +19,7 @@ fn read_setup(setup: &usize) -> Option<usize> {
     map.insert(0, 1);
     map.insert(1, 100);
     map.insert(2, 200);
-    map.insert(3, 400);
+    map.insert(3, 300);
 
     map.remove(setup)
 }
