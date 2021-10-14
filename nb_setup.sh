@@ -11,8 +11,8 @@ fi
 
 # always remove and re-clone NetBricks
 if [ -e "$HOME/dev/netbricks" ]; then
-        rm -rf "$HOME/dev/netbricks"
-	cd "$HOME/dev/"; git clone git@github.com:jethrosun/NetBricks.git -b expr netbricks;
+	cd "$HOME/dev/netbricks"
+	git pull
 else
 	cd "$HOME/dev/"; git clone git@github.com:jethrosun/NetBricks.git -b expr netbricks;
 fi

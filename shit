@@ -1,0 +1,96 @@
+tunning.sh:4:rm -rf /tmp/
+nb_setup.sh:14:        rm -rf "$HOME/dev/netbricks"
+nb_setup.sh:22:rm -rf $HOME/.rustup
+nb_setup.sh:23:rm -rf $HOME/.cargo
+shit:1:tunning.sh:4:rm -rf /tmp/
+shit:2:nb_setup.sh:14:        rm -rf "$HOME/dev/netbricks"
+shit:3:nb_setup.sh:22:rm -rf $HOME/.rustup
+shit:4:nb_setup.sh:23:rm -rf $HOME/.cargo
+netbricks_expr/misc/xcdr_cleanup.sh:6:# sudo rm -rf downloads/*
+netbricks_expr/misc/xcdr_cleanup.sh:7:# sudo rm -rf config/*
+netbricks_expr/misc/xcdr_cleanup.sh:10:sudo rm -rf /tmp/
+netbricks_expr/misc/xcdr_cleanup.sh:14:sudo rm -rf ~/dev/pvn/utils/output/output_videos/
+netbricks_expr/misc/xcdr_cleanup.sh:16:sudo rm -rf /data/output_videos/
+netbricks_expr/misc/p2p_cleanup_transmission.sh:15:sudo rm -rf /data/downloads/*
+netbricks_expr/misc/p2p_cleanup_transmission.sh:17:sudo rm -rf /data/config/*
+netbricks_expr/misc/rdr_cleanup.sh:6:sudo rm -rf /tmp/
+netbricks_expr/run_pvnf_inst.sh:90:		sudo rm -rf "$HOME/Downloads"
+netbricks_expr/run_pvnf_inst.sh:91:		sudo rm -rf /data/bt/config
+netbricks_expr/run_pvnf_inst.sh:95:		sudo rm -rf downloads/*
+netbricks_expr/run_pvnf_inst.sh:96:		sudo rm -rf config/*
+netbricks_expr/run_pvnf_inst.sh:99:		sudo rm -rf /data/downloads/*
+netbricks_expr/run_pvnf_inst.sh:100:		sudo rm -rf /data/config/*
+netbricks_expr/run_pvnf_chain.sh:90:		sudo rm -rf "$HOME/Downloads"
+netbricks_expr/run_pvnf_chain.sh:91:		sudo rm -rf /data/bt/config
+netbricks_expr/run_pvnf_chain.sh:95:		sudo rm -rf downloads/*
+netbricks_expr/run_pvnf_chain.sh:96:		sudo rm -rf config/*
+netbricks_expr/run_pvnf_chain.sh:99:		sudo rm -rf /data/downloads/*
+netbricks_expr/run_pvnf_chain.sh:100:		sudo rm -rf /data/config/*
+netbricks_expr/run_pvnf_chain.sh:189:		sudo rm -rf "$HOME/Downloads"
+netbricks_expr/run_pvnf_chain.sh:190:		sudo rm -rf /data/bt/config
+netbricks_expr/run_pvnf_chain.sh:194:		sudo rm -rf downloads/*
+netbricks_expr/run_pvnf_chain.sh:195:		sudo rm -rf config/*
+netbricks_expr/run_pvnf_chain.sh:198:		sudo rm -rf /data/downloads/*
+netbricks_expr/run_pvnf_chain.sh:199:		sudo rm -rf /data/config/*
+netbricks_expr/run_pvnf_chain.sh:288:		sudo rm -rf "$HOME/Downloads"
+netbricks_expr/run_pvnf_chain.sh:289:		sudo rm -rf /data/bt/config
+netbricks_expr/run_pvnf_chain.sh:293:		sudo rm -rf downloads/*
+netbricks_expr/run_pvnf_chain.sh:294:		sudo rm -rf config/*
+netbricks_expr/run_pvnf_chain.sh:297:		sudo rm -rf /data/downloads/*
+netbricks_expr/run_pvnf_chain.sh:298:		sudo rm -rf /data/config/*
+netbricks_expr/bak/run_netbricks_iptraf_app.sh:96:	sudo rm -rf downloads/*
+netbricks_expr/bak/run_netbricks_iptraf_app.sh:97:	sudo rm -rf config/*
+netbricks_expr/bak/run_netbricks_iptraf_app.sh:100:	sudo rm -rf /data/downloads/*
+netbricks_expr/bak/run_netbricks_iptraf_app.sh:101:	sudo rm -rf /data/config/*
+netbricks_expr/bak/run_netbricks_iptraf_app.sh:124:	sudo rm -rf downloads/*
+netbricks_expr/bak/run_netbricks_iptraf_app.sh:125:	sudo rm -rf config/*
+netbricks_expr/bak/run_netbricks_iptraf_app.sh:128:	sudo rm -rf /data/downloads/*
+netbricks_expr/bak/run_netbricks_iptraf_app.sh:129:	sudo rm -rf /data/config/*
+netbricks_expr/bak/bak_run_netbricks.sh:32:	# sudo rm -rf downloads/*
+netbricks_expr/bak/bak_run_netbricks.sh:33:	# sudo rm -rf config/*
+netbricks_expr/bak/bak_run_netbricks.sh:36:	# sudo rm -rf /data/downloads/*
+netbricks_expr/bak/bak_run_netbricks.sh:37:	# sudo rm -rf /data/config/*
+netbricks_expr/bak/bak_run_netbricks.sh:52:	# sudo rm -rf downloads/*
+netbricks_expr/bak/bak_run_netbricks.sh:53:	# sudo rm -rf config/*
+netbricks_expr/bak/bak_run_netbricks.sh:56:	# sudo rm -rf /data/downloads/*
+netbricks_expr/bak/bak_run_netbricks.sh:57:	# sudo rm -rf /data/config/*
+netbricks_expr/bak/bak_run_netbricks.sh:73:	sudo rm -rf /home/jethros/dev/pvn-utils/data/output_videos/
+netbricks_expr/bak/bak_run_netbricks.sh:90:	sudo rm -rf /home/jethros/dev/pvn-utils/data/output_videos/
+netbricks_expr/run_pvnf_coresident.sh:100:	sudo rm -rf "$HOME/Downloads"
+netbricks_expr/run_pvnf_coresident.sh:101:	sudo rm -rf /data/bt/config
+netbricks_expr/run_pvnf_coresident.sh:144:	sudo rm -rf "$HOME/Downloads"
+netbricks_expr/run_pvnf_coresident.sh:145:	sudo rm -rf /data/bt/config
+netbricks_expr/run_pvnf_coresident.sh:200:	sudo rm -rf "$HOME/Downloads"
+netbricks_expr/run_pvnf_coresident.sh:201:	sudo rm -rf /data/bt/config
+netbricks_expr/run_pvnf_coresident.sh:253:	sudo rm -rf "$HOME/Downloads"
+netbricks_expr/run_pvnf_coresident.sh:254:	sudo rm -rf /data/bt/config
+netbricks_expr/run_pvnf_mix.sh:90:		sudo rm -rf "$HOME/Downloads"
+netbricks_expr/run_pvnf_mix.sh:91:		sudo rm -rf /data/bt/config
+netbricks_expr/run_pvnf_mix.sh:95:		sudo rm -rf downloads/*
+netbricks_expr/run_pvnf_mix.sh:96:		sudo rm -rf config/*
+netbricks_expr/run_pvnf_mix.sh:99:		sudo rm -rf /data/downloads/*
+netbricks_expr/run_pvnf_mix.sh:100:		sudo rm -rf /data/config/*
+netbricks_expr/run_pvnf_contend.sh:112:		sudo rm -rf "$HOME/Downloads"
+netbricks_expr/run_pvnf_contend.sh:113:		sudo rm -rf /data/bt/config
+netbricks_expr/run_pvnf_contend.sh:117:		sudo rm -rf downloads/*
+netbricks_expr/run_pvnf_contend.sh:118:		sudo rm -rf config/*
+netbricks_expr/run_pvnf_contend.sh:121:		sudo rm -rf /data/downloads/*
+netbricks_expr/run_pvnf_contend.sh:122:		sudo rm -rf /data/config/*
+faktory_srv/start_faktory.sh:4:sudo rm -rf /home/jethros/dev/pvn/utils/data/output_videos/
+faktory_srv/start_faktory.sh:7:sudo rm -rf /data/bt
+faktory_srv/start_faktory.sh:9:sudo rm -rf /data/output_videos/
+p2p_expr/p2p_setup_nb.sh:12:sudo rm -rf /data/bt
+p2p_expr/p2p_setup_nb.sh:13:sudo rm -rf /data/output_videos
+p2p_expr/p2p_setup_leecher.sh:12:sudo rm -rf ~/bt_data
+p2p_expr/p2p_setup_seeder.sh:13:sudo rm -rf ~/data
+p2p_expr/exec_fragmentation.sh:12:rm -rf $target
+p2p_expr/p2p_cleanup_nb.sh:42:sudo rm -rf /data/bt
+p2p_expr/p2p_cleanup_nb.sh:43:sudo rm -rf /home/jethros/Downloads
+p2p_expr/p2p_cleanup_leecher.sh:42:sudo rm -rf /home/jethros/bt_data
+p2p_expr/p2p_cleanup_leecher.sh:43:sudo rm -rf /home/jethros/Downloads
+additional_scripts/exec_fragmentation.sh:14:rm -rf output_videos
+additional_scripts/exec_fragmentation.sh:15:rm -rf bt
+additional_scripts/exec_fragmentation.sh:16:rm -rf $target
+cleanup.sh:9:	# rm -rf "$HOME/dev/pvn/utils/data/output_videos"
+cleanup.sh:15:	rm -rf netbricks_logs--$current_date_time
+cleanup.sh:32:	rm -rf pktgen_logs--$current_date_time
