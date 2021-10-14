@@ -50,8 +50,8 @@ fn main() {
     let large_vec = vec![42u128; vec_size];
 
     let cores = core_affinity::get_core_ids().unwrap();
-    // We want to use core # 3 for causing memory contention
-    let occupied_cores = vec![3];
+    // We want to use core 4 for causing memory contention
+    let occupied_cores = vec![4];
     // let occupied_cores = vec![3];
     loop {
         for core in &cores {

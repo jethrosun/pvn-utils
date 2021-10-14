@@ -89,36 +89,4 @@ fn main() {
     for handle in handles.into_iter() {
         handle.join().unwrap();
     }
-
-    // // Create a thread for each active CPU core.
-    // for handle in core_ids.into_iter().map(|id| {
-    //     thread::spawn(move || {
-    //         // Pin this thread to a single CPU core.
-    //         core_affinity::set_for_current(id);
-    //         println!("{:?}", id);
-    //         // Do more work after this.
-    //         // loop to execute job
-    //         let _sleep_time = Duration::from_millis(1000 - run_time);
-    //         let _run_time = Duration::from_millis(run_time);
-    //         let mut rng = rand::thread_rng();
-
-    //         loop {
-    //             // let start = Instant::now();
-    //             let mut _now = Instant::now();
-    //             thread::sleep(_sleep_time);
-    //             // println!("\tsleeped {:?}", _now.elapsed());
-    //             loop {
-    //                 let _ = rng.gen_range(0..10);
-    //                 if _now.elapsed() >= _sleep_time + _run_time {
-    //                     _now = Instant::now();
-    //                     // println!("\tbreak");
-    //                     break;
-    //                 }
-    //             }
-    //             // println!("start elapsed {:?}", start.elapsed());
-    //         }
-    //     })
-    // }) {
-    //     handle.join().unwrap();
-    // }
 }

@@ -57,8 +57,8 @@ fn main() {
 
     let cores = core_affinity::get_core_ids().unwrap();
 
-    // We want to use core #3 and #4 to cause disk I/O contention
-    let occupied_cores = vec![3, 4];
+    // We want to use core #4 and #5 to cause disk I/O contention
+    let occupied_cores = vec![4, 5];
     loop {
         for core in &cores {
             if occupied_cores.contains(&core.id) {
