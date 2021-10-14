@@ -26,7 +26,7 @@ pvn_nf = {
 trace = {
     'app_rdr': 'pvn_rdr.pcap',
     'app_xcdr': 'pvn_xcdr.pcap',
-    'app_tlsv': 'pvn_tlsv.pcap',
+    'app_tlsv': 'pvn_tlsv6.pcap',
     'app_p2p': 'pvn_p2p.pcap',
     'app_p2p-ext': 'pvn_p2p.pcap',
     'app_p2p-controlled': 'pvn_p2p.pcap',
