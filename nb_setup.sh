@@ -22,12 +22,15 @@ fi
 rm -rf $HOME/.rustup
 rm -rf $HOME/.cargo
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain none -y
-rustup toolchain install nightly-2021-03-15 --allow-downgrade --profile minimal --component rust-src rustfmt
+rustup toolchain install nightly-2020-12-15 --allow-downgrade --profile minimal --component rust-src rustfmt
 source $HOME/.cargo/env
 
 
-rustup default nightly-2021-03-15
-rustup override set nightly-2021-03-15
+# rustup default nightly-2021-03-15
+# rustup override set nightly-2021-03-15
+
+rustup default nightly-2020-12-15
+rustup override set nightly-2020-12-15
 
 "$HOME/dev/netbricks/build.sh"
 printf "netbricks building done\n"
