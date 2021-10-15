@@ -3,24 +3,12 @@ def fetch_tlsv_trace(setup):
 
 
 pvn_nf = {
-    'app_rdr': [
-        'pvn-rdr-transform-app'
-    ],
-    'app_xcdr': [
-        'pvn-transcoder-transform-app'
-    ],
-    'app_tlsv': [
-        'pvn-tlsv-transform-app'
-    ],
-    'app_p2p': [
-        'pvn-p2p-transform-app'
-    ],
-    'app_p2p-ext': [
-        'pvn-p2p-transform-app'
-    ],
-    'app_p2p-controlled': [
-        'pvn-p2p-transform-app'
-    ],
+    'app_rdr': ['pvn-rdr-transform-app'],
+    'app_xcdr': ['pvn-transcoder-transform-app'],
+    'app_tlsv': ['pvn-tlsv-transform-app'],
+    'app_p2p': ['pvn-p2p-transform-app'],
+    'app_p2p-ext': ['pvn-p2p-transform-app'],
+    'app_p2p-controlled': ['pvn-p2p-transform-app'],
 }
 
 trace = {
@@ -48,7 +36,7 @@ xcdr_nf_list = ['pvn-transcoder-transform-app', 'pvn-transcoder-groupby-app']
 nf_set = {
     'app_xcdr': '4',
     'app_p2p': '4',
-    'app_rdr': '4',
+    'app_rdr': '3',
     'app_tlsv': '6',
     'app_p2p-ext': '4',
     'app_p2p-controlled': '4',
@@ -86,7 +74,7 @@ zero = '0'
 #for i in ['3']:
 for i in ['1', '3']:
     setup.append([i, zero, zero])
-    setup.append([zero,i, zero])
+    setup.append([zero, i, zero])
     setup.append([zero, zero, i])
     # setup.append([i, i, zero])
     # setup.append([i, zero, i])
@@ -95,12 +83,10 @@ for i in ['1', '3']:
 num_of_epoch = 1
 # num_of_epoch = 10
 
-
 # expr is 10 min/600 sec
 expr_wait_time = 925
 xcdr_port_base = 7418
 batch = 1
-
 
 # app
 xcdr = ['app_xcdr']
