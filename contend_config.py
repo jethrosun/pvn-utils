@@ -53,6 +53,7 @@ sending_rate = {
         '4': fixed_sending_rate,
     },
     'app_rdr': {
+        '3': fixed_sending_rate,
         '4': fixed_sending_rate,
     },
     'app_tlsv': {
