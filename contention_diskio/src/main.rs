@@ -18,8 +18,8 @@ fn read_setup(setup: &usize) -> Option<usize> {
     let mut map = HashMap::new();
     map.insert(0, 1);
     map.insert(1, 100);
-    map.insert(2, 200);
-    map.insert(3, 300);
+    map.insert(2, 300);
+    map.insert(3, 500);
 
     map.remove(setup)
 }
