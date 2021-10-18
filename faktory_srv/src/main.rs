@@ -1,16 +1,16 @@
-extern crate crossbeam;
 extern crate faktory;
 extern crate resize;
 extern crate y4m;
 
+use core_affinity::CoreId;
 use faktory::ConsumerBuilder;
 use resize::Pixel::Gray8;
 use resize::Type::Triangle;
 use std::env;
 use std::fs::File;
-use std::io;
 use std::process;
 use std::time::Instant;
+use std::{io, thread};
 
 /// Actual video transcoding.
 ///
@@ -69,16 +69,20 @@ fn main() {
     let _setup = params[1].parse::<usize>().unwrap();
     let expr = params[4].parse::<usize>().unwrap();
 
-    let cores = core_affinity::get_core_ids().unwrap();
-    // We want to use core # 3 for faktory
-    let occupied_cores = vec![3];
-    // let occupied_cores = vec![3];
-    loop {
-        for core in &cores {
-            if occupied_cores.contains(&core.id) {
-                let _ = crossbeam::thread::scope(|_| {
-                    // pin our work to the core
-                    core_affinity::set_for_current(*core);
+    // The regular way to get core ids are not going work as we have configured isol cpus to reduce context switches for DPDK and our things.
+    // We want to cause equal pressure to all of the cores for CPU contention
+    let mut core_ids = Vec::new();
+    for idx in 0..6 {
+        core_ids.push(CoreId { id: idx });
+    }
+
+    let handles = core_ids
+        .into_iter()
+        .map(|id| {
+            thread::spawn(move || {
+                if id.id == 3 {
+                    // Pin this thread to a single CPU core.
+                    core_affinity::set_for_current(id);
                     let mut c = ConsumerBuilder::default();
 
                     c.register(
@@ -117,8 +121,12 @@ fn main() {
                     if let Err(e) = c.run(&["default"]) {
                         println!("worker failed: {}", e);
                     }
-                });
-            }
-        }
+                }
+            })
+        })
+        .collect::<Vec<_>>();
+
+    for handle in handles.into_iter() {
+        handle.join().unwrap();
     }
 }
