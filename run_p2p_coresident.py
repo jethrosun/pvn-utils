@@ -206,7 +206,6 @@ def run_expr_p2p_controlled(expr_list):
 
 
 def main(expr_list, p2p_types):
-    """"""
     # app rdr, app p2p ...
     for typ in p2p_types:
         print("Running experiments that for P2P with type {} ".format(typ))
