@@ -1,13 +1,14 @@
 //! Simple Rust program that can generate enough Disk I/O contention. We have to use two files to
 //! generate enough I/O. To isolate the impact we also want cpu pining.
-extern crate crossbeam;
 extern crate rand;
 
+use core_affinity::CoreId;
 use std::collections::HashMap;
 use std::env;
 use std::fs::{File, OpenOptions};
 use std::io::{Read, Seek, SeekFrom, Write};
 use std::process;
+use std::thread;
 use std::thread::sleep;
 use std::time::{Duration, Instant};
 
@@ -55,35 +56,40 @@ fn main() {
     let _sleep_time = Duration::from_millis(50);
     let _second = Duration::from_secs(1);
 
-    let cores = core_affinity::get_core_ids().unwrap();
+    // The regular way to get core ids are not going work as we have configured isol cpus to reduce context switches for DPDK and our things.
+    // We want to cause equal pressure to all of the cores for CPU contention
+    let mut core_ids = Vec::new();
+    for idx in 0..6 {
+        core_ids.push(CoreId { id: idx });
+    }
 
-    // We want to use core #4 and #5 to cause disk I/O contention
-    let occupied_cores = vec![4, 5];
-    loop {
-        for core in &cores {
-            if occupied_cores.contains(&core.id) {
-                let _ = crossbeam::thread::scope(|_| {
-                    // pin our work to the core
-                    core_affinity::set_for_current(*core);
-
-                    // use buffer to store random data
-                    let mut buf: Vec<u8> = Vec::with_capacity(buf_size * 1_000_000); // B to MB
-                    for _ in 0..buf.capacity() {
-                        buf.push(rand::random())
-                    }
-                    let buf = buf.into_boxed_slice();
-
-                    let file_name = "/data/tmp/foobar".to_owned() + &core.id.to_string() + ".bin";
-
-                    // files for both cases
-                    let mut file = OpenOptions::new()
-                        .write(true)
-                        .read(true)
-                        .create(true)
-                        .open(file_name)
-                        .unwrap();
+    // Create a thread for each active CPU core.
+    let handles = core_ids
+        .into_iter()
+        .map(|id| {
+            thread::spawn(move || {
+                if id.id == 4 || id.id == 5 {
+                    // Pin this thread to a single CPU core.
+                    core_affinity::set_for_current(id);
 
                     loop {
+                        // use buffer to store random data
+                        let mut buf: Vec<u8> = Vec::with_capacity(buf_size * 1_000_000); // B to MB
+                        for _ in 0..buf.capacity() {
+                            buf.push(rand::random())
+                        }
+                        let buf = buf.into_boxed_slice();
+
+                        let file_name = "/data/tmp/foobar".to_owned() + &id.id.to_string() + ".bin";
+
+                        // files for both cases
+                        let mut file = OpenOptions::new()
+                            .write(true)
+                            .read(true)
+                            .create(true)
+                            .open(file_name)
+                            .unwrap();
+
                         let _start = Instant::now();
                         let mut _now = Instant::now();
 
@@ -98,8 +104,12 @@ fn main() {
                             continue;
                         }
                     }
-                });
-            }
-        }
+                }
+            })
+        })
+        .collect::<Vec<_>>();
+
+    for handle in handles.into_iter() {
+        handle.join().unwrap();
     }
 }

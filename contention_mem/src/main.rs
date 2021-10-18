@@ -1,5 +1,6 @@
 //! Simple Rust program that generate memory contention. Our memory setup is 64GB memory with 20GB
 //! allocated for huge page (DPDK) and 40GB left. We also allocated 32GB as virtual memory (swap).
+use core_affinity::CoreId;
 use std::collections::HashMap;
 use std::env;
 use std::process;
@@ -16,8 +17,8 @@ fn read_setup(setup: &usize) -> Option<usize> {
     let mut map = HashMap::new();
     map.insert(0, 0); // 10GB
     map.insert(1, 20 * GB_SIZE); // 10GB
-    map.insert(2, 50 * GB_SIZE); // 20GB
-    map.insert(3, 85 * GB_SIZE); // 50GB
+    map.insert(2, 40 * GB_SIZE); // 20GB
+    map.insert(3, 60 * GB_SIZE); // 50GB
 
     map.remove(setup)
 }
@@ -47,19 +48,22 @@ fn main() {
     // let _sleep_time = Duration::from_millis(500);
     let _sleep_time = Duration::from_millis(900);
 
-    let large_vec = vec![42u128; vec_size];
+    // The regular way to get core ids are not going work as we have configured isol cpus to reduce context switches for DPDK and our things.
+    // We want to cause equal pressure to all of the cores for CPU contention
+    let mut core_ids = Vec::new();
+    for idx in 0..6 {
+        core_ids.push(CoreId { id: idx });
+    }
 
-    let cores = core_affinity::get_core_ids().unwrap();
-    // We want to use core 4 for causing memory contention
-    let occupied_cores = vec![4];
-    // let occupied_cores = vec![3];
-    loop {
-        for core in &cores {
-            if occupied_cores.contains(&core.id) {
-                let _ = crossbeam::thread::scope(|_| {
-                    // pin our work to the core
-                    core_affinity::set_for_current(*core);
-
+    // Create a thread for each active CPU core.
+    let handles = core_ids
+        .into_iter()
+        .map(|id| {
+            thread::spawn(move || {
+                if id.id == 4 {
+                    // Pin this thread to a single CPU core.
+                    core_affinity::set_for_current(id);
+                    let large_vec = vec![42u128; vec_size];
                     loop {
                         thread::sleep(_sleep_time);
                         for i in 0..vec_size / 256 {
@@ -71,8 +75,12 @@ fn main() {
                             println!("{} * k since {:?}", counter, now.elapsed());
                         }
                     }
-                });
-            }
-        }
+                }
+            })
+        })
+        .collect::<Vec<_>>();
+
+    for handle in handles.into_iter() {
+        handle.join().unwrap();
     }
 }
