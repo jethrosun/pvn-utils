@@ -34,8 +34,8 @@ rdr_nf_list = ['pvn-rdr-transform-app', 'pvn-p2p-groupby-app']
 xcdr_nf_list = ['pvn-transcoder-transform-app', 'pvn-transcoder-groupby-app']
 
 nf_set = {
-    'app_xcdr': '4',
-    'app_rdr': '3',
+    'app_xcdr': '6',
+    'app_rdr': '5',
     'app_tlsv': '6',
     'app_p2p': '5',
     'app_p2p-controlled': '5',
@@ -130,4 +130,4 @@ p2p_controlled = ['app_p2p-controlled']
 p2p_ext = ['app_p2p-ext']
 
 # nf_list = ['app_tlsv', 'app_xcdr', 'app_p2p-controlled', 'app_rdr']
-nf_list = ['app_p2p-controlled']
+nf_list = ['app_xcdr', 'app_p2p-controlled', 'app_rdr']
