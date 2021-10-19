@@ -46,25 +46,52 @@ fixed_sending_rate = 10
 coresident_sending_rate = 20
 sending_rate = {
     'app_xcdr': {
-        '4': fixed_sending_rate,
-    },
-    'app_p2p': {
-        '4': fixed_sending_rate,
-        '5': fixed_sending_rate,
-        '6': fixed_sending_rate,
-    },
-    'app_rdr': {
+        '1': fixed_sending_rate,
+        '2': fixed_sending_rate,
         '3': fixed_sending_rate,
         '4': fixed_sending_rate,
+        '5': fixed_sending_rate,
+        '6': fixed_sending_rate
+    },
+    'app_p2p': {
+        '1': fixed_sending_rate,
+        '2': fixed_sending_rate,
+        '3': fixed_sending_rate,
+        '4': fixed_sending_rate,
+        '5': fixed_sending_rate,
+        '6': fixed_sending_rate
+    },
+    'app_rdr': {
+        '1': fixed_sending_rate,
+        '2': fixed_sending_rate,
+        '3': fixed_sending_rate,
+        '4': fixed_sending_rate,
+        '5': fixed_sending_rate,
+        '6': fixed_sending_rate
     },
     'app_tlsv': {
+        '1': fixed_sending_rate,
+        '2': fixed_sending_rate,
+        '3': fixed_sending_rate,
+        '4': fixed_sending_rate,
+        '5': fixed_sending_rate,
         '6': fixed_sending_rate
     },
     'app_p2p-ext': {
+        '1': fixed_sending_rate,
+        '2': fixed_sending_rate,
+        '3': fixed_sending_rate,
         '4': fixed_sending_rate,
+        '5': fixed_sending_rate,
+        '6': fixed_sending_rate
     },
     'app_p2p-controlled': {
+        '1': fixed_sending_rate,
+        '2': fixed_sending_rate,
+        '3': fixed_sending_rate,
         '4': fixed_sending_rate,
+        '5': fixed_sending_rate,
+        '6': fixed_sending_rate
     },
 }
 
@@ -103,4 +130,4 @@ p2p_controlled = ['app_p2p-controlled']
 p2p_ext = ['app_p2p-ext']
 
 # nf_list = ['app_tlsv', 'app_xcdr', 'app_p2p-controlled', 'app_rdr']
-nf_list = [ 'app_rdr', 'app_xcdr', 'app_p2p-controlled']
+nf_list = ['app_p2p-controlled']
