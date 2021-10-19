@@ -18,5 +18,5 @@ do
 	sudo -u jethros deluge-console -c /data/bt/config "add /home/jethros/dev/pvn/utils/workloads/torrent_files/p2p_image_${args[$c]}.img.torrent"
 done
 
-
+sleep 3
 for PID in $(pgrep deluged); do sudo -u jethros taskset -cp 3 $PID; done

@@ -63,5 +63,5 @@ fi
 echo "Starting up now ..."
 sudo -u jethros nice deluged -c /data/bt/config
 # sudo -u jethros deluge-web -c ~/bt_data/config
-
+sleep 3
 for PID in $(pgrep deluged); do sudo -u jethros taskset -cp 3 $PID; done
