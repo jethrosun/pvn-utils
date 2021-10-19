@@ -7,22 +7,6 @@ sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
 args=("$@")
 printf "args %s" "$@"
 
-# if [ "$1" == "1" ]; then
-#     setup=1
-# elif [ "$1" == "2" ]; then
-#     setup=2
-# elif [ "$1" == "3" ]; then
-#     setup=4
-# elif [ "$1" == "4" ]; then
-#     setup=6
-# elif [ "$1" == "5" ]; then
-#     setup=8
-# elif [ "$1" == "6" ]; then
-#     setup=10
-# else
-#     printf "Unknown setup: %s"  "$1"
-# fi
-
 setup=${args[0]}
 
 printf "\nRunning expr %s with setup %s"  "$1" "$setup"
@@ -33,3 +17,6 @@ do
 	echo "${args[$c]}"
 	sudo -u jethros deluge-console -c /data/bt/config "add /home/jethros/dev/pvn/utils/workloads/torrent_files/p2p_image_${args[$c]}.img.torrent"
 done
+
+PID=$(pgrep deluged)
+sudo taskset -cp 3 $PID
