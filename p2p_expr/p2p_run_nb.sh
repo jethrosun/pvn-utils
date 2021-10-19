@@ -19,4 +19,4 @@ do
 done
 
 PID=$(pgrep deluged)
-sudo taskset -cp 3 $PID
+sudo -u jethros taskset -cp 3 $PID

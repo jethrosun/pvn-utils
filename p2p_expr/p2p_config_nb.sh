@@ -65,4 +65,4 @@ sudo -u jethros nice deluged -c /data/bt/config
 # sudo -u jethros deluge-web -c ~/bt_data/config
 
 PID=$(pgrep deluged)
-sudo taskset -cp 3 $PID
+sudo -u jethros taskset -cp 3 $PID
