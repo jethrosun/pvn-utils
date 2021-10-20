@@ -87,7 +87,7 @@ def run_pktgen(sess, trace, rate):
         set_size_str = "set 0 size " + size
         start_str = "start 0"
 
-        time.sleep(30)
+        time.sleep(20)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
         sess.send_commands(cmd_str, set_rate_str, set_size_str, start_str)
 
@@ -99,7 +99,7 @@ def run_pktgen(sess, trace, rate):
         set_port_str = "set 0 rate " + str(rate)
         start_str = "start 0"
 
-        time.sleep(30)
+        time.sleep(20)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
         sess.send_commands(cmd_str, set_port_str, start_str)
 
@@ -179,7 +179,7 @@ def run_expr_p2p_controlled(expr):
                 p2p_cleanup("leecher", leecher1_sess)
                 p2p_cleanup("leecher", leecher2_sess)
                 p2p_cleanup("leecher", leecher3_sess)
-                time.sleep(30)
+                time.sleep(20)
 
                 # Actual RUN
                 run_p2p_node('leecher', leecher1_sess, setup, epoch)
@@ -194,17 +194,17 @@ def run_expr_p2p_controlled(expr):
                 p2p_cleanup("leecher", leecher1_sess)
                 p2p_cleanup("leecher", leecher2_sess)
                 p2p_cleanup("leecher", leecher3_sess)
-                time.sleep(30)
+                time.sleep(20)
 
                 sess_destroy(netbricks_sess)
                 sess_destroy(leecher1_sess)
                 sess_destroy(leecher2_sess)
                 sess_destroy(leecher3_sess)
 
-                time.sleep(30)
+                time.sleep(20)
 
             sess_destroy(pktgen_sess)
-            time.sleep(30)
+            time.sleep(20)
 
 
 def main(expr_list):
