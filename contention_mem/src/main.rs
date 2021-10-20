@@ -1,6 +1,5 @@
 //! Simple Rust program that generate memory contention. Our memory setup is 64GB memory with 20GB
 //! allocated for huge page (DPDK) and 40GB left. We also allocated 32GB as virtual memory (swap).
-use core_affinity::CoreId;
 use std::collections::HashMap;
 use std::env;
 use std::process;
@@ -16,9 +15,9 @@ const GB_SIZE: usize = 1_000_000_000;
 fn read_setup(setup: &usize) -> Option<usize> {
     let mut map = HashMap::new();
     map.insert(0, 0); // 10GB
-    map.insert(1, 20 * GB_SIZE); // 10GB
-    map.insert(2, 40 * GB_SIZE); // 20GB
-    map.insert(3, 60 * GB_SIZE); // 50GB
+    map.insert(1, 20 * GB_SIZE); // 20GB
+    map.insert(2, 50 * GB_SIZE); // 40GB
+    map.insert(3, 80 * GB_SIZE); // 60GB
 
     map.remove(setup)
 }
