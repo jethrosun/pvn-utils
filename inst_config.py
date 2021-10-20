@@ -187,7 +187,7 @@ expr_wait_time = 220
 
 xcdr_port_base = 7418
 
-num_of_epoch = 10
+num_of_epoch = 2
 batch = 1
 
 # app
