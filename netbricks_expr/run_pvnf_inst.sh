@@ -37,7 +37,7 @@ BIO_TOP_MONITOR=/usr/share/bcc/tools/biotop
 # IPTRAF_MONITOR=/usr/sbin/iptraf-ng
 
 # NB_CONFIG=$HOME/dev/netbricks/experiments/config_2core.toml
-NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_1core_long.toml
+NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_1core.toml
 TMP_NB_CONFIG=$HOME/config.toml
 
 # INST_LEVEL=on
@@ -46,7 +46,7 @@ sed "/duration = 750/i log_path = '$LOG'" "$NB_CONFIG_LONG" > "$TMP_NB_CONFIG"
 
 mkdir -p "$LOG_DIR"
 
-EXPR_MODE=long
+EXPR_MODE=short
 
 
 if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-groupby-app' ]; then
