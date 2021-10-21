@@ -158,15 +158,19 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 		echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
 		sleep 1
 	done
-	P3=$!
+	P2=$!
 	until sudo nice --20 /home/jethros/data/cargo-target/release/contention_mem $6 > $MEM_LOG; do
 		echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
 		sleep 1
 	done
 	P3=$!
-	until sudo nice --20 /home/jethros/data/cargo-target/release/contention_diskio $7 > $DISKIO_LOG; do
-		echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
-		sleep 1
+	while true; do
+		if [[ $(pgrep contention_diskio) ]]; then
+			echo "disk io is running";
+		else
+			echo "Not Running, so I must do something";
+			sudo nice --20 /home/jethros/data/cargo-target/release/contention_diskio $7 > $DISKIO_LOG &
+		fi
 	done
 	P4=$!
 
