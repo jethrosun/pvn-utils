@@ -35,7 +35,7 @@ xcdr_nf_list = ['pvn-transcoder-transform-app', 'pvn-transcoder-groupby-app']
 
 nf_set = {
     'app_xcdr': '6',
-    'app_rdr': '3',
+    'app_rdr': '5',
     'app_tlsv': '6',
     'app_p2p': '5',
     'app_p2p-controlled': '5',
@@ -103,7 +103,7 @@ zero = '0'
 # for i in ['1', '2', '3']:
 for i in ['3']:
     # setup.append([i, zero, zero])
-    # setup.append([zero, i, zero])
+    setup.append([zero, i, zero])
     setup.append([zero, zero, i])
     # setup.append([i, i, zero])
     # setup.append([i, zero, i])
