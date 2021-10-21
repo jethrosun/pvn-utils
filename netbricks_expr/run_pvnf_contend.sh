@@ -73,6 +73,11 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 	docker ps
 	sleep 15
 
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$8" "$8" "$9" "$FAKTORY_LOG" &
+	P4=$!
+	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
+	P5=$!
+
 	# config contention
 	/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
 	P1=$!
@@ -81,10 +86,7 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 	/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG" &
 	P3=$!
 
-	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$8" "$8" "$9" "$FAKTORY_LOG" &
-	P4=$!
-	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
-	P5=$!
+
 	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
 	P6=$!
 	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
@@ -140,6 +142,9 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 	while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > "$P2P_PROGRESS_LOG" &
 	P1=$!
 
+	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
+	P5=$!
+
 	# config contention
 	/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
 	P2=$!
@@ -148,8 +153,7 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 	/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG" &
 	P4=$!
 
-	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
-	P5=$!
+
 	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
 	P6=$!
 	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
@@ -185,6 +189,9 @@ else
 		'{setup: $setup, iter: $iter, inst: $inst, mode: $mode}' )
 	echo "$JSON_STRING" > /home/jethros/setup
 
+	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
+	P4=$!
+
 	# config contention
 	/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
 	P1=$!
@@ -193,8 +200,6 @@ else
 	/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG" &
 	P3=$!
 
-	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
-	P4=$!
 	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
 	P5=$!
 	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
