@@ -97,7 +97,7 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 	done &
 	P2=$!
 	while sleep 5; do
-		if [[ $(pgrep contention_diskio) ]]; then
+		if [[ $(pgrep contention_disk) ]]; then
 			echo "disk io is running";
 		else
 			echo "Disk io Not Running, so I must do something";
@@ -183,7 +183,7 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 	done &
 	P3=$!
 	while sleep 5; do
-		if [[ $(pgrep contention_diskio) ]]; then
+		if [[ $(pgrep contention_disk) ]]; then
 			echo "disk io is running";
 		else
 			echo "Disk IO Not Running, so I must do something";
@@ -250,7 +250,7 @@ else
 	done &
 	P2=$!
 	while sleep 5; do
-		if [[ $(pgrep contention_diskio) ]]; then
+		if [[ $(pgrep contention_disk) ]]; then
 			echo "disk io is running";
 		else
 			echo "Disk IO Not Running, so I must do something";
