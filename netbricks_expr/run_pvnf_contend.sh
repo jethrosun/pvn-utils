@@ -146,11 +146,11 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 	P5=$!
 
 	# config contention
-	/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
-	P2=$!
-	/home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
+	while true; do /home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" && break; done
+	P2=$! 
+	while true; do /home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG"  && break; done
 	P3=$!
-	/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG" &
+	while true; do /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG"  && break; done
 	P4=$!
 
 
