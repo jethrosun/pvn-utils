@@ -78,20 +78,31 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P5=$!
 
-	# config contention
-	until sudo nice --20 /home/jethros/data/cargo-target/release/contention_cpu $5 > $CPU_LOG; do
-		echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
-		sleep 1
+	while sleep 5; do
+		if [[ $(pgrep contention_cpu) ]]; then
+			echo "disk io is running";
+		else
+			echo "Not Running, so I must do something";
+			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
+		fi
 	done
 	P1=$!
-	until sudo nice --20 /home/jethros/data/cargo-target/release/contention_mem $6 > $MEM_LOG; do
-		echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
-		sleep 1
+	while sleep 5; do
+		if [[ $(pgrep contention_mem) ]]; then
+			echo "disk io is running";
+		else
+			echo "Not Running, so I must do something";
+			/home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
+		fi
 	done
 	P2=$!
-	until sudo nice --20 /home/jethros/data/cargo-target/release/contention_diskio $7 > $DISKIO_LOG; do
-		echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
-		sleep 1
+	while sleep 5; do
+		if [[ $(pgrep contention_diskio) ]]; then
+			echo "disk io is running";
+		else
+			echo "Not Running, so I must do something";
+			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG" &
+		fi
 	done
 	P3=$!
 
@@ -153,23 +164,30 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P5=$!
 
-	# config contention
-	until sudo nice --20 /home/jethros/data/cargo-target/release/contention_cpu $5 > $CPU_LOG; do
-		echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
-		sleep 1
+	while sleep 5; do
+		if [[ $(pgrep contention_cpu) ]]; then
+			echo "disk io is running";
+		else
+			echo "Not Running, so I must do something";
+			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
+		fi
 	done
 	P2=$!
-	until sudo nice --20 /home/jethros/data/cargo-target/release/contention_mem $6 > $MEM_LOG; do
-		echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
-		sleep 1
+	while sleep 5; do
+		if [[ $(pgrep contention_mem) ]]; then
+			echo "disk io is running";
+		else
+			echo "Not Running, so I must do something";
+			/home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
+		fi
 	done
 	P3=$!
-	while true; do
+	while sleep 5; do
 		if [[ $(pgrep contention_diskio) ]]; then
 			echo "disk io is running";
 		else
 			echo "Not Running, so I must do something";
-			sudo nice --20 /home/jethros/data/cargo-target/release/contention_diskio $7 > $DISKIO_LOG &
+			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG" &
 		fi
 	done
 	P4=$!
@@ -213,19 +231,31 @@ else
 	P4=$!
 
 	# config contention
-	until sudo nice --20 /home/jethros/data/cargo-target/release/contention_cpu $5 > $CPU_LOG; do
-		echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
-		sleep 1
+	while sleep 5; do
+		if [[ $(pgrep contention_cpu) ]]; then
+			echo "disk io is running";
+		else
+			echo "Not Running, so I must do something";
+			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
+		fi
 	done
 	P1=$!
-	until sudo nice --20 /home/jethros/data/cargo-target/release/contention_mem $6 > $MEM_LOG; do
-		echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
-		sleep 1
+	while sleep 5; do
+		if [[ $(pgrep contention_mem) ]]; then
+			echo "disk io is running";
+		else
+			echo "Not Running, so I must do something";
+			/home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
+		fi
 	done
 	P2=$!
-	until sudo nice --20 /home/jethros/data/cargo-target/release/contention_diskio $7 > $DISKIO_LOG; do
-		echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
-		sleep 1
+	while sleep 5; do
+		if [[ $(pgrep contention_diskio) ]]; then
+			echo "disk io is running";
+		else
+			echo "Not Running, so I must do something";
+			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG" &
+		fi
 	done
 	P3=$!
 
@@ -250,3 +280,4 @@ else
 
 	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13
 fi
+
