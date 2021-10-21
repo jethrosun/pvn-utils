@@ -12,4 +12,4 @@ if [[ $1 -eq $zero ]]; then
   exit;
 fi
 
-sudo /home/jethros/data/cargo-target/release/contention_mem $1 > $2
+sudo nice --20 /home/jethros/data/cargo-target/release/contention_mem $1 > $2
