@@ -79,13 +79,21 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 	P5=$!
 
 	# config contention
-	/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
+	until sudo nice --20 /home/jethros/data/cargo-target/release/contention_cpu $5 > $CPU_LOG; do
+		echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
+		sleep 1
+	done
 	P1=$!
-	/home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
+	until sudo nice --20 /home/jethros/data/cargo-target/release/contention_mem $6 > $MEM_LOG; do
+		echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
+		sleep 1
+	done
 	P2=$!
-	/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG" &
+	until sudo nice --20 /home/jethros/data/cargo-target/release/contention_diskio $7 > $DISKIO_LOG; do
+		echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
+		sleep 1
+	done
 	P3=$!
-
 
 	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
 	P6=$!
@@ -146,13 +154,21 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 	P5=$!
 
 	# config contention
-	while true; do /home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" && break; done
-	P2=$! 
-	while true; do /home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG"  && break; done
+	until sudo nice --20 /home/jethros/data/cargo-target/release/contention_cpu $5 > $CPU_LOG; do
+		echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
+		sleep 1
+	done
 	P3=$!
-	while true; do /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG"  && break; done
+	until sudo nice --20 /home/jethros/data/cargo-target/release/contention_mem $6 > $MEM_LOG; do
+		echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
+		sleep 1
+	done
+	P3=$!
+	until sudo nice --20 /home/jethros/data/cargo-target/release/contention_diskio $7 > $DISKIO_LOG; do
+		echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
+		sleep 1
+	done
 	P4=$!
-
 
 	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
 	P6=$!
@@ -193,11 +209,20 @@ else
 	P4=$!
 
 	# config contention
-	/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
+	until sudo nice --20 /home/jethros/data/cargo-target/release/contention_cpu $5 > $CPU_LOG; do
+		echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
+		sleep 1
+	done
 	P1=$!
-	/home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
+	until sudo nice --20 /home/jethros/data/cargo-target/release/contention_mem $6 > $MEM_LOG; do
+		echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
+		sleep 1
+	done
 	P2=$!
-	/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG" &
+	until sudo nice --20 /home/jethros/data/cargo-target/release/contention_diskio $7 > $DISKIO_LOG; do
+		echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
+		sleep 1
+	done
 	P3=$!
 
 	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &

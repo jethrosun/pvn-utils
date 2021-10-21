@@ -44,6 +44,9 @@ fn main() {
     if params.len() == 2 {
         println!("Parse 2 args");
         println!("Setup: {:?}", params[1],);
+        if params[1].parse::<usize>().unwrap() == 0 {
+            process::exit(0x0100);
+        }
     } else {
         println!("More or less than 1 args are provided. Run it with *setup*");
         process::exit(0x0100);
