@@ -68,7 +68,7 @@ fn main() {
         .into_iter()
         .map(|id| {
             thread::spawn(move || {
-                if id.id == 4 || id.id == 5 {
+                if id.id == 0 || id.id == 1 || id.id == 4 || id.id == 5 {
                     // Pin this thread to a single CPU core.
                     core_affinity::set_for_current(id);
 
