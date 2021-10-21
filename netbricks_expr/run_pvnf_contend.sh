@@ -85,7 +85,7 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 			echo "Not Running, so I must do something";
 			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
 		fi
-	done
+	done &
 	P1=$!
 	while sleep 5; do
 		if [[ $(pgrep contention_mem) ]]; then
@@ -94,7 +94,7 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 			echo "Not Running, so I must do something";
 			/home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
 		fi
-	done
+	done &
 	P2=$!
 	while sleep 5; do
 		if [[ $(pgrep contention_diskio) ]]; then
@@ -103,7 +103,7 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 			echo "Not Running, so I must do something";
 			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG" &
 		fi
-	done
+	done &
 	P3=$!
 
 	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
@@ -171,7 +171,7 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 			echo "Not Running, so I must do something";
 			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
 		fi
-	done
+	done &
 	P2=$!
 	while sleep 5; do
 		if [[ $(pgrep contention_mem) ]]; then
@@ -180,7 +180,7 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 			echo "Not Running, so I must do something";
 			/home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
 		fi
-	done
+	done &
 	P3=$!
 	while sleep 5; do
 		if [[ $(pgrep contention_diskio) ]]; then
@@ -189,7 +189,7 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 			echo "Not Running, so I must do something";
 			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG" &
 		fi
-	done
+	done &
 	P4=$!
 
 	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
@@ -238,7 +238,7 @@ else
 			echo "Not Running, so I must do something";
 			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
 		fi
-	done
+	done &
 	P1=$!
 	while sleep 5; do
 		if [[ $(pgrep contention_mem) ]]; then
@@ -247,7 +247,7 @@ else
 			echo "Not Running, so I must do something";
 			/home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
 		fi
-	done
+	done &
 	P2=$!
 	while sleep 5; do
 		if [[ $(pgrep contention_diskio) ]]; then
@@ -256,7 +256,7 @@ else
 			echo "Not Running, so I must do something";
 			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG" &
 		fi
-	done
+	done &
 	P3=$!
 
 	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
