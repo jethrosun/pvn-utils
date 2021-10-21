@@ -101,9 +101,9 @@ setup = []
 # experiments
 zero = '0'
 # for i in ['1', '2', '3']:
-for i in ['2', '3']:
+for i in ['3']:
     # setup.append([i, zero, zero])
-    setup.append([zero, i, zero])
+    # setup.append([zero, i, zero])
     setup.append([zero, zero, i])
     # setup.append([i, i, zero])
     # setup.append([i, zero, i])
@@ -131,4 +131,5 @@ p2p_controlled = ['app_p2p-controlled']
 p2p_ext = ['app_p2p-ext']
 
 # nf_list = ['app_tlsv', 'app_xcdr', 'app_p2p-controlled', 'app_rdr']
-nf_list = ['app_p2p-controlled', 'app_rdr']
+nf_list = ['app_p2p-controlled']
+# nf_list = ['app_rdr']
