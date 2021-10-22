@@ -80,27 +80,30 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 
 	while sleep 5; do
 		if [[ $(pgrep contention_cpu) ]]; then
-			echo "CPU is running";
+			# echo "CPU is running";
+			:
 		else
-			echo "CPU Not Running, so I must do something";
+			# echo "CPU Not Running, so I must do something";
 			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
 		fi
 	done &
 	P1=$!
 	while sleep 5; do
 		if [[ $(pgrep contention_mem) ]]; then
-			echo "Mem is running";
+			# echo "Mem is running";
+			:
 		else
-			echo "Mem Not Running, so I must do something";
+			# echo "Mem Not Running, so I must do something";
 			/home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
 		fi
 	done &
 	P2=$!
 	while sleep 5; do
 		if [[ $(pgrep contention_disk) ]]; then
-			echo "disk io is running";
+			# echo "disk io is running";
+			:
 		else
-			echo "Disk io Not Running, so I must do something";
+			# echo "Disk io Not Running, so I must do something";
 			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG" &
 		fi
 	done &
@@ -166,27 +169,30 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 
 	while sleep 5; do
 		if [[ $(pgrep contention_cpu) ]]; then
-			echo "CPU is running";
+			# echo "CPU is running";
+			:
 		else
-			echo "CPU Not Running, so I must do something";
+			# echo "CPU Not Running, so I must do something";
 			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
 		fi
 	done &
 	P2=$!
 	while sleep 5; do
 		if [[ $(pgrep contention_mem) ]]; then
-			echo "Mem is running";
+			# echo "Mem is running";
+			:
 		else
-			echo "Mem Not Running, so I must do something";
+			# echo "Mem Not Running, so I must do something";
 			/home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
 		fi
 	done &
 	P3=$!
 	while sleep 5; do
 		if [[ $(pgrep contention_disk) ]]; then
-			echo "disk io is running";
+			# echo "disk io is running";
+			:
 		else
-			echo "Disk IO Not Running, so I must do something";
+			# echo "Disk IO Not Running, so I must do something";
 			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG" &
 		fi
 	done &
@@ -233,27 +239,33 @@ else
 	# config contention
 	while sleep 5; do
 		if [[ $(pgrep contention_cpu) ]]; then
-			echo "CPU is running";
+			# echo "CPU is running";
+			:
 		else
-			echo "CPU Not Running, so I must do something";
+			# echo "CPU Not Running, so I must do something";
+			:
 			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
 		fi
 	done &
 	P1=$!
 	while sleep 5; do
 		if [[ $(pgrep contention_mem) ]]; then
-			echo "Mem is running";
+			# echo "Mem is running";
+			:
 		else
-			echo "Mem Not Running, so I must do something";
+			# echo "Mem Not Running, so I must do something";
+			:
 			/home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
 		fi
 	done &
 	P2=$!
 	while sleep 5; do
 		if [[ $(pgrep contention_disk) ]]; then
-			echo "disk io is running";
+			# echo "disk io is running";
+			:
 		else
-			echo "Disk IO Not Running, so I must do something";
+			# echo "Disk IO Not Running, so I must do something";
+			:
 			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG" &
 		fi
 	done &
