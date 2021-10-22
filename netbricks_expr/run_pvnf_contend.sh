@@ -41,17 +41,18 @@ TCP_LIFE_MONITOR=/usr/share/bcc/tools/tcplife
 BIO_TOP_MONITOR=/usr/share/bcc/tools/biotop
 # IPTRAF_MONITOR=/usr/sbin/iptraf-ng
 
-# NB_CONFIG=$HOME/dev/netbricks/experiments/config_2core.toml
-NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_1core_long.toml
+NB_CONFIG=$HOME/dev/netbricks/experiments/config_1core.toml
+sed "/duration = 200/i log_path = '$LOG'" "$NB_CONFIG" > "$TMP_NB_CONFIG"
+# NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_1core_long.toml
+# sed "/duration = 750/i log_path = '$LOG'" "$NB_CONFIG_LONG" > "$TMP_NB_CONFIG"
 TMP_NB_CONFIG=$HOME/config.toml
 
 # INST_LEVEL=on
 INST_LEVEL=off
-sed "/duration = 750/i log_path = '$LOG'" "$NB_CONFIG_LONG" > "$TMP_NB_CONFIG"
+EXPR_MODE=short
 
 mkdir -p "$LOG_DIR"
 
-EXPR_MODE=long
 
 if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-groupby-app' ]; then
 	#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio $8=port $9=expr_num
