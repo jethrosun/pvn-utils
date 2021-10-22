@@ -11,7 +11,10 @@ if [[ $1 -eq $zero ]]; then
   echo "no cpu contention";
   exit;
 fi
-until sudo nice --20 /home/jethros/data/cargo-target/release/contention_cpu $1 > $2; do
-    echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
-    sleep 1
-done
+
+sudo /home/jethros/data/cargo-target/release/contention_cpu $1 > $2
+
+# until sudo nice --20 /home/jethros/data/cargo-target/release/contention_cpu $1 > $2; do
+#     echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
+#     sleep 1
+# done
