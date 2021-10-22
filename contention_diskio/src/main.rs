@@ -30,10 +30,10 @@ fn file_io(f: &mut File, mut buf: Box<[u8]>) {
     f.write_all(&buf).unwrap();
     f.flush().unwrap();
 
-    // measure read throughput
-    f.seek(SeekFrom::Start(0)).unwrap();
-    // read sets * 50mb mb from file
-    f.read_exact(&mut buf).unwrap();
+    // // measure read throughput
+    // f.seek(SeekFrom::Start(0)).unwrap();
+    // // read sets * 50mb mb from file
+    // f.read_exact(&mut buf).unwrap();
 }
 
 fn main() {
@@ -71,7 +71,7 @@ fn main() {
         .into_iter()
         .map(|id| {
             thread::spawn(move || {
-                if id.id == 1 || id.id == 4 || id.id == 5 {
+                if id.id == 4 || id.id == 5 {
                     // Pin this thread to a single CPU core.
                     core_affinity::set_for_current(id);
 
