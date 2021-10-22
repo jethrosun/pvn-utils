@@ -39,18 +39,18 @@ TCP_LIFE_MONITOR=/usr/share/bcc/tools/tcplife
 BIO_TOP_MONITOR=/usr/share/bcc/tools/biotop
 # IPTRAF_MONITOR=/usr/sbin/iptraf-ng
 
-# NB_CONFIG=$HOME/dev/netbricks/experiments/config_1core.toml
-NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_1core_long.toml
+NB_CONFIG=$HOME/dev/netbricks/experiments/config_1core.toml
+# NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_1core_long.toml
 TMP_NB_CONFIG=$HOME/config.toml
 
-sed "/duration = 800/i log_path = '${LOG}'" "${NB_CONFIG_LONG}" >"${TMP_NB_CONFIG}"
+sed "/duration = 200/i log_path = '${LOG}'" "${NB_CONFIG}" >"${TMP_NB_CONFIG}"
 
 # echo "$(LOG_DIR)"
 # echo $LOG
 mkdir -p "$LOG_DIR"
 
 INST_LEVEL=off
-EXPR_MODE=long
+EXPR_MODE=short
 
 if [ "$2" == 'pvn-tlsv-rdr-coexist-app' ]; then
 	JSON_STRING=$(jq -n \
