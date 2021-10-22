@@ -40,13 +40,12 @@ NB_CONFIG=$HOME/dev/netbricks/experiments/config_1core.toml
 # NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_2core_long.toml
 TMP_NB_CONFIG=$HOME/config.toml
 
-# INST_LEVEL=on
 # sed "/duration = 350/i log_path = '$LOG'" "$NB_CONFIG" > "$TMP_NB_CONFIG"
-INST_LEVEL=off
 sed "/duration = 120/i log_path = '$LOG'" "$NB_CONFIG" > "$TMP_NB_CONFIG"
 
 mkdir -p "$LOG_DIR"
 
+INST_LEVEL=off
 EXPR_MODE=short
 
 if [ "$2" == 'pvn-transcoder-transform-app' ]; then
