@@ -33,14 +33,6 @@ p2p_nf_list = ['pvn-p2p-transform-app', 'pvn-p2p-groupby-app']
 rdr_nf_list = ['pvn-rdr-transform-app', 'pvn-p2p-groupby-app']
 xcdr_nf_list = ['pvn-transcoder-transform-app', 'pvn-transcoder-groupby-app']
 
-nf_set = {
-    'app_xcdr': '6',
-    'app_rdr': '5',
-    'app_tlsv': '6',
-    'app_p2p': '5',
-    'app_p2p-controlled': '5',
-}
-
 # 10, 20, 50, 100
 fixed_sending_rate = 10
 coresident_sending_rate = 20
@@ -100,9 +92,10 @@ setup = []
 # NOTE: zero is only for testing purposes and should not be used in real
 # experiments
 zero = '0'
-for i in ['1', '2', '3']:
-    # setup.append([i, zero, zero])
-    # setup.append([zero, i, zero])
+# for i in ['1', '2', '3']:
+for i in ['1', '3']:
+    setup.append([i, zero, zero])
+    setup.append([zero, i, zero])
     setup.append([zero, zero, i])
     # setup.append([i, i, zero])
     # setup.append([i, zero, i])
@@ -110,6 +103,14 @@ for i in ['1', '2', '3']:
     # setup.append([i, i, i])
 num_of_epoch = 1
 # num_of_epoch = 10
+
+nf_set = {
+    'app_xcdr': '6',
+    'app_rdr': '5',
+    'app_tlsv': '6',
+    'app_p2p': '5',
+    'app_p2p-controlled': '5',
+}
 
 # expr is 10 min/600 sec
 expr_wait_time = 925
@@ -129,6 +130,4 @@ complete_nuclear_list = ['app_p2p', 'app_p2p-ext']
 p2p_controlled = ['app_p2p-controlled']
 p2p_ext = ['app_p2p-ext']
 
-# nf_list = ['app_tlsv', 'app_xcdr', 'app_p2p-controlled', 'app_rdr']
-# nf_list = ['app_p2p-controlled', 'app_rdr']
-nf_list = ['app_p2p-controlled']
+nf_list = ['app_tlsv', 'app_xcdr', 'app_p2p-controlled', 'app_rdr']
