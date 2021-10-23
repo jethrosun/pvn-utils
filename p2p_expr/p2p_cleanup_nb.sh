@@ -40,5 +40,6 @@ fi
 
 
 sudo rm -rf /data/bt
+sudo rm -rf /data/tmp
 sudo rm -rf /home/jethros/Downloads
 
