@@ -25,11 +25,12 @@ fn read_setup(setup: &usize) -> Option<usize> {
     map.remove(setup)
 }
 
-fn file_io(f: &mut File, mut buf: Box<[u8]>) {
+fn file_io(counter: &mut i32, f: &mut File, mut buf: Box<[u8]>) {
     // write sets * 50mb to file
     f.write_all(&buf).unwrap();
     f.flush().unwrap();
 
+    *counter += 1;
     // // measure read throughput
     // f.seek(SeekFrom::Start(0)).unwrap();
     // // read sets * 50mb mb from file
@@ -74,30 +75,36 @@ fn main() {
                 if id.id == 4 || id.id == 5 {
                     // Pin this thread to a single CPU core.
                     core_affinity::set_for_current(id);
+                    let mut counter = 0;
+                    let start = Instant::now();
+
+                    // use buffer to store random data
+                    let mut buf: Vec<u8> = Vec::with_capacity(buf_size * 1_000_000); // B to MB
+                    for _ in 0..buf.capacity() {
+                        buf.push(rand::random())
+                    }
+                    let buf = buf.into_boxed_slice();
+
+                    let file_name = "/data/tmp/foobar".to_owned() + &id.id.to_string() + ".bin";
+
+                    // files for both cases
+                    let mut file = OpenOptions::new()
+                        .write(true)
+                        .read(true)
+                        .create(true)
+                        .open(file_name)
+                        .unwrap();
 
                     loop {
-                        // use buffer to store random data
-                        let mut buf: Vec<u8> = Vec::with_capacity(buf_size * 1_000_000); // B to MB
-                        for _ in 0..buf.capacity() {
-                            buf.push(rand::random())
-                        }
-                        let buf = buf.into_boxed_slice();
-
-                        let file_name = "/data/tmp/foobar".to_owned() + &id.id.to_string() + ".bin";
-
-                        // files for both cases
-                        let mut file = OpenOptions::new()
-                            .write(true)
-                            .read(true)
-                            .create(true)
-                            .open(file_name)
-                            .unwrap();
-
                         let _start = Instant::now();
                         let mut _now = Instant::now();
 
                         // actual file IO
-                        let _ = file_io(&mut file, buf.clone());
+                        let _ = file_io(&mut counter, &mut file, buf.clone());
+
+                        if start.elapsed() >= Duration::from_secs(181) {
+                            println!("have run for 180 seconds with counter {:?}", counter);
+                        }
 
                         if _now.elapsed() >= _second {
                             _now = Instant::now();
