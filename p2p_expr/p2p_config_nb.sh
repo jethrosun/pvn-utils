@@ -6,6 +6,7 @@ sudo -u jethros mkdir -p /home/jethros/Downloads
 sudo -u jethros mkdir -p /data/bt/config
 sudo -u jethros mkdir -p /data/bt/deluge_data
 sudo -u jethros mkdir -p /data/bt/tmp
+sudo -u jethros mkdir -p /data/tmp
 
 #prep the output dirs
 # if [ ! -e ~/bt_data/Complete ]; then
