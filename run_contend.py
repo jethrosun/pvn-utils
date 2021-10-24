@@ -53,19 +53,19 @@ def pktgen_sess_setup(trace, nf, setup):
 
 
 def run_pktgen(sess, trace, setup):
-    if trace in ['64B', '128B', '256B', '512B', '1024B', '1280B', '1518B']:
+    if trace in ['64B', '128B', '256B', '512B', '524B', '1280B', '1518B']:
         # never here
         size = trace[:-1]
         cmd_str = "sudo ./run_pktgen.sh " + trace
-        set_rate_str = "set 0 rate 100"
+        set_rate_str = "set 0 rate 50"
         set_size_str = "set 0 size " + size
         start_str = "start 0"
 
-        time.sleep(30)
+        time.sleep(15)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
         sess.send_commands(cmd_str, set_rate_str, set_size_str, start_str)
 
-        time.sleep(10)
+        time.sleep(5)
         print("Pktgen\nRUN pktgen")
     else:
         cmd_str = "sudo ./run_pktgen.sh " + trace
@@ -73,11 +73,11 @@ def run_pktgen(sess, trace, setup):
         set_port_str = "set 0 rate " + str(setup)
         start_str = "start 0"
 
-        time.sleep(30)
+        time.sleep(15)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
         sess.send_commands(cmd_str, set_port_str, start_str)
 
-        time.sleep(10)
+        time.sleep(5)
         print("Pktgen\nRUN pktgen")
 
 
@@ -161,13 +161,13 @@ def main(expr_list):
                     # run clean up for p2p nf before experiment
                     if nf in contend.p2p_nf_list:
                         p2p_cleanup(netbricks_sess)
-                        time.sleep(30)
+                        time.sleep(15)
                     elif nf in contend.xcdr_nf_list:
                         xcdr_cleanup(netbricks_sess)
-                        time.sleep(30)
+                        time.sleep(15)
                     elif nf in contend.rdr_nf_list:
                         rdr_cleanup(netbricks_sess)
-                        time.sleep(30)
+                        time.sleep(15)
 
                     # Actual RUN
                     if nf in contend.xcdr_nf_list:
@@ -187,15 +187,15 @@ def main(expr_list):
                     if nf in contend.p2p_nf_list:
                         time.sleep(contend.expr_wait_time)
                         p2p_cleanup(netbricks_sess)
-                        time.sleep(30)
+                        time.sleep(15)
                     elif nf in contend.xcdr_nf_list:
                         time.sleep(contend.expr_wait_time)
                         xcdr_cleanup(netbricks_sess)
-                        time.sleep(30)
+                        time.sleep(15)
                     elif nf in contend.rdr_nf_list:
                         time.sleep(contend.expr_wait_time)
                         rdr_cleanup(netbricks_sess)
-                        time.sleep(30)
+                        time.sleep(15)
                     elif nf in contend.pvn_nf_list:
                         time.sleep(contend.expr_wait_time)
                     else:
@@ -206,16 +206,16 @@ def main(expr_list):
                     # sess_destroy(netbricks_sess)
 
                     if nf in contend.p2p_nf_list:
-                        time.sleep(30)
+                        time.sleep(15)
                     elif nf in contend.xcdr_nf_list:
-                        time.sleep(30)
+                        time.sleep(15)
                     elif nf in contend.pvn_nf_list:
-                        time.sleep(30)
+                        time.sleep(15)
                     else:
-                        time.sleep(10)
+                        time.sleep(5)
 
                 sess_destroy(pktgen_sess)
-                time.sleep(30)
+                time.sleep(15)
 
 
 print(contend.nf_list)  # just run all
