@@ -68,12 +68,12 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 	echo "$JSON_STRING" > /home/jethros/setup
 
 	# dont track docker, why?
-	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
+	docker run -d --cpuset-cpus 1 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
 	# P1=$!
 	docker ps
 	sleep 15
 
-	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$8" "$8" "$9" "$FAKTORY_LOG" &
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$9" 1 "$FAKTORY_LOG" &
 	P4=$!
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P5=$!

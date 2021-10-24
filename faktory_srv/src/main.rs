@@ -55,19 +55,16 @@ fn main() {
     // get the list of ports from cmd args and cast into a Vec
     let params: Vec<String> = env::args().collect();
 
-    if params.len() == 5 {
-        println!("Parse 4 args");
-        println!(
-            "Setup: {:?}, Port1: {:?}, Port2: {:?}, Expr: {:?}",
-            params[1], params[2], params[3], params[4],
-        );
+    if params.len() == 3 {
+        println!("Parse 2 args");
+        println!("Setup: {:?},  Expr: {:?}", params[1], params[2]);
     } else {
         println!("More or less than 4 args are provided. Run it with *PORT1 PORT2 expr_num*");
         process::exit(0x0100);
     }
 
     let _setup = params[1].parse::<usize>().unwrap();
-    let expr = params[4].parse::<usize>().unwrap();
+    let expr = params[2].parse::<usize>().unwrap();
 
     // The regular way to get core ids are not going work as we have configured isol cpus to reduce context switches for DPDK and our things.
     // We want to cause equal pressure to all of the cores for CPU contention
