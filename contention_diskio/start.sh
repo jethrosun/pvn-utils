@@ -1,20 +1,44 @@
 #!/bin/bash
 
-# we don't need to build every time
-cd /home/jethros/dev/pvn/utils/contention_diskio/
-# /home/jethros/.cargo/bin/cargo build --release
+#!/bin/bash
 
-# sudo /home/jethros/.cargo/bin/cargo run $1 $2 $3
+# the script will be run every 5 seconds 
 
-zero=0;
-if [[ $1 -eq $zero ]]; then
-  echo "no disk I/O contention";
-  exit;
+if [[ $1 -eq 0 ]]; then
+	echo "no disk I/O contention";
+	exit;
+elif [[ $1 -eq 1 ]]; then
+	FILE_IO_PER_SECOND=250
+elif [[ $1 -eq 2 ]]; then
+	FILE_IO_PER_SECOND=500
+elif [[ $1 -eq 3 ]]; then
+	FILE_IO_PER_SECOND=1000
+else
+	echo "Contention param is wrong, $1"
+	exit;
 fi
+echo "File IO per second is $FILE_IO_PER_SECOND"
 
+if [[ $2 -eq 3 ]]; then
+	:
+elif [[ $2 -eq 4 ]]; then
+	:
+else
+	echo "Core param is wrong, $2"
+	exit;
+fi
+echo "File IO per second is $FILE_IO_PER_SECOND"
 
-sudo /home/jethros/data/cargo-target/release/contention_diskio $1 > $2
-# until sudo nice --20 /home/jethros/data/cargo-target/release/contention_diskio $1 > $2; do
-    # echo "Server 'myserver' crashed with exit code $?.  Respawning.." >&2
-    # sleep 1
-# done
+cd /data
+target="tmp$2"
+mkdir -p $target
+
+# start=`date +%s`
+
+for N in $(seq 1 $FILE_IO_PER_SECOND); do
+	taskset -c $2 head -c 1M </dev/urandom >$target/$N
+done;
+
+# end=`date +%s`
+# runtime=$((end-start))
+# echo "Total time is $runtime"

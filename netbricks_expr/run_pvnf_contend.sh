@@ -104,7 +104,8 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 			:
 		else
 			# echo "Disk io Not Running, so I must do something";
-			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG" &
+			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 >> "$DISKIO_LOG" &
+			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 >> "$DISKIO_LOG" &
 		fi
 	done &
 	P3=$!
@@ -193,7 +194,8 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 			:
 		else
 			# echo "Disk IO Not Running, so I must do something";
-			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG" &
+			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 >> "$DISKIO_LOG" &
+			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 >> "$DISKIO_LOG" &
 		fi
 	done &
 	P4=$!
@@ -265,8 +267,8 @@ else
 			:
 		else
 			# echo "Disk IO Not Running, so I must do something";
-			:
-			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" "$DISKIO_LOG" &
+			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 >> "$DISKIO_LOG" &
+			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 >> "$DISKIO_LOG" &
 		fi
 	done &
 	P3=$!
