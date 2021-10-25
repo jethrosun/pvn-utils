@@ -20,8 +20,6 @@ trace = {
     'app_p2p-controlled': 'pvn_p2p.pcap',
 }
 
-rdr_nf_list = ['pvn-rdr-transform-app', 'pvn-rdr-groupby-app']
-
 pvn_nf_list = [
     'pvn-tlsv-transform-app',
     'pvn-p2p-transform-app',

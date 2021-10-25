@@ -185,15 +185,17 @@ def main(expr_list):
                     # run clean up for p2p nf before experiment
                     if nf in contend.p2p_nf_list:
                         time.sleep(contend.expr_wait_time)
-                        time.sleep(20)
+                        time.sleep(30)
                         p2p_cleanup(netbricks_sess)
                         time.sleep(5)
                     elif nf in contend.xcdr_nf_list:
                         time.sleep(contend.expr_wait_time)
+                        time.sleep(30)
                         xcdr_cleanup(netbricks_sess)
                         time.sleep(5)
                     elif nf in contend.rdr_nf_list:
                         time.sleep(contend.expr_wait_time)
+                        time.sleep(30)
                         rdr_cleanup(netbricks_sess)
                         time.sleep(5)
                     elif nf in contend.pvn_nf_list:
@@ -205,14 +207,7 @@ def main(expr_list):
                     sess_destroy(netbricks_sess)
                     # sess_destroy(netbricks_sess)
 
-                    if nf in contend.p2p_nf_list:
-                        time.sleep(5)
-                    elif nf in contend.xcdr_nf_list:
-                        time.sleep(5)
-                    elif nf in contend.pvn_nf_list:
-                        time.sleep(5)
-                    else:
-                        time.sleep(5)
+                    time.sleep(5)
 
                 sess_destroy(pktgen_sess)
                 time.sleep(10)
