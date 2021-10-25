@@ -74,11 +74,11 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 	docker ps
 	sleep 5
 
-	sudo -u jethros taskset -c 1 /home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$9" 1 "$FAKTORY_LOG" &
+	sudo taskset -c 1 /home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$9" 1 "$FAKTORY_LOG" &
 	P4=$!
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P5=$!
-	for PID in $(pgrep faktory_srv); do sudo -u jethros taskset -cp 1 $PID; done
+	for PID in $(pgrep faktory_srv); do sudo taskset -cp 1 $PID; done
 
 	while sleep 5; do
 		if [[ $(pgrep contention_cpu) ]]; then
