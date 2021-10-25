@@ -102,11 +102,11 @@ num_of_epoch = 1
 # num_of_epoch = 10
 
 nf_set = {
-    'app_xcdr': '6',
+    'app_xcdr': '5',
     'app_rdr': '5',
     'app_tlsv': '6',
-    'app_p2p': '5',
-    'app_p2p-controlled': '5',
+    'app_p2p': '4',
+    'app_p2p-controlled': '4',
 }
 
 # expr is 10 min/600 sec
