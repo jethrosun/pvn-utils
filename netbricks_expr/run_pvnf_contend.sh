@@ -76,6 +76,7 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 
 	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$9" 1 "$FAKTORY_LOG" &
 	P4=$!
+	for PID in $(pgrep faktory_srv); do sudo -u jethros taskset -cp 1 $PID; done
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P5=$!
 
