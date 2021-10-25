@@ -41,5 +41,7 @@ fi
 
 sudo rm -rf /data/bt
 sudo rm -rf /data/tmp
+sudo rm -rf /data/tmp3
+sudo rm -rf /data/tmp4
 sudo rm -rf /home/jethros/Downloads
 
