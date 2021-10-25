@@ -118,11 +118,11 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 	P10=$!
 	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh contention; done > "$MEMLOG3" &
 	P11=$!
-	sudo -u jethros taskset -c 5 "$TCP_LIFE_MONITOR" > "$TCPLIFE_LOG" &
+	sudo taskset -c 5 "$TCP_LIFE_MONITOR" > "$TCPLIFE_LOG" &
 	P12=$!
-	sudo -u jethros taskset -c 5 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+	sudo taskset -c 5 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
 	P13=$!
-	sudo -u jethros taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
+	sudo taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
 	P14=$!
 	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13 $P14
 
@@ -203,11 +203,11 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 	P10=$!
 	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh contention; done > "$MEMLOG3" &
 	P11=$!
-	sudo -u jethros taskset -c 5 "$TCP_LIFE_MONITOR" > "$TCPLIFE_LOG" &
+	sudo taskset -c 5 "$TCP_LIFE_MONITOR" > "$TCPLIFE_LOG" &
 	P12=$!
-	sudo -u jethros taskset -c 5 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+	sudo taskset -c 5 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
 	P13=$!
-	sudo -u jethros taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
+	sudo taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
 	P14=$!
 	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13 $P14
 
@@ -235,7 +235,6 @@ else
 		if [[ $(pgrep contention_cpu) ]]; then
 			:
 		else
-			:
 			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
 		fi
 	done &
@@ -244,7 +243,6 @@ else
 		if [[ $(pgrep contention_mem) ]]; then
 			:
 		else
-			:
 			sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
 		fi
 	done &
@@ -271,11 +269,11 @@ else
 	P9=$!
 	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh contention; done > "$MEMLOG3" &
 	P10=$!
-	sudo -u jethros taskset -c 5 "$TCP_LIFE_MONITOR" > "$TCPLIFE_LOG" &
+	sudo taskset -c 5 "$TCP_LIFE_MONITOR" > "$TCPLIFE_LOG" &
 	P11=$!
-	sudo -u jethros taskset -c 5 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+	sudo taskset -c 5 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
 	P12=$!
-	sudo -u jethros taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
+	sudo  taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
 	P13=$!
 
 	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13
