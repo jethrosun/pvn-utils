@@ -8,7 +8,7 @@ cd /home/jethros/dev/pvn/utils/contention_mem/
 
 zero=0;
 if [[ $1 -eq $zero ]]; then
-  echo "no memory contention";
+  # echo "no memory contention";
   exit;
 fi
 
