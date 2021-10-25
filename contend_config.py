@@ -92,14 +92,14 @@ setup = []
 # NOTE: zero is only for testing purposes and should not be used in real
 # experiments
 zero = '0'
-for i in ['1', '2', '3']:
+for i in ['1', '3']:
     setup.append([i, zero, zero])
     setup.append([zero, i, zero])
     setup.append([zero, zero, i])
-    setup.append([i, i, zero])
-    setup.append([i, zero, i])
-    setup.append([zero, i, i])
-    setup.append([i, i, i])
+    # setup.append([i, i, zero])
+    # setup.append([i, zero, i])
+    # setup.append([zero, i, i])
+    # setup.append([i, i, i])
 num_of_epoch = 1
 # num_of_epoch = 10
 
@@ -112,7 +112,7 @@ nf_set = {
 }
 
 # expr is 10 min/600 sec
-expr_wait_time = 220
+expr_wait_time = 250
 xcdr_port_base = 7418
 batch = 1
 
@@ -130,4 +130,4 @@ p2p_controlled = ['app_p2p-controlled']
 p2p_ext = ['app_p2p-ext']
 
 # nf_list = ['app_p2p-controlled', 'app_tlsv', 'app_rdr', 'app_xcdr']
-nf_list = ['app_xcdr']
+nf_list = ['app_p2p-controlled', 'app_rdr', 'app_xcdr']
