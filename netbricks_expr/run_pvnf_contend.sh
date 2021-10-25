@@ -92,7 +92,7 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 		if [[ $(pgrep contention_mem) ]]; then
 			:
 		else
-			sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
+			sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
 		fi
 	done &
 	P2=$!
@@ -177,7 +177,7 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 		if [[ $(pgrep contention_mem) ]]; then
 			:
 		else
-			sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
+			sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
 		fi
 	done &
 	P3=$!
@@ -243,7 +243,7 @@ else
 		if [[ $(pgrep contention_mem) ]]; then
 			:
 		else
-			sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
+			sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
 		fi
 	done &
 	P2=$!
