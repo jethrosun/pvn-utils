@@ -96,10 +96,10 @@ for i in ['1', '2', '3']:
     setup.append([i, zero, zero])
     setup.append([zero, i, zero])
     setup.append([zero, zero, i])
-    # setup.append([i, i, zero])
-    # setup.append([i, zero, i])
-    # setup.append([zero, i, i])
-    # setup.append([i, i, i])
+    setup.append([i, i, zero])
+    setup.append([i, zero, i])
+    setup.append([zero, i, i])
+    setup.append([i, i, i])
 num_of_epoch = 1
 # num_of_epoch = 10
 
