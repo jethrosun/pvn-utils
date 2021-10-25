@@ -247,7 +247,7 @@ else
 		fi
 	done &
 	P2=$!
-	while sleep 5; do
+	while sleep 15; do
 		if [[ $(pgrep contention_disk) ]]; then
 			:
 		else

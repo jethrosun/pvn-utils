@@ -2,7 +2,7 @@
 
 #!/bin/bash
 
-# the script will be run every 5 seconds 
+# the script will be run every 5 seconds
 
 if [[ $1 -eq 0 ]]; then
 	echo "no disk I/O contention";
