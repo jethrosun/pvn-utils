@@ -158,9 +158,9 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 	echo "$JSON_STRING" > /home/jethros/setup
 
 	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
-	sleep 5
+	sleep 3
 	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
-	sleep 15
+	sleep 3
 
 	while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > "$P2P_PROGRESS_LOG" &
 	P1=$!
