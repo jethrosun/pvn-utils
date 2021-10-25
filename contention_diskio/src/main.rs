@@ -6,7 +6,7 @@ use core_affinity::CoreId;
 use std::collections::HashMap;
 use std::env;
 use std::fs::{File, OpenOptions};
-use std::io::{Read, Seek, SeekFrom, Write};
+use std::io::Write;
 use std::process;
 use std::thread;
 use std::thread::sleep;
@@ -25,7 +25,7 @@ fn read_setup(setup: &usize) -> Option<usize> {
     map.remove(setup)
 }
 
-fn file_io(counter: &mut i32, f: &mut File, mut buf: Box<[u8]>) {
+fn file_io(counter: &mut i32, f: &mut File, buf: Box<[u8]>) {
     // write sets * 50mb to file
     f.write_all(&buf).unwrap();
     f.flush().unwrap();
