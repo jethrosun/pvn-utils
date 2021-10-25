@@ -90,10 +90,9 @@ setup = []
 # NOTE: zero is only for testing purposes and should not be used in real
 # experiments
 zero = '0'
-# for i in ['1', '3']:
-for i in ['3']:
-    # setup.append([i, zero, zero])
-    # setup.append([zero, i, zero])
+for i in ['1', '3']:
+    setup.append([i, zero, zero])
+    setup.append([zero, i, zero])
     setup.append([zero, zero, i])
     # setup.append([i, i, zero])
     # setup.append([i, zero, i])
