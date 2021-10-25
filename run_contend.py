@@ -176,7 +176,6 @@ def main(expr_list):
                         run_netbricks_xcdr(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr], str(port2 - 1), str(port2),
                                            str(expr_num), contention[0], contention[1], contention[2])
                     elif nf in contend.p2p_nf_list:
-                        print("got in")
                         run_netbricks_p2p(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr], "app_p2p-controlled", contention[0],
                                           contention[1], contention[2])
                     else:
@@ -186,6 +185,7 @@ def main(expr_list):
                     # run clean up for p2p nf before experiment
                     if nf in contend.p2p_nf_list:
                         time.sleep(contend.expr_wait_time)
+                        time.sleep(20)
                         p2p_cleanup(netbricks_sess)
                         time.sleep(5)
                     elif nf in contend.xcdr_nf_list:
