@@ -13,7 +13,7 @@ elif [[ $1 -eq 1 ]]; then
 elif [[ $1 -eq 2 ]]; then
 	FILE_IO_PER_SECOND=500
 elif [[ $1 -eq 3 ]]; then
-	FILE_IO_PER_SECOND=5000
+	FILE_IO_PER_SECOND=10000
 else
 	echo "Contention param is wrong, $1"
 	exit;
@@ -28,7 +28,7 @@ else
 	echo "Core param is wrong, $2"
 	exit;
 fi
-echo "File IO per second is $FILE_IO_PER_SECOND"
+echo "Core is $2"
 
 cd /data
 target="tmp$2"
