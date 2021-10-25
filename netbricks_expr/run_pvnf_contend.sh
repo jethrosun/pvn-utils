@@ -72,7 +72,7 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 	docker run -d --cpuset-cpus 1 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
 	# P1=$!
 	docker ps
-	sleep 15
+	sleep 5
 
 	sudo -u jethros taskset -c 1 /home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$9" 1 "$FAKTORY_LOG" &
 	P4=$!
