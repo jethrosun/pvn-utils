@@ -171,12 +171,12 @@ def p2p_cleanup(typ, sess):
         cmd_str = "sudo ./p2p_cleanup_leecher.sh "
         sess.send_commands(cmd_str)
         print("Leecher P2P clean up with cmd: {}".format(cmd_str))
-        time.sleep(1)
+        time.sleep(3)
 
         config_str = "./p2p_config_leecher.sh "
         sess.send_commands(config_str)
         print("Leecher P2P config with cmd: {}".format(config_str))
-        time.sleep(1)
+        time.sleep(15)
     else:
         print("Unknown p2p node type {}".format(typ))
 
