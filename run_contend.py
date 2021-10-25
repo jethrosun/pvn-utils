@@ -52,6 +52,50 @@ def pktgen_sess_setup(trace, nf, setup):
         sys.exit(1)
 
 
+def p2p_sess_setup(node, trace, nf, epoch):
+    p2p_nodes = {
+        'provenza': 'seeder',
+        'flynn': 'leecher',
+        'tao': 'leecher',
+        'sanchez': 'leecher',
+    }
+    p2p_ips = {
+        'provenza': '10.200.111.125',
+        'flynn': '10.200.111.124',
+        'tao': '10.200.111.123',
+        'sanchez': '10.200.111.122',
+    }
+
+    print("Entering p2p_sess setup for {} as {}".format(node, p2p_nodes[node]))
+    try:
+        p2p_sess = Screen(node, True)
+        print("p2p session for {} is spawned".format(node))
+
+        p2p_sess.send_commands('bash')
+        p2p_sess.enable_logs(node + "--" + trace + "_" + nf + ".log")
+        p2p_sess.send_commands('ssh jethros@' + p2p_ips[node])
+        p2p_sess.send_commands('cd /home/jethros/dev/pvn/utils/p2p_expr')
+        p2p_sess.send_commands('git pull')
+
+        time.sleep(20)
+        return p2p_sess
+    except Exception as err:
+        print("Creating screen sessions failed: {}".format(err))
+        p2p_sess.kill()
+        sys.exit(1)
+
+
+def run_p2p_node(typ, sess, setup, epoch):
+    if typ == "leecher":
+        cmd_str = "./p2p_run_leecher.py " + str(setup) + " " + str(epoch)
+        print("Run P2P Leecher \n\tCmd: {}".format(cmd_str))
+        sess.send_commands(cmd_str)
+
+        time.sleep(5)
+    else:
+        print("Unknown type: {}".format(typ))
+
+
 def run_pktgen(sess, trace, setup):
     if trace in ['64B', '128B', '256B', '512B', '524B', '1280B', '1518B']:
         # never here
@@ -116,10 +160,25 @@ def sess_reboot(sess):
     sess.send_commands(cmd_str)
 
 
-def p2p_cleanup(sess):
-    cmd_str = "sudo ./misc/p2p_cleanup_nb.sh "
-    print("Extra clean up for P2P with cmd: {}".format(cmd_str))
-    sess.send_commands(cmd_str)
+def p2p_cleanup(typ, sess):
+    if typ == "netbricks":
+        p2p_cmd_str = "sudo ./misc/p2p_cleanup_nb.sh"
+        sess.send_commands(p2p_cmd_str)
+        print("NetBricks P2P cmd: {}".format(p2p_cmd_str))
+        time.sleep(5)
+
+    elif typ == "leecher":
+        cmd_str = "sudo ./p2p_cleanup_leecher.sh "
+        sess.send_commands(cmd_str)
+        print("Leecher P2P clean up with cmd: {}".format(cmd_str))
+        time.sleep(5)
+
+        config_str = "./p2p_config_leecher.sh "
+        sess.send_commands(config_str)
+        print("Leecher P2P config with cmd: {}".format(config_str))
+        time.sleep(55)
+    else:
+        print("Unknown p2p node type {}".format(typ))
 
 
 def xcdr_cleanup(sess):
@@ -160,8 +219,16 @@ def main(expr_list):
 
                     # run clean up for p2p nf before experiment
                     if nf in contend.p2p_nf_list:
-                        p2p_cleanup(netbricks_sess)
-                        time.sleep(10)
+                        leecher1_sess = p2p_sess_setup('flynn', inst.trace[expr], nf, epoch)
+                        leecher2_sess = p2p_sess_setup('tao', inst.trace[expr], nf, epoch)
+                        leecher3_sess = p2p_sess_setup('sanchez', inst.trace[expr], nf, epoch)
+
+                        # run clean up for p2p nf before experiment
+                        p2p_cleanup("netbricks", netbricks_sess)
+                        p2p_cleanup("leecher", leecher1_sess)
+                        p2p_cleanup("leecher", leecher2_sess)
+                        p2p_cleanup("leecher", leecher3_sess)
+                        time.sleep(5)
                     elif nf in contend.xcdr_nf_list:
                         xcdr_cleanup(netbricks_sess)
                         time.sleep(10)
@@ -176,8 +243,13 @@ def main(expr_list):
                         run_netbricks_xcdr(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr], str(port2 - 1), str(port2),
                                            str(expr_num), contention[0], contention[1], contention[2])
                     elif nf in contend.p2p_nf_list:
+                        # Actual RUN
+                        run_p2p_node('leecher', leecher1_sess, setup, epoch)
+                        run_p2p_node('leecher', leecher2_sess, setup, epoch)
+                        run_p2p_node('leecher', leecher3_sess, setup, epoch)
                         run_netbricks_p2p(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr], "app_p2p-controlled", contention[0],
                                           contention[1], contention[2])
+
                     else:
                         run_netbricks(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr], contention[0], contention[1],
                                       contention[2])
@@ -186,7 +258,17 @@ def main(expr_list):
                     if nf in contend.p2p_nf_list:
                         time.sleep(contend.expr_wait_time)
                         time.sleep(30)
-                        p2p_cleanup(netbricks_sess)
+                        # run clean up for p2p nf before experiment
+                        p2p_cleanup("netbricks", netbricks_sess)
+                        p2p_cleanup("leecher", leecher1_sess)
+                        p2p_cleanup("leecher", leecher2_sess)
+                        p2p_cleanup("leecher", leecher3_sess)
+                        time.sleep(5)
+
+                        sess_destroy(leecher1_sess)
+                        sess_destroy(leecher2_sess)
+                        sess_destroy(leecher3_sess)
+
                         time.sleep(5)
                     elif nf in contend.xcdr_nf_list:
                         time.sleep(contend.expr_wait_time)
@@ -206,7 +288,6 @@ def main(expr_list):
 
                     sess_destroy(netbricks_sess)
                     # sess_destroy(netbricks_sess)
-
                     time.sleep(5)
 
                 sess_destroy(pktgen_sess)
