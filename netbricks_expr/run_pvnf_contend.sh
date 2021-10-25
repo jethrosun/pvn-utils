@@ -55,6 +55,7 @@ mkdir -p "$LOG_DIR"
 
 if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-groupby-app' ]; then
 	#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio $8=port $9=expr_num
+	for PID in $(pgrep contention); do sudo -u jethros kill $PID; done
 
 	# setup toml file for NetBricks
 	JSON_STRING=$( jq -n \
@@ -104,8 +105,8 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 			:
 		else
 			# echo "Disk io Not Running, so I must do something";
-			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 >> "$DISKIO_LOG" &
-			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 >> "$DISKIO_LOG" &
+			/home/jethros/dev/pvn/utils/contention_diskio/contention_diskio.sh "$7" 3 >> "$DISKIO_LOG" &
+			/home/jethros/dev/pvn/utils/contention_diskio/contention_diskio.sh "$7" 4 >> "$DISKIO_LOG" &
 		fi
 	done &
 	P3=$!
@@ -132,6 +133,7 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 
 elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; then
 	#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio $8=p2p_type
+	for PID in $(pgrep contention); do sudo -u jethros kill $PID; done
 
 	if [ "$5" == "app_p2p-controlled" ]; then
 		sudo rm -rf "$HOME/Downloads"
@@ -194,8 +196,8 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 			:
 		else
 			# echo "Disk IO Not Running, so I must do something";
-			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 >> "$DISKIO_LOG" &
-			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 >> "$DISKIO_LOG" &
+			/home/jethros/dev/pvn/utils/contention_diskio/contention_diskio.sh "$7" 3 >> "$DISKIO_LOG" &
+			/home/jethros/dev/pvn/utils/contention_diskio/contention_diskio.sh "$7" 4 >> "$DISKIO_LOG" &
 		fi
 	done &
 	P4=$!
@@ -226,6 +228,7 @@ else
 	#
 	# we don't need to check resource usage for tlsv and rdr so we just grep chrom here
 	# as well
+	for PID in $(pgrep contention); do sudo -u jethros kill $PID; done
 
 	JSON_STRING=$( jq -n \
 		--arg iter "$3" \
@@ -267,8 +270,8 @@ else
 			:
 		else
 			# echo "Disk IO Not Running, so I must do something";
-			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 >> "$DISKIO_LOG" &
-			/home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 >> "$DISKIO_LOG" &
+			/home/jethros/dev/pvn/utils/contention_diskio/contention_diskio.sh "$7" 3 >> "$DISKIO_LOG" &
+			/home/jethros/dev/pvn/utils/contention_diskio/contention_diskio.sh "$7" 4 >> "$DISKIO_LOG" &
 		fi
 	done &
 	P3=$!
