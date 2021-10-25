@@ -77,7 +77,7 @@ def p2p_sess_setup(node, trace, nf, epoch):
         p2p_sess.send_commands('cd /home/jethros/dev/pvn/utils/p2p_expr')
         p2p_sess.send_commands('git pull')
 
-        time.sleep(20)
+        time.sleep(3)
         return p2p_sess
     except Exception as err:
         print("Creating screen sessions failed: {}".format(err))
@@ -117,7 +117,7 @@ def run_pktgen(sess, trace, setup):
         set_port_str = "set 0 rate " + str(setup)
         start_str = "start 0"
 
-        time.sleep(10)
+        time.sleep(5)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
         sess.send_commands(cmd_str, set_port_str, start_str)
 
@@ -165,18 +165,18 @@ def p2p_cleanup(typ, sess):
         p2p_cmd_str = "sudo ./misc/p2p_cleanup_nb.sh"
         sess.send_commands(p2p_cmd_str)
         print("NetBricks P2P cmd: {}".format(p2p_cmd_str))
-        time.sleep(5)
+        time.sleep(1)
 
     elif typ == "leecher":
         cmd_str = "sudo ./p2p_cleanup_leecher.sh "
         sess.send_commands(cmd_str)
         print("Leecher P2P clean up with cmd: {}".format(cmd_str))
-        time.sleep(5)
+        time.sleep(1)
 
         config_str = "./p2p_config_leecher.sh "
         sess.send_commands(config_str)
         print("Leecher P2P config with cmd: {}".format(config_str))
-        time.sleep(55)
+        time.sleep(1)
     else:
         print("Unknown p2p node type {}".format(typ))
 
@@ -244,9 +244,9 @@ def main(expr_list):
                                            str(expr_num), contention[0], contention[1], contention[2])
                     elif nf in contend.p2p_nf_list:
                         # Actual RUN
-                        run_p2p_node('leecher', leecher1_sess, setup, epoch)
-                        run_p2p_node('leecher', leecher2_sess, setup, epoch)
-                        run_p2p_node('leecher', leecher3_sess, setup, epoch)
+                        run_p2p_node('leecher', leecher1_sess, contend.nf_set[expr], epoch)
+                        run_p2p_node('leecher', leecher2_sess, contend.nf_set[expr], epoch)
+                        run_p2p_node('leecher', leecher3_sess, contend.nf_set[expr], epoch)
                         run_netbricks_p2p(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr], "app_p2p-controlled", contention[0],
                                           contention[1], contention[2])
 
