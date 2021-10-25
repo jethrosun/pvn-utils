@@ -92,8 +92,8 @@ setup = []
 zero = '0'
 for i in ['1', '3']:
     setup.append([i, zero, zero])
-    # setup.append([zero, i, zero])
-    # setup.append([zero, zero, i])
+    setup.append([zero, i, zero])
+    setup.append([zero, zero, i])
     # setup.append([i, i, zero])
     # setup.append([i, zero, i])
     # setup.append([zero, i, i])
@@ -103,7 +103,7 @@ num_of_epoch = 1
 
 nf_set = {
     'app_xcdr': '5',
-    'app_rdr': '5',
+    'app_rdr': '4',
     'app_tlsv': '6',
     'app_p2p': '4',
     'app_p2p-controlled': '4',
