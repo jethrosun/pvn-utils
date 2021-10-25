@@ -228,7 +228,7 @@ def main(expr_list):
                         p2p_cleanup("leecher", leecher1_sess)
                         p2p_cleanup("leecher", leecher2_sess)
                         p2p_cleanup("leecher", leecher3_sess)
-                        time.sleep(5)
+                        time.sleep(15)
                     elif nf in contend.xcdr_nf_list:
                         xcdr_cleanup(netbricks_sess)
                         time.sleep(10)
@@ -244,6 +244,7 @@ def main(expr_list):
                                            str(expr_num), contention[0], contention[1], contention[2])
                     elif nf in contend.p2p_nf_list:
                         # Actual RUN
+                        #
                         run_p2p_node('leecher', leecher1_sess, contend.nf_set[expr], epoch)
                         run_p2p_node('leecher', leecher2_sess, contend.nf_set[expr], epoch)
                         run_p2p_node('leecher', leecher3_sess, contend.nf_set[expr], epoch)
@@ -263,7 +264,7 @@ def main(expr_list):
                         p2p_cleanup("leecher", leecher1_sess)
                         p2p_cleanup("leecher", leecher2_sess)
                         p2p_cleanup("leecher", leecher3_sess)
-                        time.sleep(5)
+                        time.sleep(15)
 
                         sess_destroy(leecher1_sess)
                         sess_destroy(leecher2_sess)
