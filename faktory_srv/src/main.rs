@@ -2,15 +2,14 @@ extern crate faktory;
 extern crate resize;
 extern crate y4m;
 
-use core_affinity::CoreId;
 use faktory::ConsumerBuilder;
 use resize::Pixel::Gray8;
 use resize::Type::Triangle;
 use std::env;
 use std::fs::File;
+use std::io;
 use std::process;
 use std::time::Instant;
-use std::{io, thread};
 
 /// Actual video transcoding.
 ///
@@ -66,64 +65,42 @@ fn main() {
     let _setup = params[1].parse::<usize>().unwrap();
     let expr = params[2].parse::<usize>().unwrap();
 
-    // The regular way to get core ids are not going work as we have configured isol cpus to reduce context switches for DPDK and our things.
-    // We want to cause equal pressure to all of the cores for CPU contention
-    let mut core_ids = Vec::new();
-    for idx in 0..6 {
-        core_ids.push(CoreId { id: idx });
-    }
+    let mut c = ConsumerBuilder::default();
 
-    let handles = core_ids
-        .into_iter()
-        .map(|id| {
-            thread::spawn(move || {
-                if id.id == 3 {
-                    // Pin this thread to a single CPU core.
-                    core_affinity::set_for_current(id);
-                    let mut c = ConsumerBuilder::default();
+    c.register(
+        "app-xcdr_".to_owned() + &expr.to_string(),
+        move |job| -> io::Result<()> {
+            let job_args = job.args();
 
-                    c.register(
-                        "app-xcdr_".to_owned() + &expr.to_string(),
-                        move |job| -> io::Result<()> {
-                            let job_args = job.args();
+            let infile_str = job_args[0].as_str().unwrap();
+            // let outfile_str = job_args[1].as_str().unwrap();
+            let width_height_str = job_args[2].as_str().unwrap();
 
-                            let infile_str = job_args[0].as_str().unwrap();
-                            // let outfile_str = job_args[1].as_str().unwrap();
-                            let width_height_str = job_args[2].as_str().unwrap();
+            let infh: Box<dyn io::Read> = Box::new(File::open(infile_str).unwrap());
 
-                            let infh: Box<dyn io::Read> = Box::new(File::open(infile_str).unwrap());
+            if start.elapsed().as_secs() > 600 {
+                println!("reached 600 seconds, hard stop");
+            }
+            let now_2 = Instant::now();
+            // println!("transcode with core {:?} ", id.id);
+            // transcode(
+            //     infile_str.to_string(),
+            //     outfile_str.to_string(),
+            //     width_height_str.to_string(),
+            // );
+            transcode(infh, width_height_str.to_string());
+            println!(
+                "inner: transcoded in {:?} millis with core: {:?}",
+                now_2.elapsed().as_millis(),
+                0
+            );
+            Ok(())
+        },
+    );
 
-                            if start.elapsed().as_secs() > 600 {
-                                println!("reached 600 seconds, hard stop");
-                            }
-                            let now_2 = Instant::now();
-                            // println!("transcode with core {:?} ", id.id);
-                            // transcode(
-                            //     infile_str.to_string(),
-                            //     outfile_str.to_string(),
-                            //     width_height_str.to_string(),
-                            // );
-                            transcode(infh, width_height_str.to_string());
-                            println!(
-                                "inner: transcoded in {:?} millis with core: {:?}",
-                                now_2.elapsed().as_millis(),
-                                0
-                            );
-                            Ok(())
-                        },
-                    );
+    let mut c = c.connect(None).unwrap();
 
-                    let mut c = c.connect(None).unwrap();
-
-                    if let Err(e) = c.run(&["default"]) {
-                        println!("worker failed: {}", e);
-                    }
-                }
-            })
-        })
-        .collect::<Vec<_>>();
-
-    for handle in handles.into_iter() {
-        handle.join().unwrap();
+    if let Err(e) = c.run(&["default"]) {
+        println!("worker failed: {}", e);
     }
 }
