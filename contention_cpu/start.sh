@@ -8,7 +8,7 @@ cd /home/jethros/dev/pvn/utils/contention_cpu/
 
 zero=0;
 if [[ $1 -eq $zero ]]; then
-  echo "no cpu contention";
+  # echo "no cpu contention";
   exit;
 fi
 
