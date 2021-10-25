@@ -16,4 +16,4 @@ cd /home/jethros/dev/pvn/utils/faktory_srv/
 
 # sudo /home/jethros/.cargo/bin/cargo run $1 $2 $3
 
-sudo taskset $3 /home/jethros/data/cargo-target/release/faktory_srv $1 $2 > $5
+sudo taskset $3 /home/jethros/data/cargo-target/release/faktory_srv $1 $2 > $4
