@@ -138,4 +138,4 @@ p2p_controlled = ['app_p2p-controlled']
 p2p_ext = ['app_p2p-ext']
 
 # nf_list = ['app_p2p-controlled', 'app_tlsv', 'app_rdr', 'app_xcdr']
-nf_list = ['app_rdr', 'app_p2p-controlled']
+nf_list = ['app_p2p-controlled']
