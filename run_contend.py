@@ -220,9 +220,9 @@ def main(expr_list):
                     # run clean up for p2p nf before experiment
                     if nf in contend.p2p_nf_list:
                         # the setup is the number of images
-                        leecher1_sess = p2p_sess_setup('flynn', contend.leecher_set[contend.nf_set[expr]], nf, epoch)
-                        leecher2_sess = p2p_sess_setup('tao', contend.leecher_set[contend.nf_set[expr]], nf, epoch)
-                        leecher3_sess = p2p_sess_setup('sanchez', contend.leecher_set[contend.nf_set[expr]], nf, epoch)
+                        leecher1_sess = p2p_sess_setup('flynn', contend.trace[expr], nf, epoch)
+                        leecher2_sess = p2p_sess_setup('tao', contend.trace[expr], nf, epoch)
+                        leecher3_sess = p2p_sess_setup('sanchez', contend.trace[expr], nf, epoch)
 
                         # run clean up for p2p nf before experiment
                         p2p_cleanup("netbricks", netbricks_sess)
@@ -246,9 +246,9 @@ def main(expr_list):
                     elif nf in contend.p2p_nf_list:
                         # Actual RUN
                         #
-                        run_p2p_node('leecher', leecher1_sess, contend.nf_set[expr], epoch)
-                        run_p2p_node('leecher', leecher2_sess, contend.nf_set[expr], epoch)
-                        run_p2p_node('leecher', leecher3_sess, contend.nf_set[expr], epoch)
+                        run_p2p_node('leecher', leecher1_sess, contend.leecher_set[contend.nf_set[expr]], epoch)
+                        run_p2p_node('leecher', leecher2_sess, contend.leecher_set[contend.nf_set[expr]], epoch)
+                        run_p2p_node('leecher', leecher3_sess, contend.leecher_set[contend.nf_set[expr]], epoch)
                         run_netbricks_p2p(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr], "app_p2p-controlled", contention[0],
                                           contention[1], contention[2])
 
