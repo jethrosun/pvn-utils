@@ -85,6 +85,15 @@ sending_rate = {
     },
 }
 
+leecher_set = {
+    '1': '1',
+    '2': '2',
+    '3': '4',
+    '4': '6',
+    '5': '8',
+    '6': '10',
+}
+
 setup = []
 
 # NOTE: zero is only for testing purposes and should not be used in real

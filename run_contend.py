@@ -219,9 +219,10 @@ def main(expr_list):
 
                     # run clean up for p2p nf before experiment
                     if nf in contend.p2p_nf_list:
-                        leecher1_sess = p2p_sess_setup('flynn', '6', nf, epoch)
-                        leecher2_sess = p2p_sess_setup('tao', '6', nf, epoch)
-                        leecher3_sess = p2p_sess_setup('sanchez', '6', nf, epoch)
+                        # the setup is the number of images
+                        leecher1_sess = p2p_sess_setup('flynn', contend.leecher_set[contend.nf_set[expr]], nf, epoch)
+                        leecher2_sess = p2p_sess_setup('tao', contend.leecher_set[contend.nf_set[expr]], nf, epoch)
+                        leecher3_sess = p2p_sess_setup('sanchez', contend.leecher_set[contend.nf_set[expr]], nf, epoch)
 
                         # run clean up for p2p nf before experiment
                         p2p_cleanup("netbricks", netbricks_sess)
