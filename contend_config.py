@@ -103,10 +103,10 @@ num_of_epoch = 3
 
 nf_set = {
     'app_xcdr': '5',
-    'app_rdr': '4',
+    'app_rdr': '5',
     'app_tlsv': '6',
-    'app_p2p': '4',
-    'app_p2p-controlled': '4',
+    'app_p2p': '5',
+    'app_p2p-controlled': '5',
 }
 
 # expr is 10 min/600 sec
@@ -127,5 +127,5 @@ complete_nuclear_list = ['app_p2p', 'app_p2p-ext']
 p2p_controlled = ['app_p2p-controlled']
 p2p_ext = ['app_p2p-ext']
 
-nf_list = ['app_p2p-controlled', 'app_tlsv', 'app_rdr', 'app_xcdr']
-# nf_list = ['app_p2p-controlled']
+# nf_list = ['app_p2p-controlled', 'app_tlsv', 'app_rdr', 'app_xcdr']
+nf_list = ['app_rdr']
