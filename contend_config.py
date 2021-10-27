@@ -95,11 +95,11 @@ leecher_set = {
 }
 
 setup = []
+zero = '0'
 setup.append([zero, zero, zero])
 
 # NOTE: zero is only for testing purposes and should not be used in real
 # experiments
-zero = '0'
 for i in ['1', '2', '3']:
     setup.append([i, zero, zero])
     setup.append([zero, i, zero])
