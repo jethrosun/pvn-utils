@@ -213,7 +213,7 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 
 elif [ "$2" == "pvn-rdr-transform-app" ] || [ "$2" == "pvn-rdr-groupby-app" ]; then
 	# for tlsv and rdr
-	#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio
+	#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio $8=disk
 	#
 	# we don't need to check resource usage for tlsv and rdr so we just grep chrom here
 	# as well
@@ -222,7 +222,7 @@ elif [ "$2" == "pvn-rdr-transform-app" ] || [ "$2" == "pvn-rdr-groupby-app" ]; t
 	JSON_STRING=$( jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
-		--arg disk "$5" \
+		--arg disk "$8" \
 		--arg inst "$INST_LEVEL" \
 		--arg mode "$EXPR_MODE" \
 		'{setup: $setup, iter: $iter, disk: $disk, inst: $inst, mode: $mode}' )
@@ -252,7 +252,7 @@ elif [ "$2" == "pvn-rdr-transform-app" ] || [ "$2" == "pvn-rdr-groupby-app" ]; t
 		if [[ $(pgrep contention_disk) ]]; then
 			:
 		else
-			if [ "$5" == "hdd" ]; then
+			if [ "$8" == "hdd" ]; then
 				/home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_hdd.sh "$7" 3 >> "$DISKIO_LOG" &
 				/home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_hdd.sh "$7" 4 >> "$DISKIO_LOG" &
 			else
