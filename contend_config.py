@@ -95,11 +95,7 @@ leecher_set = {
 }
 
 setup = []
-zero = '0'
 setup.append([zero, zero, zero])
-
-# NOTE: zero is only for testing purposes and should not be used in real
-# experiments
 for i in ['1', '2', '3']:
     setup.append([i, zero, zero])
     setup.append([zero, i, zero])
@@ -139,4 +135,4 @@ p2p_controlled = ['app_p2p-controlled']
 p2p_ext = ['app_p2p-ext']
 
 # nf_list = ['app_p2p-controlled', 'app_tlsv', 'app_rdr', 'app_xcdr']
-nf_list = ['app_p2p-controlled']
+nf_list = ['app_rdr']
