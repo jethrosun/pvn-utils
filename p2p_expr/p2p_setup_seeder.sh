@@ -3,9 +3,6 @@
 set -ex
 
 
-echo "url is :8088"
-
-
 # seeder setup
 #
 # https://www.cyberciti.biz/faq/howto-create-lage-files-with-dd-command/
@@ -19,8 +16,8 @@ cd ~/data
 for i in {1..10}
 do
 	echo "Welcome $i times"
-	sudo fallocate -l 4G p2p_image_${i}.img
-	sudo dd if=/dev/random of=p2p_image_${i}.img bs=1 count=0 seek=4G
+	sudo fallocate -l 1G p2p_image_${i}.img
+	sudo dd if=/dev/random of=p2p_image_${i}.img bs=1 count=0 seek=1G
 	stat p2p_image_${i}.img
 done
 

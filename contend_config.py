@@ -95,6 +95,7 @@ leecher_set = {
 }
 
 setup = []
+setup.append([zero, zero, zero])
 
 # NOTE: zero is only for testing purposes and should not be used in real
 # experiments
