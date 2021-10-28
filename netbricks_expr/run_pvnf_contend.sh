@@ -248,7 +248,7 @@ elif [ "$2" == "pvn-rdr-transform-app" ] || [ "$2" == "pvn-rdr-groupby-app" ]; t
 		fi
 	done &
 	P2=$!
-	while sleep 10; do
+	while sleep 5; do
 		if [[ $(pgrep contention_disk) ]]; then
 			:
 		else
@@ -320,7 +320,7 @@ else
 		fi
 	done &
 	P2=$!
-	while sleep 10; do
+	while sleep 5; do
 		if [[ $(pgrep contention_disk) ]]; then
 			:
 		else
