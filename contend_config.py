@@ -109,7 +109,7 @@ num_of_epoch = 5
 # num_of_epoch = 10
 
 nf_set = {
-    'app_rdr': '5',
+    'app_rdr': '3',
     'app_p2p': '5',
     'app_p2p-controlled': '5',
     # done
