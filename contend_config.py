@@ -96,7 +96,7 @@ leecher_set = {
 
 setup = []
 zero = '0'
-# setup.append([zero, zero, zero])
+setup.append([zero, zero, zero])
 for i in ['1', '2', '3']:
     # setup.append([i, zero, zero])
     # setup.append([zero, i, zero])
@@ -110,8 +110,8 @@ num_of_epoch = 1
 
 nf_set = {
     'app_rdr': '3',
-    'app_p2p': '4',
-    'app_p2p-controlled': '4',
+    'app_p2p': '5',
+    'app_p2p-controlled': '5',
     # done
     'app_tlsv': '6',
     'app_xcdr': '5',
