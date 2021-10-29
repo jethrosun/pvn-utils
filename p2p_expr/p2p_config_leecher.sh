@@ -48,12 +48,11 @@ if [ ! -e /home/jethros/bt_data/config/auth ]; then
 	deluge-console -c /home/jethros/bt_data/config 'config -s dht false'
 	deluge-console -c /home/jethros/bt_data/config 'config -s utpex false'
 
-	deluge-console -c /home/jethros/bt_data/config 'config -s max_active_limit 10'
-	deluge-console -c /home/jethros/bt_data/config 'config -s max_active_downloading 10'
-
-	deluge-console -c /home/jethros/bt_data/config 'config -s max_active_seeding 10'
-	deluge-console -c /home/jethros/bt_data/config 'config -s max_download_speed_per_torrent 10000'
-	deluge-console -c /home/jethros/bt_data/config 'config -s max_upload_speed_per_torrent 10000'
+	# deluge-console -c /home/jethros/bt_data/config 'config -s max_active_limit 10'
+	# deluge-console -c /home/jethros/bt_data/config 'config -s max_active_downloading 10'
+	# deluge-console -c /home/jethros/bt_data/config 'config -s max_active_seeding 10'
+	# deluge-console -c /home/jethros/bt_data/config 'config -s max_download_speed_per_torrent 10000'
+	# deluge-console -c /home/jethros/bt_data/config 'config -s max_upload_speed_per_torrent 10000'
 	# deluge-console -c /home/jethros/bt_data/config 'config -s max_seed_speed_per_torrent 2500'
 
 	deluge-console -c /home/jethros/bt_data/config "halt"
