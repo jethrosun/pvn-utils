@@ -181,7 +181,8 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 		fi
 	done &
 	P3=$!
-	while sleep 5; do
+	# per second disk IO
+	while sleep 1; do
 		if [[ $(pgrep contention_disk) ]]; then
 			:
 		else
