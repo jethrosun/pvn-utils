@@ -105,13 +105,13 @@ for i in ['1', '2', '3']:
     # setup.append([i, zero, i])
     # setup.append([zero, i, i])
     # setup.append([i, i, i])
-num_of_epoch = 5
+num_of_epoch = 3
 # num_of_epoch = 10
 
 nf_set = {
     'app_rdr': '3',
-    'app_p2p': '5',
-    'app_p2p-controlled': '5',
+    'app_p2p': '4',
+    'app_p2p-controlled': '4',
     # done
     'app_tlsv': '6',
     'app_xcdr': '5',

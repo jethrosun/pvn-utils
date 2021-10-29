@@ -16,7 +16,7 @@ fn read_setup(setup: &usize) -> Option<u64> {
     let mut map = HashMap::new();
     map.insert(0, 1);
     map.insert(1, 100); // 10% work done
-    map.insert(2, 500); // 30% to 50% work done
+    map.insert(2, 600); // 30% to 50% work done
     map.insert(3, 990); // no work done
 
     map.remove(setup)

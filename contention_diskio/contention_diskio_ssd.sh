@@ -11,9 +11,9 @@ elif [[ $1 -eq 1 ]]; then
 	# the script will be run every 5 seconds so it is 5 sec * X MB/second
 	FILE_IO_PER_SECOND=50
 elif [[ $1 -eq 2 ]]; then
-	FILE_IO_PER_SECOND=250
+	FILE_IO_PER_SECOND=350
 elif [[ $1 -eq 3 ]]; then
-	FILE_IO_PER_SECOND=1000
+	FILE_IO_PER_SECOND=650
 else
 	echo "Contention param is wrong, $1"
 	exit;
