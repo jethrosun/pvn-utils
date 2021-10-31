@@ -38,13 +38,13 @@ if [ ! -e /data/bt/config/auth ]; then
 	sudo -u jethros deluge-console -c /data/bt/config 'config -s max_active_downloading 10'
 	sudo -u jethros deluge-console -c /data/bt/config 'config -s max_active_seeding 10'
 
-	# sudo -u jethros deluge-console -c /data/bt/config 'config -s max_download_speed_per_torrent 10000'
-	# sudo -u jethros deluge-console -c /data/bt/config 'config -s max_upload_speed_per_torrent 10000'
-	# sudo -u jethros deluge-console -c /data/bt/config 'config -s max_seed_speed_per_torrent 10000'
+	sudo -u jethros deluge-console -c /data/bt/config 'config -s max_download_speed_per_torrent 10000'
+	sudo -u jethros deluge-console -c /data/bt/config 'config -s max_upload_speed_per_torrent 10000'
+	sudo -u jethros deluge-console -c /data/bt/config 'config -s max_seed_speed_per_torrent 10000'
 
-	# sudo -u jethros deluge-console -c /data/bt/config "config -s seed_time_limit 2400"
-	# sudo -u jethros deluge-console -c /data/bt/config "config -s max_download_speed 100000"
-	# sudo -u jethros deluge-console -c /data/bt/config "config -s max_upload_speed 100000"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s seed_time_limit 2400"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s max_download_speed 100000"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s max_upload_speed 100000"
 
 	sudo -u jethros deluge-console -c /data/bt/config "halt"
 fi
