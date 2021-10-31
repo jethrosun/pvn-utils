@@ -118,7 +118,8 @@ nf_set = {
 }
 
 # expr is 10 min/600 sec
-expr_wait_time = 250
+# expr_wait_time = 250
+expr_wait_time = 750
 xcdr_port_base = 7418
 batch = 1
 
