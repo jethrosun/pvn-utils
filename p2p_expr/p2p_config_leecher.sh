@@ -17,8 +17,8 @@ if [ ! -e /home/jethros/bt_data/config/auth ]; then
 	# deluge-console -c ~/bt_data/config "config -s copy_torrent_file True"
 	# deluge-console -c ~/bt_data/config "config -s autoadd_enable True"
 
-	# deluge-console -c /home/jethros/bt_data/config 'config -s dht false'
-	# deluge-console -c /home/jethros/bt_data/config 'config -s utpex false'
+	deluge-console -c /home/jethros/bt_data/config 'config -s dht false'
+	deluge-console -c /home/jethros/bt_data/config 'config -s utpex false'
 	# deluge-console -c /home/jethros/bt_data/config 'config -s cache_size 0'
 	# deluge-console -c /home/jethros/bt_data/config "config -s compact_allocation True"
 
