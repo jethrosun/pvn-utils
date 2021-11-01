@@ -96,16 +96,16 @@ leecher_set = {
 
 setup = []
 zero = '0'
-# setup.append([zero, zero, zero])
+setup.append([zero, zero, zero])
 for i in ['1', '2', '3']:
-    # setup.append([i, zero, zero])
-    # setup.append([zero, i, zero])
+    setup.append([i, zero, zero])
+    setup.append([zero, i, zero])
     setup.append([zero, zero, i])
     # setup.append([i, i, zero])
     # setup.append([i, zero, i])
     # setup.append([zero, i, i])
     # setup.append([i, i, i])
-num_of_epoch = 3
+num_of_epoch = 5
 # num_of_epoch = 10
 
 nf_set = {
@@ -136,4 +136,5 @@ p2p_controlled = ['app_p2p-controlled']
 p2p_ext = ['app_p2p-ext']
 
 # nf_list = ['app_p2p-controlled', 'app_rdr', 'app_tlsv', 'app_xcdr']
-nf_list = ['app_p2p-controlled']
+# nf_list = ['app_p2p-controlled']
+nf_list = ['app_rdr']
