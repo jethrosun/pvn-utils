@@ -51,18 +51,39 @@ fn main() {
     // let _sleep_time = Duration::from_millis(500);
     let _sleep_time = Duration::from_millis(900);
 
-    thread::spawn(move || {
-        let large_vec = vec![42u128; vec_size];
-        loop {
-            thread::sleep(_sleep_time);
-            for i in 0..vec_size / 256 {
-                let _ = large_vec[i * 256];
-                counter += 1;
-                // println!("current value: {:?}", t);
-            }
-            if counter % 1_000 == 0 {
-                println!("{} * k since {:?}", counter, now.elapsed());
-            }
-        }
-    });
+    // The regular way to get core ids are not going work as we have configured isol cpus to reduce context switches for DPDK and our things.
+    // We want to cause equal pressure to all of the cores for CPU contention
+    let mut core_ids = Vec::new();
+    for idx in 0..6 {
+        core_ids.push(CoreId { id: idx });
+    }
+
+    // Create a thread for each active CPU core.
+    let handles = core_ids
+        .into_iter()
+        .map(|id| {
+            thread::spawn(move || {
+                if id.id == 4 {
+                    // Pin this thread to a single CPU core.
+                    core_affinity::set_for_current(id);
+                    let large_vec = vec![42u128; vec_size];
+                    loop {
+                        thread::sleep(_sleep_time);
+                        for i in 0..vec_size / 256 {
+                            let _ = large_vec[i * 256];
+                            counter += 1;
+                            // println!("current value: {:?}", t);
+                        }
+                        if counter % 1_000 == 0 {
+                            println!("{} * k since {:?}", counter, now.elapsed());
+                        }
+                    }
+                }
+            })
+        })
+        .collect::<Vec<_>>();
+
+    for handle in handles.into_iter() {
+        handle.join().unwrap();
+    }
 }
