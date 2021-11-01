@@ -104,8 +104,10 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 		if [[ $(pgrep contention_disk) ]]; then
 			:
 		else
-			/home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_ssd.sh "$7" 3 >> "$DISKIO_LOG" &
-			/home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_ssd.sh "$7" 4 >> "$DISKIO_LOG" &
+			# /home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_ssd.sh "$7" 3 >> "$DISKIO_LOG" &
+			# /home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_ssd.sh "$7" 4 >> "$DISKIO_LOG" &
+			sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 "ssd" "$DISKIO_LOG" &
+			sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 "ssd" "$DISKIO_LOG" &
 		fi
 	done &
 	P3=$!
@@ -192,8 +194,8 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 		else
 			# /home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_hdd.sh "$7" 3 >> "$DISKIO_LOG" &
 			# /home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_hdd.sh "$7" 4 >> "$DISKIO_LOG" &
-			sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 >> "$DISKIO_LOG" &
-			sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 >> "$DISKIO_LOG" &
+			sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 "hdd" "$DISKIO_LOG" &
+			sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 "hdd" "$DISKIO_LOG" &
 		fi
 	done &
 	P4=$!
@@ -260,11 +262,15 @@ elif [ "$2" == "pvn-rdr-transform-app" ] || [ "$2" == "pvn-rdr-groupby-app" ]; t
 			:
 		else
 			if [ "$8" == "hdd" ]; then
-				/home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_hdd.sh "$7" 3 >> "$DISKIO_LOG" &
-				/home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_hdd.sh "$7" 4 >> "$DISKIO_LOG" &
+				# /home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_hdd.sh "$7" 3 >> "$DISKIO_LOG" &
+				# /home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_hdd.sh "$7" 4 >> "$DISKIO_LOG" &
+				sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 "hdd" "$DISKIO_LOG" &
+				sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 "hdd" "$DISKIO_LOG" &
 			else
-				/home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_ssd.sh "$7" 3 >> "$DISKIO_LOG" &
-				/home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_ssd.sh "$7" 4 >> "$DISKIO_LOG" &
+				# /home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_ssd.sh "$7" 3 >> "$DISKIO_LOG" &
+				# /home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_ssd.sh "$7" 4 >> "$DISKIO_LOG" &
+				sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 "ssd" "$DISKIO_LOG" &
+				sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 "ssd" "$DISKIO_LOG" &
 			fi
 		fi
 	done &
@@ -331,8 +337,8 @@ else
 		if [[ $(pgrep contention_disk) ]]; then
 			:
 		else
-			/home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_ssd.sh "$7" 3 >> "$DISKIO_LOG" &
-			/home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_ssd.sh "$7" 4 >> "$DISKIO_LOG" &
+			sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 "ssd" "$DISKIO_LOG" &
+			sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 "ssd" "$DISKIO_LOG" &
 		fi
 	done &
 	P3=$!

@@ -2,7 +2,6 @@
 //! generate enough I/O. To isolate the impact we also want cpu pining.
 extern crate rand;
 
-use core_affinity::CoreId;
 use std::collections::HashMap;
 use std::env;
 use std::fs::{File, OpenOptions};
@@ -43,8 +42,11 @@ fn main() {
 
     // len of params will be number of args +1
     if params.len() == 3 {
-        println!("Parse 2 args");
-        println!("Setup: {:?}, core id: {:?}", params[1], params[2]);
+        println!("Parse 3 args");
+        println!(
+            "Setup: {:?}, core id: {:?}, disk: {:?}",
+            params[1], params[2], params[3]
+        );
         if params[1].parse::<usize>().unwrap() == 0 {
             process::exit(0x0100);
         }
@@ -55,6 +57,7 @@ fn main() {
 
     let setup = params[1].parse::<usize>().unwrap();
     let core_id = params[2].parse::<usize>().unwrap();
+    let disk = params[3].parse::<String>().unwrap();
     let buf_size = read_setup(&setup).unwrap();
 
     // Disk I/O contention
@@ -72,7 +75,12 @@ fn main() {
         }
         let buf = buf.into_boxed_slice();
 
-        let file_name = "/data/tmp/foobar".to_owned() + &core_id.to_string() + ".bin";
+        // let file_name = "/data/tmp/foobar".to_owned() + &core_id.to_string() + ".bin";
+        let file_name = if disk == "hdd" {
+            "/data/tmp/foobar".to_owned() + &core_id.to_string() + ".bin"
+        } else {
+            "/home/jethros/data/tmp/foobar".to_owned() + &core_id.to_string() + ".bin"
+        };
 
         // files for both cases
         let mut file = OpenOptions::new()
