@@ -18,9 +18,9 @@ use std::time::{Duration, Instant};
 fn read_setup(setup: &usize) -> Option<usize> {
     let mut map = HashMap::new();
     map.insert(0, 1);
-    map.insert(1, 50);
-    map.insert(2, 100);
-    map.insert(3, 200);
+    map.insert(1, 250);
+    map.insert(2, 500);
+    map.insert(3, 1500);
 
     map.remove(setup)
 }
@@ -60,66 +60,45 @@ fn main() {
     let _sleep_time = Duration::from_millis(50);
     let _second = Duration::from_secs(1);
 
-    // The regular way to get core ids are not going work as we have configured isol cpus to reduce context switches for DPDK and our things.
-    // We want to cause equal pressure to all of the cores for CPU contention
-    let mut core_ids = Vec::new();
-    for idx in 0..6 {
-        core_ids.push(CoreId { id: idx });
-    }
+    thread::spawn(move || {
+        let mut counter = 0;
+        let start = Instant::now();
 
-    // Create a thread for each active CPU core.
-    let handles = core_ids
-        .into_iter()
-        .map(|id| {
-            thread::spawn(move || {
-                if id.id == 4 || id.id == 5 {
-                    // Pin this thread to a single CPU core.
-                    core_affinity::set_for_current(id);
-                    let mut counter = 0;
-                    let start = Instant::now();
+        // use buffer to store random data
+        let mut buf: Vec<u8> = Vec::with_capacity(buf_size * 1_000_000); // B to MB
+        for _ in 0..buf.capacity() {
+            buf.push(rand::random())
+        }
+        let buf = buf.into_boxed_slice();
 
-                    // use buffer to store random data
-                    let mut buf: Vec<u8> = Vec::with_capacity(buf_size * 1_000_000); // B to MB
-                    for _ in 0..buf.capacity() {
-                        buf.push(rand::random())
-                    }
-                    let buf = buf.into_boxed_slice();
+        let file_name = "/data/tmp/foobar".to_owned() + &id.id.to_string() + ".bin";
 
-                    let file_name = "/data/tmp/foobar".to_owned() + &id.id.to_string() + ".bin";
+        // files for both cases
+        let mut file = OpenOptions::new()
+            .write(true)
+            .read(true)
+            .create(true)
+            .open(file_name)
+            .unwrap();
 
-                    // files for both cases
-                    let mut file = OpenOptions::new()
-                        .write(true)
-                        .read(true)
-                        .create(true)
-                        .open(file_name)
-                        .unwrap();
+        loop {
+            let _start = Instant::now();
+            let mut _now = Instant::now();
 
-                    loop {
-                        let _start = Instant::now();
-                        let mut _now = Instant::now();
+            // actual file IO
+            let _ = file_io(&mut counter, &mut file, buf.clone());
 
-                        // actual file IO
-                        let _ = file_io(&mut counter, &mut file, buf.clone());
+            if start.elapsed() >= Duration::from_secs(181) {
+                println!("have run for 180 seconds with counter {:?}", counter);
+            }
 
-                        if start.elapsed() >= Duration::from_secs(181) {
-                            println!("have run for 180 seconds with counter {:?}", counter);
-                        }
-
-                        if _now.elapsed() >= _second {
-                            _now = Instant::now();
-                            break;
-                        } else {
-                            sleep(_sleep_time);
-                            continue;
-                        }
-                    }
-                }
-            })
-        })
-        .collect::<Vec<_>>();
-
-    for handle in handles.into_iter() {
-        handle.join().unwrap();
-    }
+            if _now.elapsed() >= _second {
+                _now = Instant::now();
+                break;
+            } else {
+                sleep(_sleep_time);
+                continue;
+            }
+        }
+    })
 }
