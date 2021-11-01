@@ -7,5 +7,5 @@ if [[ $1 -eq $zero ]]; then
   exit;
 fi
 
-sudo taskset -c $2 /home/jethros/data/cargo-target/release/contention_diskio $1 > $3
+sudo taskset -c $2 /home/jethros/data/cargo-target/release/contention_diskio $1 $2 > $3
 

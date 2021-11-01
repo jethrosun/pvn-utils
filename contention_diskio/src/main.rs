@@ -42,9 +42,9 @@ fn main() {
     let params: Vec<String> = env::args().collect();
 
     // len of params will be number of args +1
-    if params.len() == 2 {
+    if params.len() == 3 {
         println!("Parse 2 args");
-        println!("Setup: {:?}", params[1],);
+        println!("Setup: {:?}, core id: {:?}", params[1], params[2]);
         if params[1].parse::<usize>().unwrap() == 0 {
             process::exit(0x0100);
         }
@@ -54,6 +54,7 @@ fn main() {
     }
 
     let setup = params[1].parse::<usize>().unwrap();
+    let core_id = params[2].parse::<usize>().unwrap();
     let buf_size = read_setup(&setup).unwrap();
 
     // Disk I/O contention
@@ -71,7 +72,7 @@ fn main() {
         }
         let buf = buf.into_boxed_slice();
 
-        let file_name = "/data/tmp/foobar".to_owned() + &id.id.to_string() + ".bin";
+        let file_name = "/data/tmp/foobar".to_owned() + &core_id.to_string() + ".bin";
 
         // files for both cases
         let mut file = OpenOptions::new()
@@ -100,5 +101,5 @@ fn main() {
                 continue;
             }
         }
-    })
+    });
 }
