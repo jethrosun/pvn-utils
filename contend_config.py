@@ -96,10 +96,10 @@ leecher_set = {
 
 setup = []
 zero = '0'
-setup.append([zero, zero, zero])
+# setup.append([zero, zero, zero])
 for i in ['1', '2', '3']:
-    setup.append([i, zero, zero])
-    setup.append([zero, i, zero])
+    # setup.append([i, zero, zero])
+    # setup.append([zero, i, zero])
     setup.append([zero, zero, i])
     # setup.append([i, i, zero])
     # setup.append([i, zero, i])
