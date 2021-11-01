@@ -4,6 +4,9 @@ set -ex
 mkdir -p /home/jethros/bt_data/config
 mkdir -p /home/jethros/Downloads
 
+# to properly config deluge, see 
+#
+# 	https://dev.deluge-torrent.org/wiki/UserGuide/BandwidthTweaking
 if [ ! -e /home/jethros/bt_data/config/auth ]; then
 	deluged -c /home/jethros/bt_data/config
 	sleep 1

@@ -10,6 +10,9 @@ sudo -u jethros mkdir -p /data/tmp
 sudo -u jethros mkdir -p /data/tmp3
 sudo -u jethros mkdir -p /data/tmp4
 
+# to properly config deluge, see 
+#
+# 	https://dev.deluge-torrent.org/wiki/UserGuide/BandwidthTweaking
 if [ ! -e /data/bt/config/auth ]; then
 	sudo -u jethros deluged -c /data/bt/config
 	sleep 1
