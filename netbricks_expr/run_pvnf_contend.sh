@@ -15,7 +15,7 @@ set -e
 #   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio
 
 
-SLEEP_INTERVAL=2
+SLEEP_INTERVAL=3
 LOG_DIR=$HOME/netbricks_logs/$2/$1
 
 LOG=$LOG_DIR/$3_$4__$5$6$7.log
