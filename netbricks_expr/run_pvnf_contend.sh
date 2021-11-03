@@ -14,6 +14,23 @@ set -e
 # for tlsv and rdr
 #   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio
 
+NB_CONFIG=$HOME/dev/netbricks/experiments/config_1core.toml
+NB_CONFIG_MEDIUM=$HOME/dev/netbricks/experiments/config_1core_medium.toml
+NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_1core_long.toml
+TMP_NB_CONFIG=$HOME/config.toml
+
+# ===================================
+
+# EXPR_MODE=short
+# sed "/duration = 200/i log_path = '$LOG'" "$NB_CONFIG" > "$TMP_NB_CONFIG"
+
+EXPR_MODE=medium
+sed "/duration = 320/i log_path = '$LOG'" "$NB_CONFIG_MEDIUM" > "$TMP_NB_CONFIG"
+
+# EXPR_MODE=long
+# sed "/duration = 750/i log_path = '$LOG'" "$NB_CONFIG_LONG" > "$TMP_NB_CONFIG"
+
+# ===================================
 
 SLEEP_INTERVAL=3
 LOG_DIR=$HOME/netbricks_logs/$2/$1
@@ -39,20 +56,9 @@ NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
 TCP_LIFE_MONITOR=/usr/share/bcc/tools/tcplife
 BIO_TOP_MONITOR=/usr/share/bcc/tools/biotop
-# IPTRAF_MONITOR=/usr/sbin/iptraf-ng
-
-NB_CONFIG=$HOME/dev/netbricks/experiments/config_1core.toml
-NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_1core_long.toml
-TMP_NB_CONFIG=$HOME/config.toml
 
 
 INST_LEVEL=off
-
- EXPR_MODE=short
-sed "/duration = 200/i log_path = '$LOG'" "$NB_CONFIG" > "$TMP_NB_CONFIG"
-
-# EXPR_MODE=long
-# sed "/duration = 750/i log_path = '$LOG'" "$NB_CONFIG_LONG" > "$TMP_NB_CONFIG"
 
 mkdir -p "$LOG_DIR"
 

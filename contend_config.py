@@ -105,7 +105,7 @@ for i in ['1', '2', '3']:
     # setup.append([i, zero, i])
     # setup.append([zero, i, i])
     # setup.append([i, i, i])
-num_of_epoch = 5
+num_of_epoch = 3
 # num_of_epoch = 10
 
 nf_set = {
@@ -117,8 +117,10 @@ nf_set = {
     'app_xcdr': '5',
 }
 
-# expr_wait_time = 750
-expr_wait_time = 250
+# expr_wait_time = 220  # 180
+expr_wait_time = 340  # 300
+# expr_wait_time = 750  # 600
+
 xcdr_port_base = 7418
 batch = 1
 
