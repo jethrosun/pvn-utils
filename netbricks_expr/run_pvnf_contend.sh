@@ -45,6 +45,8 @@ CPU_LOG=$LOG_DIR/$3_$4__$5$6$7_cpu.log
 MEM_LOG=$LOG_DIR/$3_$4__$5$6$7_mem.log
 DISKIO_LOG=$LOG_DIR/$3_$4__$5$6$7_diskio.log
 
+CHROME_PLOG=$LOG_DIR/$3_$4__$5$6$7_chrome_process.log
+
 CPULOG1=$LOG_DIR/$3_$4__$5$6$7_cpu1.log
 CPULOG2=$LOG_DIR/$3_$4__$5$6$7_cpu2.log
 CPULOG3=$LOG_DIR/$3_$4__$5$6$7_cpu3.log
@@ -67,7 +69,6 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 	#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio $8=port $9=expr_num
 	for PID in $(pgrep contention); do sudo -u jethros kill $PID; done
 
-	# setup toml file for NetBricks
 	JSON_STRING=$( jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
@@ -88,7 +89,6 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 	P4=$!
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P5=$!
-	for PID in $(pgrep faktory_srv); do sudo taskset -cp 1 $PID; done
 
 	while sleep 5; do
 		if [[ $(pgrep contention_cpu) ]]; then
@@ -118,6 +118,8 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 	done &
 	P3=$!
 
+	for PID in $(pgrep faktory); do sudo taskset -cp 1 $PID; done
+
 	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
 	P6=$!
 	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
@@ -145,11 +147,9 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 		sudo rm -rf /data/bt/config
 		mkdir -p "$HOME/Downloads"  /data/bt/config
 	else
-		# clean the states of transmission
 		sudo rm -rf downloads/*
 		sudo rm -rf config/*
 		mkdir -p config downloads
-
 		sudo rm -rf /data/downloads/*
 		sudo rm -rf /data/config/*
 		sudo mkdir -p /data/config /data/downloads
@@ -191,7 +191,6 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 		fi
 	done &
 	P3=$!
-	# per second disk IO
 	while sleep 5; do
 		if [[ $(pgrep contention_disk) ]]; then
 			:
@@ -204,30 +203,29 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 	done &
 	P4=$!
 
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
+	while sleep 10; do for PID in $(pgrep faktory); do sudo taskset -cp 1 $PID; done; done  &
 	P6=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
 	P7=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh deluge; done > "$CPULOG2" &
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
 	P8=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh deluge; done > "$MEMLOG2" &
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh deluge; done > "$CPULOG2" &
 	P9=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh contention; done > "$CPULOG3" &
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh deluge; done > "$MEMLOG2" &
 	P10=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh contention; done > "$MEMLOG3" &
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh contention; done > "$CPULOG3" &
 	P11=$!
-	sudo taskset -c 5 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh contention; done > "$MEMLOG3" &
 	P12=$!
-	sudo taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
+	sudo taskset -c 5 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
 	P13=$!
-	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13
+	sudo taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
+	P14=$!
+	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13 $P14
 
 elif [ "$2" == "pvn-rdr-transform-app" ] || [ "$2" == "pvn-rdr-groupby-app" ]; then
-	# for tlsv and rdr
+	# for rdr
 	#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio $8=disk
-	#
-	# we don't need to check resource usage for tlsv and rdr so we just grep chrom here
-	# as well
 	for PID in $(pgrep contention); do sudo -u jethros kill $PID; done
 
 	JSON_STRING=$( jq -n \
@@ -278,6 +276,9 @@ elif [ "$2" == "pvn-rdr-transform-app" ] || [ "$2" == "pvn-rdr-groupby-app" ]; t
 	done &
 	P3=$!
 
+	while sleep 10; do echo "shit"; pgrep sys; done >> "$CHROME_PLOG"  &
+	P4=$!
+
 	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
 	P5=$!
 	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
@@ -297,11 +298,8 @@ elif [ "$2" == "pvn-rdr-transform-app" ] || [ "$2" == "pvn-rdr-groupby-app" ]; t
 	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12
 
 else
-	# for tlsv and rdr
+	# for tlsv
 	#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio
-	#
-	# we don't need to check resource usage for tlsv and rdr so we just grep chrom here
-	# as well
 	for PID in $(pgrep contention); do sudo -u jethros kill $PID; done
 
 	JSON_STRING=$( jq -n \
@@ -315,7 +313,6 @@ else
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P4=$!
 
-	# config contention
 	while sleep 5; do
 		if [[ $(pgrep contention_cpu) ]]; then
 			:
