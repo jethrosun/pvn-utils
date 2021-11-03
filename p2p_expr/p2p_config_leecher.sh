@@ -12,19 +12,22 @@ if [ ! -e /home/jethros/bt_data/config/auth ]; then
 	sleep 1
 	deluge-console -c /home/jethros/bt_data/config "config -s allow_remote True"
 
-	#deluge-console -c ~/bt_data/config "config -s daemon_port 58846"
-	#deluge-console -c ~/bt_data/config "config -s upnp False"
-	# deluge-console -c ~/bt_data/config "config -s add_paused False"
-	# deluge-console -c ~/bt_data/config "config -s move_completed True"
-	# deluge-console -c ~/bt_data/config "config -s copy_torrent_file True"
-	# deluge-console -c ~/bt_data/config "config -s autoadd_enable True"
-
 	deluge-console -c /home/jethros/bt_data/config 'config -s dht false'
 	deluge-console -c /home/jethros/bt_data/config 'config -s utpex false'
-	# deluge-console -c /home/jethros/bt_data/config 'config -s cache_size 0'
 	deluge-console -c /home/jethros/bt_data/config "config -s compact_allocation True"
 
-	# KiB per second? 54000 and 5400
+	deluge-console -c /home/jethros/bt_data/config  "max_connections_global 200"
+	deluge-console -c /home/jethros/bt_data/config  "max_upload_slots_global 4"
+	deluge-console -c /home/jethros/bt_data/config  "max_download_speed 80754"
+	deluge-console -c /home/jethros/bt_data/config "max_upload_speed 68003"
+	deluge-console -c /home/jethros/bt_data/config "max_half_open_connections 50"
+	deluge-console -c /home/jethros/bt_data/config "max_connections_per_torrent 120"
+	deluge-console -c /home/jethros/bt_data/config "max_upload_slots_per_torrent 8"
+	deluge-console -c /home/jethros/bt_data/config "max_download_speed_per_torrent -1"
+	deluge-console -c /home/jethros/bt_data/config "max_upload_speed_per_torrent -1"
+	deluge-console -c /home/jethros/bt_data/config "max_active_limit 15"
+	deluge-console -c /home/jethros/bt_data/config "max_active_downloading 10"
+	deluge-console -c /home/jethros/bt_data/config "max_active_seeding 15"
 
 	# deluge-console -c /home/jethros/bt_data/config 'config -s max_download_speed_per_torrent 10000'
 	# deluge-console -c /home/jethros/bt_data/config 'config -s max_upload_speed_per_torrent 10000'
