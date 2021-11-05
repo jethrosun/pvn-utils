@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from screenutils import list_screens, Screen
+from screenutils import Screen
 import sys
 import time
 import contend_config as contend
