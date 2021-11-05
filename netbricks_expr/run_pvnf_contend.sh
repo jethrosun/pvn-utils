@@ -79,17 +79,6 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}' )
 	echo "$JSON_STRING" > /home/jethros/setup
 
-	# dont track docker, why?
-	docker run -d --cpuset-cpus 1 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
-	# P1=$!
-	docker ps
-	sleep 5
-
-	sudo taskset -c 1 /home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$9" 1 "$FAKTORY_LOG" &
-	P4=$!
-	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
-	P5=$!
-
 	while sleep 5; do
 		if [[ $(pgrep contention_cpu) ]]; then
 			:
@@ -117,6 +106,19 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 		fi
 	done &
 	P3=$!
+
+	sleep 5
+
+	# dont track docker, why?
+	docker run -d --cpuset-cpus 1 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
+	# P1=$!
+	docker ps
+	sleep 5
+
+	sudo taskset -c 1 /home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$9" 1 "$FAKTORY_LOG" &
+	P4=$!
+	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
+	P5=$!
 
 	for PID in $(pgrep faktory); do sudo taskset -cp 1 $PID; done
 
@@ -172,9 +174,6 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 	while sleep 5; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > "$P2P_PROGRESS_LOG" &
 	P1=$!
 
-	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
-	P5=$!
-
 	while sleep 5; do
 		if [[ $(pgrep contention_cpu) ]]; then
 			:
@@ -202,6 +201,10 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 		fi
 	done &
 	P4=$!
+	sleep 5
+
+	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
+	P5=$!
 
 	while sleep 10; do for PID in $(pgrep faktory); do sudo taskset -cp 1 $PID; done; done  &
 	P6=$!
@@ -236,9 +239,6 @@ elif [ "$2" == "pvn-rdr-transform-app" ] || [ "$2" == "pvn-rdr-groupby-app" ]; t
 		--arg mode "$EXPR_MODE" \
 		'{setup: $setup, iter: $iter, disk: $disk, inst: $inst, mode: $mode}' )
 	echo "$JSON_STRING" > /home/jethros/setup
-
-	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
-	P4=$!
 
 	# config contention
 	while sleep 5; do
@@ -275,27 +275,31 @@ elif [ "$2" == "pvn-rdr-transform-app" ] || [ "$2" == "pvn-rdr-groupby-app" ]; t
 		fi
 	done &
 	P3=$!
+	sleep 5
 
-	while sleep 10; do echo "shit"; pgrep sys; done >> "$CHROME_PLOG"  &
+	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P4=$!
 
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
+	while sleep 10; do echo "shit"; pgrep sys; done >> "$CHROME_PLOG"  &
 	P5=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
+
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
 	P6=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG2" &
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
 	P7=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG2" &
 	P8=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh contention; done > "$CPULOG3" &
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
 	P9=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh contention; done > "$MEMLOG3" &
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh contention; done > "$CPULOG3" &
 	P10=$!
-	sudo taskset -c 5 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh contention; done > "$MEMLOG3" &
 	P11=$!
-	sudo  taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
+	sudo taskset -c 5 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
 	P12=$!
-	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12
+	sudo  taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
+	P13=$!
+	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13
 
 else
 	# for tlsv
@@ -309,9 +313,6 @@ else
 		--arg mode "$EXPR_MODE" \
 		'{setup: $setup, iter: $iter, inst: $inst, mode: $mode}' )
 	echo "$JSON_STRING" > /home/jethros/setup
-
-	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
-	P4=$!
 
 	while sleep 5; do
 		if [[ $(pgrep contention_cpu) ]]; then
@@ -338,6 +339,9 @@ else
 		fi
 	done &
 	P3=$!
+
+	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
+	P4=$!
 
 	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
 	P5=$!
