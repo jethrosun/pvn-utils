@@ -105,8 +105,8 @@ for i in ['1', '2', '3']:
     # setup.append([i, zero, i])
     # setup.append([zero, i, i])
     # setup.append([i, i, i])
-# num_of_epoch = 5
-num_of_epoch = 10
+num_of_epoch = 5
+# num_of_epoch = 10
 
 nf_set = {
     'app_rdr': '5',
