@@ -261,10 +261,10 @@ def main(expr_list):
                         run_netbricks_p2p(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr], "app_p2p-controlled", contention[0],
                                           contention[1], contention[2])
                     elif nf in contend.rdr_nf_list:
-                        # run_netbricks_rdr(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr], contention[0], contention[1],
-                        #                   contention[2], 'hdd')
                         run_netbricks_rdr(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr], contention[0], contention[1],
-                                          contention[2], 'ssd')
+                                          contention[2], 'hdd')
+                        # run_netbricks_rdr(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr], contention[0], contention[1],
+                        #                   contention[2], 'ssd')
                     else:
                         run_netbricks(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr], contention[0], contention[1],
                                       contention[2])
