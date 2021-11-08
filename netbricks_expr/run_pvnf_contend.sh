@@ -4,16 +4,6 @@ set -e
 
 # This script runs the non-coresident PVNFs with resource contention
 
-# Usage:
-# for transcoder
-#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio $8=port $9=expr_num
-#
-# for p2p
-#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio $8=p2p_type
-#
-# for tlsv and rdr
-#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio
-
 NB_CONFIG=$HOME/dev/netbricks/experiments/config_1core.toml
 NB_CONFIG_MEDIUM=$HOME/dev/netbricks/experiments/config_1core_medium.toml
 NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_1core_long.toml
@@ -145,18 +135,9 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 	#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio $8=p2p_type
 	for PID in $(pgrep contention); do sudo -u jethros kill $PID; done
 
-	if [ "$5" == "app_p2p-controlled" ]; then
-		sudo rm -rf "$HOME/Downloads"
-		sudo rm -rf /data/bt/config
-		mkdir -p "$HOME/Downloads"  /data/bt/config
-	else
-		sudo rm -rf downloads/*
-		sudo rm -rf config/*
-		mkdir -p config downloads
-		sudo rm -rf /data/downloads/*
-		sudo rm -rf /data/config/*
-		sudo mkdir -p /data/config /data/downloads
-	fi
+	sudo rm -rf "$HOME/Downloads"
+	sudo rm -rf /data/bt/config
+	mkdir -p "$HOME/Downloads"  /data/bt/config
 
 	JSON_STRING=$( jq -n \
 		--arg iter "$3" \
@@ -281,7 +262,7 @@ elif [ "$2" == "pvn-rdr-transform-app" ] || [ "$2" == "pvn-rdr-groupby-app" ]; t
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P4=$!
 
-	while sleep 10; do echo "shit"; pgrep sys; done >> "$CHROME_PLOG"  &
+	while sleep 10; do echo "10 sec"; pgrep "chrome|Chrome"; done >> "$CHROME_PLOG"  &
 	P5=$!
 
 	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
