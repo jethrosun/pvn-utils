@@ -78,8 +78,8 @@ fn main() {
 
             let infh: Box<dyn io::Read> = Box::new(File::open(infile_str).unwrap());
 
-            if start.elapsed().as_secs() > 600 {
-                println!("reached 600 seconds, hard stop");
+            if start.elapsed().as_secs() > 180 {
+                println!("reached 180 seconds, hard stop");
             }
             let now_2 = Instant::now();
             // println!("transcode with core {:?} ", id.id);
