@@ -120,7 +120,8 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P5=$!
 
-	for PID in $(pgrep faktory); do sudo taskset -cp 1 $PID; done
+	while sleep 10; do for PID in $(pgrep faktory); do sudo taskset -cp 1 $PID; done; done  &
+	P14=$!
 
 	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
 	P6=$!
@@ -138,7 +139,7 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 	P12=$!
 	sudo taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
 	P13=$!
-	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13
+	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13 $P14
 
 elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; then
 	#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio $8=p2p_type
@@ -206,7 +207,7 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P5=$!
 
-	while sleep 10; do for PID in $(pgrep faktory); do sudo taskset -cp 1 $PID; done; done  &
+	while sleep 10; do for PID in $(pgrep deluge); do sudo taskset -cp 1 $PID; done; done  &
 	P6=$!
 	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
 	P7=$!
