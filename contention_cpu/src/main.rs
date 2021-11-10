@@ -1,6 +1,5 @@
 /// CPU contention: we want to use this Rust program to cause CPU contention on all the cores we
 /// have.
-///
 use core_affinity::CoreId;
 use rand::Rng;
 use std::collections::HashMap;
@@ -39,37 +38,35 @@ fn main() {
         process::exit(0x0100);
     }
 
+    // contention setup
     let setup = params[1].parse::<usize>().unwrap();
-    let num_of_process = params[2].parse::<usize>().unwrap();
+    // num of process per core
+    let num_of_process_per_core = params[2].parse::<u64>().unwrap();
 
     // read setup and translate to CPU contention in milliseconds
-    let run_time = read_setup(&setup).unwrap();
+    let run_time = read_setup(&setup).unwrap() / num_of_process_per_core;
 
     // The regular way to get core ids are not going work as we have configured isol cpus to reduce context switches for DPDK and our things.
     // We want to cause equal pressure to all of the cores for CPU contention
     let mut core_ids = Vec::new();
     for idx in 0..6 {
+        // cores [CoreId { id: 0 }, CoreId { id: 1 }]
         core_ids.push(CoreId { id: idx });
     }
-    // cores [CoreId { id: 0 }, CoreId { id: 1 }]
-    println!("cores {:?}", core_ids);
+    let num_of_threads = core_ids.len() as u64 * num_of_process_per_core;
 
-    // Create a thread for each active CPU core.
-    let handles = core_ids
-        .into_iter()
-        .map(|id| {
+    let threads: Vec<_> = (0..num_of_threads)
+        .zip(core_ids.iter().cycle().copied())
+        .map(|(i, core_id)| {
             thread::spawn(move || {
-                // Pin this thread to a single CPU core.
-                core_affinity::set_for_current(id);
-                // Do more work after this.
-                // Do more work after this.
+                core_affinity::set_for_current(core_id);
+                println!("thread: {:?} is on core id: {:?}", i, core_id);
                 // loop to execute job
                 let _sleep_time = Duration::from_millis(1000 - run_time);
                 let _run_time = Duration::from_millis(run_time);
                 let mut rng = rand::thread_rng();
 
                 loop {
-                    // let start = Instant::now();
                     let mut _now = Instant::now();
                     thread::sleep(_sleep_time);
                     // println!("\tsleeped {:?}", _now.elapsed());
@@ -81,13 +78,13 @@ fn main() {
                             break;
                         }
                     }
-                    // println!("start elapsed {:?}", start.elapsed());
+                    // println!("start elapsed {:?}", _now.elapsed());
                 }
             })
         })
-        .collect::<Vec<_>>();
+        .collect();
 
-    for handle in handles.into_iter() {
-        handle.join().unwrap();
+    for t in threads {
+        t.join().unwrap()
     }
 }
