@@ -51,7 +51,6 @@ BIO_TOP_MONITOR=/usr/share/bcc/tools/biotop
 
 
 INST_LEVEL=off
-
 mkdir -p "$LOG_DIR"
 
 
@@ -73,7 +72,7 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 		if [[ $(pgrep contention_cpu) ]]; then
 			:
 		else
-			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
+			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" 1 "$CPU_LOG" &
 		fi
 	done &
 	P1=$!
@@ -160,7 +159,7 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 		if [[ $(pgrep contention_cpu) ]]; then
 			:
 		else
-			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
+			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" 1 "$CPU_LOG" &
 		fi
 	done &
 	P2=$!
@@ -227,7 +226,8 @@ elif [ "$2" == "pvn-rdr-transform-app" ] || [ "$2" == "pvn-rdr-groupby-app" ]; t
 		if [[ $(pgrep contention_cpu) ]]; then
 			:
 		else
-			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
+			# multi process mode
+			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" 5 "$CPU_LOG" &
 		fi
 	done &
 	P1=$!
@@ -300,7 +300,7 @@ else
 		if [[ $(pgrep contention_cpu) ]]; then
 			:
 		else
-			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" "$CPU_LOG" &
+			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" 1 "$CPU_LOG" &
 		fi
 	done &
 	P1=$!

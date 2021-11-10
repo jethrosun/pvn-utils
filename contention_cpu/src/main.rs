@@ -28,24 +28,22 @@ fn main() {
     let params: Vec<String> = env::args().collect();
 
     // len of params will be number of args +1
-    if params.len() == 2 {
+    if params.len() == 3 {
         println!("Parse 2 args");
-        println!("Setup: {:?}", params[1],);
+        println!("Setup: {:?}, Running processes: {:?}", params[1], params[2]);
         if params[1].parse::<usize>().unwrap() == 0 {
             process::exit(0x0100);
         }
     } else {
-        println!("More or less than 1 args are provided. Run it with *setup*");
+        println!("More or less than 2 args are provided. Run it with *setup num_of_process*");
         process::exit(0x0100);
     }
 
     let setup = params[1].parse::<usize>().unwrap();
+    let num_of_process = params[2].parse::<usize>().unwrap();
 
     // read setup and translate to CPU contention in milliseconds
     let run_time = read_setup(&setup).unwrap();
-
-    // Retrieve the IDs of all active CPU cores.
-    // let core_ids = core_affinity::get_core_ids().unwrap();
 
     // The regular way to get core ids are not going work as we have configured isol cpus to reduce context switches for DPDK and our things.
     // We want to cause equal pressure to all of the cores for CPU contention
