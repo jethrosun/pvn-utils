@@ -16,10 +16,10 @@ use std::time::{Duration, Instant};
 /// setup: 10, 50, 100
 fn read_setup(setup: &usize) -> Option<usize> {
     let mut map = HashMap::new();
-    map.insert(0, 1);
-    map.insert(1, 20);
-    map.insert(2, 40);
-    map.insert(3, 70);
+    map.insert(0, 0);
+    map.insert(1, 5);
+    map.insert(2, 20);
+    map.insert(3, 60);
 
     map.remove(setup)
 }
