@@ -13,13 +13,13 @@ use std::time::{Duration, Instant};
 
 /// Map different setup to disk I/O intensiveness. We are mapping these setups to disk I/O per
 /// second
-/// setup: 50MB, 100MB, 200MB
+/// setup: 10, 50, 100
 fn read_setup(setup: &usize) -> Option<usize> {
     let mut map = HashMap::new();
     map.insert(0, 1);
-    map.insert(1, 10);
-    map.insert(2, 50);
-    map.insert(3, 200);
+    map.insert(1, 20);
+    map.insert(2, 40);
+    map.insert(3, 70);
 
     map.remove(setup)
 }
