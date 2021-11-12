@@ -44,7 +44,8 @@ fn main() {
     let num_of_process_per_core = params[2].parse::<u64>().unwrap();
 
     // read setup and translate to CPU contention in milliseconds
-    let run_time = read_setup(&setup).unwrap() / num_of_process_per_core;
+    let run_time = read_setup(&setup).unwrap();
+    // let run_time = read_setup(&setup).unwrap() / num_of_process_per_core;
 
     // The regular way to get core ids are not going work as we have configured isol cpus to reduce context switches for DPDK and our things.
     // We want to cause equal pressure to all of the cores for CPU contention
