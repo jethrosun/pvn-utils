@@ -102,7 +102,7 @@ setup.append([zero, zero, zero])
 for i in ['1', '2', '3']:
     setup.append([i, zero, zero])
     setup.append([zero, i, zero])
-    setup.append([zero, zero, i])
+    # setup.append([zero, zero, i])
 
 ## combination set
 # for i in ['1', '2', '3']:
