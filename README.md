@@ -1,5 +1,11 @@
 # Utils to run the experiments for systems
 
+## Steps:
+
+- `sudo ./tunning.sh`
+- `sudo ./cleanup.sh`
+- `sudo ./post_nb_setup.sh`
+
 # FIX:
 
 ## XCDR
