@@ -125,7 +125,8 @@ nf_set = {
     'app_xcdr': '4',
 }
 
-expr_wait_time = 250  # 180
+# expr_wait_time = 250  # 180
+expr_wait_time = 290  # 180
 # expr_wait_time = 340  # 300
 # expr_wait_time = 750  # 600
 
