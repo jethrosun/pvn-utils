@@ -12,7 +12,7 @@ TMP_NB_CONFIG=$HOME/config.toml
 # ===================================
 
 EXPR_MODE=short
-sed "/duration = 200/i log_path = '$LOG'" "$NB_CONFIG" > "$TMP_NB_CONFIG"
+sed "/duration = 220/i log_path = '$LOG'" "$NB_CONFIG" > "$TMP_NB_CONFIG"
 
 # EXPR_MODE=medium
 # sed "/duration = 320/i log_path = '$LOG'" "$NB_CONFIG_MEDIUM" > "$TMP_NB_CONFIG"
