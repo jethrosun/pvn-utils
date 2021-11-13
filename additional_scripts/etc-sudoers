@@ -1,0 +1,122 @@
+jethros@tuco ~/dev/pvn/utils2:main> sudo cat /etc/sudoers
+#
+# This file MUST be edited with the 'visudo' command as root.
+#
+# Please consider adding local content in /etc/sudoers.d/ instead of
+# directly modifying this file.
+#
+# See the man page for details on how to write a sudoers file.
+#
+Defaults        env_reset
+Defaults        mail_badpass
+Defaults        secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+
+# Host alias specification
+
+# User alias specification
+
+# Cmnd alias specification
+
+# User privilege specification
+root    ALL=(ALL:ALL) ALL
+
+# Members of the admin group may gain root privileges
+%admin ALL=(ALL) ALL
+
+# Allow members of group sudo to execute any command
+%sudo   ALL=(ALL:ALL) ALL
+
+# See sudoers(5) for more information on "#include" directives:
+
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/netbricks/scripts/bind-xl710.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/netbricks/scripts/tunning/energy.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/start.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/tunning.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/cleanup.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pktgen-dpdk/experiments/run_pktgen.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/faktory_srv/target/release/faktory_srv
+jethros ALL = (ALL) NOPASSWD: /sbin/reboot
+# NetBricks NFs
+jethros ALL = (ALL) NOPASSWD: /home/jethros/data/cargo-target/release/zcsi-aclfw
+jethros ALL = (ALL) NOPASSWD: /home/jethros/data/cargo-target/release/zcsi-chain
+jethros ALL = (ALL) NOPASSWD: /home/jethros/data/cargo-target/release/zcsi-lpm
+jethros ALL = (ALL) NOPASSWD: /home/jethros/data/cargo-target/release/zcsi-maglev
+jethros ALL = (ALL) NOPASSWD: /home/jethros/data/cargo-target/release/zcsi-nat
+# PVN NF
+jethros ALL = (ALL) NOPASSWD: /home/jethros/data/cargo-target/release/pvn-p2p-transform-app
+jethros ALL = (ALL) NOPASSWD: /home/jethros/data/cargo-target/release/pvn-rdr-transform-app
+jethros ALL = (ALL) NOPASSWD: /home/jethros/data/cargo-target/release/pvn-tlsv-transform-app
+jethros ALL = (ALL) NOPASSWD: /home/jethros/data/cargo-target/release/pvn-transcoder-transform-app
+# Coresident NF
+jethros ALL = (ALL) NOPASSWD: /home/jethros/data/cargo-target/release/pvn-rdr-p2p-coexist-app
+jethros ALL = (ALL) NOPASSWD: /home/jethros/data/cargo-target/release/pvn-tlsv-rdr-coexist-app
+jethros ALL = (ALL) NOPASSWD: /home/jethros/data/cargo-target/release/pvn-tlsv-p2p-coexist-app
+jethros ALL = (ALL) NOPASSWD: /home/jethros/data/cargo-target/release/pvn-xcdr-p2p-coexist-app
+jethros ALL = (ALL) NOPASSWD: /home/jethros/data/cargo-target/release/pvn-rdr-xcdr-coexist-app
+jethros ALL = (ALL) NOPASSWD: /home/jethros/data/cargo-target/release/pvn-tlsv-xcdr-coexist-app
+
+jethros ALL = (ALL) NOPASSWD: /home/jethros/data/cargo-target/release/pvn-tlsv-rdr-p2p-coexist-app
+jethros ALL = (ALL) NOPASSWD: /home/jethros/data/cargo-target/release/pvn-rdr-xcdr-p2p-coexist-app
+jethros ALL = (ALL) NOPASSWD: /home/jethros/data/cargo-target/release/pvn-tlsv-rdr-xcdr-coexist-app
+jethros ALL = (ALL) NOPASSWD: /home/jethros/data/cargo-target/release/pvn-tlsv-p2p-xcdr-coexist-app
+jethros ALL = (ALL) NOPASSWD: /home/jethros/data/cargo-target/release/pvn-tlsv-rdr-p2p-xcdr-coexist-app
+# Utils scripts
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/cleanup.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/nb_setup.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/post_nb_setup.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/setup.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/tunning.sh
+# Utils NetBricks scripts
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/app_run.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/run_pvnf_chain.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/run_pvnf_contend.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/run_pvnf_coresident.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/run_pvnf_inst.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/run_pvnf_mix.sh
+# NetBricks misc scripts
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/misc/check_transmission.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/misc/rdr_cleanup.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/misc/rm_finished_transmission.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/misc/xcdr_cleanup.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/misc/measure.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/misc/p2p_cleanup_nb.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/misc/restart_transmission.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/misc/service_restart_transmission.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/misc/p2p_cleanup_transmission.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/misc/ptop.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/misc/rm_all_transmission.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/netbricks_expr/misc/setup_transmission.sh
+# Utils P2P scripts
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/p2p_expr/exec_fragmentation.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_leecher.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/p2p_expr/p2p_run_nb.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/p2p_expr/p2p_setup_leecher.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/p2p_expr/p2p_setup_seeder.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_leecher.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_seeder.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/p2p_expr/p2p_run_seeder.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/p2p_expr/p2p_setup_nb.sh
+# Utils other running things
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/contention_cpu/start.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/contention_mem/start.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/contention_diskio/start.sh
+
+# Utils 2
+#
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils2/tunning.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils2/setup.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils2/insert_sgx_ko.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils2/cleanup.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils2/pre_nb_setup.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils2/post_nb_setup.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils2/nb_setup.sh
+
+#includedir /etc/sudoers.d
+
