@@ -98,12 +98,11 @@ setup = []
 zero = '0'
 
 ## in isolation
-# setup.append([zero, zero, zero])
-# for i in ['1', '2', '3']:
-for i in ['3']:
+setup.append([zero, zero, zero])
+for i in ['1', '2', '3']:
     setup.append([i, zero, zero])
-    # setup.append([zero, i, zero])
-    # setup.append([zero, zero, i])
+    setup.append([zero, i, zero])
+    setup.append([zero, zero, i])
 
 ## combination set
 # for i in ['1', '2', '3']:
@@ -125,7 +124,7 @@ nf_set = {
     'app_xcdr': '4',
 }
 
-expr_wait_time = 250  # 180
+expr_wait_time = 260  # 180
 # expr_wait_time = 340  # 300
 # expr_wait_time = 750  # 600
 
@@ -147,5 +146,5 @@ p2p_ext = ['app_p2p-ext']
 
 # nf_list = ['app_p2p-controlled', 'app_rdr', 'app_tlsv', 'app_xcdr']
 # nf_list = ['app_tlsv', 'app_xcdr']
-# nf_list = ['app_rdr', 'app_p2p-controlled']
-nf_list = ['app_rdr']
+nf_list = ['app_rdr', 'app_p2p-controlled']
+# nf_list = ['app_rdr']
