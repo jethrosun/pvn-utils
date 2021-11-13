@@ -22,7 +22,7 @@ sed "/duration = 200/i log_path = '$LOG'" "$NB_CONFIG" > "$TMP_NB_CONFIG"
 
 # ===================================
 
-SLEEP_INTERVAL=3
+SLEEP_INTERVAL=1
 LOG_DIR=$HOME/netbricks_logs/$2/$1
 
 LOG=$LOG_DIR/$3_$4__$5$6$7.log
@@ -227,7 +227,7 @@ elif [ "$2" == "pvn-rdr-transform-app" ] || [ "$2" == "pvn-rdr-groupby-app" ]; t
 			:
 		else
 			# multi process mode
-			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" 20 "$CPU_LOG" &
+			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" 25 "$CPU_LOG" &
 		fi
 	done &
 	P1=$!

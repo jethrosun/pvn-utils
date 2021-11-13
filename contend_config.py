@@ -101,9 +101,9 @@ zero = '0'
 # setup.append([zero, zero, zero])
 # for i in ['1', '2', '3']:
 for i in ['3']:
-    # setup.append([i, zero, zero])
+    setup.append([i, zero, zero])
     # setup.append([zero, i, zero])
-    setup.append([zero, zero, i])
+    # setup.append([zero, zero, i])
 
 ## combination set
 # for i in ['1', '2', '3']:
@@ -125,8 +125,7 @@ nf_set = {
     'app_xcdr': '4',
 }
 
-# expr_wait_time = 250  # 180
-expr_wait_time = 290  # 180
+expr_wait_time = 250  # 180
 # expr_wait_time = 340  # 300
 # expr_wait_time = 750  # 600
 
