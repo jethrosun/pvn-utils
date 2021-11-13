@@ -112,9 +112,9 @@ for i in ['3']:
 #             setup.append([i, j, k])
 
 # num_of_epoch = 10
-# num_of_epoch = 5
+num_of_epoch = 5
 # num_of_epoch = 3
-num_of_epoch = 1
+# num_of_epoch = 1
 
 nf_set = {
     'app_rdr': '4',
