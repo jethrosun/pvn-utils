@@ -22,7 +22,7 @@ sed "/duration = 200/i log_path = '$LOG'" "$NB_CONFIG" > "$TMP_NB_CONFIG"
 
 # ===================================
 
-SLEEP_INTERVAL=1
+SLEEP_INTERVAL=3
 LOG_DIR=$HOME/netbricks_logs/$2/$1
 
 LOG=$LOG_DIR/$3_$4__$5$6$7.log
