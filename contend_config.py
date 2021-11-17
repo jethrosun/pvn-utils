@@ -124,7 +124,7 @@ nf_set = {
     'app_xcdr': '4',
 }
 
-expr_wait_time = 250  # 180
+expr_wait_time = 220  # 180
 # expr_wait_time = 340  # 300
 # expr_wait_time = 750  # 600
 
@@ -146,5 +146,5 @@ p2p_ext = ['app_p2p-ext']
 
 # nf_list = ['app_p2p-controlled', 'app_rdr', 'app_tlsv', 'app_xcdr']
 # nf_list = ['app_xcdr']
-# nf_list = ['app_p2p-controlled']
-nf_list = ['app_rdr']
+nf_list = ['app_p2p-controlled']
+# nf_list = ['app_rdr']
