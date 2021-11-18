@@ -25,7 +25,7 @@ if [ ! -e /data/bt/config/auth ]; then
 
 	sudo -u jethros deluge-console -c /data/bt/config 'config -s dht false'
 	sudo -u jethros deluge-console -c /data/bt/config 'config -s utpex false'
-	sudo -u jethros deluge-console -c /data/bt/config "config -s compact_allocation True"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s compact_allocation False"
 
 	sudo -u jethros deluge-console -c /data/bt/config "config -s max_connections_global 200"
 	sudo -u jethros deluge-console -c /data/bt/config "config -s max_upload_slots_global 4"

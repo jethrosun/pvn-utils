@@ -14,7 +14,7 @@ if [ ! -e /home/jethros/bt_data/config/auth ]; then
 
 	deluge-console -c /home/jethros/bt_data/config 'config -s dht false'
 	deluge-console -c /home/jethros/bt_data/config 'config -s utpex false'
-	deluge-console -c /home/jethros/bt_data/config "config -s compact_allocation True"
+	deluge-console -c /home/jethros/bt_data/config "config -s compact_allocation False"
 
 	deluge-console -c /home/jethros/bt_data/config "config -s max_connections_global 200"
 	deluge-console -c /home/jethros/bt_data/config "config -s max_upload_slots_global 4"
