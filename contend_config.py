@@ -111,8 +111,8 @@ for i in ['1', '2', '3']:
 #             setup.append([i, j, k])
 
 # num_of_epoch = 10
-# num_of_epoch = 5
-num_of_epoch = 3
+num_of_epoch = 5
+# num_of_epoch = 3
 # num_of_epoch = 1
 
 nf_set = {
@@ -124,8 +124,8 @@ nf_set = {
     'app_xcdr': '4',
 }
 
-# expr_wait_time = 220  # 180
-expr_wait_time = 230  # 180
+expr_wait_time = 220  # 180
+# expr_wait_time = 230  # 180
 # expr_wait_time = 340  # 300
 # expr_wait_time = 750  # 600
 
@@ -139,13 +139,11 @@ tlsv = ['app_tlsv', 'app_rdr']
 tlsv_rdr = ['app_tlsv']
 rdr_xcdr = ['app_rdr', 'app_xcdr']
 rdr_xcdr_tlsv = ['app_rdr', 'app_xcdr', 'app_tlsv']
-
 complete_nuclear_list = ['app_p2p', 'app_p2p-ext']
-
 p2p_controlled = ['app_p2p-controlled']
 p2p_ext = ['app_p2p-ext']
 
 # nf_list = ['app_p2p-controlled', 'app_rdr', 'app_tlsv', 'app_xcdr']
 # nf_list = ['app_xcdr']
-# nf_list = ['app_p2p-controlled']
-nf_list = ['app_rdr']
+nf_list = ['app_p2p-controlled']
+# nf_list = ['app_rdr']
