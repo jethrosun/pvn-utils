@@ -111,7 +111,7 @@ for i in ['1', '2', '3']:
 #             setup.append([i, j, k])
 
 # num_of_epoch = 10
-num_of_epoch = 5
+# num_of_epoch = 5
 # num_of_epoch = 3
 # num_of_epoch = 1
 
@@ -145,5 +145,6 @@ p2p_ext = ['app_p2p-ext']
 
 # nf_list = ['app_p2p-controlled', 'app_rdr', 'app_tlsv', 'app_xcdr']
 # nf_list = ['app_xcdr']
-nf_list = ['app_p2p-controlled', 'app_rdr']
+# nf_list = ['app_p2p-controlled', 'app_rdr']
 # nf_list = ['app_rdr']
+nf_list = ['app_p2p-controlled']
