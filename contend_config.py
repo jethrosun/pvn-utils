@@ -116,7 +116,7 @@ num_of_epoch = 3
 # num_of_epoch = 1
 
 nf_set = {
-    'app_rdr': '5',
+    'app_rdr': '4',
     'app_p2p': '3',
     'app_p2p-controlled': '3',
     # done
@@ -125,7 +125,8 @@ nf_set = {
 }
 
 # expr_wait_time = 220  # 180
-expr_wait_time = 250  # for rdr
+expr_wait_time = 250  # for rdr 4
+# expr_wait_time = 300  # for rdr 5
 # expr_wait_time = 340  # 300
 # expr_wait_time = 750  # 600
 
