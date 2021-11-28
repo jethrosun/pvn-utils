@@ -23,7 +23,6 @@ imgs = json_data['p2p_controlled'][setup][iteration]
 
 #  "add /home/jethros/dev/pvn/utils/workloads/torrent_files/p2p_image_${args[$c]}.img.torrent"
 for x in imgs:
-    torrent_path = "add /home/jethros/dev/pvn/utils/workloads/torrent_files/p2p_image_" + str(
-        x) + ".img.torrent"
+    torrent_path = "add /home/jethros/dev/pvn/utils/workloads/torrent_files/p2p_image_" + str(x + 1) + ".img.torrent"
     print(torrent_path)
-    subprocess.run(["deluge-console", "-c", "~/bt_data/config", torrent_path])
+    subprocess.run(["deluge-console", "-c", "/home/jethros/bt_data/config", torrent_path])

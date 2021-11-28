@@ -5,63 +5,54 @@ set -ex
 sudo -u jethros mkdir -p /home/jethros/Downloads
 sudo -u jethros mkdir -p /data/bt/config
 sudo -u jethros mkdir -p /data/bt/deluge_data
+sudo -u jethros mkdir -p /data/bt/tmp
+sudo -u jethros mkdir -p /data/tmp
+sudo -u jethros mkdir -p /data/tmp3
+sudo -u jethros mkdir -p /data/tmp4
 
-#prep the output dirs
-# if [ ! -e ~/bt_data/Complete ]; then
-#     mkdir -p ~/bt_data/Complete
-#     mkdir -p ~/bt_data/Torrents
-#     mkdir -p ~/bt_data/InProgress
-#     mkdir -p ~/bt_data/Drop
-# fi
-
-# check if config exists in /config and set it up if not
+# to properly config deluge, see
+#
+# 	https://dev.deluge-torrent.org/wiki/UserGuide/BandwidthTweaking
 if [ ! -e /data/bt/config/auth ]; then
-	#create a default user (apart from admin/sudo -u jethros deluge)
-	#echo "user:Password1:10" >> /config/auth
-
-	#daemon must be running to setup
 	sudo -u jethros deluged -c /data/bt/config
-
-	#need a small delay here or the first config setting fails
 	sleep 1
 
-	#enable report connections (for webui to connect to backend)
 	sudo -u jethros deluge-console -c /data/bt/config "config -s allow_remote True"
-	#view it with: sudo -u jethros deluge-console -c /config "config allow_remote"
-
-	#setup the paths (broken due to a str decode bug)
 
 	sudo -u jethros deluge-console -c /data/bt/config "config -s move_completed_path /data/bt/deluge_data/Complete"
 	sudo -u jethros deluge-console -c /data/bt/config "config -s torrentfiles_location /data/bt/deluge_data/Torrents"
 	sudo -u jethros deluge-console -c /data/bt/config "config -s download_location /data/bt/deluge_data/InProgress"
-	sudo -u jethros deluge-console -c /data/bt/config "config -s autoadd_location /data/bt/deluge_data/Drop"
-
-	#daemon port which the WEB ui connects to
-	#sudo -u jethros deluge-console -c ~/bt_data/config "config -s daemon_port 58846"
-
-	#sudo -u jethros deluge-console -c ~/bt_data/config "config -s upnp False"
-	#sudo -u jethros deluge-console -c ~/bt_data/config "config -s compact_allocation False"
-	# sudo -u jethros deluge-console -c ~/bt_data/config "config -s add_paused False"
-	# sudo -u jethros deluge-console -c ~/bt_data/config "config -s move_completed True"
-	# sudo -u jethros deluge-console -c ~/bt_data/config "config -s copy_torrent_file True"
-	# sudo -u jethros deluge-console -c ~/bt_data/config "config -s autoadd_enable True"
 
 	sudo -u jethros deluge-console -c /data/bt/config 'config -s dht false'
 	sudo -u jethros deluge-console -c /data/bt/config 'config -s utpex false'
+	sudo -u jethros deluge-console -c /data/bt/config "config -s compact_allocation False"
 
-	sudo -u jethros deluge-console -c /data/bt/config 'config -s max_active_limit 10'
-	sudo -u jethros deluge-console -c /data/bt/config 'config -s max_active_downloading 10'
+	sudo -u jethros deluge-console -c /data/bt/config "config -s max_connections_global 200"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s max_upload_slots_global 4"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s max_download_speed 80754"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s max_upload_speed 68003"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s max_half_open_connections 50"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s max_connections_per_torrent 120"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s max_upload_slots_per_torrent 8"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s max_download_speed_per_torrent -1"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s max_upload_speed_per_torrent -1"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s max_active_limit 15"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s max_active_downloading 10"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s max_active_seeding 15"
 
-	sudo -u jethros deluge-console -c /data/bt/config 'config -s max_active_seeding 10'
-	sudo -u jethros deluge-console -c /data/bt/config 'config -s max_download_speed_per_torrent 10000'
-	sudo -u jethros deluge-console -c /data/bt/config 'config -s max_upload_speed_per_torrent 10000'
-	# sudo -u jethros deluge-console -c /home/jethros/bt_data/config 'config -s max_seed_speed_per_torrent 2500'
+	# sudo -u jethros deluge-console -c /data/bt/config 'config -s max_active_limit 10'
+	# sudo -u jethros deluge-console -c /data/bt/config 'config -s max_active_downloading 10'
+	# sudo -u jethros deluge-console -c /data/bt/config 'config -s max_active_seeding 10'
+	# sudo -u jethros deluge-console -c /data/bt/config 'config -s max_download_speed_per_torrent 10000'
+	# sudo -u jethros deluge-console -c /data/bt/config 'config -s max_upload_speed_per_torrent 10000'
+	# sudo -u jethros deluge-console -c /data/bt/config "config -s max_download_speed 100000"
+	# sudo -u jethros deluge-console -c /data/bt/config "config -s max_upload_speed 100000"
 
 	sudo -u jethros deluge-console -c /data/bt/config "halt"
 fi
 
 echo "Starting up now ..."
-sudo -u jethros nice deluged -c /data/bt/config
+sudo -u jethros taskset -c 1 deluged -c /data/bt/config
 # sudo -u jethros deluge-web -c ~/bt_data/config
-sleep 3
-for PID in $(pgrep deluged); do sudo -u jethros taskset -cp 3 $PID; done
+# sleep 3
+# for PID in $(pgrep deluged); do sudo -u jethros taskset -cp 3 $PID; done
