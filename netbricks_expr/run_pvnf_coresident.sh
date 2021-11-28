@@ -53,7 +53,306 @@ EXPR_MODE=short
 
 mkdir -p "$LOG_DIR"
 
-if [ "$2" == 'pvn-tlsv-rdr-xcdr-coexist-app' ]; then
+if [ "$2" == 'pvn-tlsv-rdr-coexist-app' ]; then
+	JSON_STRING=$(jq -n \
+		--arg iter "$3" \
+		--arg setup "$4" \
+		--arg port "$5" \
+		--arg expr_num "$7" \
+		--arg inst "$INST_LEVEL" \
+		--arg mode "$EXPR_MODE" \
+		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}')
+	echo "${JSON_STRING}" >"/home/jethros/setup"
+
+	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" >"$LOG" &
+	P1=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done >"${CPULOG1}" &
+	P3=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done >"${MEMLOG1}" &
+	P4=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh faktory; done >"${CPULOG2}" &
+	P5=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh faktory; done >"${MEMLOG2}" &
+	P6=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done >"${CPULOG3}" &
+	P7=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done >"${MEMLOG3}" &
+	P8=$!
+	$TCP_LIFE_MONITOR >"${TCPLIFE_LOG}" &
+	P9=$!
+	$BIO_TOP_MONITOR -C >"${BIO_LOG}" &
+	P10=$!
+	$TCP_TOP_MONITOR -C >"${TCP_LOG}" &
+	P11=$!
+	wait $P1 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11
+
+elif [ "$2" == 'pvn-rdr-p2p-coexist-app' ]; then
+	if [ "${5}" == "chain_rdr_p2p" ]; then
+		sudo rm -rf "$HOME/Downloads"
+		sudo rm -rf /data/bt/config
+		mkdir -p "$HOME/Downloads" /data/bt/config
+	else
+		# clean the states of transmission
+		sudo rm -rf downloads/*
+		sudo rm -rf config/*
+		mkdir -p config downloads
+
+		sudo rm -rf /data/downloads/*
+		sudo rm -rf /data/config/*
+		sudo mkdir -p /data/config /data/downloads
+	fi
+
+	JSON_STRING=$(jq -n \
+		--arg iter "$3" \
+		--arg setup "$4" \
+		--arg inst "$INST_LEVEL" \
+		--arg p2p_type "$5" \
+		--arg mode "$EXPR_MODE" \
+		'{setup: $setup, iter: $iter, inst: $inst, p2p_type: $p2p_type, mode: $mode}')
+	echo "${JSON_STRING}" >/home/jethros/setup
+
+	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
+	sleep 5
+	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
+	sleep 15
+
+	if [ "$5" == "chain_rdr_p2p" ]; then
+		while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh; done >"${P2P_PROGRESS_LOG}" &
+		P1=$!
+	else
+		while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh; done >"${P2P_PROGRESS_LOG}" &
+		P1=$!
+	fi
+	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
+	P2=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
+	P3=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
+	P4=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG2" &
+	P5=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
+	P6=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh deluge; done > "$CPULOG3" &
+	P7=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh deluge; done > "$MEMLOG3" &
+	P8=$!
+	$TCP_LIFE_MONITOR > "${TCPLIFE_LOG}" &
+	P9=$!
+	$BIO_TOP_MONITOR -C > "${BIO_LOG}" &
+	P10=$!
+	$TCP_TOP_MONITOR -C > "${TCP_LOG}" &
+	P11=$!
+	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11
+
+elif [ "$2" == 'pvn-rdr-xcdr-coexist-app' ]; then
+	JSON_STRING=$(jq -n \
+		--arg iter "$3" \
+		--arg setup "$4" \
+		--arg port "$5" \
+		--arg expr_num "$7" \
+		--arg inst "$INST_LEVEL" \
+		--arg mode "$EXPR_MODE" \
+		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}')
+	echo "${JSON_STRING}" >/home/jethros/setup
+
+	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
+	# P1=$!
+	docker ps
+	sleep 15
+
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$5" "$6" "$7" "$FAKTORY_LOG" &
+	P2=$!
+	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
+	P1=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
+	P3=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
+	P4=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG2" &
+	P5=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
+	P6=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh faktory; done > "$CPULOG3" &
+	P7=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh faktory; done > "$MEMLOG3" &
+	P8=$!
+	$TCP_LIFE_MONITOR > "$TCPLIFE_LOG" &
+	P9=$!
+	$BIO_TOP_MONITOR -C > "$BIO_LOG" &
+	P10=$!
+	$TCP_TOP_MONITOR -C > "$TCP_LOG" &
+	P11=$!
+	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11
+
+elif [ "$2" == 'pvn-tlsv-p2p-coexist-app' ]; then
+	if [ "$5" == "chain_tlsv_p2p" ]; then
+		sudo rm -rf "$HOME/Downloads"
+		sudo rm -rf /data/bt/config
+		mkdir -p "$HOME/Downloads" /data/bt/config
+	else
+		# clean the states of transmission
+		sudo rm -rf downloads/*
+		sudo rm -rf config/*
+		mkdir -p config downloads
+
+		sudo rm -rf /data/downloads/*
+		sudo rm -rf /data/config/*
+		sudo mkdir -p /data/config /data/downloads
+	fi
+
+	JSON_STRING=$(jq -n \
+		--arg iter "$3" \
+		--arg setup "$4" \
+		--arg inst "$INST_LEVEL" \
+		--arg p2p_type "$5" \
+		--arg mode "$EXPR_MODE" \
+		'{setup: $setup, iter: $iter, inst: $inst, p2p_type: $p2p_type, mode: $mode}')
+	echo "$JSON_STRING" >/home/jethros/setup
+
+	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
+	sleep 5
+	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
+	sleep 15
+
+	if [ "$5" == "chain_tlsv_p2p" ]; then
+		while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh; done > "$P2P_PROGRESS_LOG" &
+		P1=$!
+	else
+		while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh; done > "$P2P_PROGRESS_LOG" &
+		P1=$!
+	fi
+	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
+	P2=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
+	P3=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
+	P4=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG2" &
+	P5=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
+	P6=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh deluge; done > "$CPULOG3" &
+	P7=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh deluge; done > "$MEMLOG3" &
+	P8=$!
+	"$TCP_LIFE_MONITOR" > "$TCPLIFE_LOG" &
+	P9=$!
+	"$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+	P10=$!
+	"$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
+	P11=$!
+	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11
+
+elif [ "$2" == 'pvn-tlsv-xcdr-coexist-app' ]; then
+	JSON_STRING=$(jq -n \
+		--arg iter "$3" \
+		--arg setup "$4" \
+		--arg port "$5" \
+		--arg expr_num "$7" \
+		--arg inst "$INST_LEVEL" \
+		--arg mode "$EXPR_MODE" \
+		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}')
+	echo "$JSON_STRING" >/home/jethros/setup
+
+	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
+	# P1=$!
+	docker ps
+	sleep 15
+
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$5" "$6" "$7" "$FAKTORY_LOG" &
+	P2=$!
+	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
+	P1=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
+	P3=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
+	P4=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG2" &
+	P5=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
+	P6=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh faktory; done > "$CPULOG3" &
+	P7=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh faktory; done > "$MEMLOG3" &
+	P8=$!
+	"$TCP_LIFE_MONITOR" > "$TCPLIFE_LOG" &
+	P9=$!
+	"$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+	P10=$!
+	"$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
+	P11=$!
+	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11
+
+elif [ "$2" == 'pvn-xcdr-p2p-coexist-app' ]; then
+	if [ "$8" == "chain_xcdr_p2p" ]; then
+		sudo rm -rf "$HOME/Downloads"
+		sudo rm -rf /data/bt/config
+		mkdir -p "$HOME/Downloads" /data/bt/config
+	else
+		# clean the states of transmission
+		sudo rm -rf downloads/*
+		sudo rm -rf config/*
+		mkdir -p config downloads
+
+		sudo rm -rf /data/downloads/*
+		sudo rm -rf /data/config/*
+		sudo mkdir -p /data/config /data/downloads
+	fi
+
+	JSON_STRING=$(jq -n \
+		--arg iter "$3" \
+		--arg setup "$4" \
+		--arg port "$5" \
+		--arg expr_num "$7" \
+		--arg p2p_type "$8" \
+		--arg inst "$INST_LEVEL" \
+		--arg mode "$EXPR_MODE" \
+		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, p2p_type: $p2p_type, mode: $mode}')
+	echo "$JSON_STRING" >/home/jethros/setup
+
+	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
+	# P1=$!
+	docker ps
+	sleep 15
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$5" "$6" "$7" "$FAKTORY_LOG" &
+	P1=$!
+
+	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
+	sleep 5
+	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
+	sleep 15
+
+	if [ "$8" == "chain_xcdr_p2p" ]; then
+		while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh; done > "$P2P_PROGRESS_LOG" &
+		P12=$!
+	else
+		while sleep 5; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_transmission.sh; done > "$P2P_PROGRESS_LOG" &
+		P12=$!
+	fi
+	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
+	P2=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
+	P3=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
+	P4=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh faktory; done > "$CPULOG2" &
+	P5=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh faktory; done > "$MEMLOG2" &
+	P6=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh deluge; done > "$CPULOG3" &
+	P7=$!
+	while sleep "$SLEEP_INTERVAL"; do /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh deluge; done > "$MEMLOG3" &
+	P8=$!
+	"$TCP_LIFE_MONITOR" > "$TCPLIFE_LOG" &
+	P9=$!
+	"$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+	P10=$!
+	"$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
+	P11=$!
+	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12
+
+elif [ "$2" == 'pvn-tlsv-rdr-xcdr-coexist-app' ]; then
 	JSON_STRING=$(jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \

@@ -11,7 +11,7 @@ set -e
 #
 # ps -e -o user,pid,%cpu,%mem,vsz,rss,start,time,command,etime,etimes,euid --sort=-%mem
 
-SLEEP_INTERVAL=2
+SLEEP_INTERVAL=3
 LOG_DIR=$HOME/netbricks_logs/$2/$1
 
 LOG=$LOG_DIR/$3_$4.log
@@ -62,7 +62,7 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
 	# P1=$!
 	docker ps
-	sleep 15
+	sleep 5
 
 	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$5" "$6" "$7" "$FAKTORY_LOG" &
 	P2=$!
