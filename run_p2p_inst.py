@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
-from screenutils import list_screens, Screen
 import sys
 import time
-import inst_config as inst
+
+import nf_config as conf
+from screenutils import Screen, list_screens
 
 
 def netbricks_sess_setup(trace, nf, epoch, expr):
@@ -160,36 +161,37 @@ def run_expr_p2p_ext(expr):
 
 def run_expr_p2p_controlled(expr):
     print("running controlled")
-    for nf in inst.pvn_nf[expr]:
+    for nf in conf.pvn_nf[expr]:
         # we are running the regular NFs
         # config the pktgen sending rate
-        for setup in inst.set_list:
-            pktgen_sess = pktgen_sess_setup(inst.trace[expr], nf, inst.fixed_sending_rate * inst.batch)
-            run_pktgen(pktgen_sess, inst.trace[expr], inst.fixed_sending_rate * inst.batch)
+        for setup in conf.set_list:
+            sending_rate = conf.fetch_sending_rate(nf)
+            pktgen_sess = pktgen_sess_setup(conf.trace[expr], nf, sending_rate[setup])
+            run_pktgen(pktgen_sess, conf.trace[expr], sending_rate[setup])
             # epoch from 0 to 9
-            for epoch in range(inst.num_of_epoch):
-                netbricks_sess = netbricks_sess_setup(inst.trace[expr], nf, epoch, expr)
+            for epoch in range(conf.num_of_epoch):
+                netbricks_sess = netbricks_sess_setup(conf.trace[expr], nf, epoch, expr)
 
-                leecher1_sess = p2p_sess_setup('flynn', inst.trace[expr], nf, epoch)
-                leecher2_sess = p2p_sess_setup('tao', inst.trace[expr], nf, epoch)
-                leecher3_sess = p2p_sess_setup('sanchez', inst.trace[expr], nf, epoch)
+                leecher1_sess = p2p_sess_setup('flynn', conf.trace[expr], nf, epoch)
+                leecher2_sess = p2p_sess_setup('tao', conf.trace[expr], nf, epoch)
+                leecher3_sess = p2p_sess_setup('sanchez', conf.trace[expr], nf, epoch)
 
                 # run clean up for p2p nf before experiment
-                p2p_cleanup("netbricks", netbricks_sess)
-                p2p_cleanup("leecher", leecher1_sess)
-                p2p_cleanup("leecher", leecher2_sess)
-                p2p_cleanup("leecher", leecher3_sess)
-                time.sleep(20)
+                # p2p_cleanup("netbricks", netbricks_sess)
+                # p2p_cleanup("leecher", leecher1_sess)
+                # p2p_cleanup("leecher", leecher2_sess)
+                # p2p_cleanup("leecher", leecher3_sess)
+                # time.sleep(20)
 
                 # Actual RUN
                 run_p2p_node('leecher', leecher1_sess, setup, epoch)
                 run_p2p_node('leecher', leecher2_sess, setup, epoch)
                 run_p2p_node('leecher', leecher3_sess, setup, epoch)
-                run_netbricks(netbricks_sess, inst.trace[expr], nf, epoch, setup, expr)
+                run_netbricks(netbricks_sess, conf.trace[expr], nf, epoch, setup, expr)
 
-                time.sleep(inst.expr_wait_time)
+                time.sleep(conf.expr_wait_time)
 
-                # run clean up for p2p nf before experiment
+                # run clean up for p2p nf after experiment
                 p2p_cleanup("netbricks", netbricks_sess)
                 p2p_cleanup("leecher", leecher1_sess)
                 p2p_cleanup("leecher", leecher2_sess)
@@ -200,11 +202,10 @@ def run_expr_p2p_controlled(expr):
                 sess_destroy(leecher1_sess)
                 sess_destroy(leecher2_sess)
                 sess_destroy(leecher3_sess)
-
-                time.sleep(20)
+                time.sleep(5)
 
             sess_destroy(pktgen_sess)
-            time.sleep(20)
+            time.sleep(10)
 
 
 def main(expr_list):
@@ -213,14 +214,9 @@ def main(expr_list):
     for expr in expr_list:
         print("Running experiments that for {} application NF".format(expr))
         # app_rdr_g, app_rdr_t; app_p2p_g, app_p2p_t
-        if expr == "p2p":
-            run_expr_p2p(expr)
-        elif expr == "app_p2p-controlled":
-            run_expr_p2p_controlled(expr)
-        elif expr == "app_p2p-ext":
-            run_expr_p2p_ext(expr)
+        run_expr_p2p_controlled(expr)
 
 
-main(inst.p2p_controlled)
+main(conf.p2p_controlled)
 # main(p2p_ext, 5)
-print("All experiment finished {}".format(inst.p2p_controlled))
+print("All experiment finished {}".format(conf.p2p_controlled))

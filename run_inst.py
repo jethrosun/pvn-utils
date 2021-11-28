@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
-from screenutils import list_screens, Screen
 import sys
 import time
-import inst_config as inst
+
+import nf_config as conf
+from screenutils import Screen, list_screens
 
 
 def netbricks_sess_setup(trace, nf, epoch):
@@ -80,8 +81,9 @@ def run_netbricks(sess, trace, nf, epoch, setup):
     sess.send_commands(cmd_str)
 
 
-def run_netbricks_xcdr(sess, trace, nf, epoch, setup, port1, port2, expr_num):
-    cmd_str = "sudo ./run_pvnf_inst.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + str(7419) + " " + str(7420) + " " + expr_num
+def run_netbricks_xcdr(sess, trace, nf, epoch, setup, expr_num):
+    cmd_str = "sudo ./run_pvnf_inst.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + str(
+        7419) + " " + str(7420) + " " + expr_num
 
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
@@ -121,78 +123,61 @@ def main(expr_list):
     for expr in expr_list:
         print("Running experiments that for {} application NF".format(expr))
         # app_rdr_g, app_rdr_t; app_p2p_g, app_p2p_t
-        for nf in inst.pvn_nf[expr]:
+        for nf in conf.pvn_nf[expr]:
             # we are running the regular NFs
             #
             # config the pktgen sending rate
-            for setup in inst.set_list:
-                pktgen_sess = pktgen_sess_setup(inst.trace[expr], nf, inst.sending_rate[expr][setup] * inst.batch)
+            for setup in conf.set_list:
+                sending_rate = conf.fetch_sending_rate(nf)
+                pktgen_sess = pktgen_sess_setup(conf.trace[expr], nf, sending_rate[setup])
 
                 if nf == "pvn-tlsv-transform-app":
-                    tls_trace = inst.fetch_tlsv_trace(setup)
-                    run_pktgen(pktgen_sess, tls_trace, inst.sending_rate[expr][setup] * inst.batch)
+                    tls_trace = conf.fetch_tlsv_trace(setup)
+                    run_pktgen(pktgen_sess, tls_trace, sending_rate[setup])
                 else:
-                    run_pktgen(pktgen_sess, inst.trace[expr], inst.sending_rate[expr][setup] * inst.batch)
+                    run_pktgen(pktgen_sess, conf.trace[expr], sending_rate[setup])
 
                 # epoch from 0 to 9
-                for epoch in range(inst.num_of_epoch):
-                    netbricks_sess = netbricks_sess_setup(inst.trace[expr], nf, epoch)
+                for epoch in range(conf.num_of_epoch):
+                    netbricks_sess = netbricks_sess_setup(conf.trace[expr], nf, epoch)
 
                     # run clean up for p2p nf before experiment
-                    if nf in inst.p2p_nf_list:
-                        p2p_cleanup(netbricks_sess)
-                        time.sleep(20)
-                    elif nf in inst.xcdr_nf_list:
-                        xcdr_cleanup(netbricks_sess)
-                        time.sleep(20)
+                    # if nf == 'pvn-p2p-transform-app':
+                    #     p2p_cleanup(netbricks_sess)
+                    #     time.sleep(10)
 
                     # Actual RUN
-                    if nf in inst.xcdr_nf_list:
+                    if nf == 'pvn-transcoder-transform-app':
                         expr_num = epoch * 6 + int(setup) * 2
-                        port2 = inst.xcdr_port_base + expr_num
-                        run_netbricks_xcdr(netbricks_sess, inst.trace[expr], nf, epoch, setup, str(port2 - 1), str(port2), str(expr_num))
+                        run_netbricks_xcdr(netbricks_sess, conf.trace[expr], nf, epoch, setup, str(expr_num))
                     else:
-                        run_netbricks(netbricks_sess, inst.trace[expr], nf, epoch, setup)
+                        run_netbricks(netbricks_sess, conf.trace[expr], nf, epoch, setup)
 
                     # run clean up for p2p nf before experiment
-                    if nf in inst.p2p_nf_list:
-                        time.sleep(inst.expr_wait_time)
+                    if nf == 'pvn-p2p-transform-app':
+                        time.sleep(conf.expr_wait_time)
                         p2p_cleanup(netbricks_sess)
-                        time.sleep(20)
-                    elif nf in inst.xcdr_nf_list:
-                        time.sleep(inst.expr_wait_time)
+                        time.sleep(10)
+                    elif nf == 'pvn-transcoder-transform-app':
+                        time.sleep(conf.expr_wait_time)
                         xcdr_cleanup(netbricks_sess)
-                        time.sleep(20)
-                    elif nf in inst.rdr_nf_list:
-                        time.sleep(inst.expr_wait_time)
+                        time.sleep(10)
+                    elif nf == 'pvn-rdr-transform-app':
+                        time.sleep(conf.expr_wait_time)
                         rdr_cleanup(netbricks_sess)
-                        time.sleep(20)
-                    elif nf in inst.pvn_nf_list:
-                        time.sleep(inst.expr_wait_time)
+                        time.sleep(10)
                     else:
-                        print("Unknown nf?")
-                        sys.exit(1)
+                        time.sleep(conf.expr_wait_time)
 
                     sess_destroy(netbricks_sess)
-                    # sess_destroy(netbricks_sess)
 
-                    if nf in inst.p2p_nf_list:
-                        time.sleep(20)
-                    elif nf in inst.xcdr_nf_list:
-                        time.sleep(20)
-                    elif nf in inst.pvn_nf_list:
-                        time.sleep(20)
-                    else:
-                        time.sleep(10)
+                    time.sleep(10)
 
                 sess_destroy(pktgen_sess)
                 time.sleep(20)
 
 
-# main(inst.xcdr)  #rdr, xcdr
-main(inst.rdr_xcdr_tlsv)  # rdr, xcdr
-# main(inst.tlsv)  # rdr, xcdr
-
-print("All experiment finished {}".format(inst.rdr_xcdr_tlsv))
+main(conf.rdr_xcdr_tlsv)  # rdr, xcdr
+print("All experiment finished {}".format(conf.rdr_xcdr_tlsv))
 
 # FIXME: we want to reboot here
