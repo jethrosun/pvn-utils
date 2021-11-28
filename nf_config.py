@@ -161,7 +161,7 @@ xcdr_clean_list = [
 # p2p_ext_list = ['11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
 
 # set_list = ['1', '2', '3', '4', '5', '6']
-set_list = ['1', ]
+set_list = ['6', ]
 
 # expr is 10 min/600 sec
 expr_wait_time = 220
