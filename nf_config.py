@@ -4,7 +4,7 @@ def fetch_tlsv_trace(setup):
 
 def fetch_sending_rate(nf):
     # nf
-    if nf in [pvn_nf[x] for x in ['app_rdr', 'app_xcdr', 'app_tlsv', 'app_p2p', 'app_p2p-ext', 'app_p2p-controlled']]:
+    if nf in [pvn_nf[x][0] for x in ['app_rdr', 'app_xcdr', 'app_tlsv', 'app_p2p', 'app_p2p-ext', 'app_p2p-controlled']]:
         sending_rate = 10
         # chain
     elif nf in [pvn_nf[x] for x in [
