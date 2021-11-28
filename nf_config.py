@@ -7,19 +7,19 @@ def fetch_sending_rate(nf):
     if nf in [pvn_nf[x][0] for x in ['app_rdr', 'app_xcdr', 'app_tlsv', 'app_p2p', 'app_p2p-ext', 'app_p2p-controlled']]:
         sending_rate = 10
         # chain
-    elif nf in [pvn_nf[x] for x in [
+    elif nf in [pvn_nf[x][0] for x in [
             'chain_tlsv_rdr', 'chain_rdr_p2p', 'chain_rdr_xcdr', 'chain_tlsv_p2p', 'chain_tlsv_xcdr', 'chain_xcdr_p2p'
     ]]:
         sending_rate = 20
         # coresident
-    elif nf in [pvn_nf[x] for x in [
+    elif nf in [pvn_nf[x][0] for x in [
             'co_tlsv_rdr_p2p',
             'co_tlsv_p2p_xcdr',
             'co_tlsv_rdr_xcdr',
             'co_rdr_xcdr_p2p',
     ]]:
         sending_rate = 30
-    elif nf == pvn_nf['co_tlsv_rdr_p2p_xcdr']:
+    elif nf == pvn_nf['co_tlsv_rdr_p2p_xcdr'][0]:
         sending_rate = 40
     else:
         print("unknown nf:", nf)
