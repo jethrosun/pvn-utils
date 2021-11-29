@@ -227,7 +227,7 @@ elif [ "$2" == "pvn-rdr-transform-app" ] || [ "$2" == "pvn-rdr-groupby-app" ]; t
 			:
 		else
 			# multi process mode
-			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" 20 "$CPU_LOG" &
+			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" 10 "$CPU_LOG" &
 		fi
 	done &
 	P1=$!
