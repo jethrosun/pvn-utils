@@ -262,7 +262,7 @@ elif [ "$2" == "pvn-rdr-transform-app" ] || [ "$2" == "pvn-rdr-groupby-app" ]; t
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P4=$!
 
-	while sleep 10; do echo "10 sec"; pgrep "chrom|Chrom"; done > "$CHROME_PLOG"  &
+	while sleep 5; do echo "10 sec"; ps ahux --sort=-c | awk '{if($3>1.0)printf"%s %6d %s\n",$3,$2,$11}'; done > "$CHROME_PLOG"  &
 	P5=$!
 
 	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
