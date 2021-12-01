@@ -161,10 +161,11 @@ xcdr_clean_list = [
 # p2p_ext_list = ['11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
 
 # set_list = ['1', '2', '3', '4', '5', '6']
-set_list = ['6', ]
+set_list = ['4','6' ]
 
-# expr is 10 min/600 sec
-expr_wait_time = 220
+# expr is 3 min/180 sec
+# expr_wait_time = 220
+expr_wait_time = 300 # RDR?
 
 xcdr_port_base = 7418
 
