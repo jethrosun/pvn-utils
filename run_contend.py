@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
-from screenutils import Screen
 import sys
 import time
+
 import contend_config as contend
+from screenutils import Screen
 
 
 def netbricks_sess_setup(trace, nf, epoch):
@@ -128,7 +129,8 @@ def run_pktgen(sess, trace, setup):
 def run_netbricks(sess, trace, nf, epoch, setup, cpu, mem, diskio):
     # for tlsv and rdr
     #   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup	$5=cpu $6=mem $7=diskio
-    cmd_str = "sudo ./run_pvnf_contend.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + cpu + " " + mem + " " + diskio
+    cmd_str = "sudo ./run_pvnf_contend.sh " + trace + " " + nf + " " + str(
+        epoch) + " " + setup + " " + cpu + " " + mem + " " + diskio
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
@@ -136,15 +138,16 @@ def run_netbricks(sess, trace, nf, epoch, setup, cpu, mem, diskio):
 def run_netbricks_rdr(sess, trace, nf, epoch, setup, cpu, mem, diskio, disk):
     # for rdr
     #   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup	$5=cpu $6=mem $7=diskio $8=disk
-    cmd_str = "sudo ./run_pvnf_contend.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + cpu + " " + mem + " " + diskio + " " + disk
+    cmd_str = "sudo ./run_pvnf_contend.sh " + trace + " " + nf + " " + str(
+        epoch) + " " + setup + " " + cpu + " " + mem + " " + diskio + " " + disk
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
 
 def run_netbricks_xcdr(sess, trace, nf, epoch, setup, port1, port2, expr_num, cpu, mem, diskio):
     #   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio $8=port $9=expr_num
-    cmd_str = "sudo ./run_pvnf_contend.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + cpu + " " + mem + " " + diskio + " " + str(
-        7419) + " " + expr_num
+    cmd_str = "sudo ./run_pvnf_contend.sh " + trace + " " + nf + " " + str(
+        epoch) + " " + setup + " " + cpu + " " + mem + " " + diskio + " " + str(7419) + " " + expr_num
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
@@ -213,7 +216,8 @@ def main(expr_list):
             #
             # config the pktgen sending rate
             for contention in contend.setup:
-                pktgen_sess = pktgen_sess_setup(contend.trace[expr], nf, contend.sending_rate[expr][contend.nf_set[expr]])
+                pktgen_sess = pktgen_sess_setup(contend.trace[expr], nf,
+                                                contend.sending_rate[expr][contend.nf_set[expr]])
 
                 if nf == "pvn-tlsv-transform-app":
                     tls_trace = contend.fetch_tlsv_trace(contend.nf_set[expr])
@@ -249,8 +253,9 @@ def main(expr_list):
                     if nf in contend.xcdr_nf_list:
                         expr_num = epoch * 6 + int(contend.nf_set[expr]) * 2
                         port2 = contend.xcdr_port_base + expr_num
-                        run_netbricks_xcdr(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr], str(port2 - 1), str(port2),
-                                           str(expr_num), contention[0], contention[1], contention[2])
+                        run_netbricks_xcdr(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr],
+                                           str(port2 - 1), str(port2), str(expr_num), contention[0], contention[1],
+                                           contention[2])
                     elif nf in contend.p2p_nf_list:
                         # Actual RUN
                         #
@@ -258,16 +263,16 @@ def main(expr_list):
                         run_p2p_node('leecher', leecher2_sess, contend.leecher_set[contend.nf_set[expr]], epoch)
                         run_p2p_node('leecher', leecher3_sess, contend.leecher_set[contend.nf_set[expr]], epoch)
                         time.sleep(30)
-                        run_netbricks_p2p(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr], "app_p2p-controlled", contention[0],
-                                          contention[1], contention[2])
+                        run_netbricks_p2p(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr],
+                                          "app_p2p-controlled", contention[0], contention[1], contention[2])
                     elif nf in contend.rdr_nf_list:
-                        run_netbricks_rdr(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr], contention[0], contention[1],
-                                          contention[2], 'hdd')
+                        run_netbricks_rdr(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr],
+                                          contention[0], contention[1], contention[2], 'hdd')
                         # run_netbricks_rdr(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr], contention[0], contention[1],
                         #                   contention[2], 'ssd')
                     else:
-                        run_netbricks(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr], contention[0], contention[1],
-                                      contention[2])
+                        run_netbricks(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr],
+                                      contention[0], contention[1], contention[2])
 
                     # run clean up for p2p nf before experiment
                     if nf in contend.p2p_nf_list:
