@@ -176,12 +176,12 @@ def run_expr_p2p_controlled(expr_list):
                     leecher3_sess = p2p_sess_setup('sanchez', conf.trace[expr], nf, epoch)
 
                     # run clean up for p2p nf before experiment
-                    # p2p_cleanup("netbricks", netbricks_sess)
-                    # p2p_cleanup("leecher", leecher1_sess)
-                    # p2p_cleanup("leecher", leecher2_sess)
-                    # p2p_cleanup("leecher", leecher3_sess)
-                    # xcdr_cleanup(netbricks_sess)
-                    # time.sleep(30)
+                    p2p_cleanup("netbricks", netbricks_sess)
+                    p2p_cleanup("leecher", leecher1_sess)
+                    p2p_cleanup("leecher", leecher2_sess)
+                    p2p_cleanup("leecher", leecher3_sess)
+                    xcdr_cleanup(netbricks_sess)
+                    time.sleep(10)
 
                     # Actual RUN
                     run_p2p_node('leecher', leecher1_sess, setup, epoch)
@@ -201,7 +201,7 @@ def run_expr_p2p_controlled(expr_list):
                     p2p_cleanup("leecher", leecher2_sess)
                     p2p_cleanup("leecher", leecher3_sess)
                     xcdr_cleanup(netbricks_sess)
-                    time.sleep(20)
+                    time.sleep(10)
 
                     sess_destroy(netbricks_sess)
                     sess_destroy(leecher1_sess)
@@ -210,17 +210,14 @@ def run_expr_p2p_controlled(expr_list):
                     time.sleep(5)
 
                 sess_destroy(pktgen_sess)
-                time.sleep(10)
+                time.sleep(5)
 
 
 def main(expr_list, p2p_types):
-    # app rdr, app p2p ...
     for typ in p2p_types:
         print("Running experiments that for P2P with type {} ".format(typ))
-        # app_rdr_g, app_rdr_t; app_p2p_g, app_p2p_t
         run_expr_p2p_controlled(expr_list)
 
 
 main(conf.p2p_co, ["app_p2p-controlled"])
-# main(p2p_ext, 5)
 print("All experiment finished {}".format(conf.p2p_co))

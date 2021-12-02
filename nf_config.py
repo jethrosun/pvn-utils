@@ -4,12 +4,15 @@ def fetch_tlsv_trace(setup):
 
 def fetch_sending_rate(nf):
     # nf
-    if nf in [pvn_nf[x][0] for x in ['app_rdr', 'app_xcdr', 'app_tlsv', 'app_p2p', 'app_p2p-ext', 'app_p2p-controlled']]:
+    if nf in [
+            pvn_nf[x][0] for x in ['app_rdr', 'app_xcdr', 'app_tlsv', 'app_p2p', 'app_p2p-ext', 'app_p2p-controlled']
+    ]:
         sending_rate = 10
         # chain
-    elif nf in [pvn_nf[x][0] for x in [
-            'chain_tlsv_rdr', 'chain_rdr_p2p', 'chain_rdr_xcdr', 'chain_tlsv_p2p', 'chain_tlsv_xcdr', 'chain_xcdr_p2p'
-    ]]:
+    elif nf in [
+            pvn_nf[x][0] for x in
+        ['chain_tlsv_rdr', 'chain_rdr_p2p', 'chain_rdr_xcdr', 'chain_tlsv_p2p', 'chain_tlsv_xcdr', 'chain_xcdr_p2p']
+    ]:
         sending_rate = 20
         # coresident
     elif nf in [pvn_nf[x][0] for x in [
@@ -137,11 +140,6 @@ xcdr_clean_list = [
     'pvn-tlsv-rdr-p2p-xcdr-coexist-app',
 ]
 
-########################################################################
-#
-# Experiment defined values:
-#
-########################################################################
 # expr_nf_list = [
 #     'pvn-tlsv-transform-app',
 #     'pvn-p2p-transform-app',
@@ -160,16 +158,15 @@ xcdr_clean_list = [
 # xcdr_p2p_chain_list = ['pvn-xcdr-p2p-coexist-app']
 # p2p_ext_list = ['11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
 
-# set_list = ['1', '2', '3', '4', '5', '6']
-set_list = ['4','6' ]
-
+########################################################################
+#
+# Experiment defined values:
+#
+########################################################################
+expr_wait_time = 300  # RDR?
 # expr is 3 min/180 sec
 # expr_wait_time = 220
-expr_wait_time = 300 # RDR?
-
 xcdr_port_base = 7418
-
-num_of_epoch = 1
 batch = 1
 
 # app
@@ -183,3 +180,11 @@ p2p_co = [
 ]
 
 non_p2p_co = ['chain_tlsv_rdr', 'chain_rdr_xcdr', 'chain_tlsv_xcdr', 'co_tlsv_rdr_xcdr']
+
+# set_list = ['1', '2', '3', '4', '5', '6']
+# num_of_epoch = 3
+# p2p_num_of_epoch = 5
+
+set_list = ['4', '6']
+num_of_epoch = 1
+p2p_num_of_epoch = 1

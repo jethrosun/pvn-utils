@@ -1,6 +1,5 @@
 #!/bin/bash
 set -ex
-# set -euo pipefail
 
 
 sudo rm -rf /tmp/

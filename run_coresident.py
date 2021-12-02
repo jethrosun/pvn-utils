@@ -118,10 +118,10 @@ def main(expr_list):
                 for epoch in range(conf.num_of_epoch):
                     netbricks_sess = netbricks_sess_setup(conf.trace[expr], nf, epoch)
 
-                    # rdr_cleanup(netbricks_sess)
-                    # p2p_cleanup(netbricks_sess)
-                    # xcdr_cleanup(netbricks_sess)
-                    # time.sleep(15)
+                    rdr_cleanup(netbricks_sess)
+                    p2p_cleanup(netbricks_sess)
+                    xcdr_cleanup(netbricks_sess)
+                    time.sleep(5)
 
                     # Actual RUN
                     if nf in conf.xcdr_clean_list:
@@ -136,11 +136,9 @@ def main(expr_list):
                     p2p_cleanup(netbricks_sess)
                     xcdr_cleanup(netbricks_sess)
                     rdr_cleanup(netbricks_sess)
-                    time.sleep(20)
+                    time.sleep(5)
 
                     sess_destroy(netbricks_sess)
-                    # sess_destroy(netbricks_sess)
-
                     time.sleep(5)
 
                 sess_destroy(pktgen_sess)

@@ -141,10 +141,10 @@ def main(expr_list):
                 for epoch in range(conf.num_of_epoch):
                     netbricks_sess = netbricks_sess_setup(conf.trace[expr], nf, epoch)
 
-                    # run clean up for p2p nf before experiment
-                    # if nf == 'pvn-p2p-transform-app':
-                    #     p2p_cleanup(netbricks_sess)
-                    #     time.sleep(10)
+                    rdr_cleanup(netbricks_sess)
+                    p2p_cleanup(netbricks_sess)
+                    xcdr_cleanup(netbricks_sess)
+                    time.sleep(5)
 
                     # Actual RUN
                     if nf == 'pvn-transcoder-transform-app':
@@ -153,31 +153,20 @@ def main(expr_list):
                     else:
                         run_netbricks(netbricks_sess, conf.trace[expr], nf, epoch, setup)
 
+                    time.sleep(conf.expr_wait_time)
+
                     # run clean up for p2p nf before experiment
-                    if nf == 'pvn-p2p-transform-app':
-                        time.sleep(conf.expr_wait_time)
-                        p2p_cleanup(netbricks_sess)
-                        time.sleep(10)
-                    elif nf == 'pvn-transcoder-transform-app':
-                        time.sleep(conf.expr_wait_time)
-                        xcdr_cleanup(netbricks_sess)
-                        time.sleep(10)
-                    elif nf == 'pvn-rdr-transform-app':
-                        time.sleep(conf.expr_wait_time)
-                        rdr_cleanup(netbricks_sess)
-                        time.sleep(10)
-                    else:
-                        time.sleep(conf.expr_wait_time)
+                    p2p_cleanup(netbricks_sess)
+                    xcdr_cleanup(netbricks_sess)
+                    rdr_cleanup(netbricks_sess)
+                    time.sleep(5)
 
                     sess_destroy(netbricks_sess)
-
-                    time.sleep(10)
+                    time.sleep(5)
 
                 sess_destroy(pktgen_sess)
-                time.sleep(20)
+                time.sleep(10)
 
 
 main(conf.rdr_xcdr_tlsv)  # rdr, xcdr
 print("All experiment finished {}".format(conf.rdr_xcdr_tlsv))
-
-# FIXME: we want to reboot here

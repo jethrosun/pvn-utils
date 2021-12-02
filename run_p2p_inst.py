@@ -171,17 +171,16 @@ def run_expr_p2p_controlled(expr):
             # epoch from 0 to 9
             for epoch in range(conf.num_of_epoch):
                 netbricks_sess = netbricks_sess_setup(conf.trace[expr], nf, epoch, expr)
-
                 leecher1_sess = p2p_sess_setup('flynn', conf.trace[expr], nf, epoch)
                 leecher2_sess = p2p_sess_setup('tao', conf.trace[expr], nf, epoch)
                 leecher3_sess = p2p_sess_setup('sanchez', conf.trace[expr], nf, epoch)
 
                 # run clean up for p2p nf before experiment
-                # p2p_cleanup("netbricks", netbricks_sess)
-                # p2p_cleanup("leecher", leecher1_sess)
-                # p2p_cleanup("leecher", leecher2_sess)
-                # p2p_cleanup("leecher", leecher3_sess)
-                # time.sleep(20)
+                p2p_cleanup("netbricks", netbricks_sess)
+                p2p_cleanup("leecher", leecher1_sess)
+                p2p_cleanup("leecher", leecher2_sess)
+                p2p_cleanup("leecher", leecher3_sess)
+                time.sleep(10)
 
                 # Actual RUN
                 run_p2p_node('leecher', leecher1_sess, setup, epoch)
@@ -196,7 +195,7 @@ def run_expr_p2p_controlled(expr):
                 p2p_cleanup("leecher", leecher1_sess)
                 p2p_cleanup("leecher", leecher2_sess)
                 p2p_cleanup("leecher", leecher3_sess)
-                time.sleep(20)
+                time.sleep(10)
 
                 sess_destroy(netbricks_sess)
                 sess_destroy(leecher1_sess)
@@ -205,18 +204,14 @@ def run_expr_p2p_controlled(expr):
                 time.sleep(5)
 
             sess_destroy(pktgen_sess)
-            time.sleep(10)
+            time.sleep(5)
 
 
 def main(expr_list):
-    """"""
-    # app rdr, app p2p ...
     for expr in expr_list:
         print("Running experiments that for {} application NF".format(expr))
-        # app_rdr_g, app_rdr_t; app_p2p_g, app_p2p_t
         run_expr_p2p_controlled(expr)
 
 
 main(conf.p2p_controlled)
-# main(p2p_ext, 5)
 print("All experiment finished {}".format(conf.p2p_controlled))
