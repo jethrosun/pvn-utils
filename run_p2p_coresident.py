@@ -143,6 +143,12 @@ def p2p_cleanup(typ, sess):
         print("Unknown p2p node type {}".format(typ))
 
 
+def rdr_cleanup(sess):
+    cmd_str = "sudo ./misc/rdr_cleanup.sh "
+    print("Extra clean up for RDR with cmd: {}".format(cmd_str))
+    sess.send_commands(cmd_str)
+
+
 def xcdr_cleanup(sess):
     cmd_str = "sudo ./misc/xcdr_cleanup.sh "
     print("Extra clean up for XCDR with cmd: {}".format(cmd_str))
@@ -180,6 +186,7 @@ def run_expr_p2p_controlled(expr_list):
                     p2p_cleanup("leecher", leecher1_sess)
                     p2p_cleanup("leecher", leecher2_sess)
                     p2p_cleanup("leecher", leecher3_sess)
+                    rdr_cleanup(netbricks_sess)
                     xcdr_cleanup(netbricks_sess)
                     time.sleep(10)
 
@@ -200,6 +207,7 @@ def run_expr_p2p_controlled(expr_list):
                     p2p_cleanup("leecher", leecher1_sess)
                     p2p_cleanup("leecher", leecher2_sess)
                     p2p_cleanup("leecher", leecher3_sess)
+                    rdr_cleanup(netbricks_sess)
                     xcdr_cleanup(netbricks_sess)
                     time.sleep(10)
 

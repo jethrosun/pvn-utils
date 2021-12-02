@@ -118,8 +118,8 @@ def main(expr_list):
                 for epoch in range(conf.num_of_epoch):
                     netbricks_sess = netbricks_sess_setup(conf.trace[expr], nf, epoch)
 
-                    rdr_cleanup(netbricks_sess)
                     p2p_cleanup(netbricks_sess)
+                    rdr_cleanup(netbricks_sess)
                     xcdr_cleanup(netbricks_sess)
                     time.sleep(5)
 
@@ -134,8 +134,8 @@ def main(expr_list):
 
                     # run clean up for p2p nf before experiment
                     p2p_cleanup(netbricks_sess)
-                    xcdr_cleanup(netbricks_sess)
                     rdr_cleanup(netbricks_sess)
+                    xcdr_cleanup(netbricks_sess)
                     time.sleep(5)
 
                     sess_destroy(netbricks_sess)
