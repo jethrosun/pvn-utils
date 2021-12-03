@@ -1,15 +1,5 @@
 #!/bin/bash
 set -e
-# set -euo pipefail
-
-# Usage:
-#   $ ./run_netbricks.sh trace nf epoch setup expr
-
-# PS to collect long running processes' stat
-# https://unix.stackexchange.com/questions/215671/can-i-use-ps-aux-along-with-o-etime
-# https://unix.stackexchange.com/questions/58539/top-and-ps-not-showing-the-same-cpu-result
-#
-# ps -e -o user,pid,%cpu,%mem,vsz,rss,start,time,command,etime,etimes,euid --sort=-%mem
 
 SLEEP_INTERVAL=3
 LOG_DIR=$HOME/netbricks_logs/$2/$1
@@ -78,7 +68,6 @@ if [ "$2" == 'pvn-tlsv-rdr-coexist-app' ]; then
 	P11=$!
 	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11
 
-# FIXME
 elif [ "$2" == 'pvn-rdr-p2p-coexist-app' ]; then
 	sudo rm -rf "$HOME/Downloads"
 	sudo rm -rf /data/bt/config
@@ -139,7 +128,7 @@ elif [ "$2" == 'pvn-rdr-xcdr-coexist-app' ]; then
 	docker ps
 	sleep 15
 
-	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$5" "$6" "$7" "$FAKTORY_LOG" &
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$7" "$FAKTORY_LOG" &
 	P1=$!
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P2=$!
@@ -225,7 +214,7 @@ elif [ "$2" == 'pvn-tlsv-xcdr-coexist-app' ]; then
 	docker ps
 	sleep 15
 
-	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$5" "$6" "$7" "$FAKTORY_LOG" &
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$7" "$FAKTORY_LOG" &
 	P1=$!
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P2=$!
@@ -270,7 +259,7 @@ elif [ "$2" == 'pvn-xcdr-p2p-coexist-app' ]; then
 	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
 	docker ps
 	sleep 15
-	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$5" "$6" "$7" "$FAKTORY_LOG" &
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$7" "$FAKTORY_LOG" &
 	P1=$!
 
 	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
@@ -301,7 +290,7 @@ elif [ "$2" == 'pvn-xcdr-p2p-coexist-app' ]; then
 	taskset -c 5 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
 	P12=$!
 	taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
-	P12=$!
+	P13=$!
 	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13
 
 elif [ "$2" == 'pvn-tlsv-rdr-xcdr-coexist-app' ]; then
@@ -319,7 +308,7 @@ elif [ "$2" == 'pvn-tlsv-rdr-xcdr-coexist-app' ]; then
 	docker ps
 	sleep 15
 
-	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$5" "$6" "$7" "$FAKTORY_LOG" &
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4"  "$7" "$FAKTORY_LOG" &
 	P1=$!
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P2=$!
@@ -345,7 +334,6 @@ elif [ "$2" == 'pvn-tlsv-rdr-xcdr-coexist-app' ]; then
 	P12=$!
 	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12
 
-# FIXME
 elif [ "$2" == 'pvn-tlsv-rdr-p2p-coexist-app' ]; then
 	sudo rm -rf "$HOME/Downloads"
 	sudo rm -rf /data/bt/config
@@ -390,7 +378,7 @@ elif [ "$2" == 'pvn-tlsv-rdr-p2p-coexist-app' ]; then
 	taskset -c 5 $TCP_TOP_MONITOR -C > "${TCP_LOG}" &
 	P12=$!
 	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12
-# FIXME
+
 elif [ "$2" == 'pvn-rdr-xcdr-p2p-coexist-app' ]; then
 	sudo rm -rf "$HOME/Downloads"
 	sudo rm -rf /data/bt/config
@@ -411,7 +399,7 @@ elif [ "$2" == 'pvn-rdr-xcdr-p2p-coexist-app' ]; then
 	docker ps
 	sleep 15
 
-	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$5" "$6" "$7" "$FAKTORY_LOG" &
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4"  "$7" "$FAKTORY_LOG" &
 	P1=$!
 
 	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
@@ -464,7 +452,7 @@ elif [ "$2" == 'pvn-tlsv-p2p-xcdr-coexist-app' ]; then
 	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
 	docker ps
 	sleep 15
-	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$5" "$6" "$7" "$FAKTORY_LOG" &
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$7" "$FAKTORY_LOG" &
 	P1=$!
 
 	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
@@ -498,7 +486,6 @@ elif [ "$2" == 'pvn-tlsv-p2p-xcdr-coexist-app' ]; then
 	P13=$!
 	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13
 
-# FIXME
 elif [ "$2" == 'pvn-tlsv-rdr-p2p-xcdr-coexist-app' ]; then
 	sudo rm -rf "$HOME/Downloads"
 	sudo rm -rf /data/bt/config
@@ -519,7 +506,7 @@ elif [ "$2" == 'pvn-tlsv-rdr-p2p-xcdr-coexist-app' ]; then
 	docker ps
 	sleep 15
 
-	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$5" "$6" "$7" "$FAKTORY_LOG" &
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4"  "$7" "$FAKTORY_LOG" &
 	P1=$!
 
 	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh

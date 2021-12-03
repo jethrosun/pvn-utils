@@ -15,15 +15,10 @@ SLEEP_INTERVAL=3
 LOG_DIR=$HOME/netbricks_logs/$2/$1
 
 LOG=$LOG_DIR/$3_$4.log
-# MLOG=$LOG_DIR/$3_$4_measurement.log
-# AMLOG=$LOG_DIR/$3_$4_a_measurement.log
 TCP_LOG=$LOG_DIR/$3_$4_tcptop.log
 BIO_LOG=$LOG_DIR/$3_$4_biotop.log
-TCPLIFE_LOG=$LOG_DIR/$3_$4_tcplife.log
 P2P_PROGRESS_LOG=$LOG_DIR/$3_$4_p2p_progress.log
-# P2P_WRAPPER_LOG=$LOG_DIR/$3_$4_p2p_run.log
 FAKTORY_LOG=$LOG_DIR/$3_$4_faktory.log
-# IPTRAF_LOG=$LOG_DIR/$3_$4_iptraf.log
 
 CPULOG1=$LOG_DIR/$3_$4_cpu1.log
 CPULOG2=$LOG_DIR/$3_$4_cpu2.log
@@ -32,16 +27,12 @@ MEMLOG2=$LOG_DIR/$3_$4_mem2.log
 
 NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
-TCP_LIFE_MONITOR=/usr/share/bcc/tools/tcplife
 BIO_TOP_MONITOR=/usr/share/bcc/tools/biotop
-# IPTRAF_MONITOR=/usr/sbin/iptraf-ng
 
 NB_CONFIG=$HOME/dev/netbricks/experiments/config_1core.toml
-# NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_1core.toml
 TMP_NB_CONFIG=$HOME/config.toml
 
 sed "/duration = 200/i log_path = '$LOG'" "$NB_CONFIG" > "$TMP_NB_CONFIG"
-# sed "/duration = 750/i log_path = '$LOG'" "$NB_CONFIG_LONG" > "$TMP_NB_CONFIG"
 
 INST_LEVEL=off
 EXPR_MODE=short
@@ -60,12 +51,10 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 	echo "$JSON_STRING" > /home/jethros/setup
 
 	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
-	# P1=$!
 	docker ps
 	sleep 5
 
-	# FIXME
-	sudo taskset -c 1 /home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$5" "$6" "$7" "$FAKTORY_LOG" &
+	sudo taskset -c 1 /home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$7" "$FAKTORY_LOG" &
 	P1=$!
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 	P2=$!
