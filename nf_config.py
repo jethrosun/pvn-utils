@@ -74,11 +74,11 @@ trace = {
     'chain_tlsv_xcdr': 'pvn_tlsv_xcdr.pcap',
     'chain_xcdr_p2p': 'pvn_xcdr_p2p.pcap',
     # coresident
-    'co_tlsv_rdr_p2p': 'pvn-tlsv_rdr_p2p.pcap',
-    'co_tlsv_p2p_xcdr': 'pvn-tlsv_p2p_xcdr.pcap',
-    'co_tlsv_rdr_xcdr': 'pvn-tlsv_rdr_xcdr.pcap',
-    'co_rdr_xcdr_p2p': 'pvn-rdr_xcdr_p2p.pcap',
-    'co_tlsv_rdr_p2p_xcdr': 'pvn-tlsv_rdr_p2p_xcdr.pcap',
+    'co_tlsv_rdr_p2p': 'pvn_tlsv_rdr_p2p.pcap',
+    'co_tlsv_p2p_xcdr': 'pvn_tlsv_p2p_xcdr.pcap',
+    'co_tlsv_rdr_xcdr': 'pvn_tlsv_rdr_xcdr.pcap',
+    'co_rdr_xcdr_p2p': 'pvn_rdr_xcdr_p2p.pcap',
+    'co_tlsv_rdr_p2p_xcdr': 'pvn_tlsv_rdr_p2p_xcdr.pcap',
 }
 
 # # nf app
