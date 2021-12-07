@@ -176,7 +176,8 @@ p2p_controlled = ['app_p2p-controlled']
 
 # coresident
 p2p_co = [
-    'chain_rdr_p2p', 'chain_tlsv_p2p', 'chain_xcdr_p2p', 'co_tlsv_rdr_p2p', 'co_tlsv_p2p_xcdr', 'co_rdr_xcdr_p2p',
+    # 'chain_rdr_p2p', 'chain_tlsv_p2p', 'chain_xcdr_p2p', 
+    'co_tlsv_rdr_p2p', 'co_tlsv_p2p_xcdr', 'co_rdr_xcdr_p2p',
     'co_tlsv_rdr_p2p_xcdr'
 ]
 
