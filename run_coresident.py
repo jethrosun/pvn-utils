@@ -142,7 +142,7 @@ def main(expr_list):
                     time.sleep(5)
 
                 sess_destroy(pktgen_sess)
-                time.sleep(10)
+                time.sleep(30)
 
 
 main(conf.non_p2p_co)  # rdr, xcdr

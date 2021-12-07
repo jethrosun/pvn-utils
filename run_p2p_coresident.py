@@ -218,7 +218,7 @@ def run_expr_p2p_controlled(expr_list):
                     time.sleep(5)
 
                 sess_destroy(pktgen_sess)
-                time.sleep(5)
+                time.sleep(30)
 
 
 def main(expr_list, p2p_types):
