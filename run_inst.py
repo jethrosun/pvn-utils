@@ -129,13 +129,13 @@ def main(expr_list):
             # config the pktgen sending rate
             for setup in conf.set_list:
                 sending_rate = conf.fetch_sending_rate(nf)
-                pktgen_sess = pktgen_sess_setup(conf.trace[expr], nf, sending_rate[setup])
+                pktgen_sess = pktgen_sess_setup(conf.trace[expr], nf, sending_rate)
 
                 if nf == "pvn-tlsv-transform-app":
                     tls_trace = conf.fetch_tlsv_trace(setup)
-                    run_pktgen(pktgen_sess, tls_trace, sending_rate[setup])
+                    run_pktgen(pktgen_sess, tls_trace, sending_rate)
                 else:
-                    run_pktgen(pktgen_sess, conf.trace[expr], sending_rate[setup])
+                    run_pktgen(pktgen_sess, conf.trace[expr], sending_rate)
 
                 # epoch from 0 to 9
                 for epoch in range(conf.num_of_epoch):
