@@ -169,10 +169,11 @@ def run_expr_p2p_controlled(expr_list):
         for nf in conf.pvn_nf[expr]:
             # we are running the regular NFs
             # config the pktgen sending rate
+            sending_rate = conf.fetch_sending_rate(nf)
+            pktgen_sess = pktgen_sess_setup(conf.trace[expr], nf, sending_rate)
+            run_pktgen(pktgen_sess, conf.trace[expr], sending_rate)
+
             for setup in conf.set_list:
-                sending_rate = conf.fetch_sending_rate(nf)
-                pktgen_sess = pktgen_sess_setup(conf.trace[expr], nf, sending_rate[setup])
-                run_pktgen(pktgen_sess, conf.trace[expr], sending_rate[setup])
                 # epoch from 0 to 9
                 for epoch in range(conf.p2p_num_of_epoch):
                     netbricks_sess = netbricks_sess_setup(conf.trace[expr], nf, epoch, expr)
@@ -217,8 +218,8 @@ def run_expr_p2p_controlled(expr_list):
                     sess_destroy(leecher3_sess)
                     time.sleep(5)
 
-                sess_destroy(pktgen_sess)
-                time.sleep(30)
+            sess_destroy(pktgen_sess)
+            time.sleep(30)
 
 
 def main(expr_list, p2p_types):

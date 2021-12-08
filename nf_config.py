@@ -28,11 +28,7 @@ def fetch_sending_rate(nf):
         print("unknown nf:", nf)
         exit()
 
-    opts = {}
-    for setup in ['1', '2', '3', '4', '5', '6']:
-        opts[setup] = sending_rate
-
-    return opts
+    return sending_rate
 
 
 pvn_nf = {
@@ -178,7 +174,7 @@ p2p_controlled = ['app_p2p-controlled']
 p2p_co = [
     # 'chain_rdr_p2p', 'chain_tlsv_p2p', 'chain_xcdr_p2p',
     # 'co_tlsv_rdr_p2p',
-    'co_tlsv_p2p_xcdr',
+    # 'co_tlsv_p2p_xcdr',
     'co_rdr_xcdr_p2p',
     'co_tlsv_rdr_p2p_xcdr'
 ]
