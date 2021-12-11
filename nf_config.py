@@ -168,6 +168,7 @@ batch = 1
 
 # app
 rdr_xcdr_tlsv = ['app_rdr', 'app_xcdr', 'app_tlsv']
+tlsv = ['app_tlsv']
 p2p_controlled = ['app_p2p-controlled']
 
 # coresident
