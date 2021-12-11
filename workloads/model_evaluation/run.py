@@ -69,7 +69,7 @@ def rand_placement(num_of_nodes, ordered_runs):
         for nf in nf_workload:
             bucket = random.choice([x for x in range(3)])
             nodes[bucket].append(nf)
-        workload[i] = sort_node_workload(nodes)
+        workload["iter"+str(i)] = sort_node_workload(nodes)
     return workload
 
 
@@ -85,7 +85,7 @@ def least_load_placement(num_of_nodes, ordered_runs):
         for nf in nf_workload:
             idx = find_least_load_node(nodes)
             nodes[idx].append(nf)
-        workload[i] = sort_node_workload(nodes)
+        workload["iter"+str(i)] = sort_node_workload(nodes)
     return workload
 
 

@@ -1,0 +1,9 @@
+nf workload
+ ['p2p', 'xcdr', 'p2p', 'rdr', 'tlsv', 'p2p', 'rdr', 'rdr', 'rdr', 'rdr']
+ordered runs
+ {0: ['p2p', 'rdr', 'xcdr', 'tlsv', 'rdr', 'rdr', 'p2p', 'rdr', 'rdr', 'p2p'], 1: ['p2p', 'rdr', 'xcdr', 'tlsv', 'rdr', 'rdr', 'p2p', 'rdr', 'rdr', 'p2p'], 2: ['p2p', 'rdr', 'xcdr', 'tlsv', 'rdr', 'rdr', 'p2p', 'rdr', 'rdr', 'p2p'], 3: ['p2p', 'rdr', 'xcdr', 'tlsv', 'rdr', 'rdr', 'p2p', 'rdr', 'rdr', 'p2p'], 4: ['p2p', 'rdr', 'xcdr', 'tlsv', 'rdr', 'rdr', 'p2p', 'rdr', 'rdr', 'p2p']}
+rand placement:
+ {'iter0': {'node0': {'rdr': 2, 'xcdr': 1, 'tlsv': 1, 'p2p': 1}, 'node1': {'p2p': 1, 'rdr': 3}, 'node2': {'p2p': 1}}, 'iter1': {'node0': {'rdr': 2, 'p2p': 1}, 'node1': {'xcdr': 1, 'tlsv': 1, 'rdr': 3}, 'node2': {'p2p': 2}}, 'iter2': {'node0': {'rdr': 2, 'p2p': 1}, 'node1': {'p2p': 1, 'rdr': 2}, 'node2': {'xcdr': 1, 'tlsv': 1, 'p2p': 1, 'rdr': 1}}, 'iter3': {'node0': {'rdr': 2, 'p2p': 1}, 'node1': {'rdr': 2, 'xcdr': 1, 'tlsv': 1}, 'node2': {'p2p': 2, 'rdr': 1}}, 'iter4': {'node0': {'xcdr': 1, 'p2p': 2}, 'node1': {'p2p': 1, 'rdr': 4}, 'node2': {'tlsv': 1, 'rdr': 1}}}
+least load placement:
+ {'iter0': {'node0': {'p2p': 3, 'tlsv': 1}, 'node1': {'rdr': 3}, 'node2': {'xcdr': 1, 'rdr': 2}}, 'iter1': {'node0': {'p2p': 3, 'tlsv': 1}, 'node1': {'rdr': 3}, 'node2': {'xcdr': 1, 'rdr': 2}}, 'iter2': {'node0': {'p2p': 3, 'tlsv': 1}, 'node1': {'rdr': 3}, 'node2': {'xcdr': 1, 'rdr': 2}}, 'iter3': {'node0': {'p2p': 3, 'tlsv': 1}, 'node1': {'rdr': 3}, 'node2': {'xcdr': 1, 'rdr': 2}}, 'iter4': {'node0': {'p2p': 3, 'tlsv': 1}, 'node1': {'rdr': 3}, 'node2': {'xcdr': 1, 'rdr': 2}}}
+
