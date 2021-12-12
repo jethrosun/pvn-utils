@@ -178,7 +178,6 @@ p2p_co = [
 ]
 non_p2p_co = ['chain_tlsv_rdr', 'chain_rdr_xcdr', 'chain_tlsv_xcdr', 'co_tlsv_rdr_xcdr']
 
-extra_p2p_co = ['co_tlsv_rdr_p2p']
 
 set_list = ['1', '2', '3', '4', '5', '6']
 num_of_epoch = 3
