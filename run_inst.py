@@ -62,6 +62,7 @@ def run_pktgen(sess, trace, setup):
         time.sleep(10)
         print("Pktgen\nRUN pktgen")
     else:
+        print(trace)
         cmd_str = "sudo ./run_pktgen.sh " + trace
         print(cmd_str)
         set_port_str = "set 0 rate " + str(setup)
@@ -136,6 +137,7 @@ def main(expr_list):
                     tls_trace = conf.fetch_tlsv_trace(setup)
                     print(tls_trace)
                     run_pktgen(pktgen_sess, tls_trace, sending_rate)
+                    print(tls_trace, sending_rate)
                 else:
                     run_pktgen(pktgen_sess, conf.trace[expr], sending_rate)
 
