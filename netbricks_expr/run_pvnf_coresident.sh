@@ -123,6 +123,7 @@ elif [ "$2" == 'pvn-rdr-xcdr-coexist-app' ]; then
 		--arg mode "$EXPR_MODE" \
 		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}')
 	echo "${JSON_STRING}" >/home/jethros/setup
+	#"sudo ./run_pvnf_coresident.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + str(expr)
 
 	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
 	docker ps
@@ -334,16 +335,18 @@ elif [ "$2" == 'pvn-tlsv-rdr-xcdr-coexist-app' ]; then
 	P12=$!
 	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12
 
+# FIXME
 elif [ "$2" == 'pvn-tlsv-rdr-p2p-coexist-app' ]; then
 	sudo rm -rf "$HOME/Downloads"
 	sudo rm -rf /data/bt/config
 	mkdir -p "$HOME/Downloads" /data/bt/config
+	# nf + str(epoch) + setup + str(expr)
 
 	JSON_STRING=$(jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
 		--arg inst "$INST_LEVEL" \
-		--arg p2p_type "$8" \
+		--arg p2p_type "$5" \
 		--arg mode "$EXPR_MODE" \
 		'{setup: $setup, iter: $iter, inst: $inst, p2p_type: $p2p_type, mode: $mode}')
 	echo "${JSON_STRING}" >/home/jethros/setup
@@ -490,7 +493,7 @@ elif [ "$2" == 'pvn-tlsv-rdr-p2p-xcdr-coexist-app' ]; then
 	sudo rm -rf "$HOME/Downloads"
 	sudo rm -rf /data/bt/config
 	mkdir -p "$HOME/Downloads" /data/bt/config
-
+	# nf + str(epoch) + setup + str(7419) + str(7420) + str(expr_num) + str(expr)k
 	JSON_STRING=$(jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
