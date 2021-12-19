@@ -1,9 +1,70 @@
-nf workload
- ['p2p', 'xcdr', 'p2p', 'rdr', 'tlsv', 'p2p', 'rdr', 'rdr', 'rdr', 'rdr']
+loading ordered runs from pickle file
+
 ordered runs
- {0: ['p2p', 'rdr', 'xcdr', 'tlsv', 'rdr', 'rdr', 'p2p', 'rdr', 'rdr', 'p2p'], 1: ['p2p', 'rdr', 'xcdr', 'tlsv', 'rdr', 'rdr', 'p2p', 'rdr', 'rdr', 'p2p'], 2: ['p2p', 'rdr', 'xcdr', 'tlsv', 'rdr', 'rdr', 'p2p', 'rdr', 'rdr', 'p2p'], 3: ['p2p', 'rdr', 'xcdr', 'tlsv', 'rdr', 'rdr', 'p2p', 'rdr', 'rdr', 'p2p'], 4: ['p2p', 'rdr', 'xcdr', 'tlsv', 'rdr', 'rdr', 'p2p', 'rdr', 'rdr', 'p2p']}
+ {0: ['xcdr', 'tlsv', 'xcdr', 'xcdr', 'p2p', 'rdr', 'rdr', 'xcdr', 'rdr', 'tlsv'], 1: ['xcdr', 'tlsv', 'xcdr', 'xcdr', 'p2p', 'rdr', 'rdr', 'xcdr', 'rdr', 'tlsv'], 2: ['xcdr', 'tlsv', 'xcdr', 'xcdr', 'p2p', 'rdr', 'rdr', 'xcdr', 'rdr', 'tlsv'], 3: ['xcdr', 'tlsv', 'xcdr', 'xcdr', 'p2p', 'rdr', 'rdr', 'xcdr', 'rdr', 'tlsv'], 4: ['xcdr', 'tlsv', 'xcdr', 'xcdr', 'p2p', 'rdr', 'rdr', 'xcdr', 'rdr', 'tlsv']}
 rand placement:
- {'iter0': {'node0': {'rdr': 2, 'xcdr': 1, 'tlsv': 1, 'p2p': 1}, 'node1': {'p2p': 1, 'rdr': 3}, 'node2': {'p2p': 1}}, 'iter1': {'node0': {'rdr': 2, 'p2p': 1}, 'node1': {'xcdr': 1, 'tlsv': 1, 'rdr': 3}, 'node2': {'p2p': 2}}, 'iter2': {'node0': {'rdr': 2, 'p2p': 1}, 'node1': {'p2p': 1, 'rdr': 2}, 'node2': {'xcdr': 1, 'tlsv': 1, 'p2p': 1, 'rdr': 1}}, 'iter3': {'node0': {'rdr': 2, 'p2p': 1}, 'node1': {'rdr': 2, 'xcdr': 1, 'tlsv': 1}, 'node2': {'p2p': 2, 'rdr': 1}}, 'iter4': {'node0': {'xcdr': 1, 'p2p': 2}, 'node1': {'p2p': 1, 'rdr': 4}, 'node2': {'tlsv': 1, 'rdr': 1}}}
+ {'iter0': {'node0': {'xcdr': 2, 'rdr': 1, 'tlsv': 1}, 'node1': {'p2p': 1, 'rdr': 1}, 'node2': {'tlsv': 1, 'xcdr': 2, 'rdr': 1}}, 'iter1': {'node0': {'xcdr': 2, 'tlsv': 1, 'p2p': 1}, 'node1': {'xcdr': 2, 'rdr': 1}, 'node2': {'rdr': 2, 'tlsv': 1}}, 'iter2': {'node0': {'xcdr': 1, 'rdr': 2}, 'node1': {'tlsv': 1}, 'node2': {'xcdr': 3, 'p2p': 1, 'rdr': 1, 'tlsv': 1}}, 'iter3': {'node0': {'xcdr': 1, 'p2p': 1, 'rdr': 2}, 'node1': {'xcdr': 2, 'rdr': 1}, 'node2': {'tlsv': 2, 'xcdr': 1}}, 'iter4': {'node0': {'p2p': 1, 'rdr': 1}, 'node1': {'xcdr': 1, 'tlsv': 1}, 'node2': {'tlsv': 1, 'xcdr': 3, 'rdr': 2}}}
 least load placement:
- {'iter0': {'node0': {'p2p': 3, 'tlsv': 1}, 'node1': {'rdr': 3}, 'node2': {'xcdr': 1, 'rdr': 2}}, 'iter1': {'node0': {'p2p': 3, 'tlsv': 1}, 'node1': {'rdr': 3}, 'node2': {'xcdr': 1, 'rdr': 2}}, 'iter2': {'node0': {'p2p': 3, 'tlsv': 1}, 'node1': {'rdr': 3}, 'node2': {'xcdr': 1, 'rdr': 2}}, 'iter3': {'node0': {'p2p': 3, 'tlsv': 1}, 'node1': {'rdr': 3}, 'node2': {'xcdr': 1, 'rdr': 2}}, 'iter4': {'node0': {'p2p': 3, 'tlsv': 1}, 'node1': {'rdr': 3}, 'node2': {'xcdr': 1, 'rdr': 2}}}
+ {'iter0': {'node0': {'xcdr': 2, 'rdr': 1, 'tlsv': 1}, 'node1': {'tlsv': 1, 'p2p': 1, 'xcdr': 1}, 'node2': {'xcdr': 1, 'rdr': 2}}, 'iter1': {'node0': {'xcdr': 2, 'rdr': 1, 'tlsv': 1}, 'node1': {'tlsv': 1, 'p2p': 1, 'xcdr': 1}, 'node2': {'xcdr': 1, 'rdr': 2}}, 'iter2': {'node0': {'xcdr': 2, 'rdr': 1, 'tlsv': 1}, 'node1': {'tlsv': 1, 'p2p': 1, 'xcdr': 1}, 'node2': {'xcdr': 1, 'rdr': 2}}, 'iter3': {'node0': {'xcdr': 2, 'rdr': 1, 'tlsv': 1}, 'node1': {'tlsv': 1, 'p2p': 1, 'xcdr': 1}, 'node2': {'xcdr': 1, 'rdr': 2}}, 'iter4': {'node0': {'xcdr': 2, 'rdr': 1, 'tlsv': 1}, 'node1': {'tlsv': 1, 'p2p': 1, 'xcdr': 1}, 'node2': {'xcdr': 1, 'rdr': 2}}}
+iter0 node2 {'tlsv': 1, 'xcdr': 2, 'rdr': 1} already exists in nodes!
+iter3 node1 {'xcdr': 2, 'rdr': 1} already exists in nodes!
+iter4 node0 {'p2p': 1, 'rdr': 1} already exists in nodes!
+iter0 node0 {'xcdr': 2, 'rdr': 1, 'tlsv': 1} already exists in nodes!
+iter0 node2 {'xcdr': 1, 'rdr': 2} already exists in nodes!
+iter1 node0 {'xcdr': 2, 'rdr': 1, 'tlsv': 1} already exists in nodes!
+iter1 node1 {'tlsv': 1, 'p2p': 1, 'xcdr': 1} already exists in nodes!
+iter1 node2 {'xcdr': 1, 'rdr': 2} already exists in nodes!
+iter2 node0 {'xcdr': 2, 'rdr': 1, 'tlsv': 1} already exists in nodes!
+iter2 node1 {'tlsv': 1, 'p2p': 1, 'xcdr': 1} already exists in nodes!
+iter2 node2 {'xcdr': 1, 'rdr': 2} already exists in nodes!
+iter3 node0 {'xcdr': 2, 'rdr': 1, 'tlsv': 1} already exists in nodes!
+iter3 node1 {'tlsv': 1, 'p2p': 1, 'xcdr': 1} already exists in nodes!
+iter3 node2 {'xcdr': 1, 'rdr': 2} already exists in nodes!
+iter4 node0 {'xcdr': 2, 'rdr': 1, 'tlsv': 1} already exists in nodes!
+iter4 node1 {'tlsv': 1, 'p2p': 1, 'xcdr': 1} already exists in nodes!
+iter4 node2 {'xcdr': 1, 'rdr': 2} already exists in nodes!
+final nodes after dedup are: [{'xcdr': 2, 'rdr': 1, 'tlsv': 1}, {'p2p': 1, 'rdr': 1}, {'xcdr': 2, 'tlsv': 1, 'p2p': 1}, {'xcdr': 2, 'rdr': 1}, {'rdr': 2, 'tlsv': 1}, {'xcdr': 1, 'rdr': 2}, {'tlsv': 1}, {'xcdr': 3, 'p2p': 1, 'rdr': 1, 'tlsv': 1}, {'xcdr': 1, 'p2p': 1, 'rdr': 2}, {'tlsv': 2, 'xcdr': 1}, {'xcdr': 1, 'tlsv': 1}, {'tlsv': 1, 'xcdr': 3, 'rdr': 2}, {'tlsv': 1, 'p2p': 1, 'xcdr': 1}]
+
+
+{'tlsv': 1},
+
+{'p2p': 1, 'rdr': 1},
+{'xcdr': 1, 'tlsv': 1},
+
+{'xcdr': 2, 'rdr': 1},
+{'rdr': 2, 'tlsv': 1},
+{'xcdr': 1, 'rdr': 2},
+{'tlsv': 2, 'xcdr': 1},
+
+{'xcdr': 1, 'p2p': 1, 'rdr': 2},
+{'tlsv': 1, 'p2p': 1, 'xcdr': 1} // done
+{'xcdr': 2, 'rdr': 1, 'tlsv': 1}, // done
+{'xcdr': 2, 'tlsv': 1, 'p2p': 1}, // done
+
+{'tlsv': 1, 'xcdr': 3, 'rdr': 2},
+{'xcdr': 3, 'p2p': 1, 'rdr': 1, 'tlsv': 1},
+
+
+mergecap -w tlsv1_rdr1_xcdr3_p2p1.pcap tlsv1_rdr1_p2p1.pcap ../xcdr_3.pcap
+mergecap -w tlsv1_rdr1_p2p1.pcap tlsv1_rdr1.pcap ../p2p_1.pcap
+mergecap -w tlsv1_rdr2_xcdr3.pcap tlsv1_rdr2.pcap ../xcdr_3.pcap
+mergecap -w tlsv1_p2p1.pcap p2p_1.pcap tlsv_1.pcap
+mergecap -w tlsv1_rdr1_xcdr2.pcap xcdr_2.pcap tlsv1_rdr1.pcap
+mergecap -w tlsv1_rdr1.pcap tlsv_1.pcap rdr_1.pcap
+mergecap -w tlsv1_xcdr1_p2p1.pcap xcdr1_p2p1.pcap tlsv_1.pcap
+mergecap -w rdr2_xcdr1_p2p1.pcap rdr_2.pcap xcdr1_p2p1.pcap
+mergecap -w xcdr1_p2p1.pcap p2p_1.pcap xcdr_1.pcap
+mergecap -w tlsv2_xcdr1.pcap tlsv_2.pcap xcdr_1.pcap
+mergecap -w rdr2_xcdr1.pcap rdr_2.pcap xcdr_1.pcap
+mergecap -w tlsv1_rdr2.pcap tlsv_1.pcap rdr_2.pcap
+mergecap -w rdr1_xcdr2.pcap rdr_1.pcap xcdr_2.pcap
+mergecap -w tlsv1_xcdr1.pcap tlsv_1.pcap xcdr_1.pcap
+mergecap -w rdr1_p2p1.pcap rdr_1.pcap p2p_1.pcap
+mergecap -w tlsv1_xcdr1_p2p1.pcap tlsv1_xcdr1.pcap ../p2p_1.pcap
+mergecap -w tlsv1_rdr2_xcdr1.pcap tlsv1_xcdr1.pcap ../rdr_2.pcap
+mergecap -w tlsv2_xcdr1_p2p1.pcap xcdr1_p2p1.pcap tlsv_2.pcap
+mergecap -w rdr2_xcdr2.pcap rdr_2.pcap xcdr_2.pcap
+mergecap -w tlsv1_rdr1_xcdr1_p2p1.pcap   tlsv1_xcdr1.pcap rdr1_p2p1.pcap
+mergecap -w xcdr2_tlsv1_rdr1.pcap xcdr_2.pcap tlsv1_rdr1.pcap
+mergecap -w xcdr2_rdr1_p2p1.pcap xcdr_2.pcap rdr1_p2p1.pcap
 
