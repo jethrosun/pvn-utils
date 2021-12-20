@@ -1,3 +1,34 @@
+def scheduler(raw_tasks):
+    tasks = []
+    for task in raw_tasks:
+        name = 'co_'
+        load = []
+        nfs = task.split('_')
+        for nf in nfs:
+            nf_name = nf[:-1]
+            nf_load = nf[-1]
+            name += nf_name
+            name += "_"
+            load.append(nf_load)
+        # print(name[:-1], load)
+        tasks.append({name[:-1]: load})
+    return tasks
+
+
+def translate(raw_task):
+    name = 'co_'
+    load = []
+    nfs = raw_task.split('_')
+    for nf in nfs:
+        nf_name = nf[:-1]
+        nf_load = nf[-1]
+        name += nf_name
+        name += "_"
+        load.append(nf_load)
+
+    return name[:-1], load
+
+
 def fetch_tlsv_trace(setup):
     return 'pvn_tlsv' + setup + '.pcap'
 
@@ -10,8 +41,8 @@ def fetch_sending_rate(nf):
         sending_rate = 10
         # chain
     elif nf in [
-            pvn_nf[x][0] for x in
-        ['chain_tlsv_rdr', 'chain_rdr_p2p', 'chain_rdr_xcdr', 'chain_tlsv_p2p', 'chain_tlsv_xcdr', 'chain_xcdr_p2p']
+            pvn_nf[x][0]
+            for x in ['co_tlsv_rdr', 'co_rdr_p2p', 'co_rdr_xcdr', 'co_tlsv_p2p', 'co_tlsv_xcdr', 'co_xcdr_p2p']
     ]:
         sending_rate = 20
         # coresident
@@ -40,12 +71,12 @@ pvn_nf = {
     'app_p2p-ext': ['pvn-p2p-transform-app'],
     'app_p2p-controlled': ['pvn-p2p-transform-app'],
     # chain
-    'chain_tlsv_rdr': ['pvn-tlsv-rdr-coexist-app'],
-    'chain_rdr_p2p': ['pvn-rdr-p2p-coexist-app'],
-    'chain_rdr_xcdr': ['pvn-rdr-xcdr-coexist-app'],
-    'chain_tlsv_p2p': ['pvn-tlsv-p2p-coexist-app'],
-    'chain_tlsv_xcdr': ['pvn-tlsv-xcdr-coexist-app'],
-    'chain_xcdr_p2p': ['pvn-xcdr-p2p-coexist-app'],
+    'co_tlsv_rdr': ['pvn-tlsv-rdr-coexist-app'],
+    'co_rdr_p2p': ['pvn-rdr-p2p-coexist-app'],
+    'co_rdr_xcdr': ['pvn-rdr-xcdr-coexist-app'],
+    'co_tlsv_p2p': ['pvn-tlsv-p2p-coexist-app'],
+    'co_tlsv_xcdr': ['pvn-tlsv-xcdr-coexist-app'],
+    'co_xcdr_p2p': ['pvn-xcdr-p2p-coexist-app'],
     # coresident
     'co_tlsv_rdr_p2p': ['pvn-tlsv-rdr-p2p-coexist-app'],
     'co_tlsv_xcdr_p2p': ['pvn-tlsv-p2p-xcdr-coexist-app'],
@@ -63,12 +94,12 @@ trace = {
     'app_p2p-ext': 'pvn_p2p.pcap',
     'app_p2p-controlled': 'pvn_p2p.pcap',
     # chain
-    'chain_tlsv_rdr': 'pvn_rdr_tlsv.pcap',
-    'chain_rdr_p2p': 'pvn_rdr_p2p.pcap',
-    'chain_rdr_xcdr': 'pvn_rdr_xcdr.pcap',
-    'chain_tlsv_p2p': 'pvn_tlsv_p2p.pcap',
-    'chain_tlsv_xcdr': 'pvn_tlsv_xcdr.pcap',
-    'chain_xcdr_p2p': 'pvn_xcdr_p2p.pcap',
+    'co_tlsv_rdr': 'pvn_rdr_tlsv.pcap',
+    'co_rdr_p2p': 'pvn_rdr_p2p.pcap',
+    'co_rdr_xcdr': 'pvn_rdr_xcdr.pcap',
+    'co_tlsv_p2p': 'pvn_tlsv_p2p.pcap',
+    'co_tlsv_xcdr': 'pvn_tlsv_xcdr.pcap',
+    'co_xcdr_p2p': 'pvn_xcdr_p2p.pcap',
     # coresident
     'co_tlsv_rdr_p2p': 'pvn_tlsv_rdr_p2p.pcap',
     'co_tlsv_xcdr_p2p': 'pvn_tlsv_p2p_xcdr.pcap',
@@ -201,9 +232,9 @@ tlsv = ['app_tlsv']
 p2p_controlled = ['app_p2p-controlled']
 
 # coresident
-non_p2p_co = ['chain_tlsv_rdr', 'chain_rdr_xcdr', 'chain_tlsv_xcdr', 'co_tlsv_rdr_xcdr']
+non_p2p_co = ['co_tlsv_rdr', 'co_rdr_xcdr', 'co_tlsv_xcdr', 'co_tlsv_rdr_xcdr']
 # p2p_co = [
-#     'chain_rdr_p2p', 'chain_tlsv_p2p', 'chain_xcdr_p2p', 'co_tlsv_rdr_p2p', 'co_tlsv_p2p_xcdr', 'co_rdr_xcdr_p2p',
+#     'co_rdr_p2p', 'co_tlsv_p2p', 'co_xcdr_p2p', 'co_tlsv_rdr_p2p', 'co_tlsv_p2p_xcdr', 'co_rdr_xcdr_p2p',
 #     'co_tlsv_rdr_p2p_xcdr'
 # ]
 
@@ -227,34 +258,3 @@ raw_p2p_tasks = [
     'rdr1_p2p1', 'tlsv1_p2p1', 'xcdr1_p2p1', 'rdr2_xcdr1_p2p1', 'tlsv1_rdr1_p2p1', 'tlsv1_xcdr1_p2p1',
     'tlsv1_rdr1_xcdr3_p2p1'
 ]
-
-
-def scheduler(raw_tasks):
-    tasks = []
-    for task in raw_tasks:
-        name = 'co_'
-        load = []
-        nfs = task.split('_')
-        for nf in nfs:
-            nf_name = nf[:-1]
-            nf_load = nf[-1]
-            name += nf_name
-            name += "_"
-            load.append(nf_load)
-        # print(name[:-1], load)
-        tasks.append({name[:-1]: load})
-    return tasks
-
-
-def translate(raw_task):
-    name = 'co_'
-    load = []
-    nfs = raw_task.split('_')
-    for nf in nfs:
-        nf_name = nf[:-1]
-        nf_load = nf[-1]
-        name += nf_name
-        name += "_"
-        load.append(nf_load)
-
-    return name[:-1], load
