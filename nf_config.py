@@ -75,6 +75,35 @@ trace = {
     'co_tlsv_rdr_xcdr': 'pvn_tlsv_rdr_xcdr.pcap',
     'co_rdr_xcdr_p2p': 'pvn_rdr_xcdr_p2p.pcap',
     'co_tlsv_rdr_p2p_xcdr': 'pvn_tlsv_rdr_p2p_xcdr.pcap',
+
+    # tasks
+    #
+    # 'tlsv2': 'tlsv2.pcap',
+    # 'xcdr2': 'xcdr2.pcap',
+    # 'rdr1': 'rdr1.pcap',
+    # 'rdr2': 'rdr2.pcap',
+    # 'tlsv1': 'tlsv1.pcap',
+    # 'xcdr1': 'xcdr1.pcap',
+    # 'xcdr3': 'xcdr3.pcap',
+    'tlsv1_rdr2': 'tlsv1_rdr2.pcap',
+    'rdr2_xcdr1': 'rdr2_xcdr1.pcap',
+    'rdr1_xcdr2': 'rdr1_xcdr2.pcap',
+    'tlsv1_rdr1': 'tlsv1_rdr1.pcap',
+    'tlsv1_xcdr1': 'tlsv1_xcdr1.pcap',
+    'tlsv2_xcdr1': 'tlsv2_xcdr1.pcap',
+    'tlsv1_rdr1_xcdr2': 'tlsv1_rdr1_xcdr2.pcap',
+    'tlsv1_rdr2_xcdr3': 'tlsv1_rdr2_xcdr3.pcap',
+
+    # p2p
+    # 'p2p1': 'p2p1.pcap',
+    # 'p2p2': 'p2p2.pcap',
+    'rdr1_p2p1': 'rdr1_p2p1.pcap',
+    'tlsv1_p2p1': 'tlsv1_p2p1.pcap',
+    'xcdr1_p2p1': 'xcdr1_p2p1.pcap',
+    'rdr2_xcdr1_p2p1': 'rdr2_xcdr1_p2p1.pcap',
+    'tlsv1_rdr1_p2p1': 'tlsv1_rdr1_p2p1.pcap',
+    'tlsv1_xcdr1_p2p1': 'tlsv1_xcdr1_p2p1.pcap',
+    'tlsv1_rdr1_xcdr3_p2p1': 'tlsv1_rdr1_xcdr3_p2p1.pcap',
 }
 
 # # nf app
@@ -182,7 +211,50 @@ set_list = ['1', '2', '3', '4', '5', '6']
 num_of_epoch = 3
 p2p_num_of_epoch = 5
 
-p2p_co = [ 'co_tlsv_rdr_p2p' ]
+p2p_co = ['co_tlsv_rdr_p2p']
 # set_list = ['6']
 # num_of_epoch = 1
 # p2p_num_of_epoch = 1
+
+# task running
+#
+raw_tasks = [
+    'tlsv1_rdr2', 'rdr2_xcdr1', 'rdr1_xcdr2', 'tlsv1_rdr1', 'tlsv1_xcdr1', 'tlsv2_xcdr1', 'tlsv1_rdr1_xcdr2',
+    'tlsv1_rdr2_xcdr3'
+]
+
+raw_p2p_tasks = [
+    'rdr1_p2p1', 'tlsv1_p2p1', 'xcdr1_p2p1', 'rdr2_xcdr1_p2p1', 'tlsv1_rdr1_p2p1', 'tlsv1_xcdr1_p2p1',
+    'tlsv1_rdr1_xcdr3_p2p1'
+]
+
+
+def scheduler(raw_tasks):
+    tasks = []
+    for task in raw_tasks:
+        name = 'co_'
+        load = []
+        nfs = task.split('_')
+        for nf in nfs:
+            nf_name = nf[:-1]
+            nf_load = nf[-1]
+            name += nf_name
+            name += "_"
+            load.append(nf_load)
+        # print(name[:-1], load)
+        tasks.append({name[:-1]: load})
+    return tasks
+
+
+def translate(raw_task):
+    name = 'co_'
+    load = []
+    nfs = raw_task.split('_')
+    for nf in nfs:
+        nf_name = nf[:-1]
+        nf_load = nf[-1]
+        name += nf_name
+        name += "_"
+        load.append(nf_load)
+
+    return name[:-1], load
