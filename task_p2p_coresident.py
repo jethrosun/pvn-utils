@@ -177,7 +177,7 @@ def run_expr_p2p_controlled(tasks):
     for task in tasks:
         print("running controlled")
         for nf_type in task:
-            nf = conf.pvn_nf[nf_type]
+            nf = conf.pvn_nf[nf_type][0]
             nf_load = task[nf_type]
             sending_rate = len(nf_load) * 10
 

@@ -116,7 +116,7 @@ def main(tasks):
     for task in tasks:
         print("Running experiments that for {} application NF".format(task))
         for nf_type in task:
-            nf = conf.pvn_nf[nf_type]
+            nf = conf.pvn_nf[nf_type][0]
             nf_load = task[nf_type]
 
             sending_rate = len(nf_load) * 10
