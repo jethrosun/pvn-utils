@@ -17,12 +17,12 @@ def fetch_sending_rate(nf):
         # coresident
     elif nf in [pvn_nf[x][0] for x in [
             'co_tlsv_rdr_p2p',
-            'co_tlsv_p2p_xcdr',
+            'co_tlsv_xcdr_p2p',
             'co_tlsv_rdr_xcdr',
             'co_rdr_xcdr_p2p',
     ]]:
         sending_rate = 30
-    elif nf == pvn_nf['co_tlsv_rdr_p2p_xcdr'][0]:
+    elif nf == pvn_nf['co_tlsv_rdr_xcdr_p2p'][0]:
         sending_rate = 40
     else:
         print("unknown nf:", nf)
@@ -48,10 +48,10 @@ pvn_nf = {
     'chain_xcdr_p2p': ['pvn-xcdr-p2p-coexist-app'],
     # coresident
     'co_tlsv_rdr_p2p': ['pvn-tlsv-rdr-p2p-coexist-app'],
-    'co_tlsv_p2p_xcdr': ['pvn-tlsv-p2p-xcdr-coexist-app'],
+    'co_tlsv_xcdr_p2p': ['pvn-tlsv-p2p-xcdr-coexist-app'],
     'co_tlsv_rdr_xcdr': ['pvn-tlsv-rdr-xcdr-coexist-app'],
     'co_rdr_xcdr_p2p': ['pvn-rdr-xcdr-p2p-coexist-app'],
-    'co_tlsv_rdr_p2p_xcdr': ['pvn-tlsv-rdr-p2p-xcdr-coexist-app'],
+    'co_tlsv_rdr_xcdr_p2p': ['pvn-tlsv-rdr-p2p-xcdr-coexist-app'],
 }
 
 trace = {
@@ -71,10 +71,10 @@ trace = {
     'chain_xcdr_p2p': 'pvn_xcdr_p2p.pcap',
     # coresident
     'co_tlsv_rdr_p2p': 'pvn_tlsv_rdr_p2p.pcap',
-    'co_tlsv_p2p_xcdr': 'pvn_tlsv_p2p_xcdr.pcap',
+    'co_tlsv_xcdr_p2p': 'pvn_tlsv_p2p_xcdr.pcap',
     'co_tlsv_rdr_xcdr': 'pvn_tlsv_rdr_xcdr.pcap',
     'co_rdr_xcdr_p2p': 'pvn_rdr_xcdr_p2p.pcap',
-    'co_tlsv_rdr_p2p_xcdr': 'pvn_tlsv_rdr_p2p_xcdr.pcap',
+    'co_tlsv_rdr_xcdr_p2p': 'pvn_tlsv_rdr_p2p_xcdr.pcap',
 
     # tasks
     #
