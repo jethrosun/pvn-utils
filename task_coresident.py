@@ -3,7 +3,7 @@
 import sys
 import time
 
-import task_config as conf
+import nf_config as conf
 from screenutils import Screen, list_screens
 
 
