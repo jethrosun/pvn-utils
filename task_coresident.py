@@ -3,18 +3,22 @@
 import sys
 import time
 
-import nf_config as conf
+import task_config as conf
 from screenutils import Screen, list_screens
 
 
-def netbricks_sess_setup(trace, nf, epoch):
+def netbricks_sess_setup(trace, nf, nf_load):
+    # netbricks_sess = netbricks_sess_setup(conf.trace[nf_type], nf, nf_load)
     print("Entering netbricks_sess setup")
+    load = ""
+    for l in nf_load:
+        load += l
     try:
         netbricks_sess = Screen("netbricks", True)
         print("netbricks session is spawned")
 
         netbricks_sess.send_commands('bash')
-        netbricks_sess.enable_logs("netbricks--" + trace + "_" + nf + "_" + str(epoch) + ".log")
+        netbricks_sess.enable_logs("netbricks--" + trace + "_" + nf + "_" + load + ".log")
         netbricks_sess.send_commands('ssh jethros@tuco')
         netbricks_sess.send_commands('cd /home/jethros/dev/pvn/utils/faktory_srv')
         netbricks_sess.send_commands('cargo b --release')
@@ -60,16 +64,22 @@ def run_pktgen(sess, trace, setup):
     print("Pktgen\nRUN pktgen")
 
 
-def run_netbricks(sess, trace, nf, epoch, setup):
-    cmd_str = "sudo ./run_pvnf_coresident.sh " + trace + " " + nf + " " + str(epoch) + " " + setup
+def run_netbricks(sess, trace, nf, nf_load):
+    load = ""
+    for l in nf_load:
+        load += l
+        load += ":"
+    cmd_str = "sudo ./run_pvnf_task.sh " + trace + " " + nf + " " + load
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
 
-def run_netbricks_xcdr(sess, trace, nf, epoch, setup, expr_num):
-    cmd_str = "sudo ./run_pvnf_coresident.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + str(
-        1) + " " + str(2) + " " + expr_num
-
+def run_netbricks_xcdr(sess, trace, nf, nf_load):
+    load = ""
+    for l in nf_load:
+        load += l
+        load += ":"
+    cmd_str = "sudo ./run_pvnf_coresident.sh " + trace + " " + nf + " " + load
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
@@ -102,49 +112,46 @@ def rdr_cleanup(sess):
     sess.send_commands(cmd_str)
 
 
-def main(expr_list):
-    """"""
-    for expr in expr_list:
-        print("Running experiments that for {} application NF".format(expr))
-        # app_rdr_g, app_rdr_t; app_p2p_g, app_p2p_t
-        for nf in conf.pvn_nf[expr]:
-            # we are running the regular NFs
-            # config the pktgen sending rate
-            sending_rate = conf.fetch_sending_rate(nf)
-            pktgen_sess = pktgen_sess_setup(conf.trace[expr], nf, sending_rate)
-            run_pktgen(pktgen_sess, conf.trace[expr], sending_rate)
+def main(tasks):
+    for task in tasks:
+        print("Running experiments that for {} application NF".format(task))
+        for nf_type in task:
+            nf = conf.pvn_nf[nf_type]
+            nf_load = task[nf_type]
 
-            for setup in conf.set_list:
-                # epoch from 0 to 9
-                for epoch in range(conf.num_of_epoch):
-                    netbricks_sess = netbricks_sess_setup(conf.trace[expr], nf, epoch)
+            sending_rate = len(nf_load) * 10
+            pktgen_sess = pktgen_sess_setup(conf.trace[nf_type], nf, sending_rate)
+            run_pktgen(pktgen_sess, conf.trace[nf_type], sending_rate)
 
-                    p2p_cleanup(netbricks_sess)
-                    rdr_cleanup(netbricks_sess)
-                    xcdr_cleanup(netbricks_sess)
-                    time.sleep(5)
+            # epoch from 0 to 9
+            # for epoch in range(conf.num_of_epoch):
+            netbricks_sess = netbricks_sess_setup(conf.trace[nf_type], nf, nf_load)
 
-                    # Actual RUN
-                    if nf in conf.xcdr_clean_list:
-                        expr_num = epoch * 6 + int(setup) * 2
-                        run_netbricks_xcdr(netbricks_sess, conf.trace[expr], nf, epoch, setup, str(expr_num))
-                    else:
-                        run_netbricks(netbricks_sess, conf.trace[expr], nf, epoch, setup)
+            p2p_cleanup(netbricks_sess)
+            rdr_cleanup(netbricks_sess)
+            xcdr_cleanup(netbricks_sess)
+            time.sleep(5)
 
-                    time.sleep(conf.expr_wait_time)
+            # Actual RUN
+            if nf in conf.xcdr_clean_list:
+                run_netbricks_xcdr(netbricks_sess, conf.trace[nf_type], nf, nf_load)
+            else:
+                run_netbricks(netbricks_sess, conf.trace[nf_type], nf, nf_load)
 
-                    # run clean up for p2p nf before experiment
-                    p2p_cleanup(netbricks_sess)
-                    rdr_cleanup(netbricks_sess)
-                    xcdr_cleanup(netbricks_sess)
-                    time.sleep(5)
+            time.sleep(conf.expr_wait_time)
 
-                    sess_destroy(netbricks_sess)
-                    time.sleep(5)
+            # run clean up for p2p nf before experiment
+            p2p_cleanup(netbricks_sess)
+            rdr_cleanup(netbricks_sess)
+            xcdr_cleanup(netbricks_sess)
+            time.sleep(5)
+
+            sess_destroy(netbricks_sess)
+            time.sleep(5)
 
             sess_destroy(pktgen_sess)
             time.sleep(30)
 
 
-main(conf.non_p2p_co)  # rdr, xcdr
+main(conf.tasks)
 print("All experiment finished {}".format(conf.non_p2p_co))

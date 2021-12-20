@@ -40,12 +40,12 @@ pvn_nf = {
     'app_p2p-ext': ['pvn-p2p-transform-app'],
     'app_p2p-controlled': ['pvn-p2p-transform-app'],
     # chain
-    'chain_tlsv_rdr': ['pvn-tlsv-rdr-coexist-app'],
-    'chain_rdr_p2p': ['pvn-rdr-p2p-coexist-app'],
-    'chain_rdr_xcdr': ['pvn-rdr-xcdr-coexist-app'],
-    'chain_tlsv_p2p': ['pvn-tlsv-p2p-coexist-app'],
-    'chain_tlsv_xcdr': ['pvn-tlsv-xcdr-coexist-app'],
-    'chain_xcdr_p2p': ['pvn-xcdr-p2p-coexist-app'],
+    'co_tlsv_rdr': ['pvn-tlsv-rdr-coexist-app'],
+    'co_rdr_p2p': ['pvn-rdr-p2p-coexist-app'],
+    'co_rdr_xcdr': ['pvn-rdr-xcdr-coexist-app'],
+    'co_tlsv_p2p': ['pvn-tlsv-p2p-coexist-app'],
+    'co_tlsv_xcdr': ['pvn-tlsv-xcdr-coexist-app'],
+    'c0_xcdr_p2p': ['pvn-xcdr-p2p-coexist-app'],
     # coresident
     'co_tlsv_rdr_p2p': ['pvn-tlsv-rdr-p2p-coexist-app'],
     'co_tlsv_p2p_xcdr': ['pvn-tlsv-p2p-xcdr-coexist-app'],
@@ -63,18 +63,47 @@ trace = {
     'app_p2p-ext': 'pvn_p2p.pcap',
     'app_p2p-controlled': 'pvn_p2p.pcap',
     # chain
-    'chain_tlsv_rdr': 'pvn_rdr_tlsv.pcap',
-    'chain_rdr_p2p': 'pvn_rdr_p2p.pcap',
-    'chain_rdr_xcdr': 'pvn_rdr_xcdr.pcap',
-    'chain_tlsv_p2p': 'pvn_tlsv_p2p.pcap',
-    'chain_tlsv_xcdr': 'pvn_tlsv_xcdr.pcap',
-    'chain_xcdr_p2p': 'pvn_xcdr_p2p.pcap',
+    'co_tlsv_rdr': 'pvn_rdr_tlsv.pcap',
+    'co_rdr_p2p': 'pvn_rdr_p2p.pcap',
+    'co_rdr_xcdr': 'pvn_rdr_xcdr.pcap',
+    'co_tlsv_p2p': 'pvn_tlsv_p2p.pcap',
+    'co_tlsv_xcdr': 'pvn_tlsv_xcdr.pcap',
+    'co_xcdr_p2p': 'pvn_xcdr_p2p.pcap',
     # coresident
     'co_tlsv_rdr_p2p': 'pvn_tlsv_rdr_p2p.pcap',
     'co_tlsv_p2p_xcdr': 'pvn_tlsv_p2p_xcdr.pcap',
     'co_tlsv_rdr_xcdr': 'pvn_tlsv_rdr_xcdr.pcap',
     'co_rdr_xcdr_p2p': 'pvn_rdr_xcdr_p2p.pcap',
     'co_tlsv_rdr_p2p_xcdr': 'pvn_tlsv_rdr_p2p_xcdr.pcap',
+
+    # tasks
+    #
+    # 'tlsv2': 'tlsv2.pcap',
+    # 'xcdr2': 'xcdr2.pcap',
+    # 'rdr1': 'rdr1.pcap',
+    # 'rdr2': 'rdr2.pcap',
+    # 'tlsv1': 'tlsv1.pcap',
+    # 'xcdr1': 'xcdr1.pcap',
+    # 'xcdr3': 'xcdr3.pcap',
+    'tlsv1_rdr2': 'tlsv1_rdr2.pcap',
+    'rdr2_xcdr1': 'rdr2_xcdr1.pcap',
+    'rdr1_xcdr2': 'rdr1_xcdr2.pcap',
+    'tlsv1_rdr1': 'tlsv1_rdr1.pcap',
+    'tlsv1_xcdr1': 'tlsv1_xcdr1.pcap',
+    'tlsv2_xcdr1': 'tlsv2_xcdr1.pcap',
+    'tlsv1_rdr1_xcdr2': 'tlsv1_rdr1_xcdr2.pcap',
+    'tlsv1_rdr2_xcdr3': 'tlsv1_rdr2_xcdr3.pcap',
+
+    # p2p
+    # 'p2p1': 'p2p1.pcap',
+    # 'p2p2': 'p2p2.pcap',
+    'rdr1_p2p1': 'rdr1_p2p1.pcap',
+    'tlsv1_p2p1': 'tlsv1_p2p1.pcap',
+    'xcdr1_p2p1': 'xcdr1_p2p1.pcap',
+    'rdr2_xcdr1_p2p1': 'rdr2_xcdr1_p2p1.pcap',
+    'tlsv1_rdr1_p2p1': 'tlsv1_rdr1_p2p1.pcap',
+    'tlsv1_xcdr1_p2p1': 'tlsv1_xcdr1_p2p1.pcap',
+    'tlsv1_rdr1_xcdr3_p2p1': 'tlsv1_rdr1_xcdr3_p2p1.pcap',
 }
 
 # # nf app
@@ -186,3 +215,39 @@ p2p_co = ['co_tlsv_rdr_p2p']
 # set_list = ['6']
 # num_of_epoch = 1
 # p2p_num_of_epoch = 1
+
+# task running
+#
+raw_tasks = [
+    'tlsv1_rdr2', 'rdr2_xcdr1', 'rdr1_xcdr2', 'tlsv1_rdr1', 'tlsv1_xcdr1', 'tlsv2_xcdr1', 'tlsv1_rdr1_xcdr2',
+    'tlsv1_rdr2_xcdr3'
+]
+
+raw_p2p_tasks = [
+    'rdr1_p2p1', 'tlsv1_p2p1', 'xcdr1_p2p1', 'rdr2_xcdr1_p2p1', 'tlsv1_rdr1_p2p1', 'tlsv1_xcdr1_p2p1',
+    'tlsv1_rdr1_xcdr3_p2p1'
+]
+
+
+def scheduler(raw_tasks):
+    tasks = []
+    for task in raw_tasks:
+        name = 'co_'
+        load = []
+        nfs = task.split('_')
+        for nf in nfs:
+            nf_name = nf[:-1]
+            nf_load = nf[-1]
+            name += nf_name
+            name += "_"
+            load.append(nf_load)
+        # print(name[:-1], load)
+        tasks.append({name[:-1]: load})
+    return tasks
+
+
+tasks = scheduler(raw_tasks)
+print(tasks)
+
+p2p_tasks = scheduler(raw_p2p_tasks)
+print(p2p_tasks)
