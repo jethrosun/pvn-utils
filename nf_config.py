@@ -233,16 +233,17 @@ p2p_controlled = ['app_p2p-controlled']
 
 # coresident
 non_p2p_co = ['co_tlsv_rdr', 'co_rdr_xcdr', 'co_tlsv_xcdr', 'co_tlsv_rdr_xcdr']
-# p2p_co = [
-#     'co_rdr_p2p', 'co_tlsv_p2p', 'co_xcdr_p2p', 'co_tlsv_rdr_p2p', 'co_tlsv_p2p_xcdr', 'co_rdr_xcdr_p2p',
-#     'co_tlsv_rdr_p2p_xcdr'
-# ]
-
+p2p_co = [
+    'co_rdr_p2p', 'co_tlsv_p2p', 'co_xcdr_p2p',
+    'co_tlsv_rdr_p2p', 'co_tlsv_p2p_xcdr', 'co_rdr_xcdr_p2p',
+    'co_tlsv_rdr_p2p_xcdr'
+]
 set_list = ['1', '2', '3', '4', '5', '6']
 num_of_epoch = 3
 p2p_num_of_epoch = 5
 
-p2p_co = ['co_tlsv_rdr_p2p']
+# only for testing
+# p2p_co = ['co_tlsv_rdr_p2p']
 # set_list = ['6']
 # num_of_epoch = 1
 # p2p_num_of_epoch = 1
