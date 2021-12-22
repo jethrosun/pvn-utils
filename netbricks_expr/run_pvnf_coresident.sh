@@ -37,11 +37,15 @@ if [ "$2" == 'pvn-tlsv-rdr-coexist-app' ]; then
 	JSON_STRING=$(jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
+		--arg tlsv_setup "$4" \
+                --arg rdr_setup "$4" \
+		--arg xcdr_setup "0" \
+                --arg p2p_setup "0" \
 		--arg port "$5" \
 		--arg expr_num "$7" \
 		--arg inst "$INST_LEVEL" \
 		--arg mode "$EXPR_MODE" \
-		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}')
+		'{setup: $setup, tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup,  iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}')
 	echo "${JSON_STRING}" >"/home/jethros/setup"
 
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" >"$LOG" &
@@ -76,10 +80,14 @@ elif [ "$2" == 'pvn-rdr-p2p-coexist-app' ]; then
 	JSON_STRING=$(jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
+		--arg tlsv_setup "0" \
+                --arg rdr_setup "$4" \
+                --arg xcdr_setup "0" \
+                --arg p2p_setup "$4" \
 		--arg inst "$INST_LEVEL" \
 		--arg p2p_type "$5" \
 		--arg mode "$EXPR_MODE" \
-		'{setup: $setup, iter: $iter, inst: $inst, p2p_type: $p2p_type, mode: $mode}')
+		'{setup: $setup, tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup,  iter: $iter, inst: $inst, p2p_type: $p2p_type, mode: $mode}')
 	echo "${JSON_STRING}" >/home/jethros/setup
 
 	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
@@ -117,11 +125,15 @@ elif [ "$2" == 'pvn-rdr-xcdr-coexist-app' ]; then
 	JSON_STRING=$(jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
+		--arg tlsv_setup "0" \
+                --arg rdr_setup "$4" \
+                --arg xcdr_setup "$4" \
+                --arg p2p_setup "0" \
 		--arg port "$5" \
 		--arg expr_num "$7" \
 		--arg inst "$INST_LEVEL" \
 		--arg mode "$EXPR_MODE" \
-		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}')
+		'{setup: $setup, tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup,  iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}')
 	echo "${JSON_STRING}" >/home/jethros/setup
 	#"sudo ./run_pvnf_coresident.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + str(expr)
 
@@ -163,10 +175,14 @@ elif [ "$2" == 'pvn-tlsv-p2p-coexist-app' ]; then
 	JSON_STRING=$(jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
+		--arg tlsv_setup "$4" \
+                --arg rdr_setup "0" \
+                --arg xcdr_setup "0" \
+                --arg p2p_setup "$4" \
 		--arg inst "$INST_LEVEL" \
 		--arg p2p_type "$5" \
 		--arg mode "$EXPR_MODE" \
-		'{setup: $setup, iter: $iter, inst: $inst, p2p_type: $p2p_type, mode: $mode}')
+		'{setup: $setup, tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup,  iter: $iter, inst: $inst, p2p_type: $p2p_type, mode: $mode}')
 	echo "$JSON_STRING" >/home/jethros/setup
 
 	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
@@ -204,11 +220,15 @@ elif [ "$2" == 'pvn-tlsv-xcdr-coexist-app' ]; then
 	JSON_STRING=$(jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
+		--arg tlsv_setup "$4" \
+                --arg rdr_setup "0" \
+                --arg xcdr_setup "$4" \
+                --arg p2p_setup "0" \
 		--arg port "$5" \
 		--arg expr_num "$7" \
 		--arg inst "$INST_LEVEL" \
 		--arg mode "$EXPR_MODE" \
-		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}')
+		'{setup: $setup, tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup,  iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}')
 	echo "$JSON_STRING" >/home/jethros/setup
 
 	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
@@ -249,12 +269,16 @@ elif [ "$2" == 'pvn-xcdr-p2p-coexist-app' ]; then
 	JSON_STRING=$(jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
+		--arg tlsv_setup "0" \
+                --arg rdr_setup "0" \
+                --arg xcdr_setup "$4" \
+                --arg p2p_setup "$4" \
 		--arg port "$5" \
 		--arg expr_num "$7" \
 		--arg p2p_type "$8" \
 		--arg inst "$INST_LEVEL" \
 		--arg mode "$EXPR_MODE" \
-		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, p2p_type: $p2p_type, mode: $mode}')
+		'{setup: $setup, tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup,  iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, p2p_type: $p2p_type, mode: $mode}')
 	echo "$JSON_STRING" >/home/jethros/setup
 
 	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
@@ -298,11 +322,15 @@ elif [ "$2" == 'pvn-tlsv-rdr-xcdr-coexist-app' ]; then
 	JSON_STRING=$(jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
+		--arg tlsv_setup "$4" \
+                --arg rdr_setup "$4" \
+                --arg xcdr_setup "$4" \
+                --arg p2p_setup "0" \
 		--arg port "$5" \
 		--arg expr_num "$7" \
 		--arg inst "$INST_LEVEL" \
 		--arg mode "$EXPR_MODE" \
-		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}')
+		'{setup: $setup, tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup,  iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}')
 	echo "${JSON_STRING}" >/home/jethros/setup
 
 	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
@@ -345,10 +373,14 @@ elif [ "$2" == 'pvn-tlsv-rdr-p2p-coexist-app' ]; then
 	JSON_STRING=$(jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
+		--arg tlsv_setup "$4" \
+                --arg rdr_setup "$4" \
+                --arg xcdr_setup "0" \
+                --arg p2p_setup "$4" \
 		--arg inst "$INST_LEVEL" \
 		--arg p2p_type "$5" \
 		--arg mode "$EXPR_MODE" \
-		'{setup: $setup, iter: $iter, inst: $inst, p2p_type: $p2p_type, mode: $mode}')
+		'{setup: $setup, tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup, iter: $iter, inst: $inst, p2p_type: $p2p_type, mode: $mode}')
 	echo "${JSON_STRING}" >/home/jethros/setup
 
 	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
@@ -390,12 +422,16 @@ elif [ "$2" == 'pvn-rdr-xcdr-p2p-coexist-app' ]; then
 	JSON_STRING=$(jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
+		--arg tlsv_setup "0" \
+                --arg rdr_setup "$4" \
+                --arg xcdr_setup "$4" \
+                --arg p2p_setup "$4" \
 		--arg port "$5" \
 		--arg expr_num "$7" \
 		--arg p2p_type "$8" \
 		--arg inst "$INST_LEVEL" \
 		--arg mode "$EXPR_MODE" \
-		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, p2p_type: $p2p_type, mode: $mode}')
+		'{setup: $setup, tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, p2p_type: $p2p_type, mode: $mode}')
 	echo "$JSON_STRING" >/home/jethros/setup
 
 	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
@@ -444,12 +480,16 @@ elif [ "$2" == 'pvn-tlsv-p2p-xcdr-coexist-app' ]; then
 	JSON_STRING=$(jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
+		--arg tlsv_setup "$4" \
+                --arg rdr_setup "0" \
+                --arg xcdr_setup "$4" \
+                --arg p2p_setup "$4" \
 		--arg port "$5" \
 		--arg expr_num "$7" \
 		--arg p2p_type "$8" \
 		--arg inst "$INST_LEVEL" \
 		--arg mode "$EXPR_MODE" \
-		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, p2p_type: $p2p_type, mode: $mode}')
+		'{setup: $setup, tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup,  iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, p2p_type: $p2p_type, mode: $mode}')
 	echo "$JSON_STRING" >/home/jethros/setup
 
 	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
@@ -497,12 +537,16 @@ elif [ "$2" == 'pvn-tlsv-rdr-p2p-xcdr-coexist-app' ]; then
 	JSON_STRING=$(jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
+		--arg tlsv_setup "$4" \
+                --arg rdr_setup "$4" \
+                --arg xcdr_setup "$4" \
+                --arg p2p_setup "$4" \
 		--arg port "$5" \
 		--arg expr_num "$7" \
 		--arg p2p_type "$8" \
 		--arg inst "$INST_LEVEL" \
 		--arg mode "$EXPR_MODE" \
-		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, p2p_type: $p2p_type, mode: $mode}')
+		'{setup: $setup, tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, p2p_type: $p2p_type, mode: $mode}')
 	echo "$JSON_STRING" >/home/jethros/setup
 
 	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
