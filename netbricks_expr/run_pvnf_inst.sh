@@ -43,11 +43,15 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 	JSON_STRING=$( jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
+		--arg tlsv_setup "0" \
+        --arg rdr_setup "0" \
+        --arg xcdr_setup "$4" \
+        --arg p2p_setup "0" \
 		--arg port "$5" \
 		--arg expr_num "$7" \
 		--arg inst "$INST_LEVEL" \
 		--arg mode "$EXPR_MODE" \
-		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}' )
+		'{setup: $setup, tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup,  iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}' )
 	echo "$JSON_STRING" > /home/jethros/setup
 
 	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
@@ -80,10 +84,14 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 	JSON_STRING=$( jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
+		--arg tlsv_setup "0" \
+        --arg rdr_setup "0" \
+        --arg xcdr_setup "0" \
+        --arg p2p_setup "$4" \
 		--arg inst "$INST_LEVEL" \
 		--arg p2p_type "$5" \
 		--arg mode "$EXPR_MODE" \
-		'{setup: $setup, iter: $iter, inst: $inst, p2p_type: $p2p_type, mode: $mode}' )
+		'{setup: $setup, tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup,  iter: $iter, inst: $inst, p2p_type: $p2p_type, mode: $mode}' )
 	echo "$JSON_STRING" > /home/jethros/setup
 
 	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
@@ -109,15 +117,19 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 	P8=$!
 	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8
 
-else
+elif [ "$2" == "pvn-tlsv-transform-app" ] || [ "$2" == "pvn-tlsv-groupby-app" ]; then
 	# we don't need to check resource usage for tlsv so we just grep chrom here
 	# as well
 	JSON_STRING=$( jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
+		--arg tlsv_setup "$4" \
+        --arg rdr_setup "0" \
+        --arg xcdr_setup "0" \
+        --arg p2p_setup "0" \
 		--arg inst "$INST_LEVEL" \
 		--arg mode "$EXPR_MODE" \
-		'{setup: $setup, iter: $iter, inst: $inst, mode: $mode}' )
+		'{setup: $setup, tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup,  iter: $iter, inst: $inst, mode: $mode}' )
 	echo "$JSON_STRING" > /home/jethros/setup
 
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
@@ -136,4 +148,40 @@ else
 	P7=$!
 
 	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8
+
+elif [ "$2" == "pvn-rdr-transform-app" ] || [ "$2" == "pvn-rdr-groupby-app" ]; then
+	# we don't need to check resource usage for tlsv so we just grep chrom here
+	# as well
+	JSON_STRING=$( jq -n \
+		--arg iter "$3" \
+		--arg setup "$4" \
+		--arg tlsv_setup "0" \
+        --arg rdr_setup "$4" \
+        --arg xcdr_setup "0" \
+        --arg p2p_setup "0" \
+		--arg inst "$INST_LEVEL" \
+		--arg mode "$EXPR_MODE" \
+		'{setup: $setup, tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup,  iter: $iter, inst: $inst, mode: $mode}' )
+	echo "$JSON_STRING" > /home/jethros/setup
+
+	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
+	P1=$!
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
+	P2=$!
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
+	P3=$!
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG2" &
+	P4=$!
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
+	P5=$!
+	taskset -c 5 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+	P6=$!
+	taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
+	P7=$!
+
+	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8
+
+else
+	echo "$2"
+    echo "This should not be reached"
 fi
