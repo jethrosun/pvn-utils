@@ -235,8 +235,8 @@ p2p_controlled = ['app_p2p-controlled']
 non_p2p_co = ['co_tlsv_rdr', 'co_rdr_xcdr', 'co_tlsv_xcdr', 'co_tlsv_rdr_xcdr']
 p2p_co = [
     'co_rdr_p2p', 'co_tlsv_p2p', 'co_xcdr_p2p',
-    'co_tlsv_rdr_p2p', 'co_tlsv_p2p_xcdr', 'co_rdr_xcdr_p2p',
-    'co_tlsv_rdr_p2p_xcdr'
+    'co_tlsv_rdr_p2p', 'co_tlsv_xcdr_p2p', 'co_rdr_xcdr_p2p',
+    'co_tlsv_rdr_xcdr_p2p'
 ]
 set_list = ['1', '2', '3', '4', '5', '6']
 num_of_epoch = 3
