@@ -2,9 +2,9 @@
 
 import sys
 import time
-from nf_config import translate
 
 import nf_config as conf
+from nf_config import translate
 from screenutils import Screen, list_screens
 
 
@@ -13,7 +13,7 @@ def netbricks_sess_setup(trace, nf, nf_load):
     print("Entering netbricks_sess setup")
     load = ""
     for l in nf_load:
-        load += l
+        load += str(l)
     try:
         netbricks_sess = Screen("netbricks", True)
         print("netbricks session is spawned")
@@ -97,22 +97,22 @@ def run_pktgen(sess, trace, rate):
     print("Pktgen\nRUN pktgen")
 
 
-def run_netbricks_xcdr_p2p(sess, trace, nf, nf_load):
-    load = ""
-    for l in nf_load:
-        load += l
-        load += ":"
-    cmd_str = "sudo ./run_pvnf_task.sh " + trace + " " + nf + " " + load
-    print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
-    sess.send_commands(cmd_str)
+# def run_netbricks_xcdr_p2p(sess, trace, nf, nf_load):
+#     load = ""
+#     for l in nf_load:
+#         load += l
+#         load += ":"
+#     cmd_str = "sudo ./run_pvnf_task.sh " + trace + " " + nf + " " + load
+#     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
+#     sess.send_commands(cmd_str)
 
 
 def run_netbricks(sess, trace, nf, nf_load):
-    load = ""
+    load_str = ""
     for l in nf_load:
-        load += l
-        load += ":"
-    cmd_str = "sudo ./run_pvnf_task.sh " + trace + " " + nf + " " + load
+        load_str += " "
+        load_str += str(l)
+    cmd_str = "sudo ./run_pvnf_task.sh " + trace + " " + nf + load_str
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
@@ -179,7 +179,7 @@ def run_expr_p2p_controlled(raw_p2p_tasks):
         print("running controlled")
         nf_type, nf_load = translate(raw_task)
         nf = conf.pvn_nf[nf_type][0]
-        sending_rate = len(nf_load) * 10
+        sending_rate = sum(nf_load) * 10
 
         pktgen_sess = pktgen_sess_setup(conf.trace[raw_task], nf, sending_rate)
         run_pktgen(pktgen_sess, conf.trace[raw_task], sending_rate)

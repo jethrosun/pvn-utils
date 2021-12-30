@@ -167,10 +167,10 @@ def run_expr_p2p_controlled(expr):
         sending_rate = conf.fetch_sending_rate(nf)
         pktgen_sess = pktgen_sess_setup(conf.trace[expr], nf, sending_rate)
         run_pktgen(pktgen_sess, conf.trace[expr], sending_rate)
-            
+
         for setup in conf.set_list:
             # epoch from 0 to 9
-            for epoch in range(conf.num_of_epoch):
+            for epoch in range(conf.p2p_num_of_epoch):
                 netbricks_sess = netbricks_sess_setup(conf.trace[expr], nf, epoch, expr)
                 leecher1_sess = p2p_sess_setup('flynn', conf.trace[expr], nf, epoch)
                 leecher2_sess = p2p_sess_setup('tao', conf.trace[expr], nf, epoch)

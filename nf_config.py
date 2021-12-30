@@ -1,16 +1,15 @@
 def scheduler(raw_tasks):
     tasks = []
     for task in raw_tasks:
+        nf_load = {'tlsv': 0, 'rdr': 0, 'xcdr': 0, 'p2p': 0}
         name = 'co_'
-        load = []
         nfs = task.split('_')
         for nf in nfs:
             nf_name = nf[:-1]
-            nf_load = nf[-1]
+            nf_load[nf_name] = int(nf[-1])
             name += nf_name
             name += "_"
-            load.append(nf_load)
-        # print(name[:-1], load)
+        load = [nf_load[nf] for nf in ['tlsv', 'rdr', 'xcdr', 'p2p']]
         tasks.append({name[:-1]: load})
     return tasks
 
@@ -234,8 +233,7 @@ p2p_controlled = ['app_p2p-controlled']
 # coresident
 non_p2p_co = ['co_tlsv_rdr', 'co_rdr_xcdr', 'co_tlsv_xcdr', 'co_tlsv_rdr_xcdr']
 p2p_co = [
-    'co_rdr_p2p', 'co_tlsv_p2p', 'co_xcdr_p2p',
-    'co_tlsv_rdr_p2p', 'co_tlsv_xcdr_p2p', 'co_rdr_xcdr_p2p',
+    'co_rdr_p2p', 'co_tlsv_p2p', 'co_xcdr_p2p', 'co_tlsv_rdr_p2p', 'co_tlsv_xcdr_p2p', 'co_rdr_xcdr_p2p',
     'co_tlsv_rdr_xcdr_p2p'
 ]
 set_list = ['1', '2', '3', '4', '5', '6']
@@ -248,12 +246,15 @@ p2p_num_of_epoch = 5
 # num_of_epoch = 1
 # p2p_num_of_epoch = 1
 
-# task running
-#
+# ----------------------------------------
+#           task running
+# ----------------------------------------
 raw_tasks = [
     'tlsv1_rdr2', 'rdr2_xcdr1', 'rdr1_xcdr2', 'tlsv1_rdr1', 'tlsv1_xcdr1', 'tlsv2_xcdr1', 'tlsv1_rdr1_xcdr2',
     'tlsv1_rdr2_xcdr3'
 ]
+# tasks = scheduler(raw_tasks)
+# print(tasks)
 
 raw_p2p_tasks = [
     'rdr1_p2p1', 'tlsv1_p2p1', 'xcdr1_p2p1', 'rdr2_xcdr1_p2p1', 'tlsv1_rdr1_p2p1', 'tlsv1_xcdr1_p2p1',

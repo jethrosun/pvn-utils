@@ -12,7 +12,7 @@ def netbricks_sess_setup(trace, nf, nf_load):
     print("Entering netbricks_sess setup")
     load = ""
     for l in nf_load:
-        load += l
+        load += str(l)
     try:
         netbricks_sess = Screen("netbricks", True)
         print("netbricks session is spawned")
@@ -65,23 +65,23 @@ def run_pktgen(sess, trace, setup):
 
 
 def run_netbricks(sess, trace, nf, nf_load):
-    load = ""
+    load_str = ""
     for l in nf_load:
-        load += l
-        load += ":"
-    cmd_str = "sudo ./run_pvnf_task.sh " + trace + " " + nf + " " + load
+        load_str += " "
+        load_str += str(l)
+    cmd_str = "sudo ./run_pvnf_task.sh " + trace + " " + nf + load_str
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
 
-def run_netbricks_xcdr(sess, trace, nf, nf_load):
-    load = ""
-    for l in nf_load:
-        load += l
-        load += ":"
-    cmd_str = "sudo ./run_pvnf_coresident.sh " + trace + " " + nf + " " + load
-    print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
-    sess.send_commands(cmd_str)
+# def run_netbricks_xcdr(sess, trace, nf, nf_load):
+#     load = ""
+#     for l in nf_load:
+#         load += l
+#         load += ":"
+#     cmd_str = "sudo ./run_pvnf_coresident.sh " + trace + " " + nf + " " + load
+#     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
+#     sess.send_commands(cmd_str)
 
 
 def sess_destroy(sess):
@@ -118,7 +118,7 @@ def main(raw_tasks):
         nf_type, nf_load = conf.translate(raw_task)
         nf = conf.pvn_nf[nf_type][0]
 
-        sending_rate = len(nf_load) * 10
+        sending_rate = sum(nf_load)
         pktgen_sess = pktgen_sess_setup(conf.trace[raw_task], nf, sending_rate)
         run_pktgen(pktgen_sess, conf.trace[raw_task], sending_rate)
 
@@ -132,10 +132,10 @@ def main(raw_tasks):
         time.sleep(5)
 
         # Actual RUN
-        if nf in conf.xcdr_clean_list:
-            run_netbricks_xcdr(netbricks_sess, conf.trace[raw_task], nf, nf_load)
-        else:
-            run_netbricks(netbricks_sess, conf.trace[raw_task], nf, nf_load)
+        # if nf in conf.xcdr_clean_list:
+        #     run_netbricks_xcdr(netbricks_sess, conf.trace[raw_task], nf, nf_load)
+        # else:
+        run_netbricks(netbricks_sess, conf.trace[raw_task], nf, nf_load)
 
         time.sleep(conf.expr_wait_time)
 
