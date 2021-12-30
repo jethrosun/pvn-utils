@@ -14,12 +14,15 @@
 #     return tasks
 
 
+#  we have to do some hacking so our other experiemnt config can remain the same
 def translate(raw_task):
     name = 'co_'
-    nf_load = {'tlsv': 6, 'rdr': 6, 'xcdr': 6, 'p2p': 6}
+    # 0 means no load
+    nf_load = {'tlsv': 0, 'rdr': 0, 'xcdr': 0, 'p2p': 0}
     nfs = raw_task.split('_')
     for nf in nfs:
         nf_name = nf[:-1]
+        # load+6 matches our setup
         nf_load[nf_name] = int(nf[-1]) + 6
         name += nf_name
         name += "_"
