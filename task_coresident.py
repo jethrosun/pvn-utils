@@ -118,7 +118,7 @@ def main(raw_tasks):
         nf_type, nf_load = conf.translate(raw_task)
         nf = conf.pvn_nf[nf_type][0]
 
-        sending_rate = sum(nf_load)
+        sending_rate = sum(nf_load) * 10
         pktgen_sess = pktgen_sess_setup(conf.trace[raw_task], nf, sending_rate)
         run_pktgen(pktgen_sess, conf.trace[raw_task], sending_rate)
 
