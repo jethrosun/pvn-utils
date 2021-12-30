@@ -14,18 +14,20 @@ def scheduler(raw_tasks):
     return tasks
 
 
-def translate(raw_task):
-    name = 'co_'
-    load = []
-    nfs = raw_task.split('_')
-    for nf in nfs:
-        nf_name = nf[:-1]
-        nf_load = nf[-1]
-        name += nf_name
-        name += "_"
-        load.append(nf_load)
-
-    return name[:-1], load
+def translate(raw_tasks):
+    tasks = []
+    for task in raw_tasks:
+        nf_load = {'tlsv': 0, 'rdr': 0, 'xcdr': 0, 'p2p': 0}
+        name = 'co_'
+        nfs = task.split('_')
+        for nf in nfs:
+            nf_name = nf[:-1]
+            nf_load[nf_name] = int(nf[-1])
+            name += nf_name
+            name += "_"
+        load = [nf_load[nf] for nf in ['tlsv', 'rdr', 'xcdr', 'p2p']]
+        tasks.append({name[:-1]: load})
+    return tasks
 
 
 def fetch_tlsv_trace(setup):
