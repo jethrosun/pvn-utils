@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-import numpy as np
 import json
+
+import numpy as np
 
 
 def gen_rand_number(size, max_val):
@@ -13,7 +14,7 @@ def gen_rand_number(size, max_val):
 json_data = {}
 
 # create set of random number for rdr
-rdr_setup_list = [5, 10, 20, 40, 80, 100]
+rdr_setup_list = [5, 10, 20, 40, 80, 100, 30, 50]
 
 json_data['rdr'] = {}
 print("Generate random number for rdr setups")

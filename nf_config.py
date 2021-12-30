@@ -16,11 +16,11 @@
 
 def translate(raw_task):
     name = 'co_'
-    nf_load = {'tlsv': 0, 'rdr': 0, 'xcdr': 0, 'p2p': 0}
+    nf_load = {'tlsv': 6, 'rdr': 6, 'xcdr': 6, 'p2p': 6}
     nfs = raw_task.split('_')
     for nf in nfs:
         nf_name = nf[:-1]
-        nf_load[nf_name] = int(nf[-1])
+        nf_load[nf_name] = int(nf[-1]) + 6
         name += nf_name
         name += "_"
     load = [nf_load[nf] for nf in ['tlsv', 'rdr', 'xcdr', 'p2p']]
