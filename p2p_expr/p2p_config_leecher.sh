@@ -17,17 +17,19 @@ if [ ! -e /home/jethros/bt_data/config/auth ]; then
 	deluge-console -c /home/jethros/bt_data/config "config -s compact_allocation False"
 
 	deluge-console -c /home/jethros/bt_data/config "config -s max_connections_global 200"
-	deluge-console -c /home/jethros/bt_data/config "config -s max_upload_slots_global 4"
-	deluge-console -c /home/jethros/bt_data/config "config -s max_download_speed 80754"
-	deluge-console -c /home/jethros/bt_data/config "config -s max_upload_speed 68003"
+	deluge-console -c /home/jethros/bt_data/config "config -s max_upload_slots_global 20"
+	deluge-console -c /home/jethros/bt_data/config "config -s max_download_speed -1"
+	deluge-console -c /home/jethros/bt_data/config "config -s max_upload_speed -1"
 	deluge-console -c /home/jethros/bt_data/config "config -s max_half_open_connections 50"
+
 	deluge-console -c /home/jethros/bt_data/config "config -s max_connections_per_torrent 120"
-	deluge-console -c /home/jethros/bt_data/config "config -s max_upload_slots_per_torrent 8"
+	deluge-console -c /home/jethros/bt_data/config "config -s max_upload_slots_per_torrent 10"
 	deluge-console -c /home/jethros/bt_data/config "config -s max_download_speed_per_torrent -1"
 	deluge-console -c /home/jethros/bt_data/config "config -s max_upload_speed_per_torrent -1"
-	deluge-console -c /home/jethros/bt_data/config "config -s max_active_limit 15"
-	deluge-console -c /home/jethros/bt_data/config "config -s max_active_downloading 10"
-	deluge-console -c /home/jethros/bt_data/config "config -s max_active_seeding 15"
+
+	deluge-console -c /home/jethros/bt_data/config "config -s max_active_limit -1"
+	deluge-console -c /home/jethros/bt_data/config "config -s max_active_downloading -1"
+	deluge-console -c /home/jethros/bt_data/config "config -s max_active_seeding -1"
 
 	# deluge-console -c /home/jethros/bt_data/config 'config -s max_download_speed_per_torrent 10000'
 	# deluge-console -c /home/jethros/bt_data/config 'config -s max_upload_speed_per_torrent 10000'
