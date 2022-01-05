@@ -120,10 +120,8 @@ def rdr_cleanup(sess):
 
 def main(expr_list):
     """"""
-    # app rdr, app p2p ...
     for expr in expr_list:
         print("Running experiments that for {} application NF".format(expr))
-        # app_rdr_g, app_rdr_t; app_p2p_g, app_p2p_t
         for nf in conf.pvn_nf[expr]:
             # we are running the regular NFs
             #
