@@ -18,7 +18,7 @@ if [ ! -e /home/jethros/bt_data/config/auth ]; then
 	deluge-console -c /home/jethros/bt_data/config "config -s rate_limit_ip_overhead True"
 
 	deluge-console -c /home/jethros/bt_data/config "config -s max_connections_global 200"
-	deluge-console -c /home/jethros/bt_data/config "config -s max_upload_slots_global 20"
+	deluge-console -c /home/jethros/bt_data/config "config -s max_upload_slots_global 4"
 	deluge-console -c /home/jethros/bt_data/config "config -s max_download_speed -1"
 	deluge-console -c /home/jethros/bt_data/config "config -s max_upload_speed -1"
 	deluge-console -c /home/jethros/bt_data/config "config -s max_half_open_connections 50"
