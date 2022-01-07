@@ -30,19 +30,19 @@ if [ ! -e /data/bt/config/auth ]; then
 	sudo -u jethros deluge-console -c /data/bt/config "config -s compact_allocation False"
 
 	sudo -u jethros deluge-console -c /data/bt/config "config -s max_connections_global 200"
-	sudo -u jethros deluge-console -c /data/bt/config "config -s max_upload_slots_global 4"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s max_upload_slots_global 0"
 	sudo -u jethros deluge-console -c /data/bt/config "config -s max_download_speed -1"
-	sudo -u jethros deluge-console -c /data/bt/config "config -s max_upload_speed -1"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s max_upload_speed 0"
 	sudo -u jethros deluge-console -c /data/bt/config "config -s max_half_open_connections 50"
 
 	sudo -u jethros deluge-console -c /data/bt/config "config -s max_connections_per_torrent 120"
-	sudo -u jethros deluge-console -c /data/bt/config "config -s max_upload_slots_per_torrent 10"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s max_upload_slots_per_torrent 0"
 	sudo -u jethros deluge-console -c /data/bt/config "config -s max_download_speed_per_torrent -1"
-	sudo -u jethros deluge-console -c /data/bt/config "config -s max_upload_speed_per_torrent -1"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s max_upload_speed_per_torrent 0"
 
 	sudo -u jethros deluge-console -c /data/bt/config "config -s max_active_limit -1"
 	sudo -u jethros deluge-console -c /data/bt/config "config -s max_active_downloading -1"
-	sudo -u jethros deluge-console -c /data/bt/config "config -s max_active_seeding -1"
+	sudo -u jethros deluge-console -c /data/bt/config "config -s max_active_seeding 0"
 
 	# sudo -u jethros deluge-console -c /data/bt/config 'config -s max_active_limit 10'
 	# sudo -u jethros deluge-console -c /data/bt/config 'config -s max_active_downloading 10'
