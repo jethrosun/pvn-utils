@@ -38,7 +38,8 @@ for setup in p2p_setup_list:
         json_data['p2p'][str(setup)][x] = gen_rand_number(setup, 200)
 
 # create set of random number for p2p
-p2p_controlled_setup_list = [1, 2, 4, 6, 8, 10]
+# p2p_controlled_setup_list = [1, 2, 4, 6, 8, 10]
+p2p_controlled_setup_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 json_data['p2p_controlled'] = {}
 print("Generate random number for p2p controlled setups")
