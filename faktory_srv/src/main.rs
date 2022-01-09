@@ -83,7 +83,7 @@ fn main() {
                     let mut c = ConsumerBuilder::default();
 
                     c.register(
-                        "app-xcdr_".to_owned() + &expr.to_string(),
+                        "app-xcdr_".to_owned() + &0.to_string(),
                         move |job| -> io::Result<()> {
                             let job_args = job.args();
 
