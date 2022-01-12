@@ -34,7 +34,8 @@ TMP_NB_CONFIG=$HOME/config.toml
 
 sed "/duration = 200/i log_path = '$LOG'" "$NB_CONFIG" > "$TMP_NB_CONFIG"
 
-INST_LEVEL=off
+INST_LEVEL=on
+# INST_LEVEL=off
 EXPR_MODE=short
 
 mkdir -p "$LOG_DIR"
