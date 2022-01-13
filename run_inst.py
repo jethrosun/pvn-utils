@@ -170,6 +170,5 @@ def main(expr_list):
                 time.sleep(10)
 
 
-# main(conf.rdr_xcdr_tlsv)
-main(conf.tlsv)
+main(conf.rdr_xcdr_tlsv)
 print("All experiment finished {}".format(conf.rdr_xcdr_tlsv))
