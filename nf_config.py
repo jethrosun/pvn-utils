@@ -231,6 +231,7 @@ batch = 1
 # app
 rdr_xcdr_tlsv = ['app_rdr', 'app_xcdr', 'app_tlsv']
 tlsv = ['app_tlsv']
+xcdr = ['app_xcdr']
 p2p_controlled = ['app_p2p-controlled']
 
 # coresident
@@ -240,7 +241,7 @@ p2p_co = [
     'co_tlsv_rdr_xcdr_p2p'
 ]
 set_list = ['1', '2', '3', '4', '5', '6']
-# set_list = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']
+set_list = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']
 num_of_epoch = 3
 p2p_num_of_epoch = 3
 
