@@ -61,11 +61,15 @@ if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-group
 	JSON_STRING=$( jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
+		--arg tlsv_setup "0" \
+        --arg rdr_setup "0" \
+        --arg xcdr_setup "$4" \
+        --arg p2p_setup "0" \
 		--arg port "$8" \
 		--arg expr_num "$9" \
 		--arg inst "$INST_LEVEL" \
 		--arg mode "$EXPR_MODE" \
-		'{setup: $setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}' )
+		'{setup: $setup, tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}' )
 	echo "$JSON_STRING" > /home/jethros/setup
 
 	while sleep 5; do
@@ -141,10 +145,14 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 	JSON_STRING=$( jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
+		--arg tlsv_setup "0" \
+        --arg rdr_setup "0" \
+        --arg xcdr_setup "0" \
+        --arg p2p_setup "$4" \
 		--arg inst "$INST_LEVEL" \
 		--arg p2p_type "$8" \
 		--arg mode "$EXPR_MODE" \
-		'{setup: $setup, iter: $iter, inst: $inst, p2p_type: $p2p_type, mode: $mode}' )
+		'{setup: $setup,tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup, iter: $iter, inst: $inst, p2p_type: $p2p_type, mode: $mode}' )
 	echo "$JSON_STRING" > /home/jethros/setup
 
 	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
@@ -215,10 +223,14 @@ elif [ "$2" == "pvn-rdr-transform-app" ] || [ "$2" == "pvn-rdr-groupby-app" ]; t
 	JSON_STRING=$( jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
+		--arg tlsv_setup "0" \
+        --arg rdr_setup "$4" \
+        --arg xcdr_setup "0" \
+        --arg p2p_setup "0" \
 		--arg disk "$8" \
 		--arg inst "$INST_LEVEL" \
 		--arg mode "$EXPR_MODE" \
-		'{setup: $setup, iter: $iter, disk: $disk, inst: $inst, mode: $mode}' )
+		'{setup: $setup,tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup, iter: $iter, disk: $disk, inst: $inst, mode: $mode}' )
 	echo "$JSON_STRING" > /home/jethros/setup
 
 	# config contention
@@ -291,9 +303,13 @@ else
 	JSON_STRING=$( jq -n \
 		--arg iter "$3" \
 		--arg setup "$4" \
+		--arg tlsv_setup "$4" \
+        --arg rdr_setup "0" \
+        --arg xcdr_setup "0" \
+        --arg p2p_setup "0" \
 		--arg inst "$INST_LEVEL" \
 		--arg mode "$EXPR_MODE" \
-		'{setup: $setup, iter: $iter, inst: $inst, mode: $mode}' )
+		'{setup: $setup,tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup, iter: $iter, inst: $inst, mode: $mode}' )
 	echo "$JSON_STRING" > /home/jethros/setup
 
 	while sleep 5; do
