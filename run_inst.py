@@ -171,5 +171,5 @@ def main(expr_list):
 
 
 # main(conf.rdr_xcdr_tlsv)
-main(conf.xcdr)
+main(conf.rdr)
 print("All experiment finished {}".format(conf.rdr_xcdr_tlsv))
