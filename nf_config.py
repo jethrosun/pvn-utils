@@ -221,8 +221,8 @@ xcdr_clean_list = [
 # Experiment defined values:
 #
 ########################################################################
-expr_wait_time = 300  # RDR latency
-# expr_wait_time = 250  # RDR?
+# expr_wait_time = 300  # only for RDR latency
+expr_wait_time = 250
 # expr is 3 min/180 sec
 # expr_wait_time = 220
 xcdr_port_base = 7418
