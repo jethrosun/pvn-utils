@@ -255,12 +255,9 @@ p2p_num_of_epoch = 3
 # ----------------------------------------
 #           task running
 # ----------------------------------------
-raw_tasks = ['tlsv1_xcdr1', 'tlsv2_rdr1_xcdr1', 'rdr1_xcdr2']
-# tasks = scheduler(raw_tasks)
-# print(tasks)
-
+raw_tasks = ['tlsv1_xcdr1', 'tlsv2_rdr2_xcdr3', 'tlsv2_rdr1_xcdr1', 'rdr1_xcdr2']
 raw_p2p_tasks = [
-    'tlsv1_p2p1', 'tlsv1_xcdr1_p2p1', 'rdr2_xcdr1_p2p2', 'rdr1_p2p3', 'tlsv1_rdr1_xcdr1_p2p1', 'p2p1',
+    'tlsv1_p2p1', 'tlsv1_xcdr1_p2p1', 'rdr2_xcdr1_p2p2', 'rdr1_p2p3', 'tlsv1_rdr1_xcdr1_p2p1', 'p2p1', 'p2p2',
     'rdr1_xcdr1_p2p3', 'rdr1_xcdr1_p2p1', 'tlsv1_rdr1_xcdr1_p2p2', 'tlsv1_rdr2_p2p1', 'xcdr2_p2p1', 'tlsv1_p2p2',
-    'tlsv1_rdr1_p2p2', 'tlsv1_xcdr2_p2p1', 'tlsv1_rdr1_p2p1', 'rdr1_p2p2', 'xcdr1_p2p2'
+    'tlsv1_rdr1_p2p2', 'tlsv1_xcdr2_p2p1', 'tlsv1_rdr1_p2p1', 'rdr1_p2p2', 'xcdr1_p2p2', 'rdr2_p2p1', 'tlsv1_xcdr1_p2p1'
 ]
