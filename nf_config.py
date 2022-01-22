@@ -255,10 +255,52 @@ p2p_num_of_epoch = 5
 
 # ----------------------------------------
 #           task running
+#
 # ----------------------------------------
-raw_tasks = ['tlsv1_xcdr1', 'tlsv2_rdr2_xcdr3', 'tlsv2_rdr1_xcdr1', 'rdr1_xcdr2']
+# random:
+#  {'iter0':
+#       {'node0': {'tlsv': 2, 'p2p': 1}, 'node1': {'rdr': 1, 'p2p': 1}, 'node2': {'rdr': 1, 'xcdr': 3, 'p2p': 1}},
+#   'iter1':
+#       {'node0': {'tlsv': 2, 'xcdr': 1, 'rdr': 1, 'p2p': 1}, 'node1': {'p2p': 1}, 'node2': {'xcdr': 2, 'rdr': 1, 'p2p': 1}},
+#   'iter2':
+#       {'node0': {'xcdr': 1, 'p2p': 2, 'rdr': 1, 'tlsv': 1}, 'node1': {'xcdr': 1}, 'node2': {'rdr': 1, 'p2p': 1, 'xcdr': 1, 'tlsv': 1}},
+#   'iter3':
+#       {'node0': {'p2p': 1, 'xcdr': 1}, 'node1': {'p2p': 1, 'rdr': 1, 'tlsv': 2, 'xcdr': 1}, 'node2': {'p2p': 1, 'xcdr': 1, 'rdr': 1}},
+#   'iter4':
+#       {'node0': {'p2p': 1, 'tlsv': 1, 'rdr': 1}, 'node1': {'tlsv': 1, 'xcdr': 2, 'p2p': 2}, 'node2': {'rdr': 1, 'xcdr': 1}}}
+# least load:
+#  {'iter0':
+#       {'node0': {'tlsv': 1, 'xcdr': 1, 'rdr': 1, 'p2p': 1}, 'node1': {'rdr': 1, 'xcdr': 1, 'p2p': 1}, 'node2': {'xcdr': 1, 'tlsv': 1, 'p2p': 1}},
+#   'iter1':
+#       {'node0': {'p2p': 2, 'xcdr': 1, 'tlsv': 1}, 'node1': {'xcdr': 1, 'rdr': 1, 'p2p': 1}, 'node2': {'tlsv': 1, 'xcdr': 1, 'rdr': 1}},
+#   'iter2':
+#       {'node0': {'rdr': 1, 'xcdr': 1, 'p2p': 1, 'tlsv': 1}, 'node1': {'p2p': 2, 'xcdr': 1}, 'node2': {'xcdr': 1, 'rdr': 1, 'tlsv': 1}},
+#   'iter3':
+#       {'node0': {'p2p': 1, 'xcdr': 2, 'tlsv': 1}, 'node1': {'p2p': 2, 'xcdr': 1}, 'node2': {'rdr': 2, 'tlsv': 1}},
+#   'iter4':
+#       {'node0': {'tlsv': 1, 'p2p': 1, 'rdr': 1, 'xcdr': 1}, 'node1': {'p2p': 2, 'xcdr': 1}, 'node2': {'xcdr': 1, 'tlsv': 1, 'rdr': 1}}}
+#
+# coresident:
+#   1. ['tlsv1_xcdr1_p2p1', 'tlsv1_xcdr2_p2p1', 'rdr2_p2p1']
+#   2. ['tlsv1_xcdr1_p2p1', 'tlsv1_xcdr2_p2p1', 'rdr2_p2p1']
+#   3. ['tlsv1_xcdr2_p2p1', 'rdr2_p2p1', 'tlsv1_xcdr1_p2p1']
+#
+# contention:
+#   1. ['tlsv2_xcdr3', 'p2p3', 'rdr2']
+#   2. ['tlsv2_xcdr3', 'p2p3', 'rdr2']
+#   3. ['tlsv2_xcdr3', 'rdr2', 'p2p3']
+
+raw_tasks = ['xcdr1', 'rdr1_xcdr1', 'tlsv1_rdr1_xcdr1', 'tlsv1_rdr2', 'tlsv2_xcdr3', 'rdr2']
+# raw_p2p_tasks = [
+#     'tlsv2_p2p1', 'rdr1_p2p1', 'rdr1_xcdr3_p2p1', 'tlsv2_rdr1_xcdr1_p2p1', 'p2p1', 'rdr1_xcdr2_p2p1',
+#     'tlsv1_rdr1_xcdr1_p2p2', 'tlsv1_rdr1_xcdr1_p2p1', 'xcdr1_p2p1', 'rdr1_xcdr1_p2p1', 'tlsv1_rdr1_p2p1',
+#     'tlsv1_xcdr2_p2p2', 'tlsv1_xcdr1_p2p1', 'tlsv1_xcdr1_p2p2', 'xcdr1_p2p2', 'tlsv1_xcdr2_p2p1', 'p2p3',
+#     'tlsv1_xcdr1_p2p1', 'tlsv1_xcdr2_p2p1', 'rdr2_p2p1'
+# ]
+# dedup...
+
 raw_p2p_tasks = [
-    'tlsv1_p2p1', 'tlsv1_xcdr1_p2p1', 'rdr2_xcdr1_p2p2', 'rdr1_p2p3', 'tlsv1_rdr1_xcdr1_p2p1', 'p2p1', 'p2p2',
-    'rdr1_xcdr1_p2p3', 'rdr1_xcdr1_p2p1', 'tlsv1_rdr1_xcdr1_p2p2', 'tlsv1_rdr2_p2p1', 'xcdr2_p2p1', 'tlsv1_p2p2',
-    'tlsv1_rdr1_p2p2', 'tlsv1_xcdr2_p2p1', 'tlsv1_rdr1_p2p1', 'rdr1_p2p2', 'xcdr1_p2p2', 'rdr2_p2p1', 'tlsv1_xcdr1_p2p1'
+    'rdr1_xcdr3_p2p1', 'tlsv1_xcdr1_p2p2', 'tlsv1_xcdr1_p2p1', 'tlsv2_p2p1', 'xcdr1_p2p1', 'tlsv1_rdr1_xcdr1_p2p2',
+    'p2p1', 'rdr1_xcdr1_p2p1', 'xcdr1_p2p2', 'rdr2_p2p1', 'tlsv1_rdr1_p2p1', 'rdr1_xcdr2_p2p1', 'tlsv1_xcdr2_p2p1',
+    'tlsv1_rdr1_xcdr1_p2p1', 'p2p3', 'tlsv1_xcdr2_p2p2', 'tlsv2_rdr1_xcdr1_p2p1', 'rdr1_p2p1'
 ]
