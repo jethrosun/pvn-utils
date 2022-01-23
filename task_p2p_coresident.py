@@ -204,10 +204,7 @@ def run_expr_p2p_controlled(raw_p2p_tasks):
         run_p2p_node('leecher', leecher1_sess, nf_load[-1])
         run_p2p_node('leecher', leecher2_sess, nf_load[-1])
         run_p2p_node('leecher', leecher3_sess, nf_load[-1])
-        if nf in conf.xcdr_clean_list:
-            run_netbricks_xcdr_p2p(netbricks_sess, conf.trace[raw_task], nf, nf_load)
-        else:
-            run_netbricks(netbricks_sess, conf.trace[raw_task], nf, nf_load)
+        run_netbricks(netbricks_sess, conf.trace[raw_task], nf, nf_load)
 
         time.sleep(conf.expr_wait_time)
 
