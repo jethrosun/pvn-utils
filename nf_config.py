@@ -114,9 +114,7 @@ trace = {
     # 'tlsv2': 'tlsv2.pcap',
     # 'xcdr2': 'xcdr2.pcap',
     # 'rdr1': 'rdr1.pcap',
-    # 'rdr2': 'rdr2.pcap',
     # 'tlsv1': 'tlsv1.pcap',
-    # 'xcdr1': 'xcdr1.pcap',
     # 'xcdr3': 'xcdr3.pcap',
     'tlsv1_rdr2': 'tlsv1_rdr2.pcap',
     'rdr2_xcdr1': 'rdr2_xcdr1.pcap',
@@ -126,9 +124,15 @@ trace = {
     'tlsv2_xcdr1': 'tlsv2_xcdr1.pcap',
     'tlsv1_rdr1_xcdr2': 'tlsv1_rdr1_xcdr2.pcap',
     'tlsv1_rdr2_xcdr3': 'tlsv1_rdr2_xcdr3.pcap',
+    # final list
+    'xcdr1': 'xcdr1.pcap',
+    'rdr1_xcdr1': 'rdr1_xcdr1.pcap',
+    'tlsv1_rdr1_xcdr1': 'tlsv1_rdr1_xcdr1.pcap',
+    'tlsv1_rdr2': 'tlsv1_rdr2.pcap',
+    'tlsv2_xcdr3': 'tlsv2_xcdr3.pcap',
+    'rdr2': 'rdr2.pcap',
 
     # p2p
-    # 'p2p1': 'p2p1.pcap',
     # 'p2p2': 'p2p2.pcap',
     'rdr1_p2p1': 'rdr1_p2p1.pcap',
     'tlsv1_p2p1': 'tlsv1_p2p1.pcap',
@@ -137,6 +141,25 @@ trace = {
     'tlsv1_rdr1_p2p1': 'tlsv1_rdr1_p2p1.pcap',
     'tlsv1_xcdr1_p2p1': 'tlsv1_xcdr1_p2p1.pcap',
     'tlsv1_rdr1_xcdr3_p2p1': 'tlsv1_rdr1_xcdr3_p2p1.pcap',
+    # final list
+    'p2p1': 'p2p1.pcap',
+    'p2p3': 'p2p3.pcap',
+    'rdr1_xcdr3_p2p1': 'rdr1_xcdr3_p2p1.pcap',
+    'tlsv1_xcdr1_p2p2': 'tlsv1_xcdr1_p2p2.pcap',
+    'tlsv1_xcdr1_p2p1': 'tlsv1_xcdr1_p2p1.pcap',
+    'tlsv2_p2p1': 'tlsv2_p2p1.pcap',
+    'xcdr1_p2p1': 'xcdr1_p2p1.pcap',
+    'tlsv1_rdr1_xcdr1_p2p2': 'tlsv1_rdr1_xcdr1_p2p2.pcap',
+    'rdr1_xcdr1_p2p1': 'rdr1_xcdr1_p2p1.pcap',
+    'xcdr1_p2p2': 'xcdr1_p2p2.pcap',
+    'rdr2_p2p1': 'rdr2_p2p1.pcap',
+    'tlsv1_rdr1_p2p1': 'tlsv1_rdr1_p2p1.pcap',
+    'rdr1_xcdr2_p2p1': 'rdr1_xcdr2_p2p1.pcap',
+    'tlsv1_xcdr2_p2p1': 'tlsv1_xcdr2_p2p1.pcap',
+    'tlsv1_rdr1_xcdr1_p2p1': 'tlsv1_rdr1_xcdr1_p2p1.pcap',
+    'tlsv1_xcdr2_p2p2': 'tlsv1_xcdr2_p2p2.pcap',
+    'tlsv2_rdr1_xcdr1_p2p1': 'tlsv2_rdr1_xcdr1_p2p1.pcap',
+    'rdr1_p2p1': 'rdr1_p2p1.pcap'
 }
 
 # # nf app
