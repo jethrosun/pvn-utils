@@ -85,6 +85,11 @@ pvn_nf = {
     'co_tlsv_rdr_xcdr': ['pvn-tlsv-rdr-xcdr-coexist-app'],
     'co_rdr_xcdr_p2p': ['pvn-rdr-xcdr-p2p-coexist-app'],
     'co_tlsv_rdr_xcdr_p2p': ['pvn-tlsv-rdr-p2p-xcdr-coexist-app'],
+    # tasks
+    'co_rdr': ['pvn-rdr-transform-app'],
+    'co_xcdr': ['pvn-transcoder-transform-app'],
+    'co_tlsv': ['pvn-tlsv-transform-app'],
+    'co_p2p': ['pvn-p2p-transform-app']
 }
 
 trace = {
