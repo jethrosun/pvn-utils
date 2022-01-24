@@ -269,10 +269,9 @@ p2p_co = [
     'co_rdr_p2p', 'co_tlsv_p2p', 'co_xcdr_p2p', 'co_tlsv_rdr_p2p', 'co_tlsv_xcdr_p2p', 'co_rdr_xcdr_p2p',
     'co_tlsv_rdr_xcdr_p2p'
 ]
-non_p2p_co = ['co_rdr_xcdr', 'co_tlsv_rdr_xcdr']
 set_list = ['1', '2', '3', '4', '5', '6']
 # set_list = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']
-num_of_epoch = 3
+num_of_epoch = 5
 p2p_num_of_epoch = 5
 
 # only for testing
