@@ -4,20 +4,20 @@ set -e
 SLEEP_INTERVAL=3
 LOG_DIR=$HOME/netbricks_logs/$2/$1
 
-LOG=$LOG_DIR/$3_$4.log
-TCP_LOG=$LOG_DIR/$3_$4_tcptop.log
-BIO_LOG=$LOG_DIR/$3_$4_biotop.log
-P2P_PROGRESS_LOG=$LOG_DIR/$3_$4_p2p_progress.log
-FAKTORY_LOG=$LOG_DIR/$3_$4_faktory.log
+LOG=$LOG_DIR/$3_$4_$5_$6.log
+TCP_LOG=$LOG_DIR/$3_$4_$5_$6_tcptop.log
+BIO_LOG=$LOG_DIR/$3_$4_$5_$6_biotop.log
+P2P_PROGRESS_LOG=$LOG_DIR/$3_$4_$5_$6_p2p_progress.log
+FAKTORY_LOG=$LOG_DIR/$3_$4_$5_$6_faktory.log
 
-CPULOG1=$LOG_DIR/$3_$4_cpu1.log
-CPULOG2=$LOG_DIR/$3_$4_cpu2.log
-CPULOG3=$LOG_DIR/$3_$4_cpu3.log
-CPULOG4=$LOG_DIR/$3_$4_cpu4.log
-MEMLOG1=$LOG_DIR/$3_$4_mem1.log
-MEMLOG2=$LOG_DIR/$3_$4_mem2.log
-MEMLOG3=$LOG_DIR/$3_$4_mem3.log
-MEMLOG4=$LOG_DIR/$3_$4_mem4.log
+CPULOG1=$LOG_DIR/$3_$4_$5_$6_cpu1.log
+CPULOG2=$LOG_DIR/$3_$4_$5_$6_cpu2.log
+CPULOG3=$LOG_DIR/$3_$4_$5_$6_cpu3.log
+CPULOG4=$LOG_DIR/$3_$4_$5_$6_cpu4.log
+MEMLOG1=$LOG_DIR/$3_$4_$5_$6_mem1.log
+MEMLOG2=$LOG_DIR/$3_$4_$5_$6_mem2.log
+MEMLOG3=$LOG_DIR/$3_$4_$5_$6_mem3.log
+MEMLOG4=$LOG_DIR/$3_$4_$5_$6_mem4.log
 
 NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
@@ -446,6 +446,46 @@ elif [ "$2" == 'pvn-tlsv-rdr-xcdr-p2p-coexist-app' ]; then
 	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13
 
 else
-        echo "$2"
-        echo "This should not be reached"
+	sudo rm -rf "$HOME/Downloads"
+	sudo rm -rf /data/bt/config
+	mkdir -p "$HOME/Downloads" /data/bt/config
+
+	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
+	docker ps
+	sleep 15
+
+	/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "0" "$FAKTORY_LOG" &
+	P1=$!
+
+	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
+	sleep 5
+	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
+	sleep 15
+
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > "$P2P_PROGRESS_LOG" &
+	P2=$!
+	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
+	P3=$!
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
+	P4=$!
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
+	P5=$!
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh faktory; done > "$CPULOG2" &
+	P6=$!
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh faktory; done > "$MEMLOG2" &
+	P7=$!
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh deluge; done > "$CPULOG3" &
+	P8=$!
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh deluge; done > "$MEMLOG3" &
+	P9=$!
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG4" &
+	P10=$!
+	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG4" &
+	P11=$!
+	taskset -c 5 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+	P12=$!
+	taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
+	P13=$!
+	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13
+
 fi
