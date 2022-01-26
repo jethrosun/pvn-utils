@@ -104,7 +104,8 @@ for i in ['1', '2', '3']:
     setup.append([zero, zero, i])
 
 ## combination set
-for i in ['1', '2', '3']:
+# for i in ['1', '2', '3']:
+for i in ['3']:
     for j in ['1', '2', '3']:
         for k in ['1', '2', '3']:
             setup.append([i, j, k])
