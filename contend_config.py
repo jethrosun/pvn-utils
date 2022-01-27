@@ -105,10 +105,9 @@ for i in ['1', '2', '3']:
 
 ## combination set
 # for i in ['1', '2', '3']:
-for i in ['3']:
-    for j in ['1', '2', '3']:
-        for k in ['1', '2', '3']:
-            setup.append([i, j, k])
+#     for j in ['1', '2', '3']:
+#         for k in ['1', '2', '3']:
+#             setup.append([i, j, k])
 
 num_of_epoch = 5
 # num_of_epoch = 3
@@ -147,4 +146,4 @@ p2p_ext = ['app_p2p-ext']
 # nf_list = ['app_xcdr']
 # nf_list = ['app_p2p-controlled', 'app_rdr']
 nf_list = ['app_rdr']
-# nf_list = ['app_p2p-controlled']
+nf_list = ['app_p2p-controlled']
