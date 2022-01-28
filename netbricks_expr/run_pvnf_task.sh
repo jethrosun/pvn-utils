@@ -83,6 +83,8 @@ elif [ "$2" == 'pvn-rdr-p2p-coexist-app' ]; then
 	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
 	sleep 15
 
+	while sleep 10; do for PID in $(pgrep deluge); do sudo taskset -cp 3 $PID; done; done  &
+	P13=$!
 	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > "$P2P_PROGRESS_LOG" &
 	P1=$!
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
@@ -107,7 +109,7 @@ elif [ "$2" == 'pvn-rdr-p2p-coexist-app' ]; then
 	P11=$!
 	taskset -c 5 $TCP_TOP_MONITOR -C > "${TCP_LOG}" &
 	P12=$!
-	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12
+	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13
 
 elif [ "$2" == 'pvn-rdr-xcdr-coexist-app' ]; then
 	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
@@ -150,6 +152,8 @@ elif [ "$2" == 'pvn-tlsv-p2p-coexist-app' ]; then
 	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
 	sleep 15
 
+	while sleep 10; do for PID in $(pgrep deluge); do sudo taskset -cp 3 $PID; done; done  &
+	P13=$!
 	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > "$P2P_PROGRESS_LOG" &
 	P1=$!
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
@@ -174,7 +178,7 @@ elif [ "$2" == 'pvn-tlsv-p2p-coexist-app' ]; then
 	P11=$!
 	taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
 	P12=$!
-	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12
+	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13
 
 elif [ "$2" == 'pvn-tlsv-xcdr-coexist-app' ]; then
 	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
@@ -223,6 +227,8 @@ elif [ "$2" == 'pvn-xcdr-p2p-coexist-app' ]; then
 	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
 	sleep 15
 
+	while sleep 10; do for PID in $(pgrep deluge); do sudo taskset -cp 3 $PID; done; done  &
+	P14=$!
 	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > "$P2P_PROGRESS_LOG" &
 	P2=$!
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
@@ -247,7 +253,7 @@ elif [ "$2" == 'pvn-xcdr-p2p-coexist-app' ]; then
 	P12=$!
 	taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
 	P13=$!
-	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13
+	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13 $P14
 
 elif [ "$2" == 'pvn-tlsv-rdr-xcdr-coexist-app' ]; then
 	docker run -d --cpuset-cpus 4 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
@@ -291,6 +297,8 @@ elif [ "$2" == 'pvn-tlsv-rdr-p2p-coexist-app' ]; then
 	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
 	sleep 15
 
+	while sleep 10; do for PID in $(pgrep deluge); do sudo taskset -cp 3 $PID; done; done  &
+	P13=$!
 	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > "$P2P_PROGRESS_LOG" &
 	P1=$!
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
@@ -315,7 +323,7 @@ elif [ "$2" == 'pvn-tlsv-rdr-p2p-coexist-app' ]; then
 	P11=$!
 	taskset -c 5 $TCP_TOP_MONITOR -C > "${TCP_LOG}" &
 	P12=$!
-	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12
+	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13
 
 elif [ "$2" == 'pvn-rdr-xcdr-p2p-coexist-app' ]; then
 	sudo rm -rf "$HOME/Downloads"
@@ -334,6 +342,8 @@ elif [ "$2" == 'pvn-rdr-xcdr-p2p-coexist-app' ]; then
 	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
 	sleep 15
 
+	while sleep 10; do for PID in $(pgrep deluge); do sudo taskset -cp 3 $PID; done; done  &
+	P14=$!
 	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > "$P2P_PROGRESS_LOG" &
 	P2=$!
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
@@ -358,7 +368,7 @@ elif [ "$2" == 'pvn-rdr-xcdr-p2p-coexist-app' ]; then
 	P12=$!
 	taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
 	P13=$!
-	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13
+	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13  $P14
 
 elif [ "$2" == 'pvn-tlsv-xcdr-p2p-coexist-app' ]; then
 	sudo rm -rf "$HOME/Downloads"
@@ -376,6 +386,8 @@ elif [ "$2" == 'pvn-tlsv-xcdr-p2p-coexist-app' ]; then
 	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
 	sleep 15
 
+	while sleep 10; do for PID in $(pgrep deluge); do sudo taskset -cp 3 $PID; done; done  &
+	P14=$!
 	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > "$P2P_PROGRESS_LOG" &
 	P2=$!
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
@@ -400,7 +412,7 @@ elif [ "$2" == 'pvn-tlsv-xcdr-p2p-coexist-app' ]; then
 	P12=$!
 	taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
 	P13=$!
-	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13
+	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13 $P14
 
 elif [ "$2" == 'pvn-tlsv-rdr-xcdr-p2p-coexist-app' ]; then
 	sudo rm -rf "$HOME/Downloads"
@@ -419,6 +431,8 @@ elif [ "$2" == 'pvn-tlsv-rdr-xcdr-p2p-coexist-app' ]; then
 	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
 	sleep 15
 
+	while sleep 10; do for PID in $(pgrep deluge); do sudo taskset -cp 3 $PID; done; done  &
+	P14=$!
 	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > "$P2P_PROGRESS_LOG" &
 	P2=$!
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
@@ -443,7 +457,7 @@ elif [ "$2" == 'pvn-tlsv-rdr-xcdr-p2p-coexist-app' ]; then
 	P12=$!
 	taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
 	P13=$!
-	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13
+	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13 $P14
 
 else
 	sudo rm -rf "$HOME/Downloads"
@@ -462,6 +476,8 @@ else
 	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
 	sleep 15
 
+	while sleep 10; do for PID in $(pgrep deluge); do sudo taskset -cp 3 $PID; done; done  &
+	P14=$!
 	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > "$P2P_PROGRESS_LOG" &
 	P2=$!
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
@@ -486,6 +502,6 @@ else
 	P12=$!
 	taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
 	P13=$!
-	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13
+	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13  $P14
 
 fi
