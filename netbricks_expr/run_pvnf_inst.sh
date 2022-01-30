@@ -100,6 +100,8 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
 	sleep 15
 
+	while sleep 10; do for PID in $(pgrep deluge); do sudo taskset -cp 3 $PID; done; done  &
+	P9=$!
 	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > "$P2P_PROGRESS_LOG" &
 	P1=$!
 	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
@@ -116,7 +118,7 @@ elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; t
 	P7=$!
 	taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
 	P8=$!
-	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8
+	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9
 
 elif [ "$2" == "pvn-tlsv-transform-app" ] || [ "$2" == "pvn-tlsv-groupby-app" ]; then
 	# we don't need to check resource usage for tlsv so we just grep chrom here
