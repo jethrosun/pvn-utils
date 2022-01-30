@@ -258,6 +258,7 @@ batch = 1
 
 # app
 rdr_xcdr_tlsv = ['app_rdr', 'app_xcdr', 'app_tlsv']
+rdr_xcdr= ['app_rdr', 'app_xcdr']
 tlsv = ['app_tlsv']
 xcdr = ['app_xcdr']
 rdr = ['app_rdr']
@@ -270,10 +271,14 @@ p2p_co = [
     'co_tlsv_rdr_xcdr_p2p'
 ]
 # p2p_co = ['co_tlsv_rdr_xcdr_p2p']
-set_list = ['1', '2', '3', '4', '5', '6']
-# set_list = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']
-num_of_epoch = 5
-p2p_num_of_epoch = 5
+# set_list = ['1', '2', '3', '4', '5', '6']
+# num_of_epoch = 5
+# p2p_num_of_epoch = 5
+
+set_list = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16']
+num_of_epoch = 1
+p2p_num_of_epoch = 1
+
 
 # only for testing
 # p2p_co = ['co_tlsv_rdr_p2p']
