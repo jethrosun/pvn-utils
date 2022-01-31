@@ -289,6 +289,13 @@ p2p_num_of_epoch = 1
 #           task running
 #
 # ----------------------------------------
+# raw_tasks = [
+#     'tlsv2_rdr1_xcdr2', 'tlsv1_rdr1_xcdr2', 'tlsv1_rdr1_xcdr3', 'rdr2_xcdr3', 'tlsv1_xcdr1', 'tlsv2_rdr1_xcdr1',
+#     'tlsv1_rdr1_xcdr1', 'tlsv3_rdr1_xcdr1', 'tlsv1_rdr2_xcdr1', 'tlsv2', 'tlsv2_rdr3_xcdr1', 'tlsv3', 'xcdr2',
+#     'tlsv2_xcdr2', 'rdr2_xcdr2', 'rdr3', 'tlsv2_rdr6', 'rdr5', 'rdr2', 'xcdr3', 'tlsv2_xcdr3', 'tlsv2_rdr2_xcdr1',
+#     'tlsv3_xcdr2', 'tlsv1_xcdr4', 'tlsv1_rdr2_xcdr2', 'tlsv4_rdr1', 'tlsv3_rdr2', 'tlsv1_rdr3_xcdr1', 'tlsv2_rdr3'
+# ]
+
 raw_tasks = [
     'tlsv2_rdr1_xcdr2', 'tlsv1_rdr1_xcdr2', 'tlsv1_rdr1_xcdr3', 'tlsv2_rdr1_xcdr1', 'tlsv1_rdr1_xcdr1',
     'tlsv3_rdr1_xcdr1', 'tlsv1_rdr2_xcdr1', 'tlsv2_rdr3_xcdr1', 'tlsv2_rdr2_xcdr1', 'tlsv1_rdr2_xcdr2',
