@@ -290,31 +290,34 @@ p2p_num_of_epoch = 1
 #
 # ----------------------------------------
 # raw_tasks = [
-#     'tlsv2_rdr1_xcdr2', 'tlsv1_rdr1_xcdr2', 'tlsv1_rdr1_xcdr3', 'rdr2_xcdr3', 'tlsv1_xcdr1', 'tlsv2_rdr1_xcdr1',
-#     'tlsv1_rdr1_xcdr1', 'tlsv3_rdr1_xcdr1', 'tlsv1_rdr2_xcdr1', 'tlsv2', 'tlsv2_rdr3_xcdr1', 'tlsv3', 'xcdr2',
-#     'tlsv2_xcdr2', 'rdr2_xcdr2', 'rdr3', 'tlsv2_rdr6', 'rdr5', 'rdr2', 'xcdr3', 'tlsv2_xcdr3', 'tlsv2_rdr2_xcdr1',
-#     'tlsv3_xcdr2', 'tlsv1_xcdr4', 'tlsv1_rdr2_xcdr2', 'tlsv4_rdr1', 'tlsv3_rdr2', 'tlsv1_rdr3_xcdr1', 'tlsv2_rdr3'
+#     'tlsv2_rdr1_xcdr2', 'tlsv1_rdr1_xcdr2', 'tlsv1_rdr1_xcdr3', 'tlsv2_rdr1_xcdr1', 'tlsv1_rdr1_xcdr1',
+#     'tlsv3_rdr1_xcdr1', 'tlsv1_rdr2_xcdr1', 'tlsv2_rdr3_xcdr1', 'tlsv2_rdr2_xcdr1', 'tlsv1_rdr2_xcdr2',
+#     'tlsv1_rdr3_xcdr1'
+# ]
+#
+# raw_p2p_tasks = [
+#     'tlsv1_rdr1_xcdr3_p2p1', 'tlsv3_xcdr1_p2p1', 'tlsv1_rdr2_xcdr5_p2p1', 'tlsv2_rdr1_xcdr3_p2p1', 'tlsv1_rdr1_p2p2',
+#     'tlsv1_rdr1_xcdr1_p2p1', 'tlsv2_rdr1_xcdr3_p2p2', 'tlsv2_rdr2_xcdr2_p2p2', 'tlsv1_xcdr1_p2p1',
+#     'tlsv1_rdr3_xcdr2_p2p1', 'tlsv3_p2p1', 'tlsv2_rdr2_xcdr1_p2p1', 'tlsv2_xcdr2_p2p1', 'tlsv4_rdr2_xcdr1_p2p1',
+#     'tlsv1_rdr1_p2p1', 'tlsv2_rdr3_xcdr1_p2p1', 'tlsv3_rdr1_xcdr1_p2p1', 'tlsv2_xcdr1_p2p1', 'tlsv3_rdr1_p2p1',
+#     'tlsv4_xcdr1_p2p2', 'xcdr2_p2p1', 'tlsv1_rdr2_p2p2', 'tlsv1_xcdr1_p2p2', 'tlsv2_rdr2_xcdr1_p2p2',
+#     'tlsv2_xcdr1_p2p2', 'rdr2_xcdr2_p2p3', 'tlsv1_rdr1_xcdr2_p2p2', 'tlsv2_rdr2_xcdr2_p2p1', 'rdr1_xcdr2_p2p1',
+#     'tlsv1_rdr2_xcdr2_p2p2', 'tlsv2_rdr1_xcdr3_p2p3', 'tlsv1_rdr3_p2p1', 'rdr3_xcdr1_p2p1', 'rdr1_xcdr1_p2p2',
+#     'tlsv2_rdr5_p2p1', 'rdr3_xcdr1_p2p2', 'p2p1', 'tlsv2_rdr3_p2p1', 'tlsv3_rdr1_xcdr1_p2p2', 'rdr1_p2p2',
+#     'tlsv3_rdr2_p2p3', 'tlsv2_rdr2_xcdr2_p2p3', 'tlsv2_p2p1', 'tlsv3_xcdr4_p2p1', 'rdr1_xcdr1_p2p1',
+#     'tlsv1_rdr1_xcdr4_p2p1', 'tlsv2_p2p2', 'tlsv2_xcdr1_p2p3', 'tlsv1_xcdr2_p2p1', 'tlsv1_rdr2_xcdr1_p2p2',
+#     'tlsv1_rdr1_xcdr1_p2p2', 'tlsv1_rdr1_p2p4', 'tlsv1_rdr2_xcdr1_p2p1', 'rdr1_xcdr3_p2p1', 'tlsv1_rdr1_xcdr2_p2p1',
+#     'rdr3_p2p2', 'tlsv2_rdr1_xcdr1_p2p1', 'tlsv2_rdr2_p2p1', 'tlsv3_p2p2', 'tlsv1_xcdr1_p2p3', 'tlsv1_xcdr2_p2p2',
+#     'rdr1_p2p4', 'tlsv2_rdr1_p2p2', 'rdr4_p2p1', 'rdr2_xcdr1_p2p2', 'tlsv1_xcdr3_p2p1', 'rdr1_xcdr2_p2p2',
+#     'rdr1_xcdr1_p2p3'
 # ]
 
 raw_tasks = [
-    'tlsv2_rdr1_xcdr2', 'tlsv1_rdr1_xcdr2', 'tlsv1_rdr1_xcdr3', 'tlsv2_rdr1_xcdr1', 'tlsv1_rdr1_xcdr1',
-    'tlsv3_rdr1_xcdr1', 'tlsv1_rdr2_xcdr1', 'tlsv2_rdr3_xcdr1', 'tlsv2_rdr2_xcdr1', 'tlsv1_rdr2_xcdr2',
-    'tlsv1_rdr3_xcdr1'
+    'tlsv2_xcdr2', 'tlsv4_rdr1', 'tlsv3_xcdr1', 'tlsv2_rdr3', 'rdr5', 'tlsv5_rdr1', 'tlsv1_xcdr3', 'tlsv6',
+    'rdr1_xcdr5', 'tlsv3_xcdr3', 'tlsv2_xcdr3', 'rdr1_xcdr3', 'rdr6', 'tlsv1_xcdr4', 'tlsv4_xcdr1'
 ]
 
 raw_p2p_tasks = [
-    'tlsv1_rdr1_xcdr3_p2p1', 'tlsv3_xcdr1_p2p1', 'tlsv1_rdr2_xcdr5_p2p1', 'tlsv2_rdr1_xcdr3_p2p1', 'tlsv1_rdr1_p2p2',
-    'tlsv1_rdr1_xcdr1_p2p1', 'tlsv2_rdr1_xcdr3_p2p2', 'tlsv2_rdr2_xcdr2_p2p2', 'tlsv1_xcdr1_p2p1',
-    'tlsv1_rdr3_xcdr2_p2p1', 'tlsv3_p2p1', 'tlsv2_rdr2_xcdr1_p2p1', 'tlsv2_xcdr2_p2p1', 'tlsv4_rdr2_xcdr1_p2p1',
-    'tlsv1_rdr1_p2p1', 'tlsv2_rdr3_xcdr1_p2p1', 'tlsv3_rdr1_xcdr1_p2p1', 'tlsv2_xcdr1_p2p1', 'tlsv3_rdr1_p2p1',
-    'tlsv4_xcdr1_p2p2', 'xcdr2_p2p1', 'tlsv1_rdr2_p2p2', 'tlsv1_xcdr1_p2p2', 'tlsv2_rdr2_xcdr1_p2p2',
-    'tlsv2_xcdr1_p2p2', 'rdr2_xcdr2_p2p3', 'tlsv1_rdr1_xcdr2_p2p2', 'tlsv2_rdr2_xcdr2_p2p1', 'rdr1_xcdr2_p2p1',
-    'tlsv1_rdr2_xcdr2_p2p2', 'tlsv2_rdr1_xcdr3_p2p3', 'tlsv1_rdr3_p2p1', 'rdr3_xcdr1_p2p1', 'rdr1_xcdr1_p2p2',
-    'tlsv2_rdr5_p2p1', 'rdr3_xcdr1_p2p2', 'p2p1', 'tlsv2_rdr3_p2p1', 'tlsv3_rdr1_xcdr1_p2p2', 'rdr1_p2p2',
-    'tlsv3_rdr2_p2p3', 'tlsv2_rdr2_xcdr2_p2p3', 'tlsv2_p2p1', 'tlsv3_xcdr4_p2p1', 'rdr1_xcdr1_p2p1',
-    'tlsv1_rdr1_xcdr4_p2p1', 'tlsv2_p2p2', 'tlsv2_xcdr1_p2p3', 'tlsv1_xcdr2_p2p1', 'tlsv1_rdr2_xcdr1_p2p2',
-    'tlsv1_rdr1_xcdr1_p2p2', 'tlsv1_rdr1_p2p4', 'tlsv1_rdr2_xcdr1_p2p1', 'rdr1_xcdr3_p2p1', 'tlsv1_rdr1_xcdr2_p2p1',
-    'rdr3_p2p2', 'tlsv2_rdr1_xcdr1_p2p1', 'tlsv2_rdr2_p2p1', 'tlsv3_p2p2', 'tlsv1_xcdr1_p2p3', 'tlsv1_xcdr2_p2p2',
-    'rdr1_p2p4', 'tlsv2_rdr1_p2p2', 'rdr4_p2p1', 'rdr2_xcdr1_p2p2', 'tlsv1_xcdr3_p2p1', 'rdr1_xcdr2_p2p2',
-    'rdr1_xcdr1_p2p3'
+    'rdr2_xcdr1_p2p1', 'rdr4_p2p2', 'rdr3_xcdr2_p2p1', 'p2p5', 'rdr4_xcdr1_p2p1', 'rdr3_p2p1', 'p2p4',
+    'tlsv1_rdr3_xcdr1_p2p1', 'tlsv1_rdr2_p2p1', 'rdr3_p2p3'
 ]
