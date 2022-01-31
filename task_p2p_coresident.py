@@ -181,15 +181,15 @@ def run_expr_p2p_controlled(raw_p2p_tasks):
         nf = conf.pvn_nf[nf_type][0]
         sending_rate = sum(nf_load) * 10
 
-        pktgen_sess = pktgen_sess_setup(conf.trace[raw_task], nf, sending_rate)
-        run_pktgen(pktgen_sess, conf.trace[raw_task], sending_rate)
+        pktgen_sess = pktgen_sess_setup(raw_task+".pcap", nf, sending_rate)
+        run_pktgen(pktgen_sess, raw_task+".pcap", sending_rate)
 
         # for epoch in range(conf.p2p_num_of_epoch):
-        netbricks_sess = netbricks_sess_setup(conf.trace[raw_task], nf, nf_load)
+        netbricks_sess = netbricks_sess_setup(raw_task+".pcap", nf, nf_load)
 
-        leecher1_sess = p2p_sess_setup('flynn', conf.trace[raw_task], nf)
-        leecher2_sess = p2p_sess_setup('tao', conf.trace[raw_task], nf)
-        leecher3_sess = p2p_sess_setup('sanchez', conf.trace[raw_task], nf)
+        leecher1_sess = p2p_sess_setup('flynn', raw_task+".pcap", nf)
+        leecher2_sess = p2p_sess_setup('tao', raw_task+".pcap", nf)
+        leecher3_sess = p2p_sess_setup('sanchez', raw_task+".pcap", nf)
 
         # run clean up for p2p nf before experiment
         p2p_cleanup("netbricks", netbricks_sess)
@@ -204,7 +204,7 @@ def run_expr_p2p_controlled(raw_p2p_tasks):
         run_p2p_node('leecher', leecher1_sess, nf_load[-1])
         run_p2p_node('leecher', leecher2_sess, nf_load[-1])
         run_p2p_node('leecher', leecher3_sess, nf_load[-1])
-        run_netbricks(netbricks_sess, conf.trace[raw_task], nf, nf_load)
+        run_netbricks(netbricks_sess, raw_task+".pcap", nf, nf_load)
 
         time.sleep(conf.expr_wait_time)
 
