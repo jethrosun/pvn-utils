@@ -25,7 +25,7 @@ def netbricks_sess_setup(trace, nf, nf_load):
         netbricks_sess.send_commands('cargo b --release')
         netbricks_sess.send_commands('cd /home/jethros/dev/netbricks/experiments')
 
-        time.sleep(15)
+        time.sleep(5)
         return netbricks_sess
     except Exception as err:
         print("Creating screen sessions failed: {}".format(err))
@@ -43,7 +43,7 @@ def pktgen_sess_setup(trace, nf, epoch):
         pktgen_sess.enable_logs("pktgen--" + trace + "_" + nf + ".log")
         pktgen_sess.send_commands('cd /home/jethros/dev/pktgen-dpdk/experiments')
 
-        time.sleep(20)
+        time.sleep(10)
         return pktgen_sess
     except Exception as err:
         print("Creating screen sessions failed: {}".format(err))
@@ -76,7 +76,7 @@ def p2p_sess_setup(node, trace, nf):
         p2p_sess.send_commands('cd /home/jethros/dev/pvn/utils/p2p_expr')
         p2p_sess.send_commands('git pull')
 
-        time.sleep(20)
+        time.sleep(10)
         return p2p_sess
     except Exception as err:
         print("Creating screen sessions failed: {}".format(err))
@@ -90,7 +90,7 @@ def run_pktgen(sess, trace, rate):
     set_port_str = "set 0 rate " + str(rate)
     start_str = "start 0"
 
-    time.sleep(30)
+    time.sleep(10)
     sess.send_commands(cmd_str, set_port_str, start_str)
 
     time.sleep(10)
@@ -138,7 +138,7 @@ def p2p_cleanup(typ, sess):
         p2p_cmd_str = "sudo ./misc/p2p_cleanup_nb.sh"
         sess.send_commands(p2p_cmd_str)
         print("NetBricks P2P cmd: {}".format(p2p_cmd_str))
-        time.sleep(15)
+        time.sleep(10)
 
     elif typ == "leecher":
         cmd_str = "sudo ./p2p_cleanup_leecher.sh "
@@ -149,7 +149,7 @@ def p2p_cleanup(typ, sess):
         config_str = "./p2p_config_leecher.sh "
         sess.send_commands(config_str)
         print("Leecher P2P config with cmd: {}".format(config_str))
-        time.sleep(15)
+        time.sleep(10)
     else:
         print("Unknown p2p node type {}".format(typ))
 
@@ -224,7 +224,7 @@ def run_expr_p2p_controlled(raw_p2p_tasks):
         time.sleep(5)
 
         sess_destroy(pktgen_sess)
-        time.sleep(30)
+        time.sleep(10)
 
 
 def main(raw_p2p_tasks, p2p_types):
