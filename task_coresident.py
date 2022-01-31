@@ -119,12 +119,12 @@ def main(raw_tasks):
         nf = conf.pvn_nf[nf_type][0]
 
         sending_rate = sum(nf_load) * 10
-        pktgen_sess = pktgen_sess_setup(conf.trace[raw_task], nf, sending_rate)
-        run_pktgen(pktgen_sess, conf.trace[raw_task], sending_rate)
+        pktgen_sess = pktgen_sess_setup(raw_task+".pcap", nf, sending_rate)
+        run_pktgen(pktgen_sess, raw_task+".pcap", sending_rate)
 
         # epoch from 0 to 9
         # for epoch in range(conf.num_of_epoch):
-        netbricks_sess = netbricks_sess_setup(conf.trace[raw_task], nf, nf_load)
+        netbricks_sess = netbricks_sess_setup(raw_task+".pcap", nf, nf_load)
 
         p2p_cleanup(netbricks_sess)
         rdr_cleanup(netbricks_sess)
@@ -135,7 +135,7 @@ def main(raw_tasks):
         # if nf in conf.xcdr_clean_list:
         #     run_netbricks_xcdr(netbricks_sess, conf.trace[raw_task], nf, nf_load)
         # else:
-        run_netbricks(netbricks_sess, conf.trace[raw_task], nf, nf_load)
+        run_netbricks(netbricks_sess, raw_task+".pcap", nf, nf_load)
 
         time.sleep(conf.expr_wait_time)
 
