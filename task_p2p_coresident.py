@@ -177,9 +177,9 @@ def run_expr_p2p_ext(expr_list):
 def run_expr_p2p_controlled(raw_p2p_tasks):
     for raw_task in raw_p2p_tasks:
         print("running controlled")
-        nf_type, nf_load = translate(raw_task)
+        nf_type, nf_load, sending_rate= translate(raw_task)
         nf = conf.pvn_nf[nf_type][0]
-        sending_rate = sum(nf_load) * 10
+        # sending_rate = sum(nf_load) * 10
 
         pktgen_sess = pktgen_sess_setup(raw_task+".pcap", nf, sending_rate)
         run_pktgen(pktgen_sess, raw_task+".pcap", sending_rate)

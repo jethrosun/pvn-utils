@@ -115,10 +115,10 @@ def rdr_cleanup(sess):
 def main(raw_tasks):
     for raw_task in raw_tasks:
         print("Running experiments that for {} application NF".format(raw_task))
-        nf_type, nf_load = conf.translate(raw_task)
+        nf_type, nf_load, sending_rate = conf.translate(raw_task)
         nf = conf.pvn_nf[nf_type][0]
 
-        sending_rate = sum(nf_load) * 10
+        # sending_rate = sum(nf_load) * 10
         pktgen_sess = pktgen_sess_setup(raw_task+".pcap", nf, sending_rate)
         run_pktgen(pktgen_sess, raw_task+".pcap", sending_rate)
 

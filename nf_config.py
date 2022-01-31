@@ -19,16 +19,18 @@ def translate(raw_task):
     name = 'co_'
     # 0 means no load
     nf_load = {'tlsv': 0, 'rdr': 0, 'xcdr': 0, 'p2p': 0}
+    sending_rate = 0
     nfs = raw_task.split('_')
     for nf in nfs:
         nf_name = nf[:-1]
         # load+6 matches our setup
         nf_load[nf_name] = int(nf[-1]) + 6
+        sending_rate+= int(nf[-1])
         name += nf_name
         name += "_"
     load = [nf_load[nf] for nf in ['tlsv', 'rdr', 'xcdr', 'p2p']]
 
-    return name[:-1], load
+    return name[:-1], load, sending_rate
 
 
 def fetch_tlsv_trace(setup):
@@ -314,7 +316,9 @@ p2p_num_of_epoch = 1
 
 raw_tasks = [
     'tlsv2_xcdr2', 'tlsv4_rdr1', 'tlsv3_xcdr1', 'tlsv2_rdr3', 'rdr5', 'tlsv5_rdr1', 'tlsv1_xcdr3', 'tlsv6',
-    'rdr1_xcdr5', 'tlsv3_xcdr3', 'tlsv2_xcdr3', 'rdr1_xcdr3', 'rdr6', 'tlsv1_xcdr4', 'tlsv4_xcdr1'
+    'rdr1_xcdr5', 'tlsv3_xcdr3', 'tlsv2_xcdr3', 'rdr1_xcdr3', 'rdr6', 'tlsv1_xcdr4', 'tlsv4_xcdr1', 'tlsv2_rdr1_xcdr2',
+    'tlsv1_rdr1_xcdr2', 'tlsv1_rdr1_xcdr3', 'tlsv2_rdr1_xcdr1', 'tlsv1_rdr1_xcdr1', 'tlsv3_rdr1_xcdr1',
+    'tlsv1_rdr2_xcdr1', 'tlsv2_rdr3_xcdr1', 'tlsv2_rdr2_xcdr1', 'tlsv1_rdr2_xcdr2', 'tlsv1_rdr3_xcdr1'
 ]
 
 raw_p2p_tasks = [
