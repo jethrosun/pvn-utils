@@ -30,7 +30,7 @@ def translate(raw_task):
         name += "_"
     load = [nf_load[nf] for nf in ['tlsv', 'rdr', 'xcdr', 'p2p']]
 
-    return name[:-1], load, sending_rate
+    return name[:-1], load, sending_rate*10
 
 
 def fetch_tlsv_trace(setup):
