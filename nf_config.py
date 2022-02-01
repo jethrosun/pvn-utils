@@ -316,3 +316,6 @@ raw_p2p_tasks = [
     'rdr1_xcdr1_p2p3', 'rdr3_p2p1', 'rdr2_xcdr1_p2p1', 'rdr3_p2p3', 'tlsv1_rdr2_p2p1', 'p2p5', 'p2p4',
     'tlsv1_rdr3_xcdr1_p2p1', 'rdr4_p2p2', 'rdr4_xcdr1_p2p1', 'rdr3_xcdr2_p2p1'
 ]
+
+
+raw_p2p_tasks = ['rdr1_xcdr3_p2p1']
