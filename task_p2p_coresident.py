@@ -43,7 +43,7 @@ def pktgen_sess_setup(trace, nf, epoch):
         pktgen_sess.enable_logs("pktgen--" + trace + "_" + nf + ".log")
         pktgen_sess.send_commands('cd /home/jethros/dev/pktgen-dpdk/experiments')
 
-        time.sleep(10)
+        time.sleep(5)
         return pktgen_sess
     except Exception as err:
         print("Creating screen sessions failed: {}".format(err))
@@ -76,7 +76,7 @@ def p2p_sess_setup(node, trace, nf):
         p2p_sess.send_commands('cd /home/jethros/dev/pvn/utils/p2p_expr')
         p2p_sess.send_commands('git pull')
 
-        time.sleep(10)
+        time.sleep(5)
         return p2p_sess
     except Exception as err:
         print("Creating screen sessions failed: {}".format(err))
@@ -90,10 +90,10 @@ def run_pktgen(sess, trace, rate):
     set_port_str = "set 0 rate " + str(rate)
     start_str = "start 0"
 
-    time.sleep(10)
+    time.sleep(5)
     sess.send_commands(cmd_str, set_port_str, start_str)
 
-    time.sleep(10)
+    time.sleep(5)
     print("Pktgen\nRUN pktgen")
 
 
