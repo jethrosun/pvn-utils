@@ -56,6 +56,8 @@ fn execute(
     io_disk: &str,
     name: &str,
 ) -> io::Result<()> {
+    let load = read_setup(cpu_load, ram_load, io_load).unwrap();
+
     // counting the iterations
     let mut counter = 0;
     let mut now = Instant::now();
@@ -63,10 +65,32 @@ fn execute(
     // CPU
     let mut rng = rand::thread_rng();
 
-    let load = read_setup(cpu_load, ram_load, io_load).unwrap();
-
+    //RAM
     let vec_size = load.ram;
     let large_vec = vec![42u128; (vec_size as u128).try_into().unwrap()];
+
+    // I/O
+    // use buffer to store random data
+    let mut buf: Vec<u8> = Vec::with_capacity((load.io * 1_000_000).try_into().unwrap()); // B to MB
+    for _ in 0..buf.capacity() {
+        buf.push(rand::random())
+    }
+    let buf = buf.into_boxed_slice();
+
+    // let file_name = "/data/tmp/foobar".to_owned() + &core_id.to_string() + ".bin";
+    let file_name = if io_disk == "hdd" {
+        "/data/tmp/foobar".to_owned() + &name + ".bin"
+    } else {
+        "/home/jethros/data/tmp/foobar".to_owned() + &name + ".bin"
+    };
+
+    // files for both cases
+    let mut file = OpenOptions::new()
+        .write(true)
+        .read(true)
+        .create(true)
+        .open(file_name)
+        .unwrap();
 
     loop {
         // CPU work
@@ -85,27 +109,8 @@ fn execute(
             println!("{} * k since {:?}", counter, now.elapsed());
         }
 
-        // use buffer to store random data
-        let mut buf: Vec<u8> = Vec::with_capacity((load.io * 1_000_000).try_into().unwrap()); // B to MB
-        for _ in 0..buf.capacity() {
-            buf.push(rand::random())
-        }
-        let buf = buf.into_boxed_slice();
-
-        // let file_name = "/data/tmp/foobar".to_owned() + &core_id.to_string() + ".bin";
-        let file_name = if io_disk == "hdd" {
-            "/data/tmp/foobar".to_owned() + &name.to_string() + ".bin"
-        } else {
-            "/home/jethros/data/tmp/foobar".to_owned() + &name.to_string() + ".bin"
-        };
-
-        // files for both cases
-        let mut file = OpenOptions::new()
-            .write(true)
-            .read(true)
-            .create(true)
-            .open(file_name)
-            .unwrap();
+        // actual file IO
+        let _ = file_io(&mut counter, &mut file, buf.clone());
 
         if now.elapsed() >= _sleep_time + _run_time {
             now = Instant::now();
