@@ -1,13 +1,15 @@
 extern crate faktory;
 extern crate rand;
 
+use crate::rand::Rng;
 use core_affinity::CoreId;
 use faktory::ConsumerBuilder;
 use std::collections::HashMap;
+use std::convert::TryInto;
 use std::env;
 use std::fs::{File, OpenOptions};
+use std::io::Write;
 use std::process;
-use std::thread;
 use std::time::{Duration, Instant};
 use std::vec;
 use std::{io, thread};
@@ -15,9 +17,9 @@ use std::{io, thread};
 const GB_SIZE: usize = 1_000_000_000;
 
 struct Load {
-    cpu: usize,
-    ram: usize,
-    io: usize,
+    cpu: u64,
+    ram: u64,
+    io: u64,
 }
 
 /// Map different setup to memory resource intensiveness. We are mapping setup into size of u128,
@@ -25,9 +27,9 @@ struct Load {
 /// much paging.
 fn read_setup(cpu_load: u64, ram_load: u64, io_load: u64) -> Option<Load> {
     Some(Load {
-        cpu: 100,
-        ram: 1 * GB_SIZE / 16,
-        io: 20,
+        cpu: 100 as u64,
+        ram: (1 * GB_SIZE / 16) as u64,
+        io: 20 as u64,
     })
 }
 
@@ -53,25 +55,27 @@ fn execute(
     io_disk: &str,
     name: &str,
 ) -> io::Result<()> {
+    // counting the iterations
+    let mut counter = 0;
+    let mut now = Instant::now();
+
     // CPU
     let mut rng = rand::thread_rng();
-
-    let mut now = Instant::now();
 
     let load = read_setup(cpu_load, ram_load, io_load).unwrap();
 
     let vec_size = load.ram;
-    let large_vec = vec![42u128; vec_size];
+    let large_vec = vec![42u128; (vec_size as u128).try_into().unwrap()];
 
     loop {
         // CPU work
         let _sleep_time = Duration::from_millis(1000 - load.cpu);
-        let _run_time = Duration::from_millis(run_time);
+        let _run_time = Duration::from_millis(load.cpu);
 
         let _ = rng.gen_range(0..10);
 
         // RAM
-        for i in 0..vec_size / 256 {
+        for i in 0..vec_size as usize / 256 {
             let _ = large_vec[i * 256];
             counter += 1;
             // println!("current value: {:?}", t);
@@ -81,7 +85,7 @@ fn execute(
         }
 
         // use buffer to store random data
-        let mut buf: Vec<u8> = Vec::with_capacity(buf_size * 1_000_000); // B to MB
+        let mut buf: Vec<u8> = Vec::with_capacity((load.io * 1_000_000).try_into().unwrap()); // B to MB
         for _ in 0..buf.capacity() {
             buf.push(rand::random())
         }
