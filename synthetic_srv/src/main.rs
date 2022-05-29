@@ -16,6 +16,7 @@ use std::{io, thread};
 
 const GB_SIZE: usize = 1_000_000_000;
 
+#[derive(Copy, Clone, Debug)]
 struct Load {
     cpu: u64,
     ram: u64,
@@ -155,6 +156,8 @@ fn main() {
     let handles = core_ids
         .into_iter()
         .map(|id| {
+            let cio_disk = io_disk.clone();
+            let cname = name.clone();
             thread::spawn(move || {
                 if id.id == cpu_id {
                     // Pin this thread to a single CPU core.
@@ -165,8 +168,8 @@ fn main() {
                         cpu_load.to_string()
                             + &ram_load.to_string()
                             + &io_load.to_string()
-                            + &io_disk
-                            + &name,
+                            + &cio_disk
+                            + &cname,
                         move |job| -> io::Result<()> {
                             let job_args = job.args();
 
