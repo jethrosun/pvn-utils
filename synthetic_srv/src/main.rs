@@ -134,21 +134,21 @@ fn main() {
 
     // parameters:
     //
-    // CPU, CPU load, RAM load, I/O load, name
-    if params.len() == 7 {
-        println!("Parse 6 args");
+    // FIXME: Ideally we will only read the profile name, reading core id now just to make it work
+    if params.len() == 3 {
+        println!("Parse 2 args");
         println!("{:?}", params);
     } else {
-        println!("More or less than 6 args are provided. Run it with *setup expr_num*");
+        println!("More or less than 2 args are provided. Run it with *profile_name*");
         process::exit(0x0100);
     }
 
-    let cpu_id = params[1].parse::<usize>().unwrap();
-    let cpu_load = params[2].parse::<usize>().unwrap();
-    let ram_load = params[3].parse::<usize>().unwrap();
-    let io_load = params[4].parse::<usize>().unwrap();
-    let io_disk = params[5].parse::<String>().unwrap();
-    let name = params[6].parse::<String>().unwrap();
+    let profile_name = params[1].parse::<String>().unwrap();
+    let core_id = params[2].parse::<usize>().unwrap();
+    // let ram_load = params[3].parse::<usize>().unwrap();
+    // let io_load = params[4].parse::<usize>().unwrap();
+    // let io_disk = params[5].parse::<String>().unwrap();
+    // let name = params[6].parse::<String>().unwrap();
 
     // The regular way to get core ids are not going work as we have configured isol cpus to reduce
     // context switches for DPDK and our things.
@@ -161,44 +161,37 @@ fn main() {
     let handles = core_ids
         .into_iter()
         .map(|id| {
-            let cio_disk = io_disk.clone();
-            let cname = name.clone();
+            let cname = profile_name.clone();
             thread::spawn(move || {
-                if id.id == cpu_id {
+                if id.id == core_id {
                     // Pin this thread to a single CPU core.
                     core_affinity::set_for_current(id);
                     let mut c = ConsumerBuilder::default();
 
-                    c.register(
-                        cpu_load.to_string()
-                            + &ram_load.to_string()
-                            + &io_load.to_string()
-                            + &cio_disk
-                            + &cname,
-                        move |job| -> io::Result<()> {
-                            let job_args = job.args();
+                    c.register(cname, move |job| -> io::Result<()> {
+                        let job_args = job.args();
 
-                            let cpu_load = job_args[0].as_u64().unwrap();
-                            let ram_load = job_args[1].as_u64().unwrap();
-                            let io_load = job_args[2].as_u64().unwrap();
-                            let io_disk = job_args[3].as_str().unwrap();
-                            let name = job_args[4].as_str().unwrap();
+                        let cpu_load = job_args[0].as_u64().unwrap();
+                        let ram_load = job_args[1].as_u64().unwrap();
+                        let io_load = job_args[2].as_u64().unwrap();
+                        let io_disk = job_args[3].as_str().unwrap();
+                        let profile_name = job_args[4].as_str().unwrap();
 
-                            if start.elapsed().as_secs() > 180 {
-                                println!("reached 180 seconds, hard stop");
-                            }
+                        // FIXME: only run for 30 sec
+                        if start.elapsed().as_secs() > 30 {
+                            println!("reached 30 seconds, hard stop");
+                        }
 
-                            let now_2 = Instant::now();
-                            execute(cpu_load, ram_load, io_load, io_disk, name);
-                            println!(
-                                "job: {:?} with {:?} millis with core: {:?}",
-                                job.args(),
-                                now_2.elapsed().as_millis(),
-                                id.id
-                            );
-                            Ok(())
-                        },
-                    );
+                        let now_2 = Instant::now();
+                        execute(cpu_load, ram_load, io_load, io_disk, profile_name);
+                        println!(
+                            "job: {:?} with {:?} millis with core: {:?}",
+                            job.args(),
+                            now_2.elapsed().as_millis(),
+                            id.id
+                        );
+                        Ok(())
+                    });
 
                     let mut c = c.connect(None).unwrap();
 
