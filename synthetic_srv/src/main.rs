@@ -49,14 +49,10 @@ fn file_io(counter: &mut i32, f: &mut File, buf: Box<[u8]>) {
 /// Execute a job.
 ///
 /// Unit of CPU, RAM, I/O load is determined from measurment/analysis
-fn execute(
-    cpu_load: u64,
-    ram_load: u64,
-    io_load: u64,
-    io_disk: &str,
-    name: &str,
-) -> io::Result<()> {
-    let load = read_setup(cpu_load, ram_load, io_load).unwrap();
+fn execute(core_id: usize, profile: u64, count: u64) -> io::Result<()> {
+    let load = read_setup(1, 1, 1).unwrap();
+    let io_disk = "hdd";
+    let name = "rand3";
 
     // counting the iterations
     let mut counter = 0;
@@ -79,9 +75,9 @@ fn execute(
 
     // let file_name = "/data/tmp/foobar".to_owned() + &core_id.to_string() + ".bin";
     let file_name = if io_disk == "hdd" {
-        "/data/tmp/foobar".to_owned() + &name + ".bin"
+        "/data/tmp/foobar".to_owned() + &name + &core_id.to_string() + ".bin"
     } else {
-        "/home/jethros/data/tmp/foobar".to_owned() + &name + ".bin"
+        "/home/jethros/data/tmp/foobar".to_owned() + &name + &core_id.to_string() + ".bin"
     };
 
     // files for both cases
@@ -135,16 +131,16 @@ fn main() {
     // parameters:
     //
     // FIXME: Ideally we will only read the profile name, reading core id now just to make it work
-    if params.len() == 3 {
-        println!("Parse 2 args");
+    if params.len() == 2 {
+        println!("Parse 1 args");
         println!("{:?}", params);
     } else {
-        println!("More or less than 2 args are provided. Run it with *profile_name*");
+        println!("More or less than 1 args are provided. Run it with *profile_name*");
         process::exit(0x0100);
     }
 
-    let profile_name = params[1].parse::<String>().unwrap();
-    let core_id = params[2].parse::<usize>().unwrap();
+    // let profile_name = params[1].parse::<String>().unwrap();
+    let core_id = params[1].parse::<usize>().unwrap();
     // let ram_load = params[3].parse::<usize>().unwrap();
     // let io_load = params[4].parse::<usize>().unwrap();
     // let io_disk = params[5].parse::<String>().unwrap();
@@ -161,7 +157,7 @@ fn main() {
     let handles = core_ids
         .into_iter()
         .map(|id| {
-            let cname = profile_name.clone();
+            let cname = core_id.to_string();
             thread::spawn(move || {
                 if id.id == core_id {
                     // Pin this thread to a single CPU core.
@@ -171,11 +167,14 @@ fn main() {
                     c.register(cname, move |job| -> io::Result<()> {
                         let job_args = job.args();
 
-                        let cpu_load = job_args[0].as_u64().unwrap();
-                        let ram_load = job_args[1].as_u64().unwrap();
-                        let io_load = job_args[2].as_u64().unwrap();
-                        let io_disk = job_args[3].as_str().unwrap();
-                        let profile_name = job_args[4].as_str().unwrap();
+                        let profile = job_args[0].as_u64().unwrap();
+                        let count = job_args[1].as_u64().unwrap();
+
+                        // let cpu_load = job_args[0].as_u64().unwrap();
+                        // let ram_load = job_args[1].as_u64().unwrap();
+                        // let io_load = job_args[2].as_u64().unwrap();
+                        // let io_disk = job_args[3].as_str().unwrap();
+                        // let profile_name = job_args[4].as_str().unwrap();
 
                         // FIXME: only run for 30 sec
                         if start.elapsed().as_secs() > 30 {
@@ -183,7 +182,7 @@ fn main() {
                         }
 
                         let now_2 = Instant::now();
-                        execute(cpu_load, ram_load, io_load, io_disk, profile_name);
+                        execute(core_id, profile, count);
                         println!(
                             "job: {:?} with {:?} millis with core: {:?}",
                             job.args(),
