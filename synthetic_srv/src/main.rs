@@ -49,10 +49,8 @@ fn file_io(counter: &mut i32, f: &mut File, buf: Box<[u8]>) {
 /// Execute a job.
 ///
 /// Unit of CPU, RAM, I/O load is determined from measurment/analysis
-fn execute(core_id: usize, profile: u64, count: u64) -> io::Result<()> {
-    let load = read_setup(1, 1, 1).unwrap();
+fn execute(name: &str, load: Load) -> io::Result<()> {
     let io_disk = "hdd";
-    let name = "rand3";
 
     // counting the iterations
     let mut counter = 0;
@@ -75,9 +73,9 @@ fn execute(core_id: usize, profile: u64, count: u64) -> io::Result<()> {
 
     // let file_name = "/data/tmp/foobar".to_owned() + &core_id.to_string() + ".bin";
     let file_name = if io_disk == "hdd" {
-        "/data/tmp/foobar".to_owned() + &name + &core_id.to_string() + ".bin"
+        "/data/tmp/foobar".to_owned() + name + ".bin"
     } else {
-        "/home/jethros/data/tmp/foobar".to_owned() + &name + &core_id.to_string() + ".bin"
+        "/home/jethros/data/tmp/foobar".to_owned() + name + ".bin"
     };
 
     // files for both cases
@@ -131,16 +129,16 @@ fn main() {
     // parameters:
     //
     // FIXME: Ideally we will only read the profile name, reading core id now just to make it work
-    if params.len() == 2 {
-        println!("Parse 1 args");
+    if params.len() == 3 {
+        println!("Parse 2 args");
         println!("{:?}", params);
     } else {
-        println!("More or less than 1 args are provided. Run it with *profile_name*");
+        println!("More or less than 2 args are provided. Run it with *core_id profile_id/name*");
         process::exit(0x0100);
     }
 
-    // let profile_name = params[1].parse::<String>().unwrap();
     let core_id = params[1].parse::<usize>().unwrap();
+    let profile_id = params[2].parse::<String>().unwrap();
     // let ram_load = params[3].parse::<usize>().unwrap();
     // let io_load = params[4].parse::<usize>().unwrap();
     // let io_disk = params[5].parse::<String>().unwrap();
@@ -157,18 +155,23 @@ fn main() {
     let handles = core_ids
         .into_iter()
         .map(|id| {
-            let cname = core_id.to_string();
+            let cname = core_id.to_string() + "-" + &profile_id.to_string();
             thread::spawn(move || {
                 if id.id == core_id {
                     // Pin this thread to a single CPU core.
                     core_affinity::set_for_current(id);
                     let mut c = ConsumerBuilder::default();
 
-                    c.register(cname, move |job| -> io::Result<()> {
+                    c.register(cname.clone(), move |job| -> io::Result<()> {
                         let job_args = job.args();
 
-                        let profile = job_args[0].as_u64().unwrap();
-                        let count = job_args[1].as_u64().unwrap();
+                        // let profile = job_args[0].as_u64().unwrap();
+                        let count = job_args[0].as_u64().unwrap();
+
+                        // TODO: profile id to name
+                        let profile_name = "rand3";
+                        // profile and count -> load
+                        let load = read_setup(1, 1, 1).unwrap();
 
                         // let cpu_load = job_args[0].as_u64().unwrap();
                         // let ram_load = job_args[1].as_u64().unwrap();
@@ -182,7 +185,8 @@ fn main() {
                         }
 
                         let now_2 = Instant::now();
-                        execute(core_id, profile, count);
+
+                        execute(&cname, load);
                         println!(
                             "job: {:?} with {:?} millis with core: {:?}",
                             job.args(),
