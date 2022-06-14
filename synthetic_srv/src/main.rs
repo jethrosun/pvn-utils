@@ -151,6 +151,8 @@ pub fn execute(name: &str, load: Load) -> io::Result<()> {
 }
 
 fn main() {
+    // 10 min == 600 sec
+    let expr_time = 600;
     let start = Instant::now();
     let params: Vec<String> = env::args().collect();
 
@@ -172,7 +174,7 @@ fn main() {
 
     let profile_map_path = "/home/jethros/dev/pvn/utils/workloads/udf/profile_map.json";
     let profile_map = map_profile(profile_map_path.to_string()).unwrap();
-    let profile_name = profile_map.get(&profile_id).unwrap().clone();
+    let profile_name = profile_map.get(&profile_id).unwrap();
 
     let handles = core_ids
         .into_iter()
@@ -194,8 +196,7 @@ fn main() {
 
                             let workload_path = "/home/jethros/dev/pvn/utils/workloads/rdr_pvn_workloads/rdr_pvn_workload_5.json";
                             println!("{:?}", workload_path);
-                            let num_of_secs = 180;
-                            let mut rdr_workload = rdr_load_workload(workload_path.to_string(), num_of_secs, rdr_users.clone()).unwrap();
+                            let mut rdr_workload = rdr_load_workload(workload_path.to_string(), expr_time , rdr_users.clone()).unwrap();
                             println!("Workload is generated",);
 
                             // Browser list.
@@ -218,7 +219,7 @@ fn main() {
                             let mut num_of_visit = 0;
 
                             let now = Instant::now();
-                            println!("Timer started");    
+                            println!("Timer started");
 
                             let cur_time = now.elapsed().as_secs() as usize;
                             if rdr_workload.contains_key(&cur_time) {
@@ -249,8 +250,8 @@ fn main() {
                                 let infh: Box<dyn io::Read> =
                                     Box::new(File::open(infile_str).unwrap());
 
-                                if start.elapsed().as_secs() > 180 {
-                                    println!("reached 180 seconds, hard stop");
+                                if start.elapsed().as_secs() > expr_time as u64 {
+                                    println!("reached {} seconds, hard stop", expr_time);
                                 }
                                 let now_2 = Instant::now();
                                 transcode(infh, width_height_str.to_string());
@@ -276,8 +277,8 @@ fn main() {
                                 let load = read_setup(1, 1, 1).unwrap();
                                 // let p_name = profile_name;
 
-                                if start.elapsed().as_secs() > 30 {
-                                    println!("reached 30 seconds, hard stop");
+                                if start.elapsed().as_secs() > expr_time as u64 {
+                                    println!("reached {} seconds, hard stop", expr_time);
                                 }
                                 let now_2 = Instant::now();
 
