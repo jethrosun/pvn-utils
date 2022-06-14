@@ -192,71 +192,83 @@ fn main() {
                     let mut c = ConsumerBuilder::default();
 
                     if pname == "rdr" {
-                        let num_of_users = 20;
-                        let rdr_users = rdr_read_rand_seed(num_of_users, 2).unwrap();
-                        let usr_data_dir = rdr_read_user_data_dir("/home/jethros/setup".to_string()).unwrap();
+                        c.register(cname.clone(), move |job| -> io::Result<()> {
+                            //FIXME
+                            let job_args = job.args();
+                            let num_of_users  = job_args[0].as_u64().unwrap();
 
-                        let workload_path = "/home/jethros/dev/pvn/utils/workloads/rdr_pvn_workloads/rdr_pvn_workload_5.json";
-                        println!("{:?}", workload_path);
-                        let mut rdr_workload = rdr_load_workload(workload_path.to_string(), expr_time , rdr_users.clone()).unwrap();
-                        println!("Workload is generated",);
+                            let mut browser_list: HashMap<i64, Browser> = HashMap::new();
+                            let rdr_users = rdr_read_rand_seed(num_of_users, 2).unwrap();
+                            let usr_data_dir = rdr_read_user_data_dir("/home/jethros/setup".to_string()).unwrap();
 
-                        // Browser list.
-                        let mut browser_list: HashMap<i64, Browser> = HashMap::new();
+                            let workload_path = "/home/jethros/dev/pvn/utils/workloads/rdr_pvn_workloads/rdr_pvn_workload_5.json";
+                            println!("{:?}", workload_path);
+                            let mut rdr_workload = rdr_load_workload(workload_path.to_string(), expr_time , rdr_users.clone()).unwrap();
+                            println!("Workload is generated",);
 
-                        for user in &rdr_users {
-                            let browser = browser_create(&usr_data_dir).unwrap();
-                            browser_list.insert(*user, browser);
-                        }
-                        println!("{} browsers are created ", num_of_users);
-
-                        let _pivot = 1_usize;
-
-                        // Metrics for measurement
-                        let mut elapsed_time = Vec::new();
-                        let mut num_of_ok = 0;
-                        let mut num_of_err = 0;
-                        let mut num_of_timeout = 0;
-                        let mut num_of_closed = 0;
-                        let mut num_of_visit = 0;
-
-                        let now = Instant::now();
-                        println!("Timer started");
-
-                        let cur_time = now.elapsed().as_secs() as usize;
-                        if rdr_workload.contains_key(&cur_time) {
-                            // println!("pivot {:?}", cur_time);
-                            let min = cur_time / 60;
-                            let rest_sec = cur_time % 60;
-                            if let Some(wd) =  rdr_workload.remove(&cur_time) {
-                                println!("{:?} min, {:?} second", min, rest_sec);
-                                if let Some((oks, errs, timeouts, closeds, visits, elapsed)) = rdr_scheduler_ng(&cur_time, &rdr_users, wd, &browser_list) {
-                                    num_of_ok += oks;
-                                    num_of_err += errs;
-                                    num_of_timeout += timeouts;
-                                    num_of_closed += closeds;
-                                    num_of_visit += visits;
-                                    elapsed_time.push(elapsed);
-                                }
+                            for user in &rdr_users {
+                                let browser = browser_create(&usr_data_dir).unwrap();
+                                browser_list.insert(*user, browser);
                             }
+                            println!("{} browsers are created ", num_of_users);
+
+                            let _pivot = 1_usize;
+
+                            // Metrics for measurement
+                            let mut elapsed_time = Vec::new();
+                            let mut num_of_ok = 0;
+                            let mut num_of_err = 0;
+                            let mut num_of_timeout = 0;
+                            let mut num_of_closed = 0;
+                            let mut num_of_visit = 0;
+
+                            let now = Instant::now();
+                            println!("Timer started");
+
+                            let cur_time = now.elapsed().as_secs() as usize;
+                            if rdr_workload.contains_key(&cur_time) {
+                                // println!("pivot {:?}", cur_time);
+                                let min = cur_time / 60;
+                                let rest_sec = cur_time % 60;
+                                if let Some(wd) =  rdr_workload.remove(&cur_time) {
+                                    println!("{:?} min, {:?} second", min, rest_sec);
+                                    let Some((oks, errs, timeouts, closeds, visits, elapsed)) = rdr_scheduler_ng(&cur_time, &rdr_users, wd, &browser_list) {
+                                        num_of_ok += oks;
+                                        num_of_err += errs;
+                                        num_of_timeout += timeouts;
+                                        num_of_closed += closeds;
+                                        num_of_visit += visits;
+                                        elapsed_time.push(elapsed);
+                                        Ok(())
+                                    };
+                                };
+
+                                 Ok(())
+                            }
+                            else{ Ok(())
+                            }
+                        });
+                        let mut c = c.connect(None).unwrap();
+
+                        if let Err(e) = c.run(&["default"]) {
+                            println!("worker failed: {}", e);
                         }
-                    }
-                    else if pname == "xcdr" {
+                            
+                    } else if pname == "xcdr" {
                         c.register(cname.clone(), move |job| -> io::Result<()> {
                             let job_args = job.args();
-
-                            let infile_str = job_args[0].as_str().unwrap();
-                            // let outfile_str = job_args[1].as_str().unwrap();
-                            let width_height_str = job_args[2].as_str().unwrap();
-
-                            let infh: Box<dyn io::Read> =
-                                Box::new(File::open(infile_str).unwrap());
 
                             if start.elapsed().as_secs() > expr_time as u64 {
                                 println!("reached {} seconds, hard stop", expr_time);
                             }
                             let now_2 = Instant::now();
-                            transcode(infh, width_height_str.to_string());
+
+                            // https://github.com/jethrosun/NetBricks/blob/expr/framework/src/pvn/xcdr.rs#L110
+                            let count = job_args[0].as_u64().unwrap();
+                            let num_of_jobs = ((count / 10) as f64 * 1.13).ceil() as usize;
+                            for x in 0..num_of_jobs {
+                                let _ = transcode();
+                            }
                             println!(
                                 "inner: transcoded in {:?} millis with core: {:?}",
                                 now_2.elapsed().as_millis(),
@@ -272,6 +284,7 @@ fn main() {
                     }
                     // TLSV, P2P, rand1-4
                     else {
+                        // FIXME
                         c.register(cname.clone(), move |job| -> io::Result<()> {
                             let job_args = job.args();
 

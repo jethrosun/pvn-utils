@@ -106,7 +106,7 @@ pub fn rdr_retrieve_users(rdr_setup: usize) -> Option<usize> {
 }
 
 /// Read the pregenerated randomness seed from file.
-pub fn rdr_read_rand_seed(num_of_users: usize, iter: usize) -> io::Result<Vec<i64>> {
+pub fn rdr_read_rand_seed(num_of_users: u64, iter: usize) -> io::Result<Vec<i64>> {
     let rand_seed_file = "/home/jethros/dev/pvn/utils/rand_number/rand.json";
     let mut rand_vec = Vec::new();
     let file = File::open(rand_seed_file).expect("rand seed file should open read only");
@@ -176,7 +176,7 @@ pub fn simple_user_browse(
 /// RDR proxy browsing scheduler.
 #[allow(non_snake_case)]
 #[allow(unreachable_patterns)]
-pub fn rdr_scheduler_ng(
+pub fn rdr_scheduler(
     _pivot: &usize,
     rdr_users: &[i64],
     current_work: Vec<(u64, String, i64)>,
@@ -252,8 +252,11 @@ pub fn rdr_scheduler_ng(
 /// Actual video transcoding.
 ///
 /// We set up all the parameters for the transcoding job to happen.
-pub fn transcode(mut infh: Box<dyn io::Read>, width_height: String) {
-    // let mut infh: Box<dyn io::Read> = Box::new(File::open(&infile).unwrap());
+pub fn transcode() {
+    let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
+    let width_height = "360x24";
+
+    let mut infh: Box<dyn io::Read> = Box::new(File::open(infile).unwrap());
     let mut out = Vec::new();
     let dst_dims: Vec<_> = width_height
         .split("x")
