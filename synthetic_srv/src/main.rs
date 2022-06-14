@@ -176,6 +176,7 @@ fn main() {
     let profile_map = map_profile(profile_map_path.to_string()).unwrap();
     let profile_name = profile_map.get(&profile_id).unwrap();
 
+    println!("core id {}, profile id {}, profile name {}", core_id , profile_id, profile_name);
     let handles = core_ids
         .into_iter()
         .map(move |id| {
