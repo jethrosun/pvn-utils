@@ -91,7 +91,8 @@ pvn_nf = {
     'co_rdr': ['pvn-rdr-transform-app'],
     'co_xcdr': ['pvn-transcoder-transform-app'],
     'co_tlsv': ['pvn-tlsv-transform-app'],
-    'co_p2p': ['pvn-p2p-transform-app']
+    'co_p2p': ['pvn-p2p-transform-app'],
+        'udf' :['udf-schedule']
 }
 
 trace = {
@@ -166,7 +167,9 @@ trace = {
     'tlsv1_rdr1_xcdr1_p2p1': 'tlsv1_rdr1_xcdr1_p2p1.pcap',
     'tlsv1_xcdr2_p2p2': 'tlsv1_xcdr2_p2p2.pcap',
     'tlsv2_rdr1_xcdr1_p2p1': 'tlsv2_rdr1_xcdr1_p2p1.pcap',
-    'rdr1_p2p1': 'rdr1_p2p1.pcap'
+    'rdr1_p2p1': 'rdr1_p2p1.pcap', 
+
+    'udf' : 'rdr1_p2p1.pcap'
 }
 
 # # nf app
@@ -273,9 +276,14 @@ p2p_co = [
     'co_tlsv_rdr_xcdr_p2p'
 ]
 # p2p_co = ['co_tlsv_rdr_xcdr_p2p']
-set_list = ['1', '2', '3', '4', '5', '6']
-num_of_epoch = 5
-p2p_num_of_epoch = 5
+# set_list = ['1', '2', '3', '4', '5', '6']
+# num_of_epoch = 5
+# p2p_num_of_epoch = 5
+
+udf= ['udf']
+set_list = ['1', '2', '3']
+num_of_epoch = 2
+
 
 # set_list = ['7', '8', '9', '10', '11', '12', '13', '14', '15', '16']
 # num_of_epoch = 1
