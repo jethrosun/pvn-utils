@@ -2,6 +2,10 @@
 set -e
 
 # parameters?
+# $1: trace
+# $2: nf
+# $3: iter
+# $4: setup
 
 SLEEP_INTERVAL=3
 LOG_DIR=$HOME/netbricks_logs/$2/$1

@@ -41,7 +41,7 @@ pub fn map_profile(file_path: String) -> serde_json::Result<HashMap<usize, Strin
 
     let mut profile_map: HashMap<usize, String> = HashMap::new();
     for p in 1..num_of_profiles + 1 {
-        let profile = match json_data.get(p) {
+        let profile = match json_data.get(p.to_string()) {
             Some(val) => val.as_str().unwrap(),
             None => continue,
         };
@@ -174,9 +174,13 @@ fn main() {
 
     let profile_map_path = "/home/jethros/dev/pvn/utils/workloads/udf/profile_map.json";
     let profile_map = map_profile(profile_map_path.to_string()).unwrap();
+    println!(
+        "core id {}, profile id {}, profile map {:?}",
+        core_id, profile_id, profile_map
+    );
     let profile_name = profile_map.get(&profile_id).unwrap();
 
-    println!("core id {}, profile id {}, profile name {}", core_id , profile_id, profile_name);
+    // println!("core id {}, profile id {}, profile name {}", core_id , profile_id, profile_name);
     let handles = core_ids
         .into_iter()
         .map(move |id| {
