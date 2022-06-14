@@ -28,7 +28,7 @@ BIO_TOP_MONITOR=/usr/share/bcc/tools/biotop
 PCPU=$HOME/dev/pvn/utils/netbricks_expr/misc/pcpu.sh
 PMEM=$HOME/dev/pvn/utils/netbricks_expr/misc/pmem.sh
 
-NB_CONFIG=$HOME/dev/netbricks/experiments/config_1core.toml
+NB_CONFIG=$HOME/dev/netbricks/experiments/udf_1core.toml
 TMP_NB_CONFIG=$HOME/config.toml
 
 SERVER=$HOME/data/cargo-target/release/synthetic_srv
@@ -58,10 +58,10 @@ echo "${JSON_STRING}" >/home/jethros/setup
 
 docker run -d --cpuset-cpus 0 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
 docker ps
-sleep 15
+sleep 5
 
-/home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$7" "$FAKTORY_LOG" &
-P1=$!
+# /home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$7" "$FAKTORY_LOG" &
+# P1=$!
 "$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 P2=$!
 for core_id in {1..5}
@@ -69,5 +69,8 @@ do
 	for profile_id in {1..8}
 	do
 		$SERVER $core_id $profile_id > $LOG_DIR/$3_$4__${core_id}_${profile_id}.log &
+		PID=$!
+		# https://www.baeldung.com/linux/process-periodic-cpu-usage
+		sudo -u jethros taskset -c 0 top  -b -d $SLEEP_INTERVAL -p $PID > $LOG_DIR/$3_$4__${core_id}_${profile_id}_top.log &
 	done
 done

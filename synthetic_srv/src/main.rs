@@ -1,32 +1,60 @@
+extern crate failure;
 extern crate faktory;
+extern crate headless_chrome;
 extern crate rand;
+extern crate resize;
+extern crate rshttp;
+extern crate rustc_serialize;
+extern crate serde_json;
+extern crate time;
+extern crate tiny_http;
+extern crate y4m;
 
+use crate::lib::*;
 use crate::rand::Rng;
 use core_affinity::CoreId;
 use faktory::ConsumerBuilder;
+use headless_chrome::Browser;
 use std::collections::HashMap;
 use std::convert::TryInto;
-use std::env;
 use std::fs::{File, OpenOptions};
 use std::io::Write;
-use std::process;
 use std::time::{Duration, Instant};
-use std::vec;
-use std::{io, thread};
+use std::{env, io, process, thread, vec};
+
+mod lib;
 
 const GB_SIZE: usize = 1_000_000_000;
 
 #[derive(Copy, Clone, Debug)]
-struct Load {
+pub struct Load {
     cpu: u64,
     ram: u64,
     io: u64,
 }
 
+pub fn map_profile(file_path: String) -> serde_json::Result<HashMap<usize, String>> {
+    let file = File::open(file_path).expect("file should open read only");
+    let json_data: serde_json::Value =
+        serde_json::from_reader(file).expect("file should be proper JSON");
+    let num_of_profiles = 8;
+
+    let mut profile_map: HashMap<usize, String> = HashMap::new();
+    for p in 1..num_of_profiles + 1 {
+        let profile = match json_data.get(p) {
+            Some(val) => val.as_str().unwrap(),
+            None => continue,
+        };
+        profile_map.insert(p, profile.to_string());
+    }
+
+    Ok(profile_map)
+}
+
 /// Map different setup to memory resource intensiveness. We are mapping setup into size of u128,
 /// which is the largest size we can use setup: 10GB, 20GB, 50GB. 50GB is definitely causing too
 /// much paging.
-fn read_setup(cpu_load: u64, ram_load: u64, io_load: u64) -> Option<Load> {
+pub fn read_setup(cpu_load: u64, ram_load: u64, io_load: u64) -> Option<Load> {
     Some(Load {
         cpu: 100 as u64,
         ram: (1 * GB_SIZE / 16) as u64,
@@ -34,7 +62,7 @@ fn read_setup(cpu_load: u64, ram_load: u64, io_load: u64) -> Option<Load> {
     })
 }
 
-fn file_io(counter: &mut i32, f: &mut File, buf: Box<[u8]>) {
+pub fn file_io(counter: &mut i32, f: &mut File, buf: Box<[u8]>) {
     // write sets * 50mb to file
     f.write_all(&buf).unwrap();
     f.flush().unwrap();
@@ -49,7 +77,7 @@ fn file_io(counter: &mut i32, f: &mut File, buf: Box<[u8]>) {
 /// Execute a job.
 ///
 /// Unit of CPU, RAM, I/O load is determined from measurment/analysis
-fn execute(name: &str, load: Load) -> io::Result<()> {
+pub fn execute(name: &str, load: Load) -> io::Result<()> {
     let io_disk = "hdd";
 
     // counting the iterations
@@ -126,9 +154,6 @@ fn main() {
     let start = Instant::now();
     let params: Vec<String> = env::args().collect();
 
-    // parameters:
-    //
-    // FIXME: Ideally we will only read the profile name, reading core id now just to make it work
     if params.len() == 3 {
         println!("Parse 2 args");
         println!("{:?}", params);
@@ -138,68 +163,139 @@ fn main() {
     }
 
     let core_id = params[1].parse::<usize>().unwrap();
-    let profile_id = params[2].parse::<String>().unwrap();
-    // let ram_load = params[3].parse::<usize>().unwrap();
-    // let io_load = params[4].parse::<usize>().unwrap();
-    // let io_disk = params[5].parse::<String>().unwrap();
-    // let name = params[6].parse::<String>().unwrap();
+    let profile_id = params[2].parse::<usize>().unwrap();
 
-    // The regular way to get core ids are not going work as we have configured isol cpus to reduce
-    // context switches for DPDK and our things.
-    // We want to cause equal pressure to all of the cores for CPU contention
     let mut core_ids = Vec::new();
     for idx in 0..6 {
         core_ids.push(CoreId { id: idx });
     }
 
+    let profile_map_path = "/home/jethros/dev/pvn/utils/workloads/udf/profile_map.json";
+    let profile_map = map_profile(profile_map_path.to_string()).unwrap();
+    let profile_name = profile_map.get(&profile_id).unwrap().clone();
+
     let handles = core_ids
         .into_iter()
-        .map(|id| {
+        .map(move |id| {
             let cname = core_id.to_string() + "-" + &profile_id.to_string();
+            let pname = profile_name.clone();
             thread::spawn(move || {
                 if id.id == core_id {
-                    // Pin this thread to a single CPU core.
                     core_affinity::set_for_current(id);
                     let mut c = ConsumerBuilder::default();
+                    let rdr = "rdr".to_string();
+                    let xcdr = "xcdr".to_string();
 
-                    c.register(cname.clone(), move |job| -> io::Result<()> {
-                        let job_args = job.args();
+                    match pname {
+                        rdr => {
+                            let num_of_users = 20;
+                            let rdr_users = rdr_read_rand_seed(num_of_users, 2).unwrap();
+                            let usr_data_dir = rdr_read_user_data_dir("/home/jethros/setup".to_string()).unwrap();
 
-                        // let profile = job_args[0].as_u64().unwrap();
-                        let count = job_args[0].as_u64().unwrap();
+                            let workload_path = "/home/jethros/dev/pvn/utils/workloads/rdr_pvn_workloads/rdr_pvn_workload_5.json";
+                            println!("{:?}", workload_path);
+                            let num_of_secs = 180;
+                            let mut rdr_workload = rdr_load_workload(workload_path.to_string(), num_of_secs, rdr_users.clone()).unwrap();
+                            println!("Workload is generated",);
 
-                        // TODO: profile id to name
-                        let profile_name = "rand3";
-                        // profile and count -> load
-                        let load = read_setup(1, 1, 1).unwrap();
+                            // Browser list.
+                            let mut browser_list: HashMap<i64, Browser> = HashMap::new();
 
-                        // let cpu_load = job_args[0].as_u64().unwrap();
-                        // let ram_load = job_args[1].as_u64().unwrap();
-                        // let io_load = job_args[2].as_u64().unwrap();
-                        // let io_disk = job_args[3].as_str().unwrap();
-                        // let profile_name = job_args[4].as_str().unwrap();
+                            for user in &rdr_users {
+                                let browser = browser_create(&usr_data_dir).unwrap();
+                                browser_list.insert(*user, browser);
+                            }
+                            println!("{} browsers are created ", num_of_users);
 
-                        // FIXME: only run for 30 sec
-                        if start.elapsed().as_secs() > 30 {
-                            println!("reached 30 seconds, hard stop");
+                            let _pivot = 1_usize;
+
+                            // Metrics for measurement
+                            let mut elapsed_time = Vec::new();
+                            let mut num_of_ok = 0;
+                            let mut num_of_err = 0;
+                            let mut num_of_timeout = 0;
+                            let mut num_of_closed = 0;
+                            let mut num_of_visit = 0;
+
+                            let now = Instant::now();
+                            println!("Timer started");    
+
+                            let cur_time = now.elapsed().as_secs() as usize;
+                            if rdr_workload.contains_key(&cur_time) {
+                                // println!("pivot {:?}", cur_time);
+                                let min = cur_time / 60;
+                                let rest_sec = cur_time % 60;
+                                if let Some(wd) =  rdr_workload.remove(&cur_time) {
+                                    println!("{:?} min, {:?} second", min, rest_sec);
+                                    if let Some((oks, errs, timeouts, closeds, visits, elapsed)) = rdr_scheduler_ng(&cur_time, &rdr_users, wd, &browser_list) {
+                                        num_of_ok += oks;
+                                        num_of_err += errs;
+                                        num_of_timeout += timeouts;
+                                        num_of_closed += closeds;
+                                        num_of_visit += visits;
+                                        elapsed_time.push(elapsed);
+                                    }
+                                }
+                            }
                         }
+                        xcdr => {
+                            c.register(cname.clone(), move |job| -> io::Result<()> {
+                                let job_args = job.args();
 
-                        let now_2 = Instant::now();
+                                let infile_str = job_args[0].as_str().unwrap();
+                                // let outfile_str = job_args[1].as_str().unwrap();
+                                let width_height_str = job_args[2].as_str().unwrap();
 
-                        execute(&cname, load);
-                        println!(
-                            "job: {:?} with {:?} millis with core: {:?}",
-                            job.args(),
-                            now_2.elapsed().as_millis(),
-                            id.id
-                        );
-                        Ok(())
-                    });
+                                let infh: Box<dyn io::Read> =
+                                    Box::new(File::open(infile_str).unwrap());
 
-                    let mut c = c.connect(None).unwrap();
+                                if start.elapsed().as_secs() > 180 {
+                                    println!("reached 180 seconds, hard stop");
+                                }
+                                let now_2 = Instant::now();
+                                transcode(infh, width_height_str.to_string());
+                                println!(
+                                    "inner: transcoded in {:?} millis with core: {:?}",
+                                    now_2.elapsed().as_millis(),
+                                    id.id
+                                );
+                                Ok(())
+                            });
+                            let mut c = c.connect(None).unwrap();
 
-                    if let Err(e) = c.run(&["default"]) {
-                        println!("worker failed: {}", e);
+                            if let Err(e) = c.run(&["default"]) {
+                                println!("worker failed: {}", e);
+                            }
+                        }
+                        // TLSV, P2P, rand1-4
+                        _ => {
+                            c.register(cname.clone(), move |job| -> io::Result<()> {
+                                let job_args = job.args();
+
+                                let count = job_args[0].as_u64().unwrap();
+                                let load = read_setup(1, 1, 1).unwrap();
+                                // let p_name = profile_name;
+
+                                if start.elapsed().as_secs() > 30 {
+                                    println!("reached 30 seconds, hard stop");
+                                }
+                                let now_2 = Instant::now();
+
+                                execute(&cname, load);
+                                println!(
+                                    "job: {:?} with {:?} millis with core: {:?}",
+                                    job.args(),
+                                    now_2.elapsed().as_millis(),
+                                    id.id
+                                );
+                                Ok(())
+                            });
+                            let mut c = c.connect(None).unwrap();
+
+                            if let Err(e) = c.run(&["default"]) {
+                                println!("worker failed: {}", e);
+                            }
+                        }
                     }
                 }
             })
