@@ -102,7 +102,8 @@ def main(expr_list):
         for nf in conf.pvn_nf[expr]:
             # we are running the regular NFs 
             # config the pktgen sending rate
-            sending_rate = conf.fetch_sending_rate(nf)
+            # sending_rate = conf.fetch_sending_rate(nf)
+            sending_rate = 50
             pktgen_sess = pktgen_sess_setup(conf.trace[expr], nf, sending_rate)
             run_pktgen(pktgen_sess, conf.trace[expr], sending_rate)
 
