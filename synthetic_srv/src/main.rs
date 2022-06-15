@@ -320,7 +320,7 @@ fn main() {
                             let job_args = job.args();
 
                             let count = job_args[0].as_u64().unwrap();
-                            let load = udf_load(&profile_name.clone(), count as f64).unwrap();
+                            let load = udf_load(&pname, count as f64).unwrap();
 
                             if start.elapsed().as_secs() > expr_time as u64 {
                                 println!("reached {} seconds, hard stop", expr_time);
