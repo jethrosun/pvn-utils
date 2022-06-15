@@ -24,7 +24,7 @@ use std::{env, io, process, thread, vec};
 
 mod lib;
 
-const GB_SIZE: f64= 1_000_000_000.0;
+const GB_SIZE: f64 = 1_000_000_000.0;
 
 #[derive(Copy, Clone, Debug)]
 pub struct Load {
@@ -56,42 +56,42 @@ pub fn map_profile(file_path: String) -> serde_json::Result<HashMap<usize, Strin
 /// much paging.
 pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
     let load = match profile_name {
-    "tlsv" => {Load {
-        cpu: 5 * count as u64,
-        ram: 0 as u64,
-        io: 0 as u64,
-    }},
-    "p2p" =>  {Load {
-        cpu: 0 as u64,
-        ram: 0 as u64,
-        io: 20 * count  as u64,
-    }},
-    "rand1" => {Load {
-        cpu: ((0.0475*10.0*count) as f64).ceil() as u64,
-        ram: ((0.0271 *GB_SIZE / 16.0*count) as f64).ceil() as u64,
-        io: ((0.0413*20.0*count) as f64).ceil() as u64
-    }},
-"rand2" => {Load {
-        cpu: ((0.3449*10.0*count) as f64).ceil() as u64,
-        ram: ((0.639 *GB_SIZE / 16.0*count) as f64).ceil() as u64,
-        io: ((0.5554*20.0*count) as f64).ceil() as u64
-    }},
-"rand3" => {Load {
-        cpu: ((0.1555*10.0*count) as f64).ceil() as u64,
-        ram: ((0.6971 *GB_SIZE / 16.0*count) as f64).ceil() as u64,
-        io: ((0.833*20.0*count) as f64).ceil() as u64
-    }},
-"rand4" => {Load {
-        cpu: ((0.9647*10.0*count) as f64).ceil() as u64,
-        ram: ((0.6844 *GB_SIZE / 16.0*count) as f64).ceil() as u64,
-        io: ((0.0955*20.0*count) as f64).ceil() as u64
-    }},
-    _ => {
-println!("something else!");
-return None
-    }
-};
-   Some(load)
+        "tlsv" => Load {
+            cpu: 5 * count as u64,
+            ram: 0 as u64,
+            io: 0 as u64,
+        },
+        "p2p" => Load {
+            cpu: 0 as u64,
+            ram: 0 as u64,
+            io: 20 * count as u64,
+        },
+        "rand1" => Load {
+            cpu: ((0.0475 * 10.0 * count) as f64).ceil() as u64,
+            ram: ((0.0271 * GB_SIZE / 16.0 * count) as f64).ceil() as u64,
+            io: ((0.0413 * 20.0 * count) as f64).ceil() as u64,
+        },
+        "rand2" => Load {
+            cpu: ((0.3449 * 10.0 * count) as f64).ceil() as u64,
+            ram: ((0.639 * GB_SIZE / 16.0 * count) as f64).ceil() as u64,
+            io: ((0.5554 * 20.0 * count) as f64).ceil() as u64,
+        },
+        "rand3" => Load {
+            cpu: ((0.1555 * 10.0 * count) as f64).ceil() as u64,
+            ram: ((0.6971 * GB_SIZE / 16.0 * count) as f64).ceil() as u64,
+            io: ((0.833 * 20.0 * count) as f64).ceil() as u64,
+        },
+        "rand4" => Load {
+            cpu: ((0.9647 * 10.0 * count) as f64).ceil() as u64,
+            ram: ((0.6844 * GB_SIZE / 16.0 * count) as f64).ceil() as u64,
+            io: ((0.0955 * 20.0 * count) as f64).ceil() as u64,
+        },
+        _ => {
+            println!("something else!");
+            return None;
+        }
+    };
+    Some(load)
 }
 
 pub fn file_io(counter: &mut i32, f: &mut File, buf: Box<[u8]>) {

@@ -120,7 +120,7 @@ def main(expr_list):
                     # Actual RUN
                     run_netbricks(netbricks_sess, conf.trace[expr], nf, epoch, setup)
 
-                    time.sleep(conf.expr_wait_time)
+                    time.sleep(conf.udf_expr_wait_time)
 
                     # run clean up for p2p nf before experiment
                     p2p_cleanup(netbricks_sess)

@@ -256,6 +256,7 @@ xcdr_clean_list = [
 ########################################################################
 # expr_wait_time = 300  # only for RDR latency
 expr_wait_time = 250
+udf_expr_wait_time = 1250
 # expr is 3 min/180 sec
 # expr_wait_time = 220
 xcdr_port_base = 7418
