@@ -24,7 +24,7 @@ use std::{env, io, process, thread, vec};
 
 mod lib;
 
-const GB_SIZE: usize = 1_000_000_000;
+const GB_SIZE: f64= 1_000_000_000.0;
 
 #[derive(Copy, Clone, Debug)]
 pub struct Load {
@@ -54,12 +54,44 @@ pub fn map_profile(file_path: String) -> serde_json::Result<HashMap<usize, Strin
 /// Map different setup to memory resource intensiveness. We are mapping setup into size of u128,
 /// which is the largest size we can use setup: 10GB, 20GB, 50GB. 50GB is definitely causing too
 /// much paging.
-pub fn read_setup(cpu_load: u64, ram_load: u64, io_load: u64) -> Option<Load> {
-    Some(Load {
-        cpu: 100 as u64,
-        ram: (1 * GB_SIZE / 16) as u64,
-        io: 20 as u64,
-    })
+pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
+    let load = match profile_name {
+    "tlsv" => {Load {
+        cpu: 5 * count as u64,
+        ram: 0 as u64,
+        io: 0 as u64,
+    }},
+    "p2p" =>  {Load {
+        cpu: 0 as u64,
+        ram: 0 as u64,
+        io: 20 * count  as u64,
+    }},
+    "rand1" => {Load {
+        cpu: ((0.0475*10.0*count) as f64).ceil() as u64,
+        ram: ((0.0271 *GB_SIZE / 16.0*count) as f64).ceil() as u64,
+        io: ((0.0413*20.0*count) as f64).ceil() as u64
+    }},
+"rand2" => {Load {
+        cpu: ((0.3449*10.0*count) as f64).ceil() as u64,
+        ram: ((0.639 *GB_SIZE / 16.0*count) as f64).ceil() as u64,
+        io: ((0.5554*20.0*count) as f64).ceil() as u64
+    }},
+"rand3" => {Load {
+        cpu: ((0.1555*10.0*count) as f64).ceil() as u64,
+        ram: ((0.6971 *GB_SIZE / 16.0*count) as f64).ceil() as u64,
+        io: ((0.833*20.0*count) as f64).ceil() as u64
+    }},
+"rand4" => {Load {
+        cpu: ((0.9647*10.0*count) as f64).ceil() as u64,
+        ram: ((0.6844 *GB_SIZE / 16.0*count) as f64).ceil() as u64,
+        io: ((0.0955*20.0*count) as f64).ceil() as u64
+    }},
+    _ => {
+println!("something else!");
+return None
+    }
+};
+   Some(load)
 }
 
 pub fn file_io(counter: &mut i32, f: &mut File, buf: Box<[u8]>) {
@@ -178,7 +210,7 @@ fn main() {
         "core id {}, profile id {}, profile map {:?}",
         core_id, profile_id, profile_map
     );
-    let profile_name = profile_map.get(&profile_id).unwrap();
+    let profile_name = profile_map.get(&profile_id).unwrap().clone();
 
     // println!("core id {}, profile id {}, profile name {}", core_id , profile_id, profile_name);
     let handles = core_ids
@@ -193,7 +225,7 @@ fn main() {
 
                     if pname == "rdr" {
                         c.register(cname.clone(), move |job| -> io::Result<()> {
-                            //FIXME
+                            // TODO: optmize the managemenet of browser and workload
                             let job_args = job.args();
                             let num_of_users  = job_args[0].as_u64().unwrap();
 
@@ -230,30 +262,29 @@ fn main() {
                                 // println!("pivot {:?}", cur_time);
                                 let min = cur_time / 60;
                                 let rest_sec = cur_time % 60;
-                                if let Some(wd) =  rdr_workload.remove(&cur_time) {
-                                    println!("{:?} min, {:?} second", min, rest_sec);
-                                    let Some((oks, errs, timeouts, closeds, visits, elapsed)) = rdr_scheduler_ng(&cur_time, &rdr_users, wd, &browser_list) {
+                                println!("{:?} min, {:?} second", min, rest_sec);
+                                match rdr_workload.get(&cur_time) {
+                                    Some(wd) => {
+                                        let (oks, errs, timeouts, closeds, visits, elapsed) = rdr_scheduler(&cur_time, &rdr_users, wd.to_vec(), &browser_list).unwrap();
                                         num_of_ok += oks;
                                         num_of_err += errs;
                                         num_of_timeout += timeouts;
                                         num_of_closed += closeds;
                                         num_of_visit += visits;
                                         elapsed_time.push(elapsed);
-                                        Ok(())
-                                    };
-                                };
 
-                                 Ok(())
+                                    },
+                                    None => println!("no work in {}.", cur_time)
+                                }
                             }
-                            else{ Ok(())
-                            }
+                            Ok(())
                         });
                         let mut c = c.connect(None).unwrap();
 
                         if let Err(e) = c.run(&["default"]) {
                             println!("worker failed: {}", e);
                         }
-                            
+
                     } else if pname == "xcdr" {
                         c.register(cname.clone(), move |job| -> io::Result<()> {
                             let job_args = job.args();
@@ -289,8 +320,7 @@ fn main() {
                             let job_args = job.args();
 
                             let count = job_args[0].as_u64().unwrap();
-                            let load = read_setup(1, 1, 1).unwrap();
-                            // let p_name = profile_name;
+                            let load = udf_load(&profile_name.clone(), count as f64).unwrap();
 
                             if start.elapsed().as_secs() > expr_time as u64 {
                                 println!("reached {} seconds, hard stop", expr_time);
@@ -315,7 +345,7 @@ fn main() {
                 }
             })
         })
-        .collect::<Vec<_>>();
+    .collect::<Vec<_>>();
 
     for handle in handles.into_iter() {
         handle.join().unwrap();
