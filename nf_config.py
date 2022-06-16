@@ -256,7 +256,6 @@ xcdr_clean_list = [
 ########################################################################
 # expr_wait_time = 300  # only for RDR latency
 expr_wait_time = 250
-udf_expr_wait_time = 1250
 # expr is 3 min/180 sec
 # expr_wait_time = 220
 xcdr_port_base = 7418
@@ -280,11 +279,6 @@ p2p_co = [
 # set_list = ['1', '2', '3', '4', '5', '6']
 # num_of_epoch = 5
 # p2p_num_of_epoch = 5
-
-udf= ['udf']
-set_list = ['1', '2', '3']
-num_of_epoch = 2
-
 
 # set_list = ['7', '8', '9', '10', '11', '12', '13', '14', '15', '16']
 # num_of_epoch = 1
@@ -326,5 +320,10 @@ raw_p2p_tasks = [
     'tlsv1_rdr3_xcdr1_p2p1', 'rdr4_p2p2', 'rdr4_xcdr1_p2p1', 'rdr3_xcdr2_p2p1'
 ]
 
-
 raw_p2p_tasks = ['rdr1_xcdr3_p2p1']
+
+
+udf= ['udf']
+set_list = ['1', '2', '3']
+num_of_epoch = 2
+udf_expr_wait_time = 1300

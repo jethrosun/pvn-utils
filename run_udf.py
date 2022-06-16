@@ -100,7 +100,7 @@ def main(expr_list):
         print("Running experiments that for {} application NF".format(expr))
         # app_rdr_g, app_rdr_t; app_p2p_g, app_p2p_t
         for nf in conf.pvn_nf[expr]:
-            # we are running the regular NFs 
+            # we are running the regular NFs
             # config the pktgen sending rate
             # sending_rate = conf.fetch_sending_rate(nf)
             sending_rate = 50
