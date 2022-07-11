@@ -81,7 +81,7 @@ do
 		# P3=$!
 		# while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 0 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > $LOG_DIR/$3_$4__${core_id}_${profile_id}_mem.log & &
 		# P4=$!
-		sudo -u jethros taskset -c 0 "$BIO_TOP_MONITOR" -C > $LOG_DIR/$3_$4__${core_id}_${profile_id}_bio.log &
 		# P5=$!
 	done
 done
+taskset -c 0 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
