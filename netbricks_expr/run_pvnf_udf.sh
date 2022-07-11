@@ -75,6 +75,14 @@ do
 		$SERVER $core_id $profile_id > $LOG_DIR/$3_$4__${core_id}_${profile_id}.log &
 		PID=$!
 		# https://www.baeldung.com/linux/process-periodic-cpu-usage
-		sudo -u jethros taskset -c 0 top  -b -d $SLEEP_INTERVAL -p $PID > $LOG_DIR/$3_$4__${core_id}_${profile_id}_top.log &
+		sudo -u jethros taskset -c 0 top  -b -d $SLEEP_INTERVAL -p $PID | tail -1 > $LOG_DIR/$3_$4__${core_id}_${profile_id}_top.log &
+
+		# while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 0 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > $LOG_DIR/$3_$4__${core_id}_${profile_id}_cpu.log & &
+		# P3=$!
+		# while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 0 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > $LOG_DIR/$3_$4__${core_id}_${profile_id}_mem.log & &
+		# P4=$!
+		sudo -u jethros taskset -c 0 "$BIO_TOP_MONITOR" -C > $LOG_DIR/$3_$4__${core_id}_${profile_id}_bio.log & &
+		P5=$!
+
 	done
 done
