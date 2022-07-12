@@ -62,7 +62,7 @@ echo "${JSON_STRING}" >/home/jethros/setup
 
 docker run -d --cpuset-cpus 0 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
 docker ps
-sleep 5
+sleep 10
 
 # /home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$7" "$FAKTORY_LOG" &
 # P1=$!
