@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+# PID and waits:
+# https://stackoverflow.com/questions/356100/how-to-wait-in-bash-for-several-subprocesses-to-finish-and-return-exit-code-0
+
+
 # parameters?
 # $1: trace
 # $2: nf
@@ -64,19 +68,22 @@ docker run -d --cpuset-cpus 0 --name faktory_src --rm -it -p 127.0.0.1:7419:7419
 docker ps
 sleep 10
 
+pids=""
+RESULT=0
+
 # /home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$7" "$FAKTORY_LOG" &
 # P1=$!
 "$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
-P2=$!
+pids="$pids $!"
 for core_id in {1..5}
 do
 	for profile_id in {1..8}
 	do
 		$SERVER $core_id $profile_id > $LOG_DIR/$3_$4__${core_id}_${profile_id}.log &
-		PID=$!
+		pids="$pids $!"
 		# https://www.baeldung.com/linux/process-periodic-cpu-usage
 		sudo -u jethros taskset -c 0 top  -b -d $SLEEP_INTERVAL -p $PID | tail -1 > $LOG_DIR/$3_$4__${core_id}_${profile_id}_top.log &
-
+		pids="$pids $!"
 		# while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 0 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > $LOG_DIR/$3_$4__${core_id}_${profile_id}_cpu.log & &
 		# P3=$!
 		# while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 0 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > $LOG_DIR/$3_$4__${core_id}_${profile_id}_mem.log & &
@@ -85,3 +92,13 @@ do
 	done
 done
 taskset -c 0 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+pids="$pids $!"
+
+for pid in $pids; do
+    wait $pid || let "RESULT=1"
+done
+
+if [ "$RESULT" == "1" ];
+    then
+       exit 1
+fi
