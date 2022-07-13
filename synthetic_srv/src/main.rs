@@ -312,7 +312,8 @@ fn main() {
                                 let _ = transcode();
                             }
                             println!(
-                                "inner: transcoded in {:?} millis with core: {:?}",
+                                "\ttranscoded {:?} of jobs in {:?} millis with core: {:?}",
+                                num_of_jobs,
                                 now_2.elapsed().as_millis(),
                                 id.id
                             );
@@ -342,8 +343,9 @@ fn main() {
 
                             execute(&cname, load);
                             println!(
-                                "job: {:?} with {:?} millis with core: {:?}",
+                                "\tjob: {:?} (load: {:?}) with {:?} millis with core: {:?}",
                                 job.args(),
+                                load,
                                 now_2.elapsed().as_millis(),
                                 id.id
                             );
