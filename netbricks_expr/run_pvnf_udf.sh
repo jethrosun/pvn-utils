@@ -11,7 +11,8 @@ set -e
 # $3: iter
 # $4: setup
 
-SLEEP_INTERVAL=3
+DELAY_INTERVAL=2
+DELAY_INTERVAL=3
 LOG_DIR=$HOME/netbricks_logs/$2/$1
 
 LOG=$LOG_DIR/$3_$4.log
@@ -41,7 +42,8 @@ TMP_NB_CONFIG=$HOME/config.toml
 
 SERVER=$HOME/data/cargo-target/release/synthetic_srv
 
-sed "/duration = 1200/i log_path = '${LOG}'" "${NB_CONFIG}" >"${TMP_NB_CONFIG}"
+# 1800 seconds = 30 min
+sed "/duration = 1800/i log_path = '${LOG}'" "${NB_CONFIG}" >"${TMP_NB_CONFIG}"
 
 INST_LEVEL=off
 EXPR_MODE=long
@@ -61,15 +63,15 @@ JSON_STRING=$(jq -n \
 	--arg inst "$INST_LEVEL" \
 	--arg mode "$EXPR_MODE" \
 	'{setup: $setup, tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup,  iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}')
-echo "${JSON_STRING}" >/home/jethros/setup
-#"sudo ./run_pvnf_coresident.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + str(expr)
+	echo "${JSON_STRING}" >/home/jethros/setup
+	#"sudo ./run_pvnf_coresident.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + str(expr)
 
-docker run -d --cpuset-cpus 0 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
-docker ps
-sleep 10
+	docker run -d --cpuset-cpus 0 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
+	docker ps
+	sleep 10
 
-pids=""
-RESULT=0
+	pids=""
+	RESULT=0
 
 # /home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$7" "$FAKTORY_LOG" &
 # P1=$!
@@ -82,7 +84,8 @@ do
 		$SERVER $core_id $profile_id > $LOG_DIR/$3_$4__${core_id}_${profile_id}.log &
 		pids="$pids $!"
 		# https://www.baeldung.com/linux/process-periodic-cpu-usage
-		sudo -u jethros taskset -c 0 top  -b -d $SLEEP_INTERVAL -p $PID | tail -1 > $LOG_DIR/$3_$4__${core_id}_${profile_id}_top.log &
+		# top -p 310-b -n2 -d 1 | grep -w 310 | awk '{printf "%s,%s,%s,%s\n",$1,$12,$9,$10}'
+		sudo -u jethros taskset -c 0 top -b -d $DELAY_INTERVAL -p $PID | grep -w $PID | awk '{printf "%s,%s,%s,%s\n",$1,$12,$9,$10}' > $LOG_DIR/$3_$4__${core_id}_${profile_id}_top.log &
 		pids="$pids $!"
 		# while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 0 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > $LOG_DIR/$3_$4__${core_id}_${profile_id}_cpu.log & &
 		# P3=$!
@@ -95,10 +98,10 @@ taskset -c 0 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
 pids="$pids $!"
 
 for pid in $pids; do
-    wait $pid || let "RESULT=1"
+	wait $pid || let "RESULT=1"
 done
 
 if [ "$RESULT" == "1" ];
-    then
-       exit 1
+then
+	exit 1
 fi
