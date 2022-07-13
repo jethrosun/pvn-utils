@@ -81,7 +81,7 @@ do
 	for profile_id in {1..8}
 	do
 		$SERVER $core_id $profile_id > $LOG_DIR/$3_$4__${core_id}_${profile_id}.log &
-		$PID=$!
+		PID=$!
 		pids="$pids $PID"
 		# https://www.baeldung.com/linux/process-periodic-cpu-usage
 		# top -p 310-b -n2 -d 1 | grep -w 310 | awk '{printf "%s,%s,%s,%s\n",$1,$12,$9,$10}'
