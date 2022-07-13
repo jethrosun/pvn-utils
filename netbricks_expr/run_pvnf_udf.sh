@@ -11,7 +11,7 @@ set -e
 # $3: iter
 # $4: setup
 
-DELAY_INTERVAL=2
+DELAY_INTERVAL=1
 DELAY_INTERVAL=3
 LOG_DIR=$HOME/netbricks_logs/$2/$1
 
@@ -84,8 +84,8 @@ do
 		PID=$!
 		pids="$pids $PID"
 		# https://www.baeldung.com/linux/process-periodic-cpu-usage
-		# top -p 310-b -n2 -d 1 | grep -w 310 | awk '{printf "%s,%s,%s,%s\n",$1,$12,$9,$10}'
-		sudo -u jethros taskset -c 0 top -b -d $DELAY_INTERVAL -p $PID | grep -w $PID | awk '{printf "%s,%s,%s,%s\n",$1,$12,$9,$10}' > $LOG_DIR/$3_$4__${core_id}_${profile_id}_top.log &
+		sudo -u jethros taskset -c 0 top -b -d $DELAY_INTERVAL -p $PID  > $LOG_DIR/$3_$4__${core_id}_${profile_id}_top.log &
+		# sudo -u jethros taskset -c 0 top -b -d $DELAY_INTERVAL -p $PID | grep -w $PID | awk '{printf "%s,%s,%s,%s\n",$1,$12,$9,$10}' > $LOG_DIR/$3_$4__${core_id}_${profile_id}_top.log &
 		pids="$pids $!"
 		# while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 0 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > $LOG_DIR/$3_$4__${core_id}_${profile_id}_cpu.log & &
 		# P3=$!
