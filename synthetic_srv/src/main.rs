@@ -33,8 +33,6 @@ pub struct Load {
     io: u64,
 }
 
-pub fn report_expr_time(elapsed: u64, ticks: HashMap<usize, bool>) {}
-
 pub fn map_profile(file_path: String) -> serde_json::Result<HashMap<usize, String>> {
     let file = File::open(file_path).expect("file should open read only");
     let json_data: serde_json::Value =
@@ -227,7 +225,7 @@ fn main() {
                     if pname == "rdr" {
                         c.register(cname.clone(), move |job| -> io::Result<()> {
                             // 5*60 = 300
-                            let mut report_time = 300;
+                            // let mut report_time = 300;
 
                             // TODO: optmize the managemenet of browser and workload
                             let job_args = job.args();
@@ -248,10 +246,10 @@ fn main() {
                             }
                             println!("{} browsers are created ", num_of_users);
 
-                            if start.elapsed().as_secs() > report_time as u64 {
-                                report_time += 300;
-                                println!("reached {} seconds, report", report_time);
-                            }
+                            // if start.elapsed().as_secs() > report_time as u64 {
+                            //     report_time += 300;
+                            //     println!("reached {} seconds, report", report_time);
+                            // }
                             let now_2 = Instant::now();
 
                             let _pivot = 1_usize;
@@ -298,12 +296,13 @@ fn main() {
                     } else if pname == "xcdr" {
                         c.register(cname.clone(), move |job| -> io::Result<()> {
                             let job_args = job.args();
-                            let mut report_time = 300;
 
-                            if start.elapsed().as_secs() > report_time as u64 {
-                                report_time += 300;
-                                println!("reached {} seconds, report", report_time);
-                            }
+                            // let mut report_time = 300;
+
+                            // if start.elapsed().as_secs() > report_time as u64 {
+                            //     report_time += 300;
+                            //     println!("reached {} seconds, report", report_time);
+                            // }
                             let now_2 = Instant::now();
 
                             // https://github.com/jethrosun/NetBricks/blob/expr/framework/src/pvn/xcdr.rs#L110
@@ -330,15 +329,15 @@ fn main() {
                         // FIXME
                         c.register(cname.clone(), move |job| -> io::Result<()> {
                             let job_args = job.args();
-                            let mut report_time = 300;
+                            // let mut report_time = 300;
 
                             let count = job_args[0].as_u64().unwrap();
                             let load = udf_load(&pname, count as f64).unwrap();
 
-                            if start.elapsed().as_secs() > report_time as u64 {
-                                report_time += 300;
-                                println!("reached {} seconds, report", report_time);
-                            }
+                            // if start.elapsed().as_secs() > report_time as u64 {
+                            //     report_time += 300;
+                            //     println!("reached {} seconds, report", report_time);
+                            // }
                             let now_2 = Instant::now();
 
                             execute(&cname, load);
