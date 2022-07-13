@@ -50,7 +50,6 @@ EXPR_MODE=long
 
 mkdir -p "$LOG_DIR"
 
-# deprecated?
 JSON_STRING=$(jq -n \
 	--arg iter "$3" \
 	--arg setup "$4" \
@@ -66,12 +65,12 @@ JSON_STRING=$(jq -n \
 	echo "${JSON_STRING}" >/home/jethros/setup
 	#"sudo ./run_pvnf_coresident.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + str(expr)
 
-	docker run -d --cpuset-cpus 0 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
-	docker ps
-	sleep 10
+docker run -d --cpuset-cpus 0 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
+docker ps
+sleep 10
 
-	pids=""
-	RESULT=0
+pids=""
+RESULT=0
 
 # /home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$7" "$FAKTORY_LOG" &
 # P1=$!
@@ -82,7 +81,8 @@ do
 	for profile_id in {1..8}
 	do
 		$SERVER $core_id $profile_id > $LOG_DIR/$3_$4__${core_id}_${profile_id}.log &
-		pids="$pids $!"
+		$PID=$!
+		pids="$pids $PID"
 		# https://www.baeldung.com/linux/process-periodic-cpu-usage
 		# top -p 310-b -n2 -d 1 | grep -w 310 | awk '{printf "%s,%s,%s,%s\n",$1,$12,$9,$10}'
 		sudo -u jethros taskset -c 0 top -b -d $DELAY_INTERVAL -p $PID | grep -w $PID | awk '{printf "%s,%s,%s,%s\n",$1,$12,$9,$10}' > $LOG_DIR/$3_$4__${core_id}_${profile_id}_top.log &
