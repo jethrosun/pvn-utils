@@ -92,7 +92,7 @@ pvn_nf = {
     'co_xcdr': ['pvn-transcoder-transform-app'],
     'co_tlsv': ['pvn-tlsv-transform-app'],
     'co_p2p': ['pvn-p2p-transform-app'],
-        'udf' :['udf-schedule']
+    'udf': ['udf-schedule']
 }
 
 trace = {
@@ -167,9 +167,9 @@ trace = {
     'tlsv1_rdr1_xcdr1_p2p1': 'tlsv1_rdr1_xcdr1_p2p1.pcap',
     'tlsv1_xcdr2_p2p2': 'tlsv1_xcdr2_p2p2.pcap',
     'tlsv2_rdr1_xcdr1_p2p1': 'tlsv2_rdr1_xcdr1_p2p1.pcap',
-    'rdr1_p2p1': 'rdr1_p2p1.pcap', 
+    'rdr1_p2p1': 'rdr1_p2p1.pcap',
 
-    'udf' : 'rdr1_p2p1.pcap'
+    'udf': 'rdr1_p2p1.pcap'
 }
 
 # # nf app
@@ -323,7 +323,7 @@ raw_p2p_tasks = [
 raw_p2p_tasks = ['rdr1_xcdr3_p2p1']
 
 
-udf= ['udf']
+udf = ['udf']
 set_list = ['1', '2', '3']
-num_of_epoch = 2
-udf_expr_wait_time = 1300
+num_of_epoch = 3
+udf_expr_wait_time = 2000
