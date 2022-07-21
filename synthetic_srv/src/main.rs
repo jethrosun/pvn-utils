@@ -110,7 +110,7 @@ pub fn file_io(counter: &mut i32, f: &mut File, buf: Box<[u8]>) {
 ///
 /// Unit of CPU, RAM, I/O load is determined from measurment/analysis
 pub fn execute(name: &str, load: Load) -> io::Result<()> {
-    let io_disk = "hdd";
+    // let io_disk = "hdd";
 
     // counting the iterations
     let mut counter = 0;
@@ -132,11 +132,13 @@ pub fn execute(name: &str, load: Load) -> io::Result<()> {
     let buf = buf.into_boxed_slice();
 
     // let file_name = "/data/tmp/foobar".to_owned() + &core_id.to_string() + ".bin";
-    let file_name = if io_disk == "hdd" {
-        "/data/tmp/foobar".to_owned() + name + ".bin"
-    } else {
-        "/home/jethros/data/tmp/foobar".to_owned() + name + ".bin"
-    };
+    // let file_name = if io_disk == "hdd" {
+    //     "/data/tmp/foobar".to_owned() + name + ".bin"
+    // } else {
+    //     "/home/jethros/data/tmp/foobar".to_owned() + name + ".bin"
+    // };
+
+    let file_name = "tmp/foobar".to_owned() + name + ".bin";
 
     // files for both cases
     let mut file = OpenOptions::new()
@@ -203,7 +205,8 @@ fn main() {
         core_ids.push(CoreId { id: idx });
     }
 
-    let profile_map_path = "/home/jethros/dev/pvn/utils/workloads/udf/profile_map.json";
+    // let profile_map_path = "/home/jethros/dev/pvn/utils/workloads/udf/profile_map.json";
+    let profile_map_path = "tmp/udf/profile_map.json";
     let profile_map = map_profile(profile_map_path.to_string()).unwrap();
     println!(
         "core id {}, profile id {}, profile map {:?}",
@@ -229,15 +232,22 @@ fn main() {
 
                             // TODO: optmize the managemenet of browser and workload
                             let job_args = job.args();
-                            let num_of_users  = job_args[0].as_u64().unwrap();
+                            let num_of_users = job_args[0].as_u64().unwrap();
 
                             let mut browser_list: HashMap<i64, Browser> = HashMap::new();
                             let rdr_users = rdr_read_rand_seed(num_of_users, 2).unwrap();
-                            let usr_data_dir = rdr_read_user_data_dir("/home/jethros/setup".to_string()).unwrap();
+                            let usr_data_dir =
+                                rdr_read_user_data_dir("tmp/udf/setup".to_string()).unwrap();
 
-                            let workload_path = "/home/jethros/dev/pvn/utils/workloads/rdr_pvn_workloads/rdr_pvn_workload_5.json";
+                            // let workload_path = "/home/jethros/dev/pvn/utils/workloads/rdr_pvn_workloads/rdr_pvn_workload_5.json";
+                            let workload_path = "tmp/rdr_pvn_workload_5.json";
                             println!("{:?}", workload_path);
-                            let mut rdr_workload = rdr_load_workload(workload_path.to_string(), expr_time , rdr_users.clone()).unwrap();
+                            let mut rdr_workload = rdr_load_workload(
+                                workload_path.to_string(),
+                                expr_time,
+                                rdr_users.clone(),
+                            )
+                            .unwrap();
                             println!("Workload is generated",);
 
                             for user in &rdr_users {
@@ -273,16 +283,22 @@ fn main() {
                                 println!("{:?} min, {:?} second", min, rest_sec);
                                 match rdr_workload.get(&cur_time) {
                                     Some(wd) => {
-                                        let (oks, errs, timeouts, closeds, visits, elapsed) = rdr_scheduler(&cur_time, &rdr_users, wd.to_vec(), &browser_list).unwrap();
+                                        let (oks, errs, timeouts, closeds, visits, elapsed) =
+                                            rdr_scheduler(
+                                                &cur_time,
+                                                &rdr_users,
+                                                wd.to_vec(),
+                                                &browser_list,
+                                            )
+                                            .unwrap();
                                         num_of_ok += oks;
                                         num_of_err += errs;
                                         num_of_timeout += timeouts;
                                         num_of_closed += closeds;
                                         num_of_visit += visits;
                                         elapsed_time.push(elapsed);
-
-                                    },
-                                    None => println!("no work in {}.", cur_time)
+                                    }
+                                    None => println!("no work in {}.", cur_time),
                                 }
                             }
                             Ok(())
@@ -292,7 +308,6 @@ fn main() {
                         if let Err(e) = c.run(&["default"]) {
                             println!("worker failed: {}", e);
                         }
-
                     } else if pname == "xcdr" {
                         c.register(cname.clone(), move |job| -> io::Result<()> {
                             let job_args = job.args();
@@ -360,7 +375,7 @@ fn main() {
                 }
             })
         })
-    .collect::<Vec<_>>();
+        .collect::<Vec<_>>();
 
     for handle in handles.into_iter() {
         handle.join().unwrap();
