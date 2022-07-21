@@ -109,7 +109,7 @@ pub fn rdr_retrieve_users(rdr_setup: usize) -> Option<usize> {
 /// Read the pregenerated randomness seed from file.
 pub fn rdr_read_rand_seed(num_of_users: u64, iter: usize) -> io::Result<Vec<i64>> {
     // let rand_seed_file = "/home/jethros/dev/pvn/utils/rand_number/rand.json";
-    let rand_seed_file = "tmp/rand.json";
+    let rand_seed_file = "tmp/udf/rand.json";
     let mut rand_vec = Vec::new();
     let file = File::open(rand_seed_file).expect("rand seed file should open read only");
     let json_data: Value = from_reader(file).expect("file should be proper JSON");

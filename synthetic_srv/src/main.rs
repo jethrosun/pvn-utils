@@ -240,7 +240,7 @@ fn main() {
                                 rdr_read_user_data_dir("tmp/udf/setup".to_string()).unwrap();
 
                             // let workload_path = "/home/jethros/dev/pvn/utils/workloads/rdr_pvn_workloads/rdr_pvn_workload_5.json";
-                            let workload_path = "tmp/rdr_pvn_workload_5.json";
+                            let workload_path = "tmp/udf/rdr_pvn_workload_5.json";
                             println!("{:?}", workload_path);
                             let mut rdr_workload = rdr_load_workload(
                                 workload_path.to_string(),
