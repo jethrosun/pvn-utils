@@ -80,12 +80,17 @@ for core_id in {1..5}
 do
 	for profile_id in {1..8}
 	do
-		$SERVER $core_id $profile_id > $LOG_DIR/$3_$4__${core_id}_${profile_id}.log &
-		PID=$!
-		pids="$pids $PID"
+		docker run -d --cpuset-cpus $core_id --name synthetic_srv${core_id}_${profile_id} \
+				--rm -ti -v /data/tmp:/data \
+                -v /home/jethros:/config \
+                -v /home/jethros/dev/pvn/utils/workloads/udf:/tmp/udf \
+                synthetic:alphine $core_id $profile_id
+		# $SERVER $core_id $profile_id > $LOG_DIR/$3_$4__${core_id}_${profile_id}.log &
+		# PID=$!
+		# pids="$pids $PID"
 		# https://www.baeldung.com/linux/process-periodic-cpu-usage
-		sudo -u jethros taskset -c 0 top -b -d $DELAY_INTERVAL -p $PID | grep -w $PID  > $LOG_DIR/$3_$4__${core_id}_${profile_id}_top.log &
-		pids="$pids $!"
+		# sudo -u jethros taskset -c 0 top -b -d $DELAY_INTERVAL -p $PID | grep -w $PID  > $LOG_DIR/$3_$4__${core_id}_${profile_id}_top.log &
+		# pids="$pids $!"
 	done
 done
 taskset -c 0 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &

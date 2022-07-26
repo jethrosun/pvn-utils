@@ -1,8 +1,10 @@
-####################################################################################################
-## Builder
-####################################################################################################
+# https://kerkour.com/rust-small-docker-image
+# https://github.com/atroche/rust-headless-chrome/issues/267
+
 FROM rust:latest AS builder
 
+RUN rustup target add x86_64-unknown-linux-musl
+RUN apt update && apt install -y musl-tools musl-dev
 RUN update-ca-certificates
 
 # Create appuser
@@ -23,13 +25,30 @@ WORKDIR /synthetic_srv
 
 COPY ./ .
 
-# We no longer need to use the x86_64-unknown-linux-musl target
-RUN cargo build --release
+RUN cargo build --target x86_64-unknown-linux-musl --release
+# RUN cargo build  --release
 
 ####################################################################################################
 ## Final image
 ####################################################################################################
-FROM gcr.io/distroless/cc
+FROM alpine
+
+# Installs latest Chromium (latest) package.
+RUN apk update && apk upgrade && \
+    echo @edge http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \
+    echo @edge http://nl.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories && \
+    apk add --no-cache \
+    chromium@edge \
+    nss@edge \
+    freetype@edge \
+    harfbuzz@edge \
+    ttf-freefont@edge
+
+RUN addgroup -S synthetic && adduser -S -g synthetic synthetic \
+    && mkdir -p /home/chrome/Downloads \
+    && chown -R synthetic:synthetic /home/chrome \
+    && chown -R synthetic:synthetic /usr/local/bin
+
 
 # Import from builder.
 COPY --from=builder /etc/passwd /etc/passwd
@@ -38,9 +57,23 @@ COPY --from=builder /etc/group /etc/group
 WORKDIR /synthetic_srv
 
 # Copy our build
-COPY --from=builder /synthetic_srv/target/release/synthetic_srv ./
+# COPY --from=builder \
+#     /synthetic_srv/target/x86_64-unknown-linux-musl/release/synthetic_srv \
+#     /usr/local/bin
+COPY --from=builder \
+    /synthetic_srv/target/x86_64-unknown-linux-musl/release/synthetic_srv \
+    ./
+
 
 # Use an unprivileged user.
 USER synthetic:synthetic
 
-CMD ["/synthetic_srv/synthetic_srv"]
+ENTRYPOINT ["/synthetic_srv/synthetic_srv"]
+
+# ENTRYPOINT ["java", "-jar"]
+# CMD ["/dir/test-1.0.1.jar"]
+# CMD ["/synthetic_srv/synthetic_srv"]
+
+
+# CMD /synthetic_srv/synthetic_srv
+# CMD /usr/local/bin/synthetic_srv

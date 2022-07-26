@@ -11,8 +11,8 @@
 ```bash
 docker build -t synthetic:distroless -f Dockerfile .
 # docker run --rm -ti -v $PWD:/data/tmp synthetic:distroless 1 2
-docker run --rm -ti -v /data/tmp:/tmp synthetic:distroless 1 2
-
+docker run --rm -ti -v $(pwd):/data/tmp synthetic:distroless 1 2
+```
 
 ## Make a Rut Docker image
 
@@ -30,6 +30,12 @@ https://stackoverflow.com/questions/52856353/docker-accessing-files-inside-conta
 
 
 ## Log file to dir
+
+https://www.baeldung.com/ops/docker-volumes
+
+```bash
+docker run -v $(pwd):/data/tmp bash:latest   bash -c "echo Hello > /data/tmp/file.txt"
+```
 
 https://docs.docker.com/config/containers/logging/configure/
 

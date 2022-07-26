@@ -34,7 +34,7 @@ pub fn rdr_read_user_data_dir(file_path: String) -> io::Result<String> {
             //     println!("running chrome with ssd");
             //     Ok("/home/jethros/data/profile".to_string())
             // }
-            Ok("tmp/profile".to_string())
+            Ok("/data/profile".to_string())
         }
         None => {
             println!("unable to read disk setup");
@@ -109,7 +109,7 @@ pub fn rdr_retrieve_users(rdr_setup: usize) -> Option<usize> {
 /// Read the pregenerated randomness seed from file.
 pub fn rdr_read_rand_seed(num_of_users: u64, iter: usize) -> io::Result<Vec<i64>> {
     // let rand_seed_file = "/home/jethros/dev/pvn/utils/rand_number/rand.json";
-    let rand_seed_file = "tmp/udf/rand.json";
+    let rand_seed_file = "/tmp/udf/rand.json";
     let mut rand_vec = Vec::new();
     let file = File::open(rand_seed_file).expect("rand seed file should open read only");
     let json_data: Value = from_reader(file).expect("file should be proper JSON");
@@ -149,6 +149,7 @@ pub fn browser_create(usr_data_dir: &String) -> Fallible<Browser> {
         .headless(true)
         .user_data_dir(Some(usr_data_dir.to_string()))
         // .idle_browser_timeout(timeout)
+        .sandbox(false)
         .build()
         .expect("Couldn't find appropriate Chrome binary.");
     let browser = Browser::new(options)?;
@@ -256,7 +257,7 @@ pub fn rdr_scheduler(
 /// We set up all the parameters for the transcoding job to happen.
 pub fn transcode() {
     // let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
-    let infile = "tmp/udf/tiny.y4m";
+    let infile = "/tmp/udf/tiny.y4m";
     let width_height = "360x24";
 
     let mut infh: Box<dyn io::Read> = Box::new(File::open(infile).unwrap());

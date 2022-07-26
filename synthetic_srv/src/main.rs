@@ -34,6 +34,7 @@ pub struct Load {
 }
 
 pub fn map_profile(file_path: String) -> serde_json::Result<HashMap<usize, String>> {
+    println!("{:?}", file_path);
     let file = File::open(file_path).expect("file should open read only");
     let json_data: serde_json::Value =
         serde_json::from_reader(file).expect("file should be proper JSON");
@@ -138,7 +139,7 @@ pub fn execute(name: &str, load: Load) -> io::Result<()> {
     //     "/home/jethros/data/tmp/foobar".to_owned() + name + ".bin"
     // };
 
-    let file_name = "tmp/foobar".to_owned() + name + ".bin";
+    let file_name = "/data/foobar".to_owned() + name + ".bin";
 
     // files for both cases
     let mut file = OpenOptions::new()
@@ -161,8 +162,8 @@ pub fn execute(name: &str, load: Load) -> io::Result<()> {
             counter += 1;
             // println!("current value: {:?}", t);
         }
-        if counter % 1_000 == 0 {
-            println!("{} * k since {:?}", counter, now.elapsed());
+        if counter % 1_000_000 == 0 {
+            println!("{},000 * k since {:?}", counter, now.elapsed());
         }
 
         // actual file IO
@@ -187,8 +188,8 @@ pub fn execute(name: &str, load: Load) -> io::Result<()> {
 fn main() {
     let expr_time = 1800;
     let start = Instant::now();
-    let params: Vec<String> = env::args().collect();
 
+    let params: Vec<String> = env::args().collect();
     if params.len() == 3 {
         println!("Parse 2 args");
         println!("{:?}", params);
@@ -196,7 +197,6 @@ fn main() {
         println!("More or less than 2 args are provided. Run it with *core_id profile_id/name*");
         process::exit(0x0100);
     }
-
     let core_id = params[1].parse::<usize>().unwrap();
     let profile_id = params[2].parse::<usize>().unwrap();
 
@@ -206,7 +206,9 @@ fn main() {
     }
 
     // let profile_map_path = "/home/jethros/dev/pvn/utils/workloads/udf/profile_map.json";
-    let profile_map_path = "tmp/udf/profile_map.json";
+    // let profile_map_path = "/data/tmp/udf/profile_map.json";
+    let profile_map_path = "/tmp/udf/profile_map.json";
+    // let profile_map_path = "udf/profile_map.json";
     let profile_map = map_profile(profile_map_path.to_string()).unwrap();
     println!(
         "core id {}, profile id {}, profile map {:?}",
@@ -237,10 +239,10 @@ fn main() {
                             let mut browser_list: HashMap<i64, Browser> = HashMap::new();
                             let rdr_users = rdr_read_rand_seed(num_of_users, 2).unwrap();
                             let usr_data_dir =
-                                rdr_read_user_data_dir("tmp/udf/setup".to_string()).unwrap();
+                                rdr_read_user_data_dir("/config/setup".to_string()).unwrap();
 
                             // let workload_path = "/home/jethros/dev/pvn/utils/workloads/rdr_pvn_workloads/rdr_pvn_workload_5.json";
-                            let workload_path = "tmp/udf/rdr_pvn_workload_5.json";
+                            let workload_path = "/tmp/udf/rdr_pvn_workload_5.json";
                             println!("{:?}", workload_path);
                             let mut rdr_workload = rdr_load_workload(
                                 workload_path.to_string(),
