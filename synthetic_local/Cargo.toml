@@ -1,0 +1,25 @@
+[package]
+name = "synthetic_local"
+version = "0.1.0"
+authors = ["Shuwen sun <jethrosun@ccs.neu.edu>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+faktory = "=0.11"
+core_affinity = "=0.5.10"
+crossbeam = "=0.7.3"
+crossbeam-channel = "=0.4.4"
+rand = "*"
+y4m = "=0.5"
+time = "*"
+resize = "=0.3"
+failure = "=0.1.8"
+serde_json = "=1.0.64"
+rustc-serialize = "=0.3.24"
+tiny_http = "=0.7"
+rshttp = { git = "https://github.com/jethrosun/http", branch = "pvn" }
+headless_chrome = { git = "https://github.com/jethrosun/rust-headless-chrome", branch = "udf-0.9" }
+
+

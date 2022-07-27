@@ -139,7 +139,7 @@ pub fn execute(name: &str, load: Load) -> io::Result<()> {
     //     "/home/jethros/data/tmp/foobar".to_owned() + name + ".bin"
     // };
 
-    let file_name = "/data/foobar".to_owned() + name + ".bin";
+    let file_name = "/data/tmp/foobar".to_owned() + name + ".bin";
 
     // files for both cases
     let mut file = OpenOptions::new()
@@ -205,9 +205,9 @@ fn main() {
         core_ids.push(CoreId { id: idx });
     }
 
-    // let profile_map_path = "/home/jethros/dev/pvn/utils/workloads/udf/profile_map.json";
+    let profile_map_path = "/home/jethros/dev/pvn/utils/workloads/udf/profile_map.json";
     // let profile_map_path = "/data/tmp/udf/profile_map.json";
-    let profile_map_path = "/tmp/udf/profile_map.json";
+    // let profile_map_path = "/tmp/udf/profile_map.json";
     // let profile_map_path = "udf/profile_map.json";
     let profile_map = map_profile(profile_map_path.to_string()).unwrap();
     println!(
@@ -226,8 +226,6 @@ fn main() {
                 if id.id == core_id {
                     core_affinity::set_for_current(id);
                     let mut c = ConsumerBuilder::default();
-                    // c.hostname("host.docker.internal".to_string());
-                    // c.hostname("172.17.0.1".to_string());
 
                     if pname == "rdr" {
                         c.register(cname.clone(), move |job| -> io::Result<()> {
@@ -243,8 +241,8 @@ fn main() {
                             let usr_data_dir =
                                 rdr_read_user_data_dir("/config/setup".to_string()).unwrap();
 
-                            // let workload_path = "/home/jethros/dev/pvn/utils/workloads/rdr_pvn_workloads/rdr_pvn_workload_5.json";
-                            let workload_path = "/tmp/udf/rdr_pvn_workload_5.json";
+                            let workload_path = "/home/jethros/dev/pvn/utils/workloads/rdr_pvn_workloads/rdr_pvn_workload_5.json";
+                            // let workload_path = "/tmp/udf/rdr_pvn_workload_5.json";
                             println!("{:?}", workload_path);
                             let mut rdr_workload = rdr_load_workload(
                                 workload_path.to_string(),

@@ -57,15 +57,23 @@ COPY --from=builder /etc/group /etc/group
 WORKDIR /synthetic_srv
 
 # Copy our build
+# COPY --from=builder \
+#     /synthetic_srv/target/x86_64-unknown-linux-musl/release/synthetic_srv \
+#     /usr/local/bin
 COPY --from=builder \
     /synthetic_srv/target/x86_64-unknown-linux-musl/release/synthetic_srv \
-    .
-#.
-# /usr/local/bin
+    ./
+
 
 # Use an unprivileged user.
 USER synthetic:synthetic
 
+ENTRYPOINT ["/synthetic_srv/synthetic_srv"]
+
+# ENTRYPOINT ["java", "-jar"]
+# CMD ["/dir/test-1.0.1.jar"]
 # CMD ["/synthetic_srv/synthetic_srv"]
-CMD /synthetic_srv/synthetic_srv
+
+
+# CMD /synthetic_srv/synthetic_srv
 # CMD /usr/local/bin/synthetic_srv
