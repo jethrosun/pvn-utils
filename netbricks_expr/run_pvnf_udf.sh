@@ -78,6 +78,9 @@ RESULT=0
 "$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 pids="$pids $!"
 
+
+cd ~/dev/pvn/utils/synthetic_srv/
+
 for core_id in {1..5}
 do
 	for profile_id in {1..8}
