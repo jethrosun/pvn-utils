@@ -20,6 +20,7 @@ TCP_LOG=$LOG_DIR/$3_$4_tcptop.log
 BIO_LOG=$LOG_DIR/$3_$4_biotop.log
 P2P_PROGRESS_LOG=$LOG_DIR/$3_$4_p2p_progress.log
 FAKTORY_LOG=$LOG_DIR/$3_$4_faktory.log
+DOCKER_STATS_LOG=$LOG_DIR/$3_$4_docker_stats.log
 
 CPULOG1=$LOG_DIR/$3_$4_cpu1.log
 CPULOG2=$LOG_DIR/$3_$4_cpu2.log
@@ -76,15 +77,16 @@ RESULT=0
 # P1=$!
 "$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 pids="$pids $!"
+
 for core_id in {1..5}
 do
 	for profile_id in {1..8}
 	do
-		docker run -d --cpuset-cpus $core_id --name synthetic_srv${core_id}_${profile_id} \
-				--rm -ti -v /data/tmp:/data \
-                -v /home/jethros:/config \
-                -v /home/jethros/dev/pvn/utils/workloads/udf:/tmp/udf \
-                synthetic:alphine $core_id $profile_id
+		docker run -d --cpuset-cpus $core_id --name synthetic_srv_${core_id}_${profile_id} \
+			--rm -ti -v /data/tmp:/data \
+			-v /home/jethros:/config \
+			-v /home/jethros/dev/pvn/utils/workloads/udf:/tmp/udf \
+			synthetic:alphine $core_id $profile_id
 		# $SERVER $core_id $profile_id > $LOG_DIR/$3_$4__${core_id}_${profile_id}.log &
 		# PID=$!
 		# pids="$pids $PID"
@@ -93,6 +95,12 @@ do
 		# pids="$pids $!"
 	done
 done
+
+docker ps
+
+while true; do docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
+pids="$pids $!"
+
 taskset -c 0 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
 pids="$pids $!"
 
