@@ -4,7 +4,7 @@ container:
 		synthetic:alphine -f Dockerfile.alphine .
 
 container-run:
-	docker run --rm -ti \
+	docker run --rm -ti --network=host \
 		-v /data/tmp:/data \
 		-v /home/jethros:/config \
 		-v /home/jethros/dev/pvn/utils/workloads/udf:/tmp/udf \

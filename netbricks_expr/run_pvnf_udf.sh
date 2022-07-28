@@ -86,7 +86,8 @@ do
 	for profile_id in {1..8}
 	do
 		docker run -d --cpuset-cpus $core_id --name synthetic_srv_${core_id}_${profile_id} \
-			--rm -ti -v /data/tmp:/data \
+			--rm -ti --network=host \
+			-v /data/tmp:/data \
 			-v /home/jethros:/config \
 			-v /home/jethros/dev/pvn/utils/workloads/udf:/tmp/udf \
 			synthetic:alphine $core_id $profile_id
