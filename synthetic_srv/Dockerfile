@@ -8,17 +8,17 @@ RUN apt update && apt install -y musl-tools musl-dev
 RUN update-ca-certificates
 
 # Create appuser
-ENV USER=synthetic
-ENV UID=10001
+# ENV USER=synthetic
+# ENV UID=10001
 
-RUN adduser \
-    --disabled-password \
-    --gecos "" \
-    --home "/nonexistent" \
-    --shell "/sbin/nologin" \
-    --no-create-home \
-    --uid "${UID}" \
-    "${USER}"
+# RUN adduser \
+#     --disabled-password \
+#     --gecos "" \
+#     --home "/nonexistent" \
+#     --shell "/sbin/nologin" \
+#     --no-create-home \
+#     --uid "${UID}" \
+#     "${USER}"
 
 
 WORKDIR /synthetic_srv
@@ -60,12 +60,12 @@ WORKDIR /synthetic_srv
 COPY --from=builder \
     /synthetic_srv/target/x86_64-unknown-linux-musl/release/synthetic_srv \
     .
-#.
-# /usr/local/bin
 
 # Use an unprivileged user.
-USER synthetic:synthetic
+# USER synthetic:synthetic
 
 # CMD ["/synthetic_srv/synthetic_srv"]
-CMD /synthetic_srv/synthetic_srv
 # CMD /usr/local/bin/synthetic_srv
+# CMD /synthetic_srv/synthetic_srv
+
+CMD /bin/bash

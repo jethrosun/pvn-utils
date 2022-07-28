@@ -64,4 +64,4 @@ COPY --from=builder \
 USER synthetic:synthetic
 
 # CMD ["/synthetic_srv/synthetic_srv"]
-CMD /usr/local/bin/synthetic_srv
+ENTRYPOINT /usr/local/bin/synthetic_srv
