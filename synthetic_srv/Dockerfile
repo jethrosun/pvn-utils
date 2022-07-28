@@ -8,17 +8,17 @@ RUN apt update && apt install -y musl-tools musl-dev
 RUN update-ca-certificates
 
 # Create appuser
-# ENV USER=synthetic
-# ENV UID=10001
+ENV USER=chrome
+ENV UID=1000
 
-# RUN adduser \
-#     --disabled-password \
-#     --gecos "" \
-#     --home "/nonexistent" \
-#     --shell "/sbin/nologin" \
-#     --no-create-home \
-#     --uid "${UID}" \
-#     "${USER}"
+RUN adduser \
+    --disabled-password \
+    --gecos "" \
+    --home "/nonexistent" \
+    --shell "/sbin/nologin" \
+    --no-create-home \
+    --uid "${UID}" \
+    "${USER}"
 
 
 WORKDIR /synthetic_srv
@@ -26,7 +26,6 @@ WORKDIR /synthetic_srv
 COPY ./ .
 
 RUN cargo build --target x86_64-unknown-linux-musl --release
-# RUN cargo build  --release
 
 ####################################################################################################
 ## Final image
@@ -44,10 +43,10 @@ RUN apk update && apk upgrade && \
     harfbuzz@edge \
     ttf-freefont@edge
 
-RUN addgroup -S synthetic && adduser -S -g synthetic synthetic \
+RUN addgroup -S chrome && adduser -S -g chrome chrome \
     && mkdir -p /home/chrome/Downloads \
-    && chown -R synthetic:synthetic /home/chrome \
-    && chown -R synthetic:synthetic /usr/local/bin
+    && chown -R chrome:chrome /home/chrome \
+    && chown -R chrome:chrome /usr/local/bin
 
 
 # Import from builder.
@@ -59,13 +58,13 @@ WORKDIR /synthetic_srv
 # Copy our build
 COPY --from=builder \
     /synthetic_srv/target/x86_64-unknown-linux-musl/release/synthetic_srv \
-    .
+    /usr/local/bin
 
 # Use an unprivileged user.
 # USER synthetic:synthetic
+USER chrome:chrome
 
 # CMD ["/synthetic_srv/synthetic_srv"]
-# CMD /usr/local/bin/synthetic_srv
-# CMD /synthetic_srv/synthetic_srv
+# ENTRYPOINT /usr/local/bin/synthetic_srv
 
-CMD /bin/bash
+ENTRYPOINT [ "/bin/bash" ]

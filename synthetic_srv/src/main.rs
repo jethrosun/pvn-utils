@@ -189,19 +189,19 @@ fn main() {
     let expr_time = 1800;
     let start = Instant::now();
 
-    // let params: Vec<String> = env::args().collect();
-    // if params.len() == 3 {
-    //     println!("Parse 2 args");
-    //     println!("{:?}", params);
-    // } else {
-    //     println!("More or less than 2 args are provided. Run it with *core_id profile_id/name*");
-    //     process::exit(0x0100);
-    // }
-    // let core_id = params[1].parse::<usize>().unwrap();
-    // let profile_id = params[2].parse::<usize>().unwrap();
+    let params: Vec<String> = env::args().collect();
+    if params.len() == 3 {
+        println!("Parse 2 args");
+        println!("{:?}", params);
+    } else {
+        println!("More or less than 2 args are provided. Run it with *core_id profile_id/name*");
+        process::exit(0x0100);
+    }
+    let core_id = params[1].parse::<usize>().unwrap();
+    let profile_id = params[2].parse::<usize>().unwrap();
 
-    let core_id = 1;
-    let profile_id = 3;
+    // let core_id = 1;
+    // let profile_id = 3;
 
     let mut core_ids = Vec::new();
     for idx in 0..6 {

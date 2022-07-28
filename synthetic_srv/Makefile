@@ -12,6 +12,17 @@ container-run:
 
 
 test:
+	docker build -t \
+		synthetic:test -f Dockerfile .
+
+test-run:
+	docker run --rm -ti --network=host \
+		-v /data/tmp:/data \
+		-v /home/jethros:/config \
+		-v /home/jethros/dev/pvn/utils/workloads/udf:/tmp/udf \
+		synthetic:test 1 2  
+
+bash:
 	docker run --rm -ti  synthetic:alphine bash
 
 # https://stackoverflow.com/questions/24319662/from-inside-of-a-docker-container-how-do-i-connect-to-the-localhost-of-the-mach

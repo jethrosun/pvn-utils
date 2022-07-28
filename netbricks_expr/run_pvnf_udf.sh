@@ -21,6 +21,7 @@ BIO_LOG=$LOG_DIR/$3_$4_biotop.log
 P2P_PROGRESS_LOG=$LOG_DIR/$3_$4_p2p_progress.log
 FAKTORY_LOG=$LOG_DIR/$3_$4_faktory.log
 DOCKER_STATS_LOG=$LOG_DIR/$3_$4_docker_stats.log
+SYNTHETIC_LOG=$LOG_DIR/$3_$4_srv
 
 CPULOG1=$LOG_DIR/$3_$4_cpu1.log
 CPULOG2=$LOG_DIR/$3_$4_cpu2.log
@@ -85,12 +86,16 @@ for core_id in {1..5}
 do
 	for profile_id in {1..8}
 	do
+		# run docker and collect logs
+		# https://www.baeldung.com/ops/docker-logs
 		docker run -d --cpuset-cpus $core_id --name synthetic_srv_${core_id}_${profile_id} \
 			--rm -ti --network=host \
 			-v /data/tmp:/data \
 			-v /home/jethros:/config \
 			-v /home/jethros/dev/pvn/utils/workloads/udf:/tmp/udf \
 			synthetic:alphine $core_id $profile_id
+		docker logs -f synthetic_srv_${core_id}_${profile_id} &> ${SYNTHETIC_LOG}__${core_id}_${profile_id}.log &
+		pids="$pids $!"
 		# $SERVER $core_id $profile_id > $LOG_DIR/$3_$4__${core_id}_${profile_id}.log &
 		# PID=$!
 		# pids="$pids $PID"
@@ -116,3 +121,6 @@ if [ "$RESULT" == "1" ];
 then
 	exit 1
 fi
+
+# https://www.baeldung.com/ops/docker-logs
+truncate -s 0 /var/lib/docker/containers/*/*-json.log
