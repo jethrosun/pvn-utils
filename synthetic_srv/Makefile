@@ -8,7 +8,8 @@ container-run:
 		-v /data/tmp:/data \
 		-v /home/jethros:/config \
 		-v /home/jethros/dev/pvn/utils/workloads/udf:/tmp/udf \
-		synthetic:alphine 1 2 
+		synthetic:alphine 1 2  
+
 
 test:
 	docker run --rm -ti  synthetic:alphine bash
