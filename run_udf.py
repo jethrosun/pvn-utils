@@ -107,6 +107,7 @@ def main(expr_list):
             pktgen_sess = pktgen_sess_setup(conf.trace[expr], nf, sending_rate)
             run_pktgen(pktgen_sess, conf.trace[expr], sending_rate)
 
+            # setup here maps to node (1,2,3)
             for setup in conf.set_list:
                 # epoch from 0 to 9
                 for epoch in range(conf.num_of_epoch):
