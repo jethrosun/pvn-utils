@@ -92,7 +92,9 @@ pvn_nf = {
     'co_xcdr': ['pvn-transcoder-transform-app'],
     'co_tlsv': ['pvn-tlsv-transform-app'],
     'co_p2p': ['pvn-p2p-transform-app'],
-    'udf': ['udf-schedule']
+    'udf': ['udf-schedule'],
+    'udf_schedule': ['udf-schedule'],
+    'udf_profile': ['udf-profile']
 }
 
 trace = {
@@ -169,7 +171,9 @@ trace = {
     'tlsv2_rdr1_xcdr1_p2p1': 'tlsv2_rdr1_xcdr1_p2p1.pcap',
     'rdr1_p2p1': 'rdr1_p2p1.pcap',
 
-    'udf': 'rdr1_p2p1.pcap'
+    'udf': 'rdr1_p2p1.pcap',
+    'udf_profile': 'rdr1_p2p1.pcap',
+    'udf_schedule': 'rdr1_p2p1.pcap'
 }
 
 # # nf app
@@ -204,6 +208,8 @@ rdr_clean_list = [
     'pvn-tlsv-rdr-xcdr-coexist-app',
     'pvn-rdr-xcdr-p2p-coexist-app',
     'pvn-tlsv-rdr-p2p-xcdr-coexist-app',
+    'udf_profile',
+    'udf_schedule'
 ]
 
 p2p_clean_list = [
@@ -217,6 +223,8 @@ p2p_clean_list = [
     'pvn-tlsv-p2p-xcdr-coexist-app',
     'pvn-rdr-xcdr-p2p-coexist-app',
     'pvn-tlsv-rdr-p2p-xcdr-coexist-app',
+    'udf_profile',
+    'udf_schedule'
 ]
 xcdr_clean_list = [
     'pvn-transcoder-transform-app',
@@ -229,6 +237,8 @@ xcdr_clean_list = [
     'pvn-tlsv-rdr-xcdr-coexist-app',
     'pvn-rdr-xcdr-p2p-coexist-app',
     'pvn-tlsv-rdr-p2p-xcdr-coexist-app',
+    'udf_profile',
+    'udf_schedule'
 ]
 
 # expr_nf_list = [
@@ -323,7 +333,8 @@ raw_p2p_tasks = [
 raw_p2p_tasks = ['rdr1_xcdr3_p2p1']
 
 
-udf = ['udf']
+udf_schedule = ['udf_schedule']
+udf_profile = ['udf_profile']
 udf_node_list = ['1', '2', '3']
 udf_nf_list = ['1', '6', '7', '8']
 num_of_epoch = 3

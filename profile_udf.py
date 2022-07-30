@@ -135,5 +135,5 @@ def main(expr_list):
             time.sleep(30)
 
 
-main(conf.udf)
-print("All experiment finished {}".format(conf.udf))
+main(conf.udf_profile)
+print("All experiment finished {}".format(conf.udf_profile))
