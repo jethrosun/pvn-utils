@@ -324,6 +324,7 @@ raw_p2p_tasks = ['rdr1_xcdr3_p2p1']
 
 
 udf = ['udf']
-set_list = ['1', '2', '3']
+udf_node_list = ['1', '2', '3']
+udf_nf_list = ['1', '6', '7', '8']
 num_of_epoch = 3
 udf_expr_wait_time = 2000

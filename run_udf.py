@@ -108,7 +108,7 @@ def main(expr_list):
             run_pktgen(pktgen_sess, conf.trace[expr], sending_rate)
 
             # setup here maps to node (1,2,3)
-            for setup in conf.set_list:
+            for node in conf.udf_node_list:
                 # epoch from 0 to 9
                 for epoch in range(conf.num_of_epoch):
                     netbricks_sess = netbricks_sess_setup(conf.trace[expr], nf, epoch)
@@ -119,7 +119,7 @@ def main(expr_list):
                     time.sleep(5)
 
                     # Actual RUN
-                    run_netbricks(netbricks_sess, conf.trace[expr], nf, epoch, setup)
+                    run_netbricks(netbricks_sess, conf.trace[expr], nf, epoch, node)
 
                     time.sleep(conf.udf_expr_wait_time)
 
