@@ -67,6 +67,9 @@ JSON_STRING=$(jq -n \
 	echo "${JSON_STRING}" >/home/jethros/setup
 	#"sudo ./run_pvnf_coresident.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + str(expr)
 
+# https://www.baeldung.com/ops/docker-logs
+truncate -s 0 /var/lib/docker/containers/*/*-json.log
+
 docker run -d --cpuset-cpus 0 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
 docker ps
 sleep 10
@@ -122,5 +125,4 @@ then
 	exit 1
 fi
 
-# https://www.baeldung.com/ops/docker-logs
-truncate -s 0 /var/lib/docker/containers/*/*-json.log
+
