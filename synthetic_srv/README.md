@@ -5,6 +5,7 @@
 3. qos to regulate?
 
 
+package another container for RDR only?
 
 ## commands
 

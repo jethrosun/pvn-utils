@@ -110,9 +110,15 @@ done
 
 docker ps
 
+# docker stats
 while true; do docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
 pids="$pids $!"
 
+# mpstat
+
+# intel PQoS
+
+# Block IO
 taskset -c 0 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
 pids="$pids $!"
 
