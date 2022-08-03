@@ -10,6 +10,13 @@ container-run:
 		-v /home/jethros/dev/pvn/utils/workloads/udf:/tmp/udf \
 		synthetic:alphine 1 2  
 
+run:
+	docker run -d --cpuset-cpus 1 --name synthetic_srv_1_2 \
+			--rm -ti --network=host \
+			-v /data/tmp:/data \
+			-v /home/jethros:/config \
+			-v /home/jethros/dev/pvn/utils/workloads/udf:/tmp/udf \
+			synthetic:alphine 1 2 
 
 test:
 	docker build -t \
