@@ -15,6 +15,15 @@ docker build -t synthetic:distroless -f Dockerfile .
 docker run --rm -ti -v $(pwd):/data/tmp synthetic:distroless 1 2
 ```
 
+## CMD vs ENTRYPOINT
+
+https://stackoverflow.com/questions/64035402/is-it-possible-run-a-docker-container-multiple-times-with-different-arguments
+
+https://stackoverflow.com/questions/30494050/how-do-i-pass-environment-variables-to-docker-containers
+
+https://stackoverflow.com/questions/21553353/what-is-the-difference-between-cmd-and-entrypoint-in-a-dockerfile
+
+
 ## Make a Rut Docker image
 
 https://kerkour.com/rust-small-docker-image
