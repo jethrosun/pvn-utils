@@ -11,7 +11,7 @@ container-run:
 		synthetic:alphine 1 2  
 
 run:
-	docker run -d --cpuset-cpus 1 --name synthetic_srv_1_2 \
+	docker run --cpuset-cpus 1 --name synthetic_srv_1_2 \
 			--rm -ti --network=host \
 			-v /data/tmp:/data \
 			-v /home/jethros:/config \

@@ -34,7 +34,7 @@ pub struct Load {
 }
 
 pub fn map_profile(file_path: String) -> serde_json::Result<HashMap<usize, String>> {
-    println!("{:?}", file_path);
+    // println!("DEBUG: profile path is {:?}", file_path);
     let file = File::open(file_path).expect("file should open read only");
     let json_data: serde_json::Value =
         serde_json::from_reader(file).expect("file should be proper JSON");
@@ -88,7 +88,7 @@ pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
             io: ((0.0955 * 20.0 * count) as f64).ceil() as u64,
         },
         _ => {
-            println!("something else!");
+            println!("profile name is something else!");
             return None;
         }
     };
@@ -100,11 +100,11 @@ pub fn file_io(counter: &mut i32, f: &mut File, buf: Box<[u8]>) {
     f.write_all(&buf).unwrap();
     f.flush().unwrap();
 
-    *counter += 1;
     // // measure read throughput
     // f.seek(SeekFrom::Start(0)).unwrap();
     // // read sets * 50mb mb from file
     // f.read_exact(&mut buf).unwrap();
+    *counter += 1;
 }
 
 /// Execute a job.
@@ -131,14 +131,6 @@ pub fn execute(name: &str, load: Load) -> io::Result<()> {
         buf.push(rand::random())
     }
     let buf = buf.into_boxed_slice();
-
-    // let file_name = "/data/tmp/foobar".to_owned() + &core_id.to_string() + ".bin";
-    // let file_name = if io_disk == "hdd" {
-    //     "/data/tmp/foobar".to_owned() + name + ".bin"
-    // } else {
-    //     "/home/jethros/data/tmp/foobar".to_owned() + name + ".bin"
-    // };
-
     let file_name = "/data/foobar".to_owned() + name + ".bin";
 
     // files for both cases
@@ -191,17 +183,15 @@ fn main() {
 
     let params: Vec<String> = env::args().collect();
     if params.len() == 3 {
-        println!("Parse 2 args");
+        println!("Parsing 2 args");
         println!("{:?}", params);
     } else {
         println!("More or less than 2 args are provided. Run it with *core_id profile_id/name*");
         process::exit(0x0100);
     }
+
     let core_id = params[1].parse::<usize>().unwrap();
     let profile_id = params[2].parse::<usize>().unwrap();
-
-    // let core_id = 1;
-    // let profile_id = 3;
 
     let mut core_ids = Vec::new();
     for idx in 0..6 {
@@ -213,11 +203,11 @@ fn main() {
     let profile_map_path = "/tmp/udf/profile_map.json";
     // let profile_map_path = "udf/profile_map.json";
     let profile_map = map_profile(profile_map_path.to_string()).unwrap();
-    println!(
-        "core id {}, profile id {}, profile map {:?}",
-        core_id, profile_id, profile_map
-    );
     let profile_name = profile_map.get(&profile_id).unwrap().clone();
+    println!(
+        "core id {}, profile id {}, profile name {:?}",
+        core_id, profile_id, profile_name
+    );
 
     // println!("core id {}, profile id {}, profile name {}", core_id , profile_id, profile_name);
     let handles = core_ids
