@@ -2,7 +2,7 @@
 set -x
 
 cd "$HOME/dev/pvn/utils" || exit
-sudo -u jethros git pull
+git pull
 
 "$HOME/dev/pvn/utils/setup.sh"
 
