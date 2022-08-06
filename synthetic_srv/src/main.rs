@@ -351,7 +351,7 @@ fn main() {
 
                             let count = job_args[0].as_u64().unwrap();
                             let load = udf_load(&pname, count as f64).unwrap();
-                            println("count {:?}, load {:?}", count, load);
+                            println!("count {:?}, load {:?}", count, load);
 
                             // if start.elapsed().as_secs() > report_time as u64 {
                             //     report_time += 300;
