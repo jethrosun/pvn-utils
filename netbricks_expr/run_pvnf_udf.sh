@@ -111,7 +111,8 @@ done
 docker ps
 
 # docker stats
-while true; do docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
+while true; do sudo docker stats -a --no-stream >> ${DOCKER_STATS_LOG}; done &
+# while true; do docker stats --no-stream | tee --append ; sleep 1; done &
 pids="$pids $!"
 
 # mpstat
