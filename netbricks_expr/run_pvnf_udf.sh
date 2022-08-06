@@ -112,24 +112,8 @@ docker ps
 
 # docker stats
 # https://github.com/moby/moby/issues/22618
-while true; do docker stats -a --no-stream >> ${DOCKER_STATS_LOG}; done &
-# while true; do docker stats --no-stream | tee --append stats.txt; sleep 1; done
-# while true; do docker stats --no-stream | tee --append ; sleep 1; done &
-
-
-update_file() {
-  docker stats --no-stream --format "table {{.Name}},{{.CPUPerc}},{{.MemUsage}},{{.NetIO}},{{.BlockIO}},{{.PIDs}}" | tee --append ${DOCKER_STATS_LOG};
-  echo $(date +'%s.%N') | tee --append $OUTNAME;
-}
-
-while true;
-do
-	update_file &
-	pids="$pids $!"
-	# sleep $INTERVAL;
-	sleep 1;
-done
-
+# while true; do docker stats -a --no-stream >> ${DOCKER_STATS_LOG}; done &
+while true; do docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
 
 # mpstat
 

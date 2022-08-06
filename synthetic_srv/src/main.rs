@@ -56,36 +56,40 @@ pub fn map_profile(file_path: String) -> serde_json::Result<HashMap<usize, Strin
 /// which is the largest size we can use setup: 10GB, 20GB, 50GB. 50GB is definitely causing too
 /// much paging.
 pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
+    let cpu_load = 50.0;
+    let ram_load = 200.0;
+    let io_load = 50.0;
+
     let load = match profile_name {
         "tlsv" => Load {
-            cpu: 5 * count as u64,
+            cpu: 20 * count as u64,
             ram: 0 as u64,
             io: 0 as u64,
         },
         "p2p" => Load {
             cpu: 0 as u64,
             ram: 0 as u64,
-            io: 20 * count as u64,
+            io: 50 * count as u64,
         },
         "rand1" => Load {
-            cpu: ((0.0475 * 10.0 * count) as f64).ceil() as u64,
-            ram: ((0.0271 * GB_SIZE / 16.0 * count) as f64).ceil() as u64,
-            io: ((0.0413 * 20.0 * count) as f64).ceil() as u64,
+            cpu: ((0.0475 * cpu_load * count) as f64).ceil() as u64,
+            ram: ((0.0271 * GB_SIZE / ram_load * count) as f64).ceil() as u64,
+            io: ((0.0413 * io_load * count) as f64).ceil() as u64,
         },
         "rand2" => Load {
-            cpu: ((0.3449 * 10.0 * count) as f64).ceil() as u64,
-            ram: ((0.639 * GB_SIZE / 16.0 * count) as f64).ceil() as u64,
-            io: ((0.5554 * 20.0 * count) as f64).ceil() as u64,
+            cpu: ((0.3449 * cpu_load * count) as f64).ceil() as u64,
+            ram: ((0.639 * GB_SIZE / ram_load * count) as f64).ceil() as u64,
+            io: ((0.5554 * io_load * count) as f64).ceil() as u64,
         },
         "rand3" => Load {
-            cpu: ((0.1555 * 10.0 * count) as f64).ceil() as u64,
-            ram: ((0.6971 * GB_SIZE / 16.0 * count) as f64).ceil() as u64,
-            io: ((0.833 * 20.0 * count) as f64).ceil() as u64,
+            cpu: ((0.1555 * cpu_load * count) as f64).ceil() as u64,
+            ram: ((0.6971 * GB_SIZE / ram_load * count) as f64).ceil() as u64,
+            io: ((0.833 * io_load * count) as f64).ceil() as u64,
         },
         "rand4" => Load {
-            cpu: ((0.9647 * 10.0 * count) as f64).ceil() as u64,
-            ram: ((0.6844 * GB_SIZE / 16.0 * count) as f64).ceil() as u64,
-            io: ((0.0955 * 20.0 * count) as f64).ceil() as u64,
+            cpu: ((0.9647 * cpu_load * count) as f64).ceil() as u64,
+            ram: ((0.6844 * GB_SIZE / ram_load * count) as f64).ceil() as u64,
+            io: ((0.0955 * io_load * count) as f64).ceil() as u64,
         },
         _ => {
             println!("profile name is something else!");
@@ -320,6 +324,7 @@ fn main() {
                             // https://github.com/jethrosun/NetBricks/blob/expr/framework/src/pvn/xcdr.rs#L110
                             let count = job_args[0].as_u64().unwrap();
                             let num_of_jobs = ((count / 10) as f64 * 1.13).ceil() as usize;
+                            println!("count {:?}, num of job {:?}", count,num_of_jobs);
                             for x in 0..num_of_jobs {
                                 let _ = transcode();
                             }
@@ -346,6 +351,7 @@ fn main() {
 
                             let count = job_args[0].as_u64().unwrap();
                             let load = udf_load(&pname, count as f64).unwrap();
+                            println("count {:?}, load {:?}", count, load);
 
                             // if start.elapsed().as_secs() > report_time as u64 {
                             //     report_time += 300;
