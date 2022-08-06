@@ -111,15 +111,15 @@ pub fn file_io(counter: &mut i32, f: &mut File, buf: Box<[u8]>) {
     *counter += 1;
 }
 
-/// Execute a job.
+/// Execute the work we need in exactly one second
 ///
 /// Unit of CPU, RAM, I/O load is determined from measurment/analysis
 pub fn execute(name: &str, load: Load) -> io::Result<()> {
-    // let io_disk = "hdd";
+    let mut beginning = Instant::now();
 
+    let _sleep_time = Duration::from_millis(50);
     // counting the iterations
     let mut counter = 0;
-    let mut now = Instant::now();
 
     // CPU
     let mut rng = rand::thread_rng();
@@ -145,39 +145,49 @@ pub fn execute(name: &str, load: Load) -> io::Result<()> {
         .open(file_name)
         .unwrap();
 
+    // File I/O
+    let _ = file_io(&mut counter, &mut file, buf.clone());
+
+    // make sure we run for exactly one second
     loop {
-        // CPU work
         let _sleep_time = Duration::from_millis(1000 - load.cpu);
         let _run_time = Duration::from_millis(load.cpu);
+        let mut _now = Instant::now();
 
-        let _ = rng.gen_range(0..10);
+        // sleep a little
+        thread::sleep(_sleep_time);
 
-        // RAM
-        for i in 0..vec_size as usize / 256 {
-            let _ = large_vec[i * 256];
+        loop {
+            // CPU work
+            // we generate 100 randon numbers
+            for _ in 0..100 {
+                let _ = rng.gen_range(0..10);
+            }
+
+            // RAM
+            for i in 0..vec_size as usize / 256 {
+                let _ = large_vec[i * 256];
+                // println!("current value: {:?}", t);
+            }
             counter += 1;
-            // println!("current value: {:?}", t);
+
+            if beginning.elapsed() >= Duration::from_secs(1) {
+                break;
+            }
+            // if _now.elapsed() >= _sleep_time + _run_time {
+            //     _now = Instant::now();
+            //     break;
+            // }
         }
         if counter % 1_000_000 == 0 {
-            println!("{},000 * k since {:?}", counter, now.elapsed());
+            println!("{},000 * k since {:?}", counter, beginning.elapsed());
         }
 
-        // actual file IO
-        let _ = file_io(&mut counter, &mut file, buf.clone());
-
-        if now.elapsed() >= _sleep_time + _run_time {
-            now = Instant::now();
-            // println!("\tbreak");
+        if beginning.elapsed() >= Duration::from_secs(1) {
             break;
         }
+
     }
-    // println!("start elapsed {:?}", _now.elapsed());
-
-    // I/O
-    // Disk I/O contention
-    let _sleep_time = Duration::from_millis(50);
-    let _second = Duration::from_secs(1);
-
     Ok(())
 }
 
@@ -227,6 +237,7 @@ fn main() {
                     // c.hostname("172.17.0.1".to_string());
 
                     if pname == "rdr" {
+                        // FIXME
                         c.register(cname.clone(), move |job| -> io::Result<()> {
                             // 5*60 = 300
                             // let mut report_time = 300;
@@ -312,13 +323,6 @@ fn main() {
                     } else if pname == "xcdr" {
                         c.register(cname.clone(), move |job| -> io::Result<()> {
                             let job_args = job.args();
-
-                            // let mut report_time = 300;
-
-                            // if start.elapsed().as_secs() > report_time as u64 {
-                            //     report_time += 300;
-                            //     println!("reached {} seconds, report", report_time);
-                            // }
                             let now_2 = Instant::now();
 
                             // https://github.com/jethrosun/NetBricks/blob/expr/framework/src/pvn/xcdr.rs#L110
