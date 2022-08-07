@@ -150,9 +150,8 @@ pub fn execute(name: &str, load: Load) -> io::Result<()> {
 
     // make sure we run for exactly one second
     loop {
-        let _sleep_time = Duration::from_millis(1000 - load.cpu);
-        let _run_time = Duration::from_millis(load.cpu);
-        let mut _now = Instant::now();
+        let cpu_run_time = Duration::from_millis(load.cpu);
+        let mut cpu_time = Duration::from_millis(0);
 
         // sleep a little
         thread::sleep(_sleep_time);
@@ -160,8 +159,12 @@ pub fn execute(name: &str, load: Load) -> io::Result<()> {
         loop {
             // CPU work
             // we generate 100 randon numbers
-            for _ in 0..100 {
-                let _ = rng.gen_range(0..10);
+            if cpu_time < cpu_run_time {
+                let mut _now = Instant::now();
+                for _ in 0..100 {
+                    let _ = rng.gen_range(0..10);
+                }
+                cpu_time += _now.elapsed();
             }
 
             // RAM
@@ -186,7 +189,6 @@ pub fn execute(name: &str, load: Load) -> io::Result<()> {
         if beginning.elapsed() >= Duration::from_secs(1) {
             break;
         }
-
     }
     Ok(())
 }
@@ -328,7 +330,7 @@ fn main() {
                             // https://github.com/jethrosun/NetBricks/blob/expr/framework/src/pvn/xcdr.rs#L110
                             let count = job_args[0].as_u64().unwrap();
                             let num_of_jobs = ((count / 10) as f64 * 1.13).ceil() as usize;
-                            println!("count {:?}, num of job {:?}", count,num_of_jobs);
+                            println!("count {:?}, num of job {:?}", count, num_of_jobs);
                             for x in 0..num_of_jobs {
                                 let _ = transcode();
                             }
