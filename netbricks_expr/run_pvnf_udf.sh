@@ -113,14 +113,14 @@ docker ps
 # docker stats
 # https://github.com/moby/moby/issues/22618
 # while true; do docker stats -a --no-stream >> ${DOCKER_STATS_LOG}; done &
-while true; do docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
+while true; do taskset -c 5 docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 5; done &
 
 # mpstat
 
 # intel PQoS
 
 # Block IO
-taskset -c 0 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+taskset -c 5 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
 pids="$pids $!"
 
 for pid in $pids; do

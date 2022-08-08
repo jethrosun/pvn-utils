@@ -10,6 +10,7 @@ extern crate time;
 extern crate tiny_http;
 extern crate y4m;
 
+use std::sync::{Arc, Mutex};
 use crate::lib::*;
 use crate::rand::Rng;
 use core_affinity::CoreId;
@@ -225,6 +226,8 @@ fn main() {
         core_id, profile_id, profile_name
     );
 
+    
+
     // println!("core id {}, profile id {}, profile name {}", core_id , profile_id, profile_name);
     let handles = core_ids
         .into_iter()
@@ -235,47 +238,44 @@ fn main() {
                 if id.id == core_id {
                     core_affinity::set_for_current(id);
                     let mut c = ConsumerBuilder::default();
-                    // c.hostname("host.docker.internal".to_string());
-                    // c.hostname("172.17.0.1".to_string());
-
                     if pname == "rdr" {
-                        // FIXME
-                        c.register(cname.clone(), move |job| -> io::Result<()> {
+
+let rdr_users = rdr_read_rand_seed(50, 2).unwrap();
+    // let workload_path = "/home/jethros/dev/pvn/utils/workloads/rdr_pvn_workloads/rdr_pvn_workload_5.json";
+    let workload_path = "/tmp/udf/rdr_pvn_workload_5.json";
+    println!("{:?}", workload_path);
+    let mut rdr_workload = rdr_load_workload(
+        workload_path.to_string(),
+        expr_time,
+        rdr_users.clone(),
+    )
+    .unwrap();
+    // let t2 = Arc::clone(&browser_list);
+    println!("Workload is generated",);
+
+    let mut browser_list = Arc::new(Mutex::new(HashMap::<i64, Browser>::with_capacity(50)));
+    let t1 = Arc::clone(&browser_list);
+    let t2 = Arc::clone(&browser_list);
+
+        // Creating the browsers
+        // let rdr_users = rdr_read_rand_seed(num_of_users, 2).unwrap();
+        let usr_data_dir =
+            rdr_read_user_data_dir("/config/setup".to_string()).unwrap();
+
+        for user in &rdr_users {
+            let mut w = t1.lock().unwrap();
+            let browser = browser_create(&usr_data_dir).unwrap();
+            w.insert(*user, browser);
+        }
+        // println!("{} browsers are created ", num_of_users);
+                        
+        c.register(cname.clone(), move |job| -> io::Result<()> {
                             // 5*60 = 300
                             // let mut report_time = 300;
 
                             // TODO: optmize the managemenet of browser and workload
                             let job_args = job.args();
                             let num_of_users = job_args[0].as_u64().unwrap();
-
-                            let mut browser_list: HashMap<i64, Browser> = HashMap::new();
-                            let rdr_users = rdr_read_rand_seed(num_of_users, 2).unwrap();
-                            let usr_data_dir =
-                                rdr_read_user_data_dir("/config/setup".to_string()).unwrap();
-
-                            // let workload_path = "/home/jethros/dev/pvn/utils/workloads/rdr_pvn_workloads/rdr_pvn_workload_5.json";
-                            let workload_path = "/tmp/udf/rdr_pvn_workload_5.json";
-                            println!("{:?}", workload_path);
-                            let mut rdr_workload = rdr_load_workload(
-                                workload_path.to_string(),
-                                expr_time,
-                                rdr_users.clone(),
-                            )
-                            .unwrap();
-                            println!("Workload is generated",);
-
-                            for user in &rdr_users {
-                                let browser = browser_create(&usr_data_dir).unwrap();
-                                browser_list.insert(*user, browser);
-                            }
-                            println!("{} browsers are created ", num_of_users);
-
-                            // if start.elapsed().as_secs() > report_time as u64 {
-                            //     report_time += 300;
-                            //     println!("reached {} seconds, report", report_time);
-                            // }
-                            let now_2 = Instant::now();
-
                             let _pivot = 1_usize;
 
                             // Metrics for measurement
@@ -290,19 +290,20 @@ fn main() {
                             println!("Timer started");
 
                             let cur_time = now.elapsed().as_secs() as usize;
-                            if rdr_workload.contains_key(&cur_time) {
+                            if rdr_workload.clone().contains_key(&cur_time) {
                                 // println!("pivot {:?}", cur_time);
                                 let min = cur_time / 60;
                                 let rest_sec = cur_time % 60;
                                 println!("{:?} min, {:?} second", min, rest_sec);
+                                let mut w = t2.lock().unwrap();
                                 match rdr_workload.get(&cur_time) {
                                     Some(wd) => {
                                         let (oks, errs, timeouts, closeds, visits, elapsed) =
                                             rdr_scheduler(
                                                 &cur_time,
-                                                &rdr_users,
+                                                &(rdr_users.clone()),
                                                 wd.to_vec(),
-                                                &browser_list,
+                                                &w,
                                             )
                                             .unwrap();
                                         num_of_ok += oks;
