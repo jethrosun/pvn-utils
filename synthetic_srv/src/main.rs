@@ -10,7 +10,6 @@ extern crate time;
 extern crate tiny_http;
 extern crate y4m;
 
-use std::sync::{Arc, Mutex};
 use crate::lib::*;
 use crate::rand::Rng;
 use core_affinity::CoreId;
@@ -20,6 +19,7 @@ use std::collections::HashMap;
 use std::convert::TryInto;
 use std::fs::{File, OpenOptions};
 use std::io::Write;
+use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 use std::{env, io, process, thread, vec};
 
@@ -57,20 +57,20 @@ pub fn map_profile(file_path: String) -> serde_json::Result<HashMap<usize, Strin
 /// which is the largest size we can use setup: 10GB, 20GB, 50GB. 50GB is definitely causing too
 /// much paging.
 pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
-    let cpu_load = 50.0;
-    let ram_load = 200.0;
-    let io_load = 50.0;
+    let cpu_load = 500.0;
+    let ram_load = 2000.0;
+    let io_load = 500.0;
 
     let load = match profile_name {
         "tlsv" => Load {
-            cpu: 20 * count as u64,
+            cpu: 500 * count as u64,
             ram: 0 as u64,
             io: 0 as u64,
         },
         "p2p" => Load {
             cpu: 0 as u64,
             ram: 0 as u64,
-            io: 50 * count as u64,
+            io: 500 * count as u64,
         },
         "rand1" => Load {
             cpu: ((0.0475 * cpu_load * count) as f64).ceil() as u64,
@@ -196,6 +196,7 @@ pub fn execute(name: &str, load: Load) -> io::Result<()> {
 
 fn main() {
     let expr_time = 1800;
+    let num_of_rdr_users = 10;
     let start = Instant::now();
 
     let params: Vec<String> = env::args().collect();
@@ -226,8 +227,6 @@ fn main() {
         core_id, profile_id, profile_name
     );
 
-    
-
     // println!("core id {}, profile id {}, profile name {}", core_id , profile_id, profile_name);
     let handles = core_ids
         .into_iter()
@@ -239,37 +238,37 @@ fn main() {
                     core_affinity::set_for_current(id);
                     let mut c = ConsumerBuilder::default();
                     if pname == "rdr" {
+                        let rdr_users = rdr_read_rand_seed(num_of_rdr_users, 2).unwrap();
+                        // let workload_path = "/home/jethros/dev/pvn/utils/workloads/rdr_pvn_workloads/rdr_pvn_workload_5.json";
+                        let workload_path = "/tmp/udf/rdr_pvn_workload_5.json";
+                        println!("{:?}", workload_path);
+                        let mut rdr_workload = rdr_load_workload(
+                            workload_path.to_string(),
+                            expr_time,
+                            rdr_users.clone(),
+                        )
+                        .unwrap();
+                        // let t2 = Arc::clone(&browser_list);
+                        println!("Workload is generated",);
 
-let rdr_users = rdr_read_rand_seed(50, 2).unwrap();
-    // let workload_path = "/home/jethros/dev/pvn/utils/workloads/rdr_pvn_workloads/rdr_pvn_workload_5.json";
-    let workload_path = "/tmp/udf/rdr_pvn_workload_5.json";
-    println!("{:?}", workload_path);
-    let mut rdr_workload = rdr_load_workload(
-        workload_path.to_string(),
-        expr_time,
-        rdr_users.clone(),
-    )
-    .unwrap();
-    // let t2 = Arc::clone(&browser_list);
-    println!("Workload is generated",);
+                        let mut browser_list =
+                            Arc::new(Mutex::new(HashMap::<i64, Browser>::with_capacity(50)));
+                        let t1 = Arc::clone(&browser_list);
+                        let t2 = Arc::clone(&browser_list);
 
-    let mut browser_list = Arc::new(Mutex::new(HashMap::<i64, Browser>::with_capacity(50)));
-    let t1 = Arc::clone(&browser_list);
-    let t2 = Arc::clone(&browser_list);
+                        // Creating the browsers
+                        // let rdr_users = rdr_read_rand_seed(num_of_users, 2).unwrap();
+                        let usr_data_dir =
+                            rdr_read_user_data_dir("/config/setup".to_string()).unwrap();
 
-        // Creating the browsers
-        // let rdr_users = rdr_read_rand_seed(num_of_users, 2).unwrap();
-        let usr_data_dir =
-            rdr_read_user_data_dir("/config/setup".to_string()).unwrap();
+                        for user in &rdr_users {
+                            let mut w = t1.lock().unwrap();
+                            let browser = browser_create(&usr_data_dir).unwrap();
+                            w.insert(*user, browser);
+                        }
+                        // println!("{} browsers are created ", num_of_users);
 
-        for user in &rdr_users {
-            let mut w = t1.lock().unwrap();
-            let browser = browser_create(&usr_data_dir).unwrap();
-            w.insert(*user, browser);
-        }
-        // println!("{} browsers are created ", num_of_users);
-                        
-        c.register(cname.clone(), move |job| -> io::Result<()> {
+                        c.register(cname.clone(), move |job| -> io::Result<()> {
                             // 5*60 = 300
                             // let mut report_time = 300;
 
