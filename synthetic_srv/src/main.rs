@@ -57,20 +57,20 @@ pub fn map_profile(file_path: String) -> serde_json::Result<HashMap<usize, Strin
 /// which is the largest size we can use setup: 10GB, 20GB, 50GB. 50GB is definitely causing too
 /// much paging.
 pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
-    let cpu_load = 500.0;
+    let cpu_load = 200.0;
     let ram_load = 2000.0;
-    let io_load = 500.0;
+    let io_load = 100.0; // 1 P2P user from logs
 
     let load = match profile_name {
         "tlsv" => Load {
-            cpu: 500 * count as u64,
+            cpu: 100 * count as u64,
             ram: 0 as u64,
             io: 0 as u64,
         },
         "p2p" => Load {
             cpu: 0 as u64,
             ram: 0 as u64,
-            io: 500 * count as u64,
+            io: 50 * count as u64,
         },
         "rand1" => Load {
             cpu: ((0.0475 * cpu_load * count) as f64).ceil() as u64,
@@ -162,9 +162,7 @@ pub fn execute(name: &str, load: Load) -> io::Result<()> {
             // we generate 100 randon numbers
             if cpu_time < cpu_run_time {
                 let mut _now = Instant::now();
-                for _ in 0..100 {
-                    let _ = rng.gen_range(0..10);
-                }
+                let _ = rng.gen_range(0..100);
                 cpu_time += _now.elapsed();
             }
 
@@ -183,8 +181,8 @@ pub fn execute(name: &str, load: Load) -> io::Result<()> {
             //     break;
             // }
         }
-        if counter % 1_000_000 == 0 {
-            println!("{},000 * k since {:?}", counter, beginning.elapsed());
+        if counter % 100 == 0 {
+            println!("{}00 rounds since {:?}", counter, beginning.elapsed());
         }
 
         if beginning.elapsed() >= Duration::from_secs(1) {
@@ -197,7 +195,7 @@ pub fn execute(name: &str, load: Load) -> io::Result<()> {
 fn main() {
     let expr_time = 1800;
     let num_of_rdr_users = 10;
-    let start = Instant::now();
+    // let start = Instant::now();
 
     let params: Vec<String> = env::args().collect();
     if params.len() == 3 {
@@ -238,20 +236,21 @@ fn main() {
                     core_affinity::set_for_current(id);
                     let mut c = ConsumerBuilder::default();
                     if pname == "rdr" {
+                        let fake_rdr_users = rdr_read_rand_seed(100, 2).unwrap();
                         let rdr_users = rdr_read_rand_seed(num_of_rdr_users, 2).unwrap();
                         // let workload_path = "/home/jethros/dev/pvn/utils/workloads/rdr_pvn_workloads/rdr_pvn_workload_5.json";
                         let workload_path = "/tmp/udf/rdr_pvn_workload_5.json";
                         println!("{:?}", workload_path);
-                        let mut rdr_workload = rdr_load_workload(
+                        let rdr_workload = rdr_load_workload(
                             workload_path.to_string(),
                             expr_time,
-                            rdr_users.clone(),
+                            fake_rdr_users.clone(),
                         )
                         .unwrap();
                         // let t2 = Arc::clone(&browser_list);
                         println!("Workload is generated",);
 
-                        let mut browser_list =
+                        let browser_list =
                             Arc::new(Mutex::new(HashMap::<i64, Browser>::with_capacity(50)));
                         let t1 = Arc::clone(&browser_list);
                         let t2 = Arc::clone(&browser_list);
@@ -290,7 +289,7 @@ fn main() {
 
                             let cur_time = now.elapsed().as_secs() as usize;
                             if rdr_workload.clone().contains_key(&cur_time) {
-                                // println!("pivot {:?}", cur_time);
+                                println!("pivot {:?}", cur_time);
                                 let min = cur_time / 60;
                                 let rest_sec = cur_time % 60;
                                 println!("{:?} min, {:?} second", min, rest_sec);
