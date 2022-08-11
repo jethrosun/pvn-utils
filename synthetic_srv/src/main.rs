@@ -267,6 +267,9 @@ fn main() {
                         }
                         // println!("{} browsers are created ", num_of_users);
 
+                        println!("Timer started");
+                        let now = Instant::now();
+
                         c.register(cname.clone(), move |job| -> io::Result<()> {
                             // 5*60 = 300
                             // let mut report_time = 300;
@@ -284,10 +287,8 @@ fn main() {
                             let mut num_of_closed = 0;
                             let mut num_of_visit = 0;
 
-                            let now = Instant::now();
-                            println!("Timer started");
-
                             let cur_time = now.elapsed().as_secs() as usize;
+                            println!("Getting workload for {:?}", cur_time);
                             if rdr_workload.clone().contains_key(&cur_time) {
                                 println!("pivot {:?}", cur_time);
                                 let min = cur_time / 60;
