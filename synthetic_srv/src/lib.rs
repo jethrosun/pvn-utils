@@ -238,18 +238,14 @@ pub fn rdr_scheduler(
 
     let total = elapsed_time.iter().sum();
 
-    if num_of_visit > 0 {
-        Some((
-            num_of_ok,
-            num_of_err,
-            num_of_timeout,
-            num_of_closed,
-            elapsed_time.len(),
-            total,
-        ))
-    } else {
-        None
-    }
+    Some((
+        num_of_ok,
+        num_of_err,
+        num_of_timeout,
+        num_of_closed,
+        elapsed_time.len(),
+        total,
+    ))
 }
 
 /// Actual video transcoding.
