@@ -57,8 +57,8 @@ pub fn map_profile(file_path: String) -> serde_json::Result<HashMap<usize, Strin
 /// which is the largest size we can use setup: 10GB, 20GB, 50GB. 50GB is definitely causing too
 /// much paging.
 pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
-    let cpu_load = 200.0;
-    let ram_load = 2000.0;
+    let cpu_load = 1000.0;
+    let ram_load = 60.0;
     let io_load = 100.0; // 1 P2P user from logs
 
     let load = match profile_name {
@@ -74,22 +74,22 @@ pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
         },
         "rand1" => Load {
             cpu: ((0.0475 * cpu_load * count) as f64).ceil() as u64,
-            ram: ((0.0271 * GB_SIZE / ram_load * count) as f64).ceil() as u64,
+            ram: ((0.0271 * GB_SIZE * ram_load * count) as f64).ceil() as u64,
             io: ((0.0413 * io_load * count) as f64).ceil() as u64,
         },
         "rand2" => Load {
             cpu: ((0.3449 * cpu_load * count) as f64).ceil() as u64,
-            ram: ((0.639 * GB_SIZE / ram_load * count) as f64).ceil() as u64,
+            ram: ((0.639 * GB_SIZE * ram_load * count) as f64).ceil() as u64,
             io: ((0.5554 * io_load * count) as f64).ceil() as u64,
         },
         "rand3" => Load {
             cpu: ((0.1555 * cpu_load * count) as f64).ceil() as u64,
-            ram: ((0.6971 * GB_SIZE / ram_load * count) as f64).ceil() as u64,
+            ram: ((0.6971 * GB_SIZE * ram_load * count) as f64).ceil() as u64,
             io: ((0.833 * io_load * count) as f64).ceil() as u64,
         },
         "rand4" => Load {
             cpu: ((0.9647 * cpu_load * count) as f64).ceil() as u64,
-            ram: ((0.6844 * GB_SIZE / ram_load * count) as f64).ceil() as u64,
+            ram: ((0.6844 * GB_SIZE * ram_load * count) as f64).ceil() as u64,
             io: ((0.0955 * io_load * count) as f64).ceil() as u64,
         },
         _ => {
