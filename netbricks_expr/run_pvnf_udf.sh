@@ -122,7 +122,7 @@ while true; do taskset -c 0 docker stats --no-stream | tee --append ${DOCKER_STA
 pids="$pids $!"
 
 # mpstat
-taskset -c 0 mpstat >> "$MPSTAT_LOG" &
+taskset -c 0 mpstat -P ALL >> "$MPSTAT_LOG" &
 pids="$pids $!"
 
 # intel PQoS
