@@ -121,8 +121,8 @@ docker ps
 while true; do taskset -c 0 docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 60; done &
 pids="$pids $!"
 
-# mpstat
-taskset -c 0 mpstat -P ALL >> "$MPSTAT_LOG" &
+# mpstat for every second
+taskset -c 0 mpstat -P ALL 1 >> "$MPSTAT_LOG" &
 pids="$pids $!"
 
 # intel PQoS
