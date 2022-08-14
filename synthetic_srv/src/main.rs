@@ -63,7 +63,7 @@ pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
 
     let load = match profile_name {
         "tlsv" => Load {
-            cpu: 100 * count as u64,
+            cpu: 20 * count as u64,
             ram: 0 as u64,
             io: 0 as u64,
         },
@@ -173,7 +173,7 @@ pub fn execute(name: &str, load: Load) -> io::Result<()> {
             }
             counter += 1;
 
-            if beginning.elapsed() >= Duration::from_secs(1) {
+            if beginning.elapsed() >= Duration::from_millis(900) {
                 break;
             }
             // if _now.elapsed() >= _sleep_time + _run_time {
@@ -181,11 +181,9 @@ pub fn execute(name: &str, load: Load) -> io::Result<()> {
             //     break;
             // }
         }
-        if counter % 100 == 0 {
-            println!("{}00 rounds since {:?}", counter, beginning.elapsed());
-        }
+        println!("{} rounds since {:?}", counter, beginning.elapsed());
 
-        if beginning.elapsed() >= Duration::from_secs(1) {
+        if beginning.elapsed() >= Duration::from_millis(900) {
             break;
         }
     }
@@ -251,7 +249,7 @@ fn main() {
                         println!("Workload is generated",);
 
                         let browser_list =
-                            Arc::new(Mutex::new(HashMap::<i64, Browser>::with_capacity(50)));
+                            Arc::new(Mutex::new(HashMap::<i64, Browser>::with_capacity(100)));
                         let t1 = Arc::clone(&browser_list);
                         let t2 = Arc::clone(&browser_list);
 
@@ -327,15 +325,17 @@ fn main() {
                             let job_args = job.args();
                             let now_2 = Instant::now();
 
-                            // https://github.com/jethrosun/NetBricks/blob/expr/framework/src/pvn/xcdr.rs#L110
                             let count = job_args[0].as_u64().unwrap();
+                            // translate number of users to number of transcoding jobs
+                            // https://github.com/jethrosun/NetBricks/blob/expr/framework/src/pvn/xcdr.rs#L110
                             let num_of_jobs = ((count / 10) as f64 * 1.13).ceil() as usize;
                             println!("count {:?}, num of job {:?}", count, num_of_jobs);
+                            // NOTE: 25 jobs roughly takes 1 second
                             for x in 0..num_of_jobs {
                                 let _ = transcode();
                             }
                             println!(
-                                "\ttranscoded {:?} of jobs in {:?} millis with core: {:?}",
+                                "\ttranscoded {:?} jobs in {:?} millis with core: {:?}",
                                 num_of_jobs,
                                 now_2.elapsed().as_millis(),
                                 id.id
@@ -357,7 +357,7 @@ fn main() {
 
                             let count = job_args[0].as_u64().unwrap();
                             let load = udf_load(&pname, count as f64).unwrap();
-                            println!("count {:?}, load {:?}", count, load);
+                            println!("count {:?}, {:?}", count, load);
 
                             // if start.elapsed().as_secs() > report_time as u64 {
                             //     report_time += 300;
@@ -367,7 +367,7 @@ fn main() {
 
                             execute(&cname, load);
                             println!(
-                                "\tjob: {:?} (load: {:?}) with {:?} millis with core: {:?}",
+                                "\tjob: {:?} ({:?}) with {:?} millis with core: {:?}",
                                 job.args(),
                                 load,
                                 now_2.elapsed().as_millis(),
