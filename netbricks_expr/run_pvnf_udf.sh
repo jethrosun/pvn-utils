@@ -1,16 +1,6 @@
 #!/bin/bash
 set -e
 
-# PID and waits:
-# https://stackoverflow.com/questions/356100/how-to-wait-in-bash-for-several-subprocesses-to-finish-and-return-exit-code-0
-
-
-# parameters?
-# $1: trace
-# $2: nf
-# $3: iter
-# $4: setup
-
 # configs
 DELAY_INTERVAL=1
 DELAY_INTERVAL=3
@@ -19,6 +9,8 @@ DELAY_INTERVAL=3
 LOG_DIR=$HOME/netbricks_logs/$2/$1
 
 # log files
+# 3: number of runs
+# 4: *NF id* for udf_profile, and *node id* for udf_schedule
 LOG=$LOG_DIR/$3_$4.log
 TCP_LOG=$LOG_DIR/$3_$4_tcptop.log
 BIO_LOG=$LOG_DIR/$3_$4_biotop.log
@@ -26,6 +18,7 @@ P2P_PROGRESS_LOG=$LOG_DIR/$3_$4_p2p_progress.log
 FAKTORY_LOG=$LOG_DIR/$3_$4_faktory.log
 DOCKER_STATS_LOG=$LOG_DIR/$3_$4_docker_stats.log
 MPSTAT_LOG=$LOG_DIR/$3_$4_mpstat.log
+# then *core id* and *NF id*
 SYNTHETIC_LOG=$LOG_DIR/$3_$4_srv
 
 CPULOG1=$LOG_DIR/$3_$4_cpu1.log
@@ -139,3 +132,13 @@ if [ "$RESULT" == "1" ];
 then
 	exit 1
 fi
+
+# PID and waits:
+# https://stackoverflow.com/questions/356100/how-to-wait-in-bash-for-several-subprocesses-to-finish-and-return-exit-code-0
+
+
+# parameters?
+# $1: trace
+# $2: nf
+# $3: iter
+# $4: setup

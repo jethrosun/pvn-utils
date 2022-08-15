@@ -285,53 +285,7 @@ p2p_co = [
     'co_rdr_p2p', 'co_tlsv_p2p', 'co_xcdr_p2p', 'co_tlsv_rdr_p2p', 'co_tlsv_xcdr_p2p', 'co_rdr_xcdr_p2p',
     'co_tlsv_rdr_xcdr_p2p'
 ]
-# p2p_co = ['co_tlsv_rdr_xcdr_p2p']
-# set_list = ['1', '2', '3', '4', '5', '6']
-# num_of_epoch = 5
-# p2p_num_of_epoch = 5
-
-# set_list = ['7', '8', '9', '10', '11', '12', '13', '14', '15', '16']
-# num_of_epoch = 1
-# p2p_num_of_epoch = 1
-
-# only for testing
-# p2p_co = ['co_tlsv_rdr_p2p']
-# set_list = ['6']
-# num_of_epoch = 1
-# p2p_num_of_epoch = 1
-
-# ----------------------------------------
-#           task running
-#
-# ----------------------------------------
-raw_tasks = [
-    'tlsv2_rdr1_xcdr2', 'tlsv1_rdr1_xcdr2', 'tlsv1_rdr1_xcdr3', 'rdr2_xcdr3', 'tlsv1_xcdr1', 'tlsv2_rdr1_xcdr1',
-    'tlsv1_rdr1_xcdr1', 'tlsv3_rdr1_xcdr1', 'tlsv1_rdr2_xcdr1', 'tlsv2', 'tlsv2_rdr3_xcdr1', 'tlsv3', 'xcdr2',
-    'tlsv2_xcdr2', 'rdr2_xcdr2', 'rdr3', 'tlsv2_rdr6', 'rdr5', 'rdr2', 'xcdr3', 'tlsv2_xcdr3', 'tlsv2_rdr2_xcdr1',
-    'tlsv3_xcdr2', 'tlsv1_xcdr4', 'tlsv1_rdr2_xcdr2', 'tlsv4_rdr1', 'tlsv3_rdr2', 'tlsv1_rdr3_xcdr1', 'tlsv2_rdr3',
-    'tlsv5_rdr1', 'tlsv4_xcdr1', 'tlsv6', 'rdr1_xcdr3', 'rdr1_xcdr5', 'rdr6', 'tlsv3_xcdr3', 'tlsv1_xcdr3',
-    'tlsv3_xcdr1'
-]
-raw_p2p_tasks = [
-    'tlsv1_rdr1_xcdr3_p2p1', 'tlsv3_xcdr1_p2p1', 'tlsv1_rdr2_xcdr5_p2p1', 'tlsv2_rdr1_xcdr3_p2p1', 'tlsv1_rdr1_p2p2',
-    'tlsv1_rdr1_xcdr1_p2p1', 'tlsv2_rdr1_xcdr3_p2p2', 'tlsv2_rdr2_xcdr2_p2p2', 'tlsv1_xcdr1_p2p1',
-    'tlsv1_rdr3_xcdr2_p2p1', 'tlsv3_p2p1', 'tlsv2_rdr2_xcdr1_p2p1', 'tlsv2_xcdr2_p2p1', 'tlsv4_rdr2_xcdr1_p2p1',
-    'tlsv1_rdr1_p2p1', 'tlsv2_rdr3_xcdr1_p2p1', 'tlsv3_rdr1_xcdr1_p2p1', 'tlsv2_xcdr1_p2p1', 'tlsv3_rdr1_p2p1',
-    'tlsv4_xcdr1_p2p2', 'xcdr2_p2p1', 'tlsv1_rdr2_p2p2', 'tlsv1_xcdr1_p2p2', 'tlsv2_rdr2_xcdr1_p2p2',
-    'tlsv2_xcdr1_p2p2', 'rdr2_xcdr2_p2p3', 'tlsv1_rdr1_xcdr2_p2p2', 'tlsv2_rdr2_xcdr2_p2p1', 'rdr1_xcdr2_p2p1',
-    'tlsv1_rdr2_xcdr2_p2p2', 'tlsv2_rdr1_xcdr3_p2p3', 'tlsv1_rdr3_p2p1', 'rdr3_xcdr1_p2p1', 'rdr1_xcdr1_p2p2',
-    'tlsv2_rdr5_p2p1', 'rdr3_xcdr1_p2p2', 'p2p1', 'tlsv2_rdr3_p2p1', 'tlsv3_rdr1_xcdr1_p2p2', 'rdr1_p2p2',
-    'tlsv3_rdr2_p2p3', 'tlsv2_rdr2_xcdr2_p2p3', 'tlsv2_p2p1', 'tlsv3_xcdr4_p2p1', 'rdr1_xcdr1_p2p1',
-    'tlsv1_rdr1_xcdr4_p2p1', 'tlsv2_p2p2', 'tlsv2_xcdr1_p2p3', 'tlsv1_xcdr2_p2p1', 'tlsv1_rdr2_xcdr1_p2p2',
-    'tlsv1_rdr1_xcdr1_p2p2', 'tlsv1_rdr1_p2p4', 'tlsv1_rdr2_xcdr1_p2p1', 'rdr1_xcdr3_p2p1', 'tlsv1_rdr1_xcdr2_p2p1',
-    'rdr3_p2p2', 'tlsv2_rdr1_xcdr1_p2p1', 'tlsv2_rdr2_p2p1', 'tlsv3_p2p2', 'tlsv1_xcdr1_p2p3', 'tlsv1_xcdr2_p2p2',
-    'rdr1_p2p4', 'tlsv2_rdr1_p2p2', 'rdr4_p2p1', 'rdr2_xcdr1_p2p2', 'tlsv1_xcdr3_p2p1', 'rdr1_xcdr2_p2p2',
-    'rdr1_xcdr1_p2p3', 'rdr3_p2p1', 'rdr2_xcdr1_p2p1', 'rdr3_p2p3', 'tlsv1_rdr2_p2p1', 'p2p5', 'p2p4',
-    'tlsv1_rdr3_xcdr1_p2p1', 'rdr4_p2p2', 'rdr4_xcdr1_p2p1', 'rdr3_xcdr2_p2p1'
-]
-
 raw_p2p_tasks = ['rdr1_xcdr3_p2p1']
-
 
 udf_schedule = ['udf_schedule']
 udf_profile = ['udf_profile']
