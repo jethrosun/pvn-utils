@@ -58,7 +58,7 @@ pub fn map_profile(file_path: String) -> serde_json::Result<HashMap<usize, Strin
 /// much paging.
 pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
     let cpu_load = 1000.0;
-    let ram_load = 60.0;
+    let ram_load = 1.0;
     let io_load = 100.0; // 1 P2P user from logs
 
     let load = match profile_name {
