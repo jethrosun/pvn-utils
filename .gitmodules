@@ -1,0 +1,9 @@
+[submodule "tlsv_builder"]
+	path = tlsv_builder
+	url = git@github.com:jethrosun/tlsv-builder.git
+[submodule "rdr_builder"]
+	path = rdr_builder
+	url = git@github.com:jethrosun/rdr-builder.git
+[submodule "p2p_builder"]
+	path = p2p_builder
+	url = git@github.com:jethrosun/p2p-builder.git
