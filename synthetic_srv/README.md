@@ -1,3 +1,5 @@
+
+
 # Running backend services as containers
 
 1. use docker stats to collect resource usage
@@ -64,3 +66,8 @@ https://www.baeldung.com/ops/docker-logs
 https://linuxhint.com/docker_logs_linux_tutorial/
 
 https://www.howtogeek.com/devops/where-does-docker-keep-log-files/
+
+
+
+
+{"1": "xcdr", "2": "rand1", "3": "rand2", "4": "rand4", "5": "rand3", "6": "tlsv", "7": "p2p", "8": "rdr"}

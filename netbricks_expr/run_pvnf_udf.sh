@@ -75,6 +75,9 @@ sleep 10
 pids=""
 RESULT=0
 
+# TODO: Run P2P seeder and leechers....
+
+
 # /home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$7" "$FAKTORY_LOG" &
 # P1=$!
 "$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
@@ -83,6 +86,7 @@ pids="$pids $!"
 
 cd ~/dev/pvn/utils/synthetic_srv/
 
+# {"1": "xcdr", "2": "rand1", "3": "rand2", "4": "rand4", "5": "rand3", "6": "tlsv", "7": "p2p", "8": "rdr"}
 for core_id in {1..5}
 do
 	for profile_id in {1..8}
@@ -104,6 +108,40 @@ do
 		# sudo -u jethros taskset -c 0 top -b -d $DELAY_INTERVAL -p $PID | grep -w $PID  > $LOG_DIR/$3_$4__${core_id}_${profile_id}_top.log &
 		# pids="$pids $!"
 	done
+done
+
+for core_id in {1..5}
+do
+	# "6": "tlsv"
+	docker run -d --cpuset-cpus $core_id --name tlsv_${core_id}_6 \
+		--rm -ti --network=host \
+		-v /data/tmp:/data \
+		-v /home/jethros:/config \
+		-v /home/jethros/dev/pvn/utils/workloads/udf:/tmp/udf \
+		tlsv:alphine $core_id 6
+	docker logs -f tlsv_${core_id}_6 &> ${SYNTHETIC_LOG}__${core_id}_6.log &
+	pids="$pids $!"
+
+	# "7": "p2p"
+	docker run -d --cpuset-cpus $core_id --name synthetic_srv_${core_id}_7 \
+		--rm -ti --network=host \
+		-v /data/tmp:/data \
+		-v /home/jethros:/config \
+		-v /home/jethros/dev/pvn/utils/workloads/udf:/tmp/udf \
+		p2p:alphine $core_id 7
+	docker logs -f p2p_${core_id}_7 &> ${SYNTHETIC_LOG}__${core_id}_7.log &
+	pids="$pids $!"
+
+	# "8": "rdr"
+	docker run -d --cpuset-cpus $core_id --name rdr_${core_id}_8 \
+		--rm -ti --network=host \
+		-v /data/tmp:/data \
+		-v /home/jethros:/config \
+		-v /home/jethros/dev/pvn/utils/workloads/udf:/tmp/udf \
+		rdr:alphine $core_id 8
+	docker logs -f rdr_${core_id}_8 &> ${SYNTHETIC_LOG}__${core_id}_8.log &
+	pids="$pids $!"
+
 done
 
 docker ps

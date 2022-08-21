@@ -32,17 +32,6 @@ RUN cargo build --target x86_64-unknown-linux-musl --release
 ####################################################################################################
 FROM alpine
 
-# Installs latest Chromium (latest) package.
-RUN apk update && apk upgrade && \
-    echo @edge http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \
-    echo @edge http://nl.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories && \
-    apk add --no-cache \
-    chromium@edge \
-    nss@edge \
-    freetype@edge \
-    harfbuzz@edge \
-    ttf-freefont@edge
-
 RUN addgroup -S chrome && adduser -S -g chrome chrome \
     && mkdir -p /home/chrome/Downloads \
     && chown -R chrome:chrome /home/chrome \
