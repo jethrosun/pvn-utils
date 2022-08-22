@@ -15,7 +15,7 @@ use std::{io, vec};
 pub fn transcode() {
     // let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
     // let infile = "/Users/jethros/dev/pvn/utils/data/tiny.y4m";
-    let infile = "/tmp/udf/tiny.y4m";
+    let infile = "/data/tiny.y4m";
 
     let width_height = "360x24";
 

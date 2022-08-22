@@ -38,8 +38,8 @@ fn main() {
     let core = CoreId { id: core_id };
 
     // get udf profiles
-    // let profile_map_path = "/Users/jethros/dev/pvn/workload/results/profile_map.json";
-    let profile_map_path = "/tmp/udf/profile_map.json";
+    // let profile_map_path = "/home/jethros/dev/pvn/workload/results/profile_map.json";
+    let profile_map_path = "/udf/profile_map.json";
 
     let profile_map = map_profile(profile_map_path.to_string()).unwrap();
     let profile_name = profile_map.get(&profile_id).unwrap().clone();
@@ -49,14 +49,14 @@ fn main() {
     );
 
     // get workload based on node_id/core_id/profile_id
-    // let workload_path = "/Users/jethros/dev/pvn/workload/results/udf_profile".to_owned()
+    // let workload_path = "/home/jethros/dev/pvn/workload/results/udf_profile".to_owned()
     //     + &profile_id.to_string()
     //     + "_node"
     //     + &node_id.to_string()
     //     + "_core"
     //     + &core_id.to_string()
     //     + ".json";
-    let workload_path = "/tmp/udf/udf_profile".to_owned()
+    let workload_path = "/udf/udf_profile".to_owned()
         + &profile_id.to_string()
         + "_node"
         + &node_id.to_string()

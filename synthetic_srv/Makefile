@@ -7,8 +7,8 @@ container-run:
 	docker run --rm -ti --network=host \
 		-v /data/tmp:/data \
 		-v /home/jethros:/config \
-		-v /home/jethros/dev/pvn/utils/workloads/udf:/tmp/udf \
-		synthetic:alphine 1 2  
+		-v /home/jethros/dev/pvn/workload/results:/udf \
+		synthetic:alphine 1 2  3
 
 run:
 	docker run --cpuset-cpus 1 --name synthetic_srv_1_2 \

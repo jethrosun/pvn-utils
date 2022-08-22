@@ -89,10 +89,6 @@ pub fn retrieve_workload(
     Ok((vec, udf_workload))
 }
 
-pub fn schedule_udf_workload() -> io::Result<()> {
-    !unimplemented!()
-}
-
 pub fn map_profile(file_path: String) -> serde_json::Result<HashMap<usize, String>> {
     // println!("DEBUG: profile path is {:?}", file_path);
     let file = File::open(file_path).expect("file should open read only");
