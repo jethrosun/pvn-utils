@@ -95,7 +95,7 @@ do
 			-v /data/tmp:/data \
 			-v /home/jethros:/config \
 			-v /home/jethros/dev/pvn/workload/results:/udf \
-			synthetic:alphine "$core_id" "$profile_id" 
+			synthetic:alphine $4 "$core_id" "$profile_id" 
 		docker logs -f synthetic_srv_${core_id}_${profile_id} &> ${SYNTHETIC_LOG}__${core_id}_${profile_id}.log &
 		pids="$pids $!"
 		# $SERVER $core_id $profile_id > $LOG_DIR/$3_$4__${core_id}_${profile_id}.log &
@@ -110,33 +110,36 @@ done
 for core_id in {1..5}
 do
 	# "6": "tlsv"
+	cd ~/dev/pvn/tlsv-builder/
 	docker run -d --cpuset-cpus "$core_id" --name tlsv_${core_id}_6 \
 		--rm -ti --network=host \
 		-v /data/tmp:/data \
 		-v /home/jethros/data/traces/pvn_tlsv/tmp:/traces \
 		-v /home/jethros:/config \
 		-v /home/jethros/dev/pvn/workload/results:/udf \
-		tlsv:alphine "$core_id" 6
+		tlsv:alphine $4 "$core_id" 6
 	docker logs -f tlsv_${core_id}_6 &> ${SYNTHETIC_LOG}__${core_id}_6.log &
 	pids="$pids $!"
 
 	# "7": "p2p"
+	cd ~/dev/pvn/p2p-builder/
 	docker run -d --cpuset-cpus $core_id --name synthetic_srv_${core_id}_7 \
 		--rm -ti --network=host \
 		-v /data/tmp:/data \
 		-v /home/jethros:/config \
 		-v /home/jethros/dev/pvn/workload/results:/udf \
-		p2p:alphine $core_id 7
+		p2p:alphine $4 $core_id 7
 	docker logs -f p2p_${core_id}_7 &> ${SYNTHETIC_LOG}__${core_id}_7.log &
 	pids="$pids $!"
 
 	# "8": "rdr"
+	cd ~/dev/pvn/rdr-builder/
 	docker run -d --cpuset-cpus $core_id --name rdr_${core_id}_8 \
 		--rm -ti --network=host \
 		-v /data/tmp:/data \
 		-v /home/jethros:/config \
 		-v /home/jethros/dev/pvn/workload/results:/udf \
-		rdr:alphine $core_id 8
+		rdr:alphine $4 $core_id 8
 	docker logs -f rdr_${core_id}_8 &> ${SYNTHETIC_LOG}__${core_id}_8.log &
 	pids="$pids $!"
 
