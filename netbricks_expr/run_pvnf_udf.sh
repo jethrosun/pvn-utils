@@ -68,10 +68,7 @@ JSON_STRING=$(jq -n \
 # https://www.baeldung.com/ops/docker-logs
 truncate -s 0 /var/lib/docker/containers/*/*-json.log
 
-docker run -d --cpuset-cpus 0 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
-docker ps
-sleep 10
-
+# docker run -d --cpuset-cpus 0 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
 pids=""
 RESULT=0
 
@@ -89,7 +86,7 @@ cd ~/dev/pvn/utils/synthetic_srv/
 # {"1": "xcdr", "2": "rand1", "3": "rand2", "4": "rand4", "5": "rand3", "6": "tlsv", "7": "p2p", "8": "rdr"}
 for core_id in {1..5}
 do
-	for profile_id in {1..8}
+	for profile_id in {1..5}
 	do
 		# run docker and collect logs
 		# https://www.baeldung.com/ops/docker-logs
