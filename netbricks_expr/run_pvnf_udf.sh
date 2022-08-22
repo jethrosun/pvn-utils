@@ -94,7 +94,7 @@ do
 			--rm -ti --network=host \
 			-v /data/tmp:/data \
 			-v /home/jethros:/config \
-			-v /home/jethros/dev/pvn/workload/results:/tmp/udf \
+			-v /home/jethros/dev/pvn/workload/results:/udf \
 			synthetic:alphine "$core_id" "$profile_id" 
 		docker logs -f synthetic_srv_${core_id}_${profile_id} &> ${SYNTHETIC_LOG}__${core_id}_${profile_id}.log &
 		pids="$pids $!"
@@ -115,7 +115,7 @@ do
 		-v /data/tmp:/data \
 		-v /home/jethros/data/traces/pvn_tlsv/tmp:/traces \
 		-v /home/jethros:/config \
-		-v /home/jethros/dev/pvn/workload/results:/tmp/udf \
+		-v /home/jethros/dev/pvn/workload/results:/udf \
 		tlsv:alphine "$core_id" 6
 	docker logs -f tlsv_${core_id}_6 &> ${SYNTHETIC_LOG}__${core_id}_6.log &
 	pids="$pids $!"
@@ -125,7 +125,7 @@ do
 		--rm -ti --network=host \
 		-v /data/tmp:/data \
 		-v /home/jethros:/config \
-		-v /home/jethros/dev/pvn/workload/results:/tmp/udf \
+		-v /home/jethros/dev/pvn/workload/results:/udf \
 		p2p:alphine $core_id 7
 	docker logs -f p2p_${core_id}_7 &> ${SYNTHETIC_LOG}__${core_id}_7.log &
 	pids="$pids $!"
@@ -135,7 +135,7 @@ do
 		--rm -ti --network=host \
 		-v /data/tmp:/data \
 		-v /home/jethros:/config \
-		-v /home/jethros/dev/pvn/workload/results:/tmp/udf \
+		-v /home/jethros/dev/pvn/workload/results:/udf \
 		rdr:alphine $core_id 8
 	docker logs -f rdr_${core_id}_8 &> ${SYNTHETIC_LOG}__${core_id}_8.log &
 	pids="$pids $!"
