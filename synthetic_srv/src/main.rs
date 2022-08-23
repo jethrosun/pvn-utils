@@ -1,11 +1,8 @@
 extern crate failure;
 extern crate rand;
 extern crate resize;
-extern crate rshttp;
-extern crate rustc_serialize;
 extern crate serde_json;
 extern crate time;
-extern crate tiny_http;
 extern crate y4m;
 
 use crate::lib::*;
