@@ -123,7 +123,10 @@ fn main() {
                     process::exit(0x0100);
                 } else if beginning.elapsed().as_secs() >= *pivot as u64 {
                     count = *workload.get(pivot).unwrap();
-                    pivot = times_iter.next().unwrap();
+                    pivot = match times_iter.next() {
+                        Some(t) => t,
+                        None => &expr_time,
+                    };
                     num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
                     println!(
                         "Workload changed, count: {:?}, pivot waiting for: {:?}, num_of_jobs: {:?}",
@@ -139,7 +142,7 @@ fn main() {
             println!("count {:?}, {:?}", count, load);
 
             //RAM
-            let large_vec = vec![42u128; (load.ram as u128).try_into().unwrap()];
+            let mut large_vec = vec![42u128; (load.ram as u128).try_into().unwrap()];
 
             // File I/O
             // use buffer to store random data
@@ -181,12 +184,16 @@ fn main() {
                     process::exit(0x0100);
                 } else if beginning.elapsed().as_secs() >= *pivot as u64 {
                     count = *workload.get(pivot).unwrap();
-                    pivot = times_iter.next().unwrap();
+                    pivot = match times_iter.next() {
+                        Some(t) => t,
+                        None => &expr_time,
+                    };
                     load = udf_load(&pname, count as f64).unwrap();
                     println!(
                         "Workload changed, count: {:?}, pivot waiting for: {:?}, new load {:?}",
                         count, pivot, load
                     );
+                    large_vec.resize(load.ram as usize, 42u128);
                     continue;
                 }
             }
