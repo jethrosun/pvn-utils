@@ -5,10 +5,19 @@ container:
 
 container-run:
 	docker run --rm -ti --network=host \
+		-v /home/jethros/dev/pvn/utils/data:/udf_data \
 		-v /data/tmp:/data \
 		-v /home/jethros:/config \
-		-v /home/jethros/dev/pvn/workload/results:/udf \
+		-v /home/jethros/dev/pvn/workload/output:/udf \
 		synthetic:alphine 1 2  3
+
+xcdr-run:
+	docker run --rm -ti --network=host \
+		-v /home/jethros/dev/pvn/utils/data:/udf_data \
+		-v /data/tmp:/data \
+		-v /home/jethros:/config \
+		-v /home/jethros/dev/pvn/workload/output:/udf \
+		synthetic:alphine 1 1 1 
 
 run:
 	docker run --cpuset-cpus 1 --name synthetic_srv_1_2 \

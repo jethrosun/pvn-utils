@@ -90,13 +90,14 @@ do
 	do
 		# run docker and collect logs
 		# https://www.baeldung.com/ops/docker-logs
-		docker run -d --cpuset-cpus $core_id --name synthetic_srv_${core_id}_${profile_id} \
+		docker run -d --cpuset-cpus $core_id --name synthetic_srv_${profile_id}_${core_id} \
 			--rm -ti --network=host \
+			-v /home/jethros/dev/pvn/utils/data:/udf_data \
 			-v /data/tmp:/data \
 			-v /home/jethros:/config \
-			-v /home/jethros/dev/pvn/workload/results:/udf \
+			-v /home/jethros/dev/pvn/workload/output:/udf \
 			synthetic:alphine "$profile_id" $4 "$core_id"  
-		docker logs -f synthetic_srv_${core_id}_${profile_id} &> ${SYNTHETIC_LOG}__${core_id}_${profile_id}.log &
+		docker logs -f synthetic_srv_${profile_id}_${core_id} &> ${SYNTHETIC_LOG}__${profile_id}_${core_id}.log &
 		pids="$pids $!"
 		# $SERVER $core_id $profile_id > $LOG_DIR/$3_$4__${core_id}_${profile_id}.log &
 		# PID=$!
@@ -111,36 +112,36 @@ for core_id in {1..5}
 do
 	# "6": "tlsv"
 	cd ~/dev/pvn/tlsv-builder/
-	docker run -d --cpuset-cpus "$core_id" --name tlsv_${core_id}_6 \
+	docker run -d --cpuset-cpus "$core_id" --name tlsv_6_${core_id} \
 		--rm -ti --network=host \
 		-v /data/tmp:/data \
 		-v /home/jethros/data/traces/pvn_tlsv/tmp:/traces \
 		-v /home/jethros:/config \
-		-v /home/jethros/dev/pvn/workload/results:/udf \
+		-v /home/jethros/dev/pvn/workload/output:/udf \
 		tlsv:alphine 6 $4 "$core_id"
-	docker logs -f tlsv_${core_id}_6 &> ${SYNTHETIC_LOG}__${core_id}_6.log &
+	docker logs -f tlsv_6_${core_id} &> ${SYNTHETIC_LOG}__6_${core_id}.log &
 	pids="$pids $!"
 
 	# "7": "p2p"
 	cd ~/dev/pvn/p2p-builder/
-	docker run -d --cpuset-cpus $core_id --name synthetic_srv_${core_id}_7 \
+	docker run -d --cpuset-cpus $core_id --name p2p_7_${core_id} \
 		--rm -ti --network=host \
 		-v /data/tmp:/data \
 		-v /home/jethros:/config \
-		-v /home/jethros/dev/pvn/workload/results:/udf \
+		-v /home/jethros/dev/pvn/workload/output:/udf \
 		p2p:alphine 7 $4 $core_id
-	docker logs -f p2p_${core_id}_7 &> ${SYNTHETIC_LOG}__${core_id}_7.log &
+	docker logs -f p2p_7_${core_id} &> ${SYNTHETIC_LOG}__7_${core_id}.log &
 	pids="$pids $!"
 
 	# "8": "rdr"
 	cd ~/dev/pvn/rdr-builder/
-	docker run -d --cpuset-cpus $core_id --name rdr_${core_id}_8 \
+	docker run -d --cpuset-cpus $core_id --name rdr_8_${core_id} \
 		--rm -ti --network=host \
 		-v /data/tmp:/data \
 		-v /home/jethros:/config \
-		-v /home/jethros/dev/pvn/workload/results:/udf \
+		-v /home/jethros/dev/pvn/workload/output:/udf \
 		rdr:alphine 8 $4 $core_id
-	docker logs -f rdr_${core_id}_8 &> ${SYNTHETIC_LOG}__${core_id}_8.log &
+	docker logs -f rdr_8_${core_id} &> ${SYNTHETIC_LOG}__8_${core_id}.log &
 	pids="$pids $!"
 
 done

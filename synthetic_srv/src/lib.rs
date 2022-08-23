@@ -24,7 +24,7 @@ pub struct Load {
 /// much paging.
 pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
     let cpu_load = 300.0; // 50%
-    let ram_load = 0.1; // 1GB
+    let ram_load = 0.05; // 1GB
     let io_load = 50.0; // 1 P2P user from logs
 
     let load = match profile_name {
