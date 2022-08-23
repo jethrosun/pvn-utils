@@ -1,31 +1,27 @@
-use failure::Fallible;
 use rand::Rng;
-use resize::Pixel::Gray8;
-use serde_json::{from_reader, json, Value};
 use std::collections::HashMap;
-use std::convert::TryInto;
-use std::fs::{File, OpenOptions};
-use std::io::{Error, ErrorKind, Write};
+use std::fs::File;
+use std::io::Write;
 use std::time::{Duration, Instant};
 use std::vec::Vec;
-use std::{env, io, process, thread, vec};
+use std::{io, thread};
 
 const GB_SIZE: f64 = 1_000_000_000.0;
 
 #[derive(Copy, Clone, Debug)]
 pub struct Load {
-    cpu: u64,
-    ram: u64,
-    io: u64,
+    pub cpu: u64,
+    pub ram: u64,
+    pub io: u64,
 }
 
 /// Map different setup to memory resource intensiveness. We are mapping setup into size of u128,
 /// which is the largest size we can use setup: 10GB, 20GB, 50GB. 50GB is definitely causing too
 /// much paging.
 pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
-    let cpu_load = 300.0; // 50%
-    let ram_load = 0.05; // 1GB
-    let io_load = 50.0; // 1 P2P user from logs
+    let cpu_load = 200.0; // 50%
+    let ram_load = 0.01; // 1GB
+    let io_load = 20.0; // 1 P2P user from logs
 
     let load = match profile_name {
         "tlsv" => Load {
@@ -36,7 +32,7 @@ pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
         "p2p" => Load {
             cpu: 0 as u64,
             ram: 0 as u64,
-            io: 50 * count as u64,
+            io: 20 * count as u64,
         },
         "rand1" => Load {
             cpu: ((0.0475 * cpu_load * count) as f64).ceil() as u64,
@@ -123,8 +119,13 @@ pub fn file_io(counter: &mut i32, f: &mut File, buf: Box<[u8]>) {
 /// Execute the work we need in exactly one second
 ///
 /// Unit of CPU, RAM, I/O load is determined from measurment/analysis
-pub fn execute(name: &str, load: Load) -> io::Result<()> {
-    let mut beginning = Instant::now();
+pub fn execute(
+    load: Load,
+    large_vec: &Vec<u128>,
+    file: &mut File,
+    buf: Box<[u8]>,
+) -> io::Result<()> {
+    let beginning = Instant::now();
 
     let _sleep_time = Duration::from_millis(50);
     // counting the iterations
@@ -133,29 +134,8 @@ pub fn execute(name: &str, load: Load) -> io::Result<()> {
     // CPU
     let mut rng = rand::thread_rng();
 
-    //RAM
-    let vec_size = load.ram;
-    let large_vec = vec![42u128; (vec_size as u128).try_into().unwrap()];
-
     // I/O
-    // use buffer to store random data
-    let mut buf: Vec<u8> = Vec::with_capacity((load.io * 1_000_000).try_into().unwrap()); // B to MB
-    for _ in 0..buf.capacity() {
-        buf.push(rand::random())
-    }
-    let buf = buf.into_boxed_slice();
-    let file_name = "/data/foobar".to_owned() + name + ".bin";
-
-    // files for both cases
-    let mut file = OpenOptions::new()
-        .write(true)
-        .read(true)
-        .create(true)
-        .open(file_name)
-        .unwrap();
-
-    // File I/O
-    let _ = file_io(&mut counter, &mut file, buf.clone());
+    let _ = file_io(&mut counter, file, buf);
 
     // make sure we run for exactly one second
     loop {
@@ -175,7 +155,7 @@ pub fn execute(name: &str, load: Load) -> io::Result<()> {
             }
 
             // RAM
-            for i in 0..vec_size as usize / 256 {
+            for i in 0..load.ram as usize / 256 {
                 let _ = large_vec[i * 256];
                 // println!("current value: {:?}", t);
             }

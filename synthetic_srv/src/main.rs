@@ -8,7 +8,10 @@ extern crate y4m;
 use crate::lib::*;
 use crate::transcode::*;
 use core_affinity::CoreId;
+use std::convert::TryInto;
+use std::fs::OpenOptions;
 use std::time::{Duration, Instant};
+use std::vec;
 use std::{env, process, thread};
 
 mod lib;
@@ -130,20 +133,36 @@ fn main() {
                 }
             }
         }
-        // TLSV, P2P, rand1-4
+        // rand1-4
         else {
             let mut load = udf_load(&pname, count as f64).unwrap();
             println!("count {:?}, {:?}", count, load);
 
+            //RAM
+            let large_vec = vec![42u128; (load.ram as u128).try_into().unwrap()];
+
+            // File I/O
+            // use buffer to store random data
+            let mut buf: Vec<u8> = Vec::with_capacity((load.io * 1_000_000).try_into().unwrap()); // B to MB
+            for _ in 0..buf.capacity() {
+                buf.push(rand::random())
+            }
+            let buf = buf.into_boxed_slice();
+
+            // files
+            let file_name = "/data/foobar".to_owned() + &cname + ".bin";
+            let mut file = OpenOptions::new()
+                .write(true)
+                .read(true)
+                .create(true)
+                .open(file_name)
+                .unwrap();
+
             // let mut report_time = 300;
             loop {
-                // if start.elapsed().as_secs() > report_time as u64 {
-                //     report_time += 300;
-                //     println!("reached {} seconds, report", report_time);
-                // }
                 let now = Instant::now();
 
-                let _ = execute(&cname, load);
+                let _ = execute(load, &large_vec, &mut file, buf.clone());
                 println!(
                     "\tjob: {:?} ({:?}) with {:?} millis with core: {:?}",
                     count,

@@ -1,11 +1,6 @@
-use failure::Fallible;
 use resize::Pixel::Gray8;
 use resize::Type::Triangle;
-use serde_json::{from_reader, json, Value};
-use std::collections::HashMap;
 use std::fs::File;
-use std::io::{Error, ErrorKind, Write};
-use std::time::{Duration, Instant};
 use std::vec::Vec;
 use std::{io, vec};
 
