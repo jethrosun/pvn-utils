@@ -20,9 +20,9 @@ pub struct Load {
 /// which is the largest size we can use setup: 10GB, 20GB, 50GB. 50GB is definitely causing too
 /// much paging.
 pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
-    let cpu_load = 200.0; // 50%
-    let ram_load = 0.01; // 1GB
-    let io_load = 20.0; // 1 P2P user from logs
+    let cpu_load = 500.0; // 50%
+    let ram_load = 0.03; // 1GB
+    let io_load = 200.0; // 1 P2P user from logs
 
     let load = match profile_name {
         "tlsv" => Load {
