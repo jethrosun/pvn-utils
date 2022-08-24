@@ -150,22 +150,25 @@ fn main() {
             for _ in 0..buf.capacity() {
                 buf.push(rand::random())
             }
+            println!("buf size: {:?}", buf.capacity());
             let buf = buf.into_boxed_slice();
 
             // files
-            let file_name = "/data/foobar".to_owned() + &cname + ".bin";
-            let mut file = OpenOptions::new()
-                .write(true)
-                .read(true)
-                .create(true)
-                .open(file_name)
-                .unwrap();
+            // FIXME: file size grows???
+            // let file_name = "/data/foobar".to_owned() + &cname + ".bin";
+            // let mut file = OpenOptions::new()
+            //     .write(true)
+            //     .read(true)
+            //     .create(true)
+            //     .open(file_name)
+            //     .unwrap();
 
             // let mut report_time = 300;
             loop {
                 let now = Instant::now();
 
-                let _ = execute(load, &large_vec, &mut file, buf.clone());
+                // let _ = execute(load, &large_vec, &mut file, buf.clone());
+                let _ = execute(load, &cname, &large_vec, buf.clone());
                 println!(
                     "\tjob: {:?} ({:?}) with {:?} millis with core: {:?}",
                     count,

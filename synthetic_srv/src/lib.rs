@@ -1,6 +1,7 @@
 use rand::Rng;
 use std::collections::HashMap;
 use std::fs::File;
+use std::fs::OpenOptions;
 use std::io::Write;
 use std::time::{Duration, Instant};
 use std::vec::Vec;
@@ -121,8 +122,9 @@ pub fn file_io(counter: &mut i32, f: &mut File, buf: Box<[u8]>) {
 /// Unit of CPU, RAM, I/O load is determined from measurment/analysis
 pub fn execute(
     load: Load,
+    cname: &String,
     large_vec: &Vec<u128>,
-    file: &mut File,
+    // file: &mut File,
     buf: Box<[u8]>,
 ) -> io::Result<()> {
     let beginning = Instant::now();
@@ -134,8 +136,16 @@ pub fn execute(
     // CPU
     let mut rng = rand::thread_rng();
 
+    let file_name = "/data/foobar".to_owned() + cname + ".bin";
+    let mut file = OpenOptions::new()
+        .write(true)
+        .read(true)
+        .create(true)
+        .open(file_name)
+        .unwrap();
+
     // I/O
-    let _ = file_io(&mut counter, file, buf);
+    let _ = file_io(&mut counter, &mut file, buf);
 
     // make sure we run for exactly one second
     loop {
