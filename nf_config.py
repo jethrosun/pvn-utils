@@ -292,5 +292,5 @@ udf_profile = ['udf_profile']
 udf_node_list = ['1', '2', '3']
 # udf_nf_list = ['1', '6', '7', '8']
 udf_nf_list = ['1', '2', '3', '4', '5', '6', '7', '8']
-num_of_epoch = 1
+num_of_epoch = 3
 udf_expr_wait_time = 2000
