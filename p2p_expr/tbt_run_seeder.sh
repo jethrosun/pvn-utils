@@ -22,8 +22,8 @@ do
         echo "Core $core "
 	for i in {0..12}
 	do
-                transmission-remote --torrent=/home/jethros/data/p2p_core_${core}_image_${c}.img.torrent \
-                        -a p2p_core_${core}_image_${c}.img.torrent --verify \
+                transmission-remote --torrent=/home/jethros/data/p2p_core_${core}_image_${i}.img.torrent \
+                        -a p2p_core_${core}_image_${i}.img.torrent --verify \
                         --download-dir=/home/jethros/data --start
 	done
 done
