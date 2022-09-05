@@ -8,10 +8,11 @@ set -ex
 # https://www.cyberciti.biz/faq/howto-create-lage-files-with-dd-command/
 # https://superuser.com/questions/470949/how-do-i-create-a-1gb-random-file-in-linux
 sudo rm -rf ~/data
-mkdir -p ~/data
+mkdir -p ~/data/downloads
+mkdir -p ~/data/Downloads
 mkdir -p ~/torrents
-cd ~/data
 
+cd ~/data/downloads
 # the max number is 13 for now, so it is 5 cores * 13 images
 # https://www.reddit.com/r/torrents/comments/8likab/how_to_create_a_trackerless_torrent_using_the_dht/
 for core in {1..5}
@@ -29,9 +30,9 @@ do
 		chmod 644 ~/torrents/p2p_core_${core}_image_${i}.torrent
 
 		# start seed
-		# transmisson-remote --add ~/torrents/p2p_core_${core}_image_${i}.img.torrent
+		# transmisson-remote --add ~/torrents/p2p_core_${core}_image_${i}.torrent
 		# Download
-		# exec /snap/bin/aria2c --seed-ratio=0.0 -V -d . p2p_core_${core}_image_${i}.img.torrent
+		# exec /snap/bin/aria2c --seed-ratio=0.0 -V -d . p2p_core_${core}_image_${i}.torrent
 	done
 done
 
