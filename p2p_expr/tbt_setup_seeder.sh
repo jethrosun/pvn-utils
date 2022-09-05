@@ -30,7 +30,7 @@ do
 		chmod 644 ~/torrents/p2p_core_${core}_image_${i}.torrent
 
 		# start seed
-		# transmisson-remote --add ~/torrents/p2p_core_${core}_image_${i}.torrent
+		# transmission-remote --add ~/torrents/p2p_core_${core}_image_${i}.torrent
 		# Download
 		# exec /snap/bin/aria2c --seed-ratio=0.0 -V -d . p2p_core_${core}_image_${i}.torrent
 	done
