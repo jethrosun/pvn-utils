@@ -1,6 +1,15 @@
 run deluge console https://github.com/tardfree/docker-deluge/blob/22487ccd42f4838a51847007d082e337d36a5cbf/apprun.sh
 
 
+## install package 
+
+snap install aria2c
+apt install transmission-cli
+
+
+
+## setup sudo access
+
 sudo update-alternatives --config editor
 
 
