@@ -2,7 +2,8 @@
 set -ex
 
 # seeder setup
-SERVER="--private --tracker http://10.200.111.125:8080/announce"
+# d8:announce35:http://10.200.111.125:9000/announce
+SERVER="--private --tracker http://10.200.111.125:9000/announce"
 
 # https://www.cyberciti.biz/faq/howto-create-lage-files-with-dd-command/
 # https://superuser.com/questions/470949/how-do-i-create-a-1gb-random-file-in-linux
@@ -27,7 +28,7 @@ do
 		cp p2p_core_${core}_image_${i}.img.torrent ~/torrents
 		chmod 644 ~/torrents/p2p_core_${core}_image_${i}.img.torrent
 
-		exec /snap/bin/aria2c --seed-ratio=0.0 -V -d . p2p_core_${core}_image_${i}.img.torrent
+		# exec /snap/bin/aria2c --seed-ratio=0.0 -V -d . p2p_core_${core}_image_${i}.img.torrent
 	done
 done
 
