@@ -4,8 +4,7 @@ run deluge console https://github.com/tardfree/docker-deluge/blob/22487ccd42f483
 ## install package 
 
 snap install aria2c
-apt install transmission-cli
-
+apt-get install transmission-cli transmission-daemon
 
 
 ## setup sudo access

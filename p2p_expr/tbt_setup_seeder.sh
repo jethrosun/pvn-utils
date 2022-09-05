@@ -3,7 +3,7 @@ set -ex
 
 # seeder setup
 # d8:announce35:http://10.200.111.125:9000/announce
-SERVER="--private --tracker http://10.200.111.125:9000/announce"
+SERVER="--private --tracker http://10.200.111.125:9091/announce"
 
 # https://www.cyberciti.biz/faq/howto-create-lage-files-with-dd-command/
 # https://superuser.com/questions/470949/how-do-i-create-a-1gb-random-file-in-linux
@@ -33,4 +33,4 @@ do
 done
 
 
-echo "To create torrents and start seeding them, a qBitTorrent GUI must be used."
+# echo "To create torrents and start seeding them, a qBitTorrent GUI must be used."

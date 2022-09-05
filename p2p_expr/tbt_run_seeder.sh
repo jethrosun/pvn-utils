@@ -5,8 +5,8 @@ set -euo pipefail
 
 
 # Server string: "host:port --auth username:password"
-# SERVER="127.0.0.1:9091 --auth transmission:transmission"
-SERVER="--private --tracker http://10.200.111.125:9000/announce"
+SERVER="127.0.0.1:9091 --auth transmission:transmission"
+# SERVER="--private --tracker http://10.200.111.125:9000/announce"
 
 # Get the final server string to use.
 echo -n "Using hardcoded server string: "
