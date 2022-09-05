@@ -27,7 +27,7 @@ do
 		cp p2p_core_${core}_image_${i}.img.torrent ~/torrents
 		chmod 644 ~/torrents/p2p_core_${core}_image_${i}.img.torrent
 
-		exec /usr/bin/aria2c --seed-ratio=0.0 -V -d . p2p_core_${core}_image_${i}.img.torrent
+		exec /snap/bin/aria2c --seed-ratio=0.0 -V -d . p2p_core_${core}_image_${i}.img.torrent
 	done
 done
 
