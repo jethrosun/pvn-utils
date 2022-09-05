@@ -21,13 +21,13 @@ do
 		echo "Making $i images"
 		sudo fallocate -l 1G p2p_core_${core}_image_${i}.img
 		sudo dd if=/dev/random of=p2p_core_${core}_image_${i}.img bs=1 count=0 seek=1G
-		stat ~/data/p2p_core_${core}_image_${i}.img
+		stat p2p_core_${core}_image_${i}.img
 
-		transmission-create $SERVER ~/data/p2p_core_${core}_image_${i}.img
-		cp ~/data/p2p_core_${core}_image_${i}.torrent ~/torrents
-		chmod 644 ~/torrents/p2p_core_${core}_image_${i}.torrent
+		transmission-create $SERVER p2p_core_${core}_image_${i}.img
+		cp p2p_core_${core}_image_${i}.img.torrent ~/torrents
+		chmod 644 ~/torrents/p2p_core_${core}_image_${i}.img.torrent
 
-		exec /usr/bin/aria2c --seed-ratio=0.0 -V -d . ~/data/p2p_core_${core}_image_${i}.torrent
+		exec /usr/bin/aria2c --seed-ratio=0.0 -V -d . p2p_core_${core}_image_${i}.img.torrent
 	done
 done
 
