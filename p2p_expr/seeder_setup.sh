@@ -24,6 +24,7 @@ do
 		sudo dd if=/dev/random of=p2p_core_${core}_image_${i}.img bs=1 count=0 seek=1G
 
 		# stat p2p_core_${core}_image_${i}.img
+		sudo chmod 644 p2p_core_${core}_image_${i}.img
 
 		transmission-create -o ~/torrents/p2p_core_${core}_image_${i}.torrent --private --tracker http://10.200.111.125:9000/announce p2p_core_${core}_image_${i}.img
 		# cp p2p_core_${core}_image_${i}.img.torrent ~/torrents
@@ -37,6 +38,6 @@ do
 done
 
 
-sudo chown -R jethros:jethros.
+sudo chown -R jethros:jethros .
 
 # echo "To create torrents and start seeding them, a qBitTorrent GUI must be used."
