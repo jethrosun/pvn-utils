@@ -2,7 +2,6 @@
 #set -x
 set -euo pipefail
 
-sudo rm -rf /home/jethros/data
 
 sleep 5
 
@@ -26,13 +25,12 @@ do
 done
 
 # service restart
-sudo service transmission-daemon stop
-sudo service transmission-daemon start
-
-sudo pkill -HUP transmission-da
-# stop and restart daemon
-sudo /etc/init.d/transmission-daemon stop
-sudo /etc/init.d/transmission-daemon start
+# sudo service transmission-daemon stop
+# sudo service transmission-daemon start
+#
+# sudo pkill -HUP transmission-da
+# sudo /etc/init.d/transmission-daemon stop
+# sudo /etc/init.d/transmission-daemon start
 
 # ----------------------------------
 #   Check status of transmission
