@@ -7,6 +7,7 @@ set -ex
 # https://www.cyberciti.biz/faq/howto-create-lage-files-with-dd-command/
 # https://superuser.com/questions/470949/how-do-i-create-a-1gb-random-file-in-linux
 rm -rf ~/data
+rm -rf ~/torrents
 mkdir -p ~/data/downloads
 mkdir -p ~/data/Downloads
 mkdir -p ~/torrents
