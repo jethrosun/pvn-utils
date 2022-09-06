@@ -9,8 +9,8 @@ do
         echo "Core $core "
 	for i in {0..12}
 	do
-                transmission-remote --torrent=/home/jethros/data/p2p_core_${core}_image_${i}.torrent \
-                -a p2p_core_${core}_image_${i}.torrent --verify --start
+                transmission-remote --torrent=/home/jethros/torrents/p2p_core_${core}_image_${i}.torrent \
+                        -a p2p_core_${core}_image_${i}.torrent --verify --start
 		# transmission-remote --add ~/torrents/p2p_core_${core}_image_${i}.torrent --verify --start
                 # transmission-remote --torrent=/home/jethros/data/p2p_core_${core}_image_${i}.torrent \
                 #         -a p2p_core_${core}_image_${i}.torrent --verify \
