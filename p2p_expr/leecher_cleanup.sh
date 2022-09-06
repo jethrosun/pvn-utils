@@ -2,8 +2,6 @@
 # https://www.reddit.com/r/freenas/comments/41gj0q/remove_completed_torrents_from_transmission/
 set -ex
 
-sudo rm -rf /home/jethros/data
-
 TORRENTLIST=`transmission-remote --list | sed -e '1d;$d;s/^ *//' | cut -f1 -d' '`
 
 for TORRENTID in $TORRENTLIST
@@ -22,4 +20,5 @@ do
 	echo "Removing torrent from list"
 	transmission-remote --torrent $TORRENTID --remove
 done
+
 
