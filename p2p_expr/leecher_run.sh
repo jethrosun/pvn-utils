@@ -9,4 +9,4 @@ set -exuo pipefail
 # -x: how many streams to use for downloading from each mirror.
 
 cd ~/data/downloads
-aria2c -d . -s 5 -j 70 -x 700 ~/torrents/*.torrent
+aria2c -d . -s 5 -j 70 -x 16 ~/torrents/*.torrent
