@@ -1,9 +1,8 @@
 #!/bin/bash
 set -ex
 
-# seeder setup
-# d8:announce35:http://10.200.111.125:9000/announce
-# SERVER="--private --tracker http://10.200.111.125:9091/announce"
+# sudo iptables -I INPUT -p tcp --dport 9000 -j ACCEPT
+# sudo ufw allow out 9000/tcp
 
 # https://www.cyberciti.biz/faq/howto-create-lage-files-with-dd-command/
 # https://superuser.com/questions/470949/how-do-i-create-a-1gb-random-file-in-linux
@@ -32,7 +31,7 @@ do
 		# start seed
 		# transmission-remote --add ~/torrents/p2p_core_${core}_image_${i}.torrent
 		# Download
-		# exec /snap/bin/aria2c --seed-ratio=0.0 -V -d . p2p_core_${core}_image_${i}.torrent
+		exec /snap/bin/aria2c --seed-ratio=0.0 -V -d . p2p_core_${core}_image_${i}.torrent
 	done
 done
 
