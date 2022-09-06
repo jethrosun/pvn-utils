@@ -7,8 +7,11 @@ https://stackoverflow.com/questions/18936994/transmission-remote-commands-are-er
 ## port:
 ```bash
 sudo iptables -I INPUT -p tcp --dport 9000 -j ACCEPT
+sudo ufw allow out 9000/tcp
 ```
 https://superuser.com/questions/1084173/port-forwarding-transmission-torrent-client
+https://askubuntu.com/questions/104477/why-isnt-transmission-working
+
 
 ## use transmission
 https://github.com/ashmckenzie/percheron-torrent/blob/b93a1a1df5614d448ec6880777a4fa7a1aa1d504/seeder/bin/seed.sh
