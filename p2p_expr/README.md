@@ -1,3 +1,10 @@
+# Seeder 
+
+## seeder tracker
+
+https://github.com/qbittorrent/qBittorrent/wiki/How-to-use-qBittorrent-as-a-tracker
+
+
 # Transmission
 
 ## setup
