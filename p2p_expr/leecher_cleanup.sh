@@ -1,7 +1,6 @@
 #!/bin/bash
 # https://www.reddit.com/r/freenas/comments/41gj0q/remove_completed_torrents_from_transmission/
 # set -x
-set -euo pipefail
 
 TORRENTLIST=`transmission-remote --list | sed -e '1d;$d;s/^ *//' | cut -f1 -d' '`
 

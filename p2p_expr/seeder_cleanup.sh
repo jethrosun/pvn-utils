@@ -1,6 +1,5 @@
 #!/bin/bash
-#set -x
-set -euo pipefail
+# set -x
 
 TORRENTLIST=`transmission-remote --list | sed -e '1d;$d;s/^ *//' | cut -f1 -d' '`
 
