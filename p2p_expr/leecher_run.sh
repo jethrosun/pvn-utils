@@ -9,4 +9,4 @@ set -exuo pipefail
 # -x: how many streams to use for downloading from each mirror.
 
 cd ~/data/downloads
-aria2c --seed-ratio=0.0 --allow-overwrite true -d . -s 5 -j 70 -x 16 ~/torrents/*.torrent
+aria2c --seed-ratio=0.0 --allow-overwrite=true -d . -s 5 -j 70 -x 16 ~/torrents/*.torrent
