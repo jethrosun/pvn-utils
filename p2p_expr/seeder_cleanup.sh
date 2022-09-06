@@ -32,7 +32,7 @@ transmission-remote  --session-stats
 transmission-remote --list
 
 
-service restart
+# service restart
 sudo service transmission-daemon stop
 sudo service transmission-daemon start
 
