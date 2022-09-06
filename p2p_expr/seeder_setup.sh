@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -e
 
 # sudo iptables -I INPUT -p tcp --dport 9000 -j ACCEPT
 # sudo ufw allow out 9000/tcp
