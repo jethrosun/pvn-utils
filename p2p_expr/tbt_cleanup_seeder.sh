@@ -2,9 +2,6 @@
 #set -x
 set -euo pipefail
 
-
-sleep 5
-
 TORRENTLIST=`transmission-remote --list | sed -e '1d;$d;s/^ *//' | cut -f1 -d' '`
 
 for TORRENTID in $TORRENTLIST
@@ -24,14 +21,6 @@ do
 	transmission-remote --torrent $TORRENTID --remove
 done
 
-# service restart
-# sudo service transmission-daemon stop
-# sudo service transmission-daemon start
-#
-# sudo pkill -HUP transmission-da
-# sudo /etc/init.d/transmission-daemon stop
-# sudo /etc/init.d/transmission-daemon start
-
 # ----------------------------------
 #   Check status of transmission
 # ----------------------------------
@@ -42,3 +31,13 @@ transmission-remote --session-info
 transmission-remote  --session-stats
 # List all torrents
 transmission-remote --list
+
+
+
+service restart
+sudo service transmission-daemon stop
+sudo service transmission-daemon start
+
+sudo pkill -HUP transmission-da
+sudo /etc/init.d/transmission-daemon stop
+sudo /etc/init.d/transmission-daemon start
