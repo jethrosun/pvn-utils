@@ -2,6 +2,29 @@
 #set -x
 set -euo pipefail
 
+sudo rm -rf /home/jethros/data
+
+sleep 5
+
+TORRENTLIST=`transmission-remote --list | sed -e '1d;$d;s/^ *//' | cut -f1 -d' '`
+
+for TORRENTID in $TORRENTLIST
+do
+	TORRENTID=`echo "$TORRENTID" | sed 's:*::'`
+	INFO=`transmission-remote --torrent $TORRENTID --info`
+
+	NAME=`echo "$INFO" | grep "Name: *"`
+	DL_COMPLETED=`echo "$INFO" | grep "Percent Done: 100%"`
+	STATE_STOPPED=`echo "$INFO" | grep "State: Stopped\|Finished\|Idle"`
+
+	echo "Torrent $TORRENTID is in $STATE_STOPPED"
+	echo "$NAME"
+	# echo "Moving downloaded file(s) to $MOVEDIR"
+	# transmission-remote --torrent $TORRENTID --move $MOVEDIR
+	echo "Removing torrent from list"
+	transmission-remote --torrent $TORRENTID --remove
+done
+
 # service restart
 sudo service transmission-daemon stop
 sudo service transmission-daemon start
@@ -10,17 +33,6 @@ sudo pkill -HUP transmission-da
 # stop and restart daemon
 sudo /etc/init.d/transmission-daemon stop
 sudo /etc/init.d/transmission-daemon start
-
-sleep 5
-
-# -------------------------------
-#   operations we want to enable
-# -------------------------------
-
-# Disable uTP for peer connections. If current torrent(s) are selected this operates on them. Otherwise, it changes the global setting.
-transmission-remote --no-utp
-# Use directory as the default location for newly added torrents to download files to.
-transmission-remote --download-dir=/home/jethros/qbt_data/downloads
 
 # ----------------------------------
 #   Check status of transmission
