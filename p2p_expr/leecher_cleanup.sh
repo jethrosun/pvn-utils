@@ -2,23 +2,28 @@
 # https://www.reddit.com/r/freenas/comments/41gj0q/remove_completed_torrents_from_transmission/
 # set -x
 
-TORRENTLIST=`transmission-remote --list | sed -e '1d;$d;s/^ *//' | cut -f1 -d' '`
+torrentlist=`transmission-remote --list | sed -e '1d;$d;s/^ *//' | cut -f1 -d' '`
 
-for TORRENTID in $TORRENTLIST
+for torrentid in $torrentlist
 do
-	TORRENTID=`echo "$TORRENTID" | sed 's:*::'`
-	INFO=`transmission-remote --torrent $TORRENTID --info`
+	torrentid=`echo "$torrentid" | sed 's:*::'`
+	info=`transmission-remote --torrent $torrentid --info`
 
-	NAME=`echo "$INFO" | grep "Name: *"`
-	DL_COMPLETED=`echo "$INFO" | grep "Percent Done: 100%"`
-	STATE_STOPPED=`echo "$INFO" | grep "State: Stopped\|Finished\|Idle"`
+	name=`echo "$info" | grep "name: *"`
+	dl_completed=`echo "$info" | grep "percent done: 100%"`
+	state_stopped=`echo "$info" | grep "state: stopped\|finished\|idle"`
 
-	echo "Torrent $TORRENTID is in $STATE_STOPPED"
-	echo "$NAME"
-	# echo "Moving downloaded file(s) to $MOVEDIR"
-	# transmission-remote --torrent $TORRENTID --move $MOVEDIR
-	echo "Removing torrent from list"
-	transmission-remote --torrent $TORRENTID --remove
+	echo "torrent $torrentid is in $state_stopped"
+	echo "$name"
+	# echo "moving downloaded file(s) to $movedir"
+	# transmission-remote --torrent $torrentid --move $movedir
+	echo "removing torrent from list"
+	transmission-remote --torrent $torrentid --remove
 done
 
+
+sudo rm -rf /home/jethros/data/downloads
+sudo mkdir -p /home/jethros/data/downloads
+sudo chown -R debian-transmission:debian-transmission /home/jethros/data/downloads
+sudo chmod -R 775 /home/jethros/data/downloads
 
