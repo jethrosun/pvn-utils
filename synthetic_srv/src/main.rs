@@ -5,16 +5,16 @@ extern crate serde_json;
 extern crate time;
 extern crate y4m;
 
-use crate::lib::*;
+use crate::udf::*;
 use crate::transcode::*;
 use core_affinity::CoreId;
 use std::convert::TryInto;
-use std::fs::OpenOptions;
+// use std::fs::OpenOptions;
 use std::time::{Duration, Instant};
 use std::vec;
 use std::{env, process, thread};
 
-mod lib;
+mod udf;
 mod transcode;
 
 fn main() {
