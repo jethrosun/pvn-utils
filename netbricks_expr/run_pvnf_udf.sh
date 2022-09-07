@@ -127,10 +127,10 @@ do
 	cd ~/dev/pvn/p2p-builder/
 	docker run -d --cpuset-cpus $core_id --name p2p_7_${core_id} \
 		--rm -ti --network=host \
-		-v /data/tmp:/data \
-		-v /home/jethros:/config \
+		-v /home/jethros:/conf \
 		-v /home/jethros/dev/pvn/workload/output:/udf \
-		p2p:alphine 7 $4 $core_id
+		-v /data/downloads:/download \
+		p2p:transmission 7 $4 $core_id
 	docker logs -f p2p_7_${core_id} &> ${SYNTHETIC_LOG}__7_${core_id}.log &
 	pids="$pids $!"
 
