@@ -2,20 +2,18 @@ extern crate failure;
 extern crate rand;
 extern crate resize;
 extern crate serde_json;
-extern crate time;
 extern crate y4m;
 
-use crate::udf::*;
 use crate::transcode::*;
+use crate::udf::*;
 use core_affinity::CoreId;
 use std::convert::TryInto;
-// use std::fs::OpenOptions;
 use std::time::{Duration, Instant};
 use std::vec;
 use std::{env, process, thread};
 
-mod udf;
 mod transcode;
+mod udf;
 
 fn main() {
     // let expr_time = 1800;
@@ -94,14 +92,20 @@ fn main() {
             let mut job_count = 0;
             let mut num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
 
+            println!("Timer started");
+            let now = Instant::now();
+            let mut next_sec = 1_usize;
+
             loop {
-                // loop {
-                let now = Instant::now();
+                let cur_time = now.elapsed().as_secs() as usize;
+                if cur_time <= next_sec {
+                    continue;
+                }
 
                 // translate number of users to number of transcoding jobs
                 // https://github.com/jethrosun/NetBricks/blob/expr/framework/src/pvn/xcdr.rs#L110
                 // NOTE: 25 jobs roughly takes 1 second
-                for x in 0..num_of_jobs {
+                for _ in 0..num_of_jobs {
                     let _ = transcode();
                 }
                 job_count += num_of_jobs;
@@ -112,10 +116,7 @@ fn main() {
                     now.elapsed().as_millis(),
                     core
                 );
-                if now.elapsed() < Duration::from_millis(990) {
-                    thread::sleep(Duration::from_millis(990) - now.elapsed());
-                }
-                // }
+                next_sec = cur_time + 1;
 
                 // run until the next change
                 //
