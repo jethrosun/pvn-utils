@@ -34,8 +34,8 @@ NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
 BIO_TOP_MONITOR=/usr/share/bcc/tools/biotop
 
-PCPU=$HOME/dev/pvn/utils/netbricks_expr/misc/pcpu.sh
-PMEM=$HOME/dev/pvn/utils/netbricks_expr/misc/pmem.sh
+# PCPU=$HOME/dev/pvn/utils/netbricks_expr/misc/pcpu.sh
+# PMEM=$HOME/dev/pvn/utils/netbricks_expr/misc/pmem.sh
 
 NB_CONFIG=$HOME/dev/netbricks/experiments/udf_1core.toml
 TMP_NB_CONFIG=$HOME/config.toml
