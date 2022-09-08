@@ -69,6 +69,10 @@ JSON_STRING=$(jq -n \
 # https://www.baeldung.com/ops/docker-logs
 truncate -s 0 /var/lib/docker/containers/*/*-json.log
 
+sudo /home/jethros/dev/pvn/utils/p2p_expr/nb_cleanup_config.sh
+sleep 3
+
+
 # docker run -d --cpuset-cpus 0 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
 pids=""
 RESULT=0
@@ -92,7 +96,7 @@ do
 		# run docker and collect logs
 		# https://www.baeldung.com/ops/docker-logs
 		docker run -d --cpuset-cpus $core_id --name synthetic_srv_${profile_id}_${core_id} \
-			--rm -ti --network=host \
+			--rm --network=host \
 			-v /home/jethros/dev/pvn/utils/data:/udf_data \
 			-v /data/tmp:/data \
 			-v /home/jethros:/config \
@@ -114,7 +118,7 @@ do
 	# "6": "tlsv"
 	cd ~/dev/pvn/tlsv-builder/
 	docker run -d --cpuset-cpus "$core_id" --name tlsv_6_${core_id} \
-		--rm -ti --network=host \
+		--rm --network=host \
 		-v /data/tmp:/data \
 		-v /home/jethros/data/traces/pvn_tlsv/tmp:/traces \
 		-v /home/jethros:/config \
@@ -124,12 +128,17 @@ do
 	pids="$pids $!"
 
 	# "7": "p2p"
+	PORT1=$((9090+core_id))
+	PORT2=$((51412+core_id))
 	cd ~/dev/pvn/p2p-builder/
 	docker run -d --cpuset-cpus $core_id --name p2p_7_${core_id} \
-		--rm -ti --network=host \
-		-v /home/jethros:/conf \
-		-v /home/jethros/dev/pvn/workload/output:/udf \
-		-v /data/downloads:/download \
+		--rm \
+        -p $PORT1:9091 \
+        -p $PORT2:51413 \
+        -p $PORT2:51413/udp \
+        -v /data/downloads/core_${core_id}:/downloads \
+        -v /home/jethros/dev/pvn/workload/output:/udf \
+        -v /home/jethros/torrents:/torrents \
 		p2p:transmission 7 $4 $core_id
 	docker logs -f p2p_7_${core_id} &> ${SYNTHETIC_LOG}__7_${core_id}.log &
 	pids="$pids $!"
@@ -137,7 +146,7 @@ do
 	# "8": "rdr"
 	cd ~/dev/pvn/rdr-builder/
 	docker run -d --cpuset-cpus $core_id --name rdr_8_${core_id} \
-		--rm -ti --network=host \
+		--rm  --network=host \
 		-v /data/tmp:/data \
 		-v /home/jethros:/config \
 		-v /home/jethros/dev/pvn/workload/output:/udf \
