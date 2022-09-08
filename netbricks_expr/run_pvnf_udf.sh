@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+BATCH=400019
+# BATCH=664673
+# BATCH=1374946
+
 # configs
 DELAY_INTERVAL=1
 DELAY_INTERVAL=3
@@ -21,14 +25,14 @@ MPSTAT_LOG=$LOG_DIR/$3_$4_mpstat.log
 # then *core id* and *NF id*
 SYNTHETIC_LOG=$LOG_DIR/$3_$4_srv
 
-CPULOG1=$LOG_DIR/$3_$4_cpu1.log
-CPULOG2=$LOG_DIR/$3_$4_cpu2.log
-CPULOG3=$LOG_DIR/$3_$4_cpu3.log
-CPULOG4=$LOG_DIR/$3_$4_cpu4.log
-MEMLOG1=$LOG_DIR/$3_$4_mem1.log
-MEMLOG2=$LOG_DIR/$3_$4_mem2.log
-MEMLOG3=$LOG_DIR/$3_$4_mem3.log
-MEMLOG4=$LOG_DIR/$3_$4_mem4.log
+# CPULOG1=$LOG_DIR/$3_$4_cpu1.log
+# CPULOG2=$LOG_DIR/$3_$4_cpu2.log
+# CPULOG3=$LOG_DIR/$3_$4_cpu3.log
+# CPULOG4=$LOG_DIR/$3_$4_cpu4.log
+# MEMLOG1=$LOG_DIR/$3_$4_mem1.log
+# MEMLOG2=$LOG_DIR/$3_$4_mem2.log
+# MEMLOG3=$LOG_DIR/$3_$4_mem3.log
+# MEMLOG4=$LOG_DIR/$3_$4_mem4.log
 
 NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
@@ -100,8 +104,9 @@ do
 			-v /home/jethros/dev/pvn/utils/data:/udf_data \
 			-v /data/tmp:/data \
 			-v /home/jethros:/config \
-			-v /home/jethros/dev/pvn/workload/output:/udf \
-			synthetic:alphine "$profile_id" $4 "$core_id"  
+			-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
+			-v /home/jethros/dev/pvn/workload/udf_workload/${BATCH}:/udf_workload \
+			synthetic:alphine "$profile_id" $4 "$core_id"
 		docker logs -f synthetic_srv_${profile_id}_${core_id} &> ${SYNTHETIC_LOG}__${profile_id}_${core_id}.log &
 		pids="$pids $!"
 		# $SERVER $core_id $profile_id > $LOG_DIR/$3_$4__${core_id}_${profile_id}.log &
@@ -122,7 +127,8 @@ do
 		-v /data/tmp:/data \
 		-v /home/jethros/data/traces/pvn_tlsv/tmp:/traces \
 		-v /home/jethros:/config \
-		-v /home/jethros/dev/pvn/workload/output:/udf \
+		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
+		-v /home/jethros/dev/pvn/workload/udf_workload/${BATCH}:/udf_workload \
 		tlsv:alphine 6 $4 "$core_id"
 	docker logs -f tlsv_6_${core_id} &> ${SYNTHETIC_LOG}__6_${core_id}.log &
 	pids="$pids $!"
@@ -133,12 +139,13 @@ do
 	cd ~/dev/pvn/p2p-builder/
 	docker run -d --cpuset-cpus $core_id --name p2p_7_${core_id} \
 		--rm \
-        -p $PORT1:9091 \
-        -p $PORT2:51413 \
-        -p $PORT2:51413/udp \
-        -v /data/downloads/core_${core_id}:/downloads \
-        -v /home/jethros/dev/pvn/workload/output:/udf \
-        -v /home/jethros/torrents:/torrents \
+		-p $PORT1:9091 \
+		-p $PORT2:51413 \
+		-p $PORT2:51413/udp \
+		-v /data/downloads/core_${core_id}:/downloads \
+		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
+		-v /home/jethros/dev/pvn/workload/udf_workload/${BATCH}:/udf_workload \
+		-v /home/jethros/torrents:/torrents \
 		p2p:transmission 7 $4 $core_id
 	docker logs -f p2p_7_${core_id} &> ${SYNTHETIC_LOG}__7_${core_id}.log &
 	pids="$pids $!"
@@ -149,7 +156,8 @@ do
 		--rm  --network=host \
 		-v /data/tmp:/data \
 		-v /home/jethros:/config \
-		-v /home/jethros/dev/pvn/workload/output:/udf \
+		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
+		-v /home/jethros/dev/pvn/workload/udf_workload/${BATCH}:/udf_workload \
 		rdr:alphine 8 $4 $core_id
 	docker logs -f rdr_8_${core_id} &> ${SYNTHETIC_LOG}__8_${core_id}.log &
 	pids="$pids $!"

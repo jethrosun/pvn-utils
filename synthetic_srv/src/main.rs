@@ -38,7 +38,7 @@ fn main() {
 
     // get udf profiles
     // let profile_map_path = "/home/jethros/dev/pvn/workload/results/profile_map.json";
-    let profile_map_path = "/udf/profile_map.json";
+    let profile_map_path = "/udf_config/profile_map.json";
 
     let profile_map = map_profile(profile_map_path.to_string()).unwrap();
     let profile_name = profile_map.get(&profile_id).unwrap().clone();
@@ -55,7 +55,7 @@ fn main() {
     //     + "_core"
     //     + &core_id.to_string()
     //     + ".json";
-    let workload_path = "/udf/udf_profile".to_owned()
+    let workload_path = "/udf_workload/udf_profile".to_owned()
         + &profile_id.to_string()
         + "_node"
         + &node_id.to_string()
