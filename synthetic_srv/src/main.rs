@@ -111,7 +111,7 @@ fn main() {
                 job_count += num_of_jobs;
                 // TODO: better way to track this
                 println!(
-                    "\ttranscoded {:?} jobs in {:?} millis with core: {:?}",
+                    "Metric: {:?} jobs transcoded in {:?} millis with core: {:?}",
                     num_of_jobs,
                     now.elapsed().as_millis(),
                     core

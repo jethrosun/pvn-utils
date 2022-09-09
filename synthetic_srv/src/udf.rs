@@ -169,7 +169,11 @@ pub fn execute(
             //     break;
             // }
         }
-        println!("{} rounds since {:?}", counter, beginning.elapsed());
+        println!(
+            "Metric: 1 exec w/ {} rounds since {:?}",
+            counter,
+            beginning.elapsed()
+        );
 
         if beginning.elapsed() >= Duration::from_millis(990) {
             break;
