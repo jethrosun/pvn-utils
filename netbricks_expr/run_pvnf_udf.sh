@@ -73,8 +73,8 @@ JSON_STRING=$(jq -n \
 # https://www.baeldung.com/ops/docker-logs
 truncate -s 0 /var/lib/docker/containers/*/*-json.log
 
-sudo /home/jethros/dev/pvn/utils/p2p_expr/nb_cleanup_config.sh
-sleep 3
+# sudo /home/jethros/dev/pvn/utils/netbricks_expr/misc/nb_cleanup.sh
+# sleep 3
 
 
 # docker run -d --cpuset-cpus 0 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest

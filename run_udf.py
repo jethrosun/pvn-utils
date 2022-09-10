@@ -100,7 +100,7 @@ def run_netbricks(sess, trace, nf, epoch, setup):
 
 def run_p2p_node(typ, sess, epoch):
     if typ == "leecher":
-        cmd_str = "./leecher_run.py "
+        cmd_str = "./leecher_run.sh"
         print("Run P2P Leecher \n\tCmd: {}".format(cmd_str))
         sess.send_commands(cmd_str)
 
