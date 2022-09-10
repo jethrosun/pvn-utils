@@ -100,7 +100,7 @@ def run_netbricks(sess, trace, nf, epoch, setup):
 
 def run_p2p_node(typ, sess, epoch):
     if typ == "leecher":
-        cmd_str = "./leecher_run.py " 
+        cmd_str = "./leecher_run.py "
         print("Run P2P Leecher \n\tCmd: {}".format(cmd_str))
         sess.send_commands(cmd_str)
 
@@ -122,7 +122,7 @@ def sess_reboot(sess):
 # setup only once at the beginning
 def p2p_setup(typ, sess):
     if typ == "netbricks":
-        p2p_cmd_str = "./misc/nb_cleanup.sh"
+        p2p_cmd_str = "sudo ./misc/nb_setup.sh"
         sess.send_commands(p2p_cmd_str)
         print("NetBricks P2P cmd: {}".format(p2p_cmd_str))
         time.sleep(5)
@@ -138,7 +138,7 @@ def p2p_setup(typ, sess):
 
 def p2p_cleanup(typ, sess):
     if typ == "netbricks":
-        p2p_cmd_str = "./misc/nb_cleanup.sh"
+        p2p_cmd_str = "sudo ./misc/nb_cleanup.sh"
         sess.send_commands(p2p_cmd_str)
         print("NetBricks P2P cmd: {}".format(p2p_cmd_str))
         time.sleep(5)
