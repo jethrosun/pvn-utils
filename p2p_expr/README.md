@@ -24,7 +24,7 @@ https://askubuntu.com/questions/104477/why-isnt-transmission-working
 https://github.com/ashmckenzie/percheron-torrent/blob/b93a1a1df5614d448ec6880777a4fa7a1aa1d504/seeder/bin/seed.sh
 https://antrikshy.com/code/seeding-torrents-using-transmission-cli
 
-## create and seed torrent
+## create and seed torren
 https://superuser.com/questions/1687624/how-to-create-and-seed-new-torrent-files-for-bittorrent-using-transmisson-client
 
 https://www.mankier.com/1/transmission-create
@@ -55,8 +55,8 @@ apt-get install transmission-cli transmission-daemon
 sudo update-alternatives --config editor
 ```
 
-
-jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/p2p_expr/run_p2p_seeder.sh
-jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/p2p_expr/run_p2p_leecher.sh
-jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/p2p_expr/p2p_seeder_cleanup.sh
-jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/p2p_expr/p2p_leecher_cleanup.sh
+```bash
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/p2p_expr/leecher_cleanup.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/p2p_expr/leecher_run.sh
+jethros ALL = (ALL) NOPASSWD: /home/jethros/dev/pvn/utils/p2p_expr/leecher_setup.sh
+```

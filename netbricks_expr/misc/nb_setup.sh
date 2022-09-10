@@ -14,6 +14,13 @@ sudo -u jethros mkdir -p /data/tmp4
 sudo -u jethros mkdir -p /home/jethros/Downloads
 
 
+sudo rm -rf /home/jethros/torrents
+sudo -u jethros mkdir -p /home/jethros/torrents
+
+# scp torrents
+scp -r jethros@10.200.111.125:~/torrents/* /home/jethros/torrents
+
+
 sudo rm -rf /data/downloads
 for core_id in {1..5}
 do
