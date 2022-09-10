@@ -18,7 +18,7 @@ sudo rm -rf /home/jethros/torrents
 sudo -u jethros mkdir -p /home/jethros/torrents
 
 # scp torrents
-scp -r jethros@10.200.111.125:~/torrents/* /home/jethros/torrents
+sudo -u jethros scp -r jethros@10.200.111.125:~/torrents/* /home/jethros/torrents
 
 
 sudo rm -rf /data/downloads
