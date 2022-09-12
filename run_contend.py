@@ -205,7 +205,6 @@ def rdr_cleanup(sess):
 
 
 def main(expr_list):
-    """"""
     for expr in expr_list:
         # expr: app_tlsv
         print("Running experiments that for {} application NF".format(expr))
@@ -216,95 +215,23 @@ def main(expr_list):
             #
             # config the pktgen sending rate
             for contention in contend.setup:
-                pktgen_sess = pktgen_sess_setup(contend.trace[expr], nf,
-                                                contend.sending_rate[expr][contend.nf_set[expr]])
+                pktgen_sess = pktgen_sess_setup(contend.trace[expr], nf, 100)
 
                 if nf == "pvn-tlsv-transform-app":
                     tls_trace = contend.fetch_tlsv_trace(contend.nf_set[expr])
-                    run_pktgen(pktgen_sess, tls_trace, contend.sending_rate[expr][contend.nf_set[expr]])
+                    run_pktgen(pktgen_sess, tls_trace, 100)
                 else:
-                    run_pktgen(pktgen_sess, contend.trace[expr], contend.sending_rate[expr][contend.nf_set[expr]])
+                    run_pktgen(pktgen_sess, contend.trace[expr], 100)
 
                 # epoch from 0 to 9
                 for epoch in range(contend.num_of_epoch):
                     netbricks_sess = netbricks_sess_setup(contend.trace[expr], nf, epoch)
 
-                    # run clean up for p2p nf before experiment
-                    if nf in contend.p2p_nf_list:
-                        # the setup is the number of images
-                        leecher1_sess = p2p_sess_setup('flynn', contend.trace[expr], nf, epoch)
-                        leecher2_sess = p2p_sess_setup('tao', contend.trace[expr], nf, epoch)
-                        leecher3_sess = p2p_sess_setup('sanchez', contend.trace[expr], nf, epoch)
-
-                        # run clean up for p2p nf before experiment
-                        p2p_cleanup("netbricks", netbricks_sess)
-                        p2p_cleanup("leecher", leecher1_sess)
-                        p2p_cleanup("leecher", leecher2_sess)
-                        p2p_cleanup("leecher", leecher3_sess)
-                        time.sleep(10)
-                    elif nf in contend.xcdr_nf_list:
-                        xcdr_cleanup(netbricks_sess)
-                        time.sleep(10)
-                    elif nf in contend.rdr_nf_list:
-                        rdr_cleanup(netbricks_sess)
-                        time.sleep(10)
-
                     # Actual RUN
-                    if nf in contend.xcdr_nf_list:
-                        expr_num = epoch * 6 + int(contend.nf_set[expr]) * 2
-                        port2 = contend.xcdr_port_base + expr_num
-                        run_netbricks_xcdr(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr],
-                                           str(port2 - 1), str(port2), str(expr_num), contention[0], contention[1],
-                                           contention[2])
-                    elif nf in contend.p2p_nf_list:
-                        # Actual RUN
-                        #
-                        run_p2p_node('leecher', leecher1_sess, contend.leecher_set[contend.nf_set[expr]], epoch)
-                        run_p2p_node('leecher', leecher2_sess, contend.leecher_set[contend.nf_set[expr]], epoch)
-                        run_p2p_node('leecher', leecher3_sess, contend.leecher_set[contend.nf_set[expr]], epoch)
-                        time.sleep(30)
-                        run_netbricks_p2p(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr],
-                                          "app_p2p-controlled", contention[0], contention[1], contention[2])
-                    elif nf in contend.rdr_nf_list:
-                        run_netbricks_rdr(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr],
-                                          contention[0], contention[1], contention[2], 'hdd')
-                        # run_netbricks_rdr(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr], contention[0], contention[1],
-                        #                   contention[2], 'ssd')
-                    else:
-                        run_netbricks(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr],
-                                      contention[0], contention[1], contention[2])
+                    run_netbricks(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr],
+                                  contention[0], contention[1], contention[2])
 
-                    # run clean up for p2p nf before experiment
-                    if nf in contend.p2p_nf_list:
-                        time.sleep(contend.expr_wait_time)
-                        time.sleep(30)
-                        # run clean up for p2p nf before experiment
-                        p2p_cleanup("netbricks", netbricks_sess)
-                        p2p_cleanup("leecher", leecher1_sess)
-                        p2p_cleanup("leecher", leecher2_sess)
-                        p2p_cleanup("leecher", leecher3_sess)
-                        time.sleep(15)
-
-                        sess_destroy(leecher1_sess)
-                        sess_destroy(leecher2_sess)
-                        sess_destroy(leecher3_sess)
-
-                        time.sleep(5)
-                    elif nf in contend.xcdr_nf_list:
-                        time.sleep(contend.expr_wait_time)
-                        time.sleep(30)
-                        xcdr_cleanup(netbricks_sess)
-                        time.sleep(5)
-                    elif nf in contend.rdr_nf_list:
-                        time.sleep(contend.expr_wait_time)
-                        time.sleep(30)
-                        rdr_cleanup(netbricks_sess)
-                        time.sleep(5)
-                    elif nf in contend.pvn_nf_list:
-                        time.sleep(contend.expr_wait_time)
-                    else:
-                        print("Unknown nf?")
-                        sys.exit(1)
+                    time.sleep(contend.expr_wait_time)
 
                     sess_destroy(netbricks_sess)
                     # sess_destroy(netbricks_sess)

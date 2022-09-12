@@ -14,7 +14,7 @@ if [ -e "$HOME/dev/netbricks" ]; then
 	cd "$HOME/dev/netbricks"
 	git pull
 else
-	cd "$HOME/dev/"; git clone git@github.com:jethrosun/NetBricks.git -b expr netbricks;
+	cd "$HOME/dev/"; git clone git@github.com:jethrosun/NetBricks.git -b 0.3.1 netbricks;
 fi
 
 
