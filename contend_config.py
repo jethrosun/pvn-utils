@@ -3,30 +3,29 @@ def fetch_tlsv_trace(setup):
 
 
 pvn_nf = {
-    'app_rdr': ['pvn-rdr-transform-app'],
-    'app_xcdr': ['pvn-transcoder-transform-app'],
-    'app_tlsv': ['pvn-tlsv-transform-app'],
-    'app_p2p': ['pvn-p2p-transform-app'],
-    'app_p2p-ext': ['pvn-p2p-transform-app'],
-    'app_p2p-controlled': ['pvn-p2p-transform-app'],
-    'zcsi-nat': ['zcsi-nat'],
-    "zcsi-lpm": ["zcsi-lpm"],
-    "zcsi-maglev": ["zcsi-maglev"],
-    "zcsi-aclfw": ["zcsi-aclfw"]
-
+    'app_rdr': 'pvn-rdr-transform-app',
+    'app_xcdr': 'pvn-transcoder-transform-app',
+    'app_tlsv': 'pvn-tlsv-transform-app',
+    'app_p2p': 'pvn-p2p-transform-app',
+    'app_p2p-ext': 'pvn-p2p-transform-app',
+    'app_p2p-controlled': 'pvn-p2p-transform-app',
+    'zcsi-nat': 'zcsi-nat',
+    "zcsi-lpm": "zcsi-lpm",
+    "zcsi-maglev": "zcsi-maglev",
+    "zcsi-aclfw": "zcsi-aclfw"
 }
 
-trace = {
-    'app_rdr': 'pvn_rdr.pcap',
-    'app_xcdr': 'pvn_xcdr.pcap',
-    'app_tlsv': 'pvn_tlsv6.pcap',
-    'app_p2p': 'pvn_p2p.pcap',
-    'app_p2p-ext': 'pvn_p2p.pcap',
-    'app_p2p-controlled': 'pvn_p2p.pcap',
-    'zcsi-nat': 'pvn_tlsv6.pcap',
-    "zcsi-lpm": 'pvn_tlsv6.pcap',
-    "zcsi-maglev": 'pvn_tlsv6.pcap',
-    "zcsi-aclfw": 'pvn_tlsv6.pcap',
+pvn_trace = {
+    # 'app_rdr': 'pvn_rdr.pcap',
+    # 'app_xcdr': 'pvn_xcdr.pcap',
+    # 'app_p2p': 'pvn_p2p.pcap',
+    # 'app_p2p-ext': 'pvn_p2p.pcap',
+    # 'app_p2p-controlled': 'pvn_p2p.pcap',
+    'app_tlsv': ['pvn_tlsv6.pcap', 'ictf2010-0-re.pcap', '64B', '128B', '256B', '512B', '1500B'],
+    'zcsi-nat': ['pvn_tlsv6.pcap', 'ictf2010-0-re.pcap', '64B', '128B', '256B', '512B', '1500B'],
+    "zcsi-lpm": ['pvn_tlsv6.pcap', 'ictf2010-0-re.pcap', '64B', '128B', '256B', '512B', '1500B'],
+    "zcsi-maglev": ['pvn_tlsv6.pcap', 'ictf2010-0-re.pcap', '64B', '128B', '256B', '512B', '1500B'],
+    "zcsi-aclfw": ['pvn_tlsv6.pcap', 'ictf2010-0-re.pcap', '64B', '128B', '256B', '512B', '1500B']
 }
 
 setup = []
@@ -84,9 +83,9 @@ p2p_ext = ['app_p2p-ext']
 # nf_list = ['app_p2p-controlled']
 
 nf_list = [
-           "zcsi-maglev",
-           "zcsi-lpm",
-           'zcsi-nat',
-           "zcsi-acl-fw"
-            'app_tlsv',
-           ]
+    "zcsi-maglev",
+    "zcsi-lpm",
+    'zcsi-nat',
+    "zcsi-aclfw"
+    'app_tlsv',
+]

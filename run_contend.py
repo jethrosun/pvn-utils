@@ -98,7 +98,7 @@ def run_p2p_node(typ, sess, setup, epoch):
 
 
 def run_pktgen(sess, trace, setup):
-    if trace in ['64B', '128B', '256B', '512B', '524B', '1280B', '1518B']:
+    if trace in ['64B', '128B', '256B', '512B', '1280B', '1500B']:
         # never here
         size = trace[:-1]
         cmd_str = "sudo ./run_pktgen.sh " + trace
@@ -131,32 +131,6 @@ def run_netbricks(sess, trace, nf, epoch, setup, cpu, mem, diskio):
     #   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup	$5=cpu $6=mem $7=diskio
     cmd_str = "sudo ./run_pvnf_contend.sh " + trace + " " + nf + " " + str(
         epoch) + " " + setup + " " + cpu + " " + mem + " " + diskio
-    print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
-    sess.send_commands(cmd_str)
-
-
-def run_netbricks_rdr(sess, trace, nf, epoch, setup, cpu, mem, diskio, disk):
-    # for rdr
-    #   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup	$5=cpu $6=mem $7=diskio $8=disk
-    cmd_str = "sudo ./run_pvnf_contend.sh " + trace + " " + nf + " " + str(
-        epoch) + " " + setup + " " + cpu + " " + mem + " " + diskio + " " + disk
-    print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
-    sess.send_commands(cmd_str)
-
-
-def run_netbricks_xcdr(sess, trace, nf, epoch, setup, port1, port2, expr_num, cpu, mem, diskio):
-    #   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio $8=port $9=expr_num
-    cmd_str = "sudo ./run_pvnf_contend.sh " + trace + " " + nf + " " + str(
-        epoch) + " " + setup + " " + cpu + " " + mem + " " + diskio + " " + str(7419) + " " + expr_num
-    print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
-    sess.send_commands(cmd_str)
-
-
-def run_netbricks_p2p(sess, trace, nf, epoch, setup, p2p_type, cpu, mem, diskio):
-    #   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio $8=p2p_type
-    cmd_str = "sudo ./run_pvnf_contend.sh " + trace + " " + nf + " " + str(
-        epoch) + " " + setup + " " + cpu + " " + mem + " " + diskio + " " + p2p_type
-
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
@@ -209,26 +183,27 @@ def main(expr_list):
         # expr: app_tlsv
         print("Running experiments that for {} application NF".format(expr))
         # app_rdr_t, app_p2p_t
-        for nf in contend.pvn_nf[expr]:
+        nf = contend.pvn_nf[expr]
+        for trace in contend.pvn_trace[expr]:
             # nf: 'pvn-tlsv-transform-app',
             # we are running the regular NFs
             #
             # config the pktgen sending rate
             for contention in contend.setup:
-                pktgen_sess = pktgen_sess_setup(contend.trace[expr], nf, 100)
+                pktgen_sess = pktgen_sess_setup(trace, nf, 100)
 
                 if nf == "pvn-tlsv-transform-app":
                     tls_trace = contend.fetch_tlsv_trace(contend.nf_set[expr])
                     run_pktgen(pktgen_sess, tls_trace, 100)
                 else:
-                    run_pktgen(pktgen_sess, contend.trace[expr], 100)
+                    run_pktgen(pktgen_sess, trace, 100)
 
                 # epoch from 0 to 9
                 for epoch in range(contend.num_of_epoch):
-                    netbricks_sess = netbricks_sess_setup(contend.trace[expr], nf, epoch)
+                    netbricks_sess = netbricks_sess_setup(trace, nf, epoch)
 
                     # Actual RUN
-                    run_netbricks(netbricks_sess, contend.trace[expr], nf, epoch, contend.nf_set[expr],
+                    run_netbricks(netbricks_sess, trace, nf, epoch, contend.nf_set[expr],
                                   contention[0], contention[1], contention[2])
 
                     time.sleep(contend.expr_wait_time)
