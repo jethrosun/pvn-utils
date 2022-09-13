@@ -2,13 +2,13 @@
 //! generate enough I/O. To isolate the impact we also want cpu pining.
 extern crate rand;
 
+use core_affinity::CoreId;
 use std::collections::HashMap;
 use std::env;
 use std::fs::{File, OpenOptions};
 use std::io::Write;
 use std::process;
 use std::thread;
-use std::thread::sleep;
 use std::time::{Duration, Instant};
 
 /// Map different setup to disk I/O intensiveness. We are mapping these setups to disk I/O per
@@ -41,7 +41,7 @@ fn main() {
     let params: Vec<String> = env::args().collect();
 
     // len of params will be number of args +1
-    if params.len() == 3 {
+    if params.len() == 4 {
         println!("Parse 3 args");
         println!(
             "Setup: {:?}, core id: {:?}, disk: {:?}",
@@ -51,7 +51,7 @@ fn main() {
             process::exit(0x0100);
         }
     } else {
-        println!("More or less than 1 args are provided. Run it with *setup*");
+        println!("More or less than 3 args are provided. Run it with *setup*");
         process::exit(0x0100);
     }
 
@@ -59,12 +59,16 @@ fn main() {
     let core_id = params[2].parse::<usize>().unwrap();
     let disk = params[3].parse::<String>().unwrap();
     let buf_size = read_setup(&setup).unwrap();
+    let core = CoreId { id: core_id };
 
     // Disk I/O contention
     let _sleep_time = Duration::from_millis(50);
     let _second = Duration::from_secs(1);
 
-    thread::spawn(move || {
+    let handler = thread::spawn(move || {
+        core_affinity::set_for_current(core);
+        println!("thread pined to {:?}", core);
+
         let mut counter = 0;
         let start = Instant::now();
 
@@ -105,9 +109,10 @@ fn main() {
                 _now = Instant::now();
                 break;
             } else {
-                sleep(_sleep_time);
+                thread::sleep(_sleep_time);
                 continue;
             }
         }
     });
+    handler.join().unwrap();
 }
