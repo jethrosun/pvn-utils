@@ -54,308 +54,65 @@ INST_LEVEL=off
 mkdir -p "$LOG_DIR"
 
 
-if [ "$2" == 'pvn-transcoder-transform-app' ] || [ "$2" == 'pvn-transcoder-groupby-app' ]; then
-	#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio $8=port $9=expr_num
-	for PID in $(pgrep contention); do sudo -u jethros kill $PID; done
+# for tlsv
+#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio
+for PID in $(pgrep contention); do sudo -u jethros kill $PID; done
 
-	JSON_STRING=$( jq -n \
-		--arg iter "$3" \
-		--arg setup "$4" \
-		--arg tlsv_setup "0" \
-        --arg rdr_setup "0" \
-        --arg xcdr_setup "$4" \
-        --arg p2p_setup "0" \
-		--arg port "$8" \
-		--arg expr_num "$9" \
-		--arg inst "$INST_LEVEL" \
-		--arg mode "$EXPR_MODE" \
-		'{setup: $setup, tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup, iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}' )
-	echo "$JSON_STRING" > /home/jethros/setup
+JSON_STRING=$( jq -n \
+	--arg iter "$3" \
+	--arg setup "$4" \
+	--arg tlsv_setup "$4" \
+	--arg rdr_setup "0" \
+	--arg xcdr_setup "0" \
+	--arg p2p_setup "0" \
+	--arg inst "$INST_LEVEL" \
+	--arg mode "$EXPR_MODE" \
+	'{setup: $setup,tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup, iter: $iter, inst: $inst, mode: $mode}' )
+echo "$JSON_STRING" > /home/jethros/setup
 
-	while sleep 5; do
-		if [[ $(pgrep contention_cpu) ]]; then
-			:
-		else
-			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" 1 "$CPU_LOG" &
-		fi
-	done &
-	P1=$!
-	while sleep 5; do
-		if [[ $(pgrep contention_mem) ]]; then
-			:
-		else
-			sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
-		fi
-	done &
-	P2=$!
-	while sleep 5; do
-		if [[ $(pgrep contention_disk) ]]; then
-			:
-		else
-			# /home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_ssd.sh "$7" 3 >> "$DISKIO_LOG" &
-			# /home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_ssd.sh "$7" 4 >> "$DISKIO_LOG" &
-			sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 "ssd" "$DISKIO_LOG" &
-			sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 "ssd" "$DISKIO_LOG" &
-		fi
-	done &
-	P3=$!
+while sleep 5; do
+	if [[ $(pgrep contention_cpu) ]]; then
+		:
+	else
+		/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" 1 "$CPU_LOG" &
+	fi
+done &
+P1=$!
+while sleep 5; do
+	if [[ $(pgrep contention_mem) ]]; then
+		:
+	else
+		sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
+	fi
+done &
+P2=$!
+while sleep 5; do
+	if [[ $(pgrep contention_disk) ]]; then
+		:
+	else
+		sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 "hdd" "$DISKIO_LOG" &
+		sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 "hdd" "$DISKIO_LOG" &
+	fi
+done &
+P3=$!
 
-	sleep 5
+"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
+P4=$!
 
-	# dont track docker, why?
-	docker run -d --cpuset-cpus 1 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
-	# P1=$!
-	docker ps
-	sleep 5
-
-	sudo taskset -c 1 /home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$9" 1 "$FAKTORY_LOG" &
-	P4=$!
-	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
-	P5=$!
-
-	while sleep 10; do for PID in $(pgrep faktory); do sudo taskset -cp 1 $PID; done; done  &
-	P14=$!
-
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
-	P6=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
-	P7=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh faktory; done > "$CPULOG2" &
-	P8=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh faktory; done > "$MEMLOG2" &
-	P9=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh contention; done > "$CPULOG3" &
-	P10=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh contention; done > "$MEMLOG3" &
-	P11=$!
-	sudo taskset -c 5 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
-	P12=$!
-	sudo taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
-	P13=$!
-	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13 $P14
-
-elif [ "$2" == "pvn-p2p-transform-app" ] || [ "$2" == "pvn-p2p-groupby-app" ]; then
-	#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio $8=p2p_type
-	for PID in $(pgrep contention); do sudo -u jethros kill $PID; done
-
-	sudo rm -rf "$HOME/Downloads"
-	sudo rm -rf /data/bt/config
-	mkdir -p "$HOME/Downloads"  /data/bt/config
-
-	JSON_STRING=$( jq -n \
-		--arg iter "$3" \
-		--arg setup "$4" \
-		--arg tlsv_setup "0" \
-        --arg rdr_setup "0" \
-        --arg xcdr_setup "0" \
-        --arg p2p_setup "$4" \
-		--arg inst "$INST_LEVEL" \
-		--arg p2p_type "$8" \
-		--arg mode "$EXPR_MODE" \
-		'{setup: $setup,tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup, iter: $iter, inst: $inst, p2p_type: $p2p_type, mode: $mode}' )
-	echo "$JSON_STRING" > /home/jethros/setup
-
-	sudo /home/jethros/dev/pvn/utils/p2p_expr/p2p_cleanup_nb.sh
-	sleep 3
-	sudo -u jethros /home/jethros/dev/pvn/utils/p2p_expr/p2p_config_nb.sh
-	sleep 3
-
-	while sleep 30; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/mon_finished_deluge.sh ; done > "$P2P_PROGRESS_LOG" &
-	P1=$!
-
-	while sleep 5; do
-		if [[ $(pgrep contention_cpu) ]]; then
-			:
-		else
-			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" 1 "$CPU_LOG" &
-		fi
-	done &
-	P2=$!
-	while sleep 5; do
-		if [[ $(pgrep contention_mem) ]]; then
-			:
-		else
-			sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
-		fi
-	done &
-	P3=$!
-	while sleep 5; do
-		if [[ $(pgrep contention_disk) ]]; then
-			:
-		else
-			# /home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_hdd.sh "$7" 3 >> "$DISKIO_LOG" &
-			# /home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_hdd.sh "$7" 4 >> "$DISKIO_LOG" &
-			sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 "hdd" "$DISKIO_LOG" &
-			sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 "hdd" "$DISKIO_LOG" &
-		fi
-	done &
-	P4=$!
-	sleep 5
-
-	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
-	P5=$!
-
-	while sleep 10; do for PID in $(pgrep deluge); do sudo taskset -cp 1 $PID; done; done  &
-	P6=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
-	P7=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
-	P8=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh deluge; done > "$CPULOG2" &
-	P9=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh deluge; done > "$MEMLOG2" &
-	P10=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh contention; done > "$CPULOG3" &
-	P11=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh contention; done > "$MEMLOG3" &
-	P12=$!
-	sudo taskset -c 5 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
-	P13=$!
-	sudo taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
-	P14=$!
-	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13 $P14
-
-elif [ "$2" == "pvn-rdr-transform-app" ] || [ "$2" == "pvn-rdr-groupby-app" ]; then
-	# for rdr
-	#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio $8=disk
-	for PID in $(pgrep contention); do sudo -u jethros kill $PID; done
-
-	JSON_STRING=$( jq -n \
-		--arg iter "$3" \
-		--arg setup "$4" \
-		--arg tlsv_setup "0" \
-        --arg rdr_setup "$4" \
-        --arg xcdr_setup "0" \
-        --arg p2p_setup "0" \
-		--arg disk "$8" \
-		--arg inst "$INST_LEVEL" \
-		--arg mode "$EXPR_MODE" \
-		'{setup: $setup,tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup, iter: $iter, disk: $disk, inst: $inst, mode: $mode}' )
-	echo "$JSON_STRING" > /home/jethros/setup
-
-	# config contention
-	while sleep 5; do
-		if [[ $(pgrep contention_cpu) ]]; then
-			:
-		else
-			# multi process mode
-			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" 10 "$CPU_LOG" &
-		fi
-	done &
-	P1=$!
-	while sleep 5; do
-		if [[ $(pgrep contention_mem) ]]; then
-			:
-		else
-			sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
-		fi
-	done &
-	P2=$!
-	while sleep 5; do
-		if [[ $(pgrep contention_disk) ]]; then
-			:
-		else
-			if [ "$8" == "hdd" ]; then
-				# /home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_hdd.sh "$7" 3 >> "$DISKIO_LOG" &
-				# /home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_hdd.sh "$7" 4 >> "$DISKIO_LOG" &
-				sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 "hdd" "$DISKIO_LOG" &
-				sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 "hdd" "$DISKIO_LOG" &
-			else
-				# /home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_ssd.sh "$7" 3 >> "$DISKIO_LOG" &
-				# /home/jethros/dev/pvn/utils/contention_diskio/contention_diskio_ssd.sh "$7" 4 >> "$DISKIO_LOG" &
-				sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 "ssd" "$DISKIO_LOG" &
-				sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 "ssd" "$DISKIO_LOG" &
-			fi
-		fi
-	done &
-	P3=$!
-	sleep 5
-
-	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
-	P4=$!
-
-	while sleep 5; do echo "10 sec"; ps ahux --sort=-c | awk '{if($3>1.0)printf"%s %6d %s\n",$3,$2,$11}'; done > "$CHROME_PLOG"  &
-	P5=$!
-
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
-	P6=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
-	P7=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG2" &
-	P8=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
-	P9=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh contention; done > "$CPULOG3" &
-	P10=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh contention; done > "$MEMLOG3" &
-	P11=$!
-	sudo taskset -c 5 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
-	P12=$!
-	sudo  taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
-	P13=$!
-	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12 $P13
-
-else
-	# for tlsv
-	#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio
-	for PID in $(pgrep contention); do sudo -u jethros kill $PID; done
-
-	JSON_STRING=$( jq -n \
-		--arg iter "$3" \
-		--arg setup "$4" \
-		--arg tlsv_setup "$4" \
-        --arg rdr_setup "0" \
-        --arg xcdr_setup "0" \
-        --arg p2p_setup "0" \
-		--arg inst "$INST_LEVEL" \
-		--arg mode "$EXPR_MODE" \
-		'{setup: $setup,tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup, iter: $iter, inst: $inst, mode: $mode}' )
-	echo "$JSON_STRING" > /home/jethros/setup
-
-	while sleep 5; do
-		if [[ $(pgrep contention_cpu) ]]; then
-			:
-		else
-			/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" 1 "$CPU_LOG" &
-		fi
-	done &
-	P1=$!
-	while sleep 5; do
-		if [[ $(pgrep contention_mem) ]]; then
-			:
-		else
-			sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
-		fi
-	done &
-	P2=$!
-	while sleep 5; do
-		if [[ $(pgrep contention_disk) ]]; then
-			:
-		else
-			sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 "ssd" "$DISKIO_LOG" &
-			sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 "ssd" "$DISKIO_LOG" &
-		fi
-	done &
-	P3=$!
-
-	"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
-	P4=$!
-
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
-	P5=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
-	P6=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG2" &
-	P7=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
-	P8=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh contention; done > "$CPULOG3" &
-	P9=$!
-	while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh contention; done > "$MEMLOG3" &
-	P10=$!
-	sudo taskset -c 5 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
-	P11=$!
-	sudo  taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
-	P12=$!
-	wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12
-fi
+while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
+P5=$!
+while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
+P6=$!
+while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG2" &
+P7=$!
+while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
+P8=$!
+while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh contention; done > "$CPULOG3" &
+P9=$!
+while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh contention; done > "$MEMLOG3" &
+P10=$!
+sudo taskset -c 5 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+P11=$!
+sudo  taskset -c 5 "$TCP_TOP_MONITOR" -C > "$TCP_LOG" &
+P12=$!
+wait $P1 $P2 $P3 $P4 $P5 $P6 $P7 $P8 $P9 $P10 $P11 $P12

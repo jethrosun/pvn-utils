@@ -86,16 +86,6 @@ def p2p_sess_setup(node, trace, nf, epoch):
         sys.exit(1)
 
 
-def run_p2p_node(typ, sess, setup, epoch):
-    if typ == "leecher":
-        cmd_str = "./p2p_run_leecher.py " + str(setup) + " " + str(epoch)
-        print("Run P2P Leecher \n\tCmd: {}".format(cmd_str))
-        sess.send_commands(cmd_str)
-
-        time.sleep(5)
-    else:
-        print("Unknown type: {}".format(typ))
-
 
 def run_pktgen(sess, trace, setup):
     if trace in ['64B', '128B', '256B', '512B', '1280B', '1500B']:
