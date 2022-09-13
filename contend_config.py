@@ -26,8 +26,7 @@ trace = {
     'zcsi-nat': 'pvn_tlsv6.pcap',
     "zcsi-lpm": 'pvn_tlsv6.pcap',
     "zcsi-maglev": 'pvn_tlsv6.pcap',
-    "zcsi-acl-fw": 'pvn_tlsv6.pcap',
-
+    "zcsi-aclfw": 'pvn_tlsv6.pcap',
 }
 
 setup = []
@@ -53,9 +52,13 @@ nf_set = {
     'app_rdr': '4',
     'app_p2p': '3',
     'app_p2p-controlled': '3',
-    # done
     'app_tlsv': '6',
     'app_xcdr': '4',
+    # zcsi
+    'zcsi-nat': '6',
+    "zcsi-lpm": '6',
+    "zcsi-maglev": '6',
+    "zcsi-aclfw": '6',
 }
 
 # expr_wait_time = 220  # 180
@@ -80,9 +83,10 @@ p2p_ext = ['app_p2p-ext']
 # nf_list = ['app_rdr']
 # nf_list = ['app_p2p-controlled']
 
-nf_list = ['app_tlsv',
-           'zcsi-nat',
-           "zcsi-lpm",
+nf_list = [
            "zcsi-maglev",
+           "zcsi-lpm",
+           'zcsi-nat',
            "zcsi-acl-fw"
+            'app_tlsv',
            ]
