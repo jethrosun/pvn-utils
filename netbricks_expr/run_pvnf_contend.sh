@@ -4,6 +4,7 @@ set -e
 
 # This script runs the non-coresident PVNFs with resource contention
 
+NB_CONFIG_DUMB=$HOME/dev/netbricks/experiments/config_1core_dumb.toml
 NB_CONFIG=$HOME/dev/netbricks/experiments/config_1core.toml
 NB_CONFIG_MEDIUM=$HOME/dev/netbricks/experiments/config_1core_medium.toml
 NB_CONFIG_LONG=$HOME/dev/netbricks/experiments/config_1core_long.toml
@@ -12,7 +13,10 @@ TMP_NB_CONFIG=$HOME/config.toml
 # ===================================
 
 EXPR_MODE=short
-sed "/duration = 200/i log_path = '$LOG'" "$NB_CONFIG" > "$TMP_NB_CONFIG"
+# traditional NF
+sed "/duration = 95/i log_path = '$LOG'" "$NB_CONFIG_DUMB" > "$TMP_NB_CONFIG"
+# TLSV
+# sed "/duration = 185/i log_path = '$LOG'" "$NB_CONFIG" > "$TMP_NB_CONFIG"
 
 # EXPR_MODE=medium
 # sed "/duration = 320/i log_path = '$LOG'" "$NB_CONFIG_MEDIUM" > "$TMP_NB_CONFIG"

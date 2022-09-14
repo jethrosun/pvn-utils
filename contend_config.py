@@ -29,6 +29,37 @@ pvn_trace = {
     "zcsi-aclfw": trace_list,
 }
 
+nf_set = {
+    'app_rdr': '4',
+    'app_p2p': '3',
+    'app_p2p-controlled': '3',
+    'app_tlsv': '6',
+    'app_xcdr': '4',
+    # zcsi
+    'zcsi-nat': '6',
+    "zcsi-lpm": '6',
+    "zcsi-maglev": '6',
+    "zcsi-aclfw": '6',
+}
+
+# app
+xcdr = ['app_xcdr']
+rdr = ['app_rdr']
+tlsv = ['app_tlsv', 'app_rdr']
+tlsv_rdr = ['app_tlsv']
+rdr_xcdr = ['app_rdr', 'app_xcdr']
+rdr_xcdr_tlsv = ['app_rdr', 'app_xcdr', 'app_tlsv']
+complete_nuclear_list = ['app_p2p', 'app_p2p-ext']
+p2p_controlled = ['app_p2p-controlled']
+p2p_ext = ['app_p2p-ext']
+
+# nf_list = ['app_p2p-controlled', 'app_rdr', 'app_tlsv', 'app_xcdr']
+# nf_list = ['app_xcdr']
+# nf_list = ['app_p2p-controlled', 'app_rdr']
+# nf_list = ['app_rdr']
+# nf_list = ['app_p2p-controlled']
+
+
 setup = []
 zero = '0'
 # in isolation
@@ -48,45 +79,21 @@ for i in ['1', '2', '3']:
 # num_of_epoch = 3
 num_of_epoch = 1
 
-nf_set = {
-    'app_rdr': '4',
-    'app_p2p': '3',
-    'app_p2p-controlled': '3',
-    'app_tlsv': '6',
-    'app_xcdr': '4',
-    # zcsi
-    'zcsi-nat': '6',
-    "zcsi-lpm": '6',
-    "zcsi-maglev": '6',
-    "zcsi-aclfw": '6',
-}
-
-# expr_wait_time = 220  # 180
-expr_wait_time = 250  # for rdr 4
-xcdr_port_base = 7418
-batch = 1
-
-# app
-xcdr = ['app_xcdr']
-rdr = ['app_rdr']
-tlsv = ['app_tlsv', 'app_rdr']
-tlsv_rdr = ['app_tlsv']
-rdr_xcdr = ['app_rdr', 'app_xcdr']
-rdr_xcdr_tlsv = ['app_rdr', 'app_xcdr', 'app_tlsv']
-complete_nuclear_list = ['app_p2p', 'app_p2p-ext']
-p2p_controlled = ['app_p2p-controlled']
-p2p_ext = ['app_p2p-ext']
-
-# nf_list = ['app_p2p-controlled', 'app_rdr', 'app_tlsv', 'app_xcdr']
-# nf_list = ['app_xcdr']
-# nf_list = ['app_p2p-controlled', 'app_rdr']
-# nf_list = ['app_rdr']
-# nf_list = ['app_p2p-controlled']
-
+# traditional NF
+# ------------------------
+expr_wait_time = 95
+# num_of_epoch = 3
 nf_list = [
     "zcsi-maglev",
     "zcsi-lpm",
     'zcsi-nat',
     "zcsi-aclfw"
-    'app_tlsv',
 ]
+
+# tlsv
+# -------------------------
+# expr_wait_time = 190
+# num_of_epoch = 3
+# nf_list = [
+#     'app_tlsv'
+# ]
