@@ -15,17 +15,18 @@ pvn_nf = {
     "zcsi-aclfw": "zcsi-aclfw"
 }
 
+trace_list = ['pvn_tlsv6.pcap', 'ictf2010-0-re.pcap', '64B', '128B', '256B', '512B', '1500B'],
 pvn_trace = {
     # 'app_rdr': 'pvn_rdr.pcap',
     # 'app_xcdr': 'pvn_xcdr.pcap',
     # 'app_p2p': 'pvn_p2p.pcap',
     # 'app_p2p-ext': 'pvn_p2p.pcap',
     # 'app_p2p-controlled': 'pvn_p2p.pcap',
-    'app_tlsv': ['pvn_tlsv6.pcap', 'ictf2010-0-re.pcap', '64B', '128B', '256B', '512B', '1500B'],
-    'zcsi-nat': ['pvn_tlsv6.pcap', 'ictf2010-0-re.pcap', '64B', '128B', '256B', '512B', '1500B'],
-    "zcsi-lpm": ['pvn_tlsv6.pcap', 'ictf2010-0-re.pcap', '64B', '128B', '256B', '512B', '1500B'],
-    "zcsi-maglev": ['pvn_tlsv6.pcap', 'ictf2010-0-re.pcap', '64B', '128B', '256B', '512B', '1500B'],
-    "zcsi-aclfw": ['pvn_tlsv6.pcap', 'ictf2010-0-re.pcap', '64B', '128B', '256B', '512B', '1500B']
+    'app_tlsv': trace_list,
+    'zcsi-nat': trace_list,
+    "zcsi-lpm": trace_list,
+    "zcsi-maglev": trace_list,
+    "zcsi-aclfw": trace_list,
 }
 
 setup = []

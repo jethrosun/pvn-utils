@@ -6,6 +6,8 @@ use core_affinity::CoreId;
 use std::collections::HashMap;
 use std::env;
 use std::fs::{File, OpenOptions};
+use std::io::prelude::*;
+use std::io::SeekFrom;
 use std::io::Write;
 use std::process;
 use std::thread;
@@ -24,16 +26,16 @@ fn read_setup(setup: &usize) -> Option<usize> {
     map.remove(setup)
 }
 
-fn file_io(counter: &mut i32, f: &mut File, buf: Box<[u8]>) {
+fn file_io(counter: &mut i32, f: &mut File, buf: &mut Box<[u8]>) {
     // write sets * 50mb to file
     f.write_all(&buf).unwrap();
     f.flush().unwrap();
 
     *counter += 1;
-    // // measure read throughput
-    // f.seek(SeekFrom::Start(0)).unwrap();
-    // // read sets * 50mb mb from file
-    // f.read_exact(&mut buf).unwrap();
+    // measure read throughput
+    f.seek(SeekFrom::Start(0)).unwrap();
+    // read sets * 50mb mb from file
+    f.read_exact(&mut buf).unwrap();
 }
 
 fn main() {
@@ -99,7 +101,7 @@ fn main() {
             let mut _now = Instant::now();
 
             // actual file IO
-            let _ = file_io(&mut counter, &mut file, buf.clone());
+            let _ = file_io(&mut counter, &mut file, &mut buf.clone());
 
             if start.elapsed() >= Duration::from_secs(181) {
                 println!("have run for 180 seconds with counter {:?}", counter);
