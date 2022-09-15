@@ -147,13 +147,13 @@ def main(expr_list):
             #
             # config the pktgen sending rate
             for contention in contend.setup:
-                pktgen_sess = pktgen_sess_setup(trace, nf, 100)
+                pktgen_sess = pktgen_sess_setup(trace, nf, contend.sending_rate)
 
                 if nf == "pvn-tlsv-transform-app":
                     tls_trace = contend.fetch_tlsv_trace(contend.nf_set[expr])
-                    run_pktgen(pktgen_sess, tls_trace, 100)
+                    run_pktgen(pktgen_sess, tls_trace, contend.sending_rate)
                 else:
-                    run_pktgen(pktgen_sess, trace, 100)
+                    run_pktgen(pktgen_sess, trace, contend.sending_rate)
 
                 # epoch from 0 to 9
                 for epoch in range(contend.num_of_epoch):
