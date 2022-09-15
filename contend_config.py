@@ -15,7 +15,8 @@ pvn_nf = {
     "zcsi-aclfw": "zcsi-aclfw"
 }
 
-trace_list = ['pvn_tlsv6.pcap', 'ictf2010-0-re.pcap', '64B', '128B', '256B', '512B', '1500B'],
+# trace_list = ['pvn_tlsv6.pcap', 'ictf2010-0-re.pcap', '64B', '128B', '256B', '512B', '1500B'],
+trace_list = ['ictf2010-0-re.pcap', '64B', '128B', '256B', '512B', '1500B']
 pvn_trace = {
     # 'app_rdr': 'pvn_rdr.pcap',
     # 'app_xcdr': 'pvn_xcdr.pcap',
@@ -70,10 +71,10 @@ for i in ['1', '2', '3']:
     setup.append([zero, zero, i])
 
 # combination set
-# for i in ['1', '2', '3']:
-#     for j in ['1', '2', '3']:
-#         for k in ['1', '2', '3']:
-#             setup.append([i, j, k])
+for i in ['1', '2', '3']:
+    for j in ['1', '2', '3']:
+        for k in ['1', '2', '3']:
+            setup.append([i, j, k])
 
 # num_of_epoch = 5
 # num_of_epoch = 3
@@ -81,14 +82,15 @@ num_of_epoch = 1
 
 # traditional NF
 # ------------------------
-expr_wait_time = 95
+expr_wait_time = 65
 # num_of_epoch = 3
 nf_list = [
     "zcsi-maglev",
     "zcsi-lpm",
+    "zcsi-aclfw",
     'zcsi-nat',
-    "zcsi-aclfw"
 ]
+
 
 # tlsv
 # -------------------------

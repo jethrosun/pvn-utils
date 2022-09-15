@@ -27,7 +27,7 @@ def netbricks_sess_setup(trace, nf, epoch):
 
         netbricks_sess.send_commands('cd /home/jethros/dev/netbricks/experiments')
 
-        time.sleep(5)
+        time.sleep(3)
         return netbricks_sess
     except Exception as err:
         print("Creating screen sessions failed: {}".format(err))
@@ -45,46 +45,12 @@ def pktgen_sess_setup(trace, nf, setup):
         pktgen_sess.enable_logs("pktgen--" + trace + "_" + nf + ".log")
         pktgen_sess.send_commands('cd /home/jethros/dev/pktgen-dpdk/experiments')
 
-        time.sleep(10)
+        time.sleep(3)
         return pktgen_sess
     except Exception as err:
         print("Creating screen sessions failed: {}".format(err))
         pktgen_sess.kill()
         sys.exit(1)
-
-
-def p2p_sess_setup(node, trace, nf, epoch):
-    p2p_nodes = {
-        'provenza': 'seeder',
-        'flynn': 'leecher',
-        'tao': 'leecher',
-        'sanchez': 'leecher',
-    }
-    p2p_ips = {
-        'provenza': '10.200.111.125',
-        'flynn': '10.200.111.124',
-        'tao': '10.200.111.123',
-        'sanchez': '10.200.111.122',
-    }
-
-    print("Entering p2p_sess setup for {} as {}".format(node, p2p_nodes[node]))
-    try:
-        p2p_sess = Screen(node, True)
-        print("p2p session for {} is spawned".format(node))
-
-        p2p_sess.send_commands('bash')
-        p2p_sess.enable_logs(node + "--" + trace + "_" + nf + ".log")
-        p2p_sess.send_commands('ssh jethros@' + p2p_ips[node])
-        p2p_sess.send_commands('cd /home/jethros/dev/pvn/utils/p2p_expr')
-        p2p_sess.send_commands('git pull')
-
-        time.sleep(3)
-        return p2p_sess
-    except Exception as err:
-        print("Creating screen sessions failed: {}".format(err))
-        p2p_sess.kill()
-        sys.exit(1)
-
 
 
 def run_pktgen(sess, trace, setup):
@@ -96,7 +62,7 @@ def run_pktgen(sess, trace, setup):
         set_size_str = "set 0 size " + size
         start_str = "start 0"
 
-        time.sleep(10)
+        time.sleep(1)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
         sess.send_commands(cmd_str, set_rate_str, set_size_str, start_str)
 
@@ -108,7 +74,7 @@ def run_pktgen(sess, trace, setup):
         set_port_str = "set 0 rate " + str(setup)
         start_str = "start 0"
 
-        time.sleep(5)
+        time.sleep(1)
         # print("Pktgen\nStart with cmd: {}".format(cmd_str))
         sess.send_commands(cmd_str, set_port_str, start_str)
 
@@ -171,9 +137,10 @@ def rdr_cleanup(sess):
 def main(expr_list):
     for expr in expr_list:
         # expr: app_tlsv
-        print("Running experiments that for {} application NF".format(expr))
+        print("Running experiment for NF: {} ".format(expr))
         # app_rdr_t, app_p2p_t
         nf = contend.pvn_nf[expr]
+        print(expr, nf)
         for trace in contend.pvn_trace[expr]:
             # nf: 'pvn-tlsv-transform-app',
             # we are running the regular NFs

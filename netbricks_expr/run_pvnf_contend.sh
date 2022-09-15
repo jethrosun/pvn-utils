@@ -14,7 +14,7 @@ TMP_NB_CONFIG=$HOME/config.toml
 
 EXPR_MODE=short
 # traditional NF
-sed "/duration = 95/i log_path = '$LOG'" "$NB_CONFIG_DUMB" > "$TMP_NB_CONFIG"
+sed "/duration = 65/i log_path = '$LOG'" "$NB_CONFIG_DUMB" > "$TMP_NB_CONFIG"
 # TLSV
 # sed "/duration = 185/i log_path = '$LOG'" "$NB_CONFIG" > "$TMP_NB_CONFIG"
 
