@@ -29,14 +29,14 @@ MPSTAT_LOG=$LOG_DIR/$3_$4_mpstat.log
 # then *core id* and *NF id*
 SYNTHETIC_LOG=$LOG_DIR/$3_$4_srv
 
-# CPULOG1=$LOG_DIR/$3_$4_cpu1.log
-# CPULOG2=$LOG_DIR/$3_$4_cpu2.log
-# CPULOG3=$LOG_DIR/$3_$4_cpu3.log
-# CPULOG4=$LOG_DIR/$3_$4_cpu4.log
-# MEMLOG1=$LOG_DIR/$3_$4_mem1.log
-# MEMLOG2=$LOG_DIR/$3_$4_mem2.log
-# MEMLOG3=$LOG_DIR/$3_$4_mem3.log
-# MEMLOG4=$LOG_DIR/$3_$4_mem4.log
+CPULOG1=$LOG_DIR/$3_$4_cpu1.log
+CPULOG2=$LOG_DIR/$3_$4_cpu2.log
+CPULOG3=$LOG_DIR/$3_$4_cpu3.log
+CPULOG4=$LOG_DIR/$3_$4_cpu4.log
+MEMLOG1=$LOG_DIR/$3_$4_mem1.log
+MEMLOG2=$LOG_DIR/$3_$4_mem2.log
+MEMLOG3=$LOG_DIR/$3_$4_mem3.log
+MEMLOG4=$LOG_DIR/$3_$4_mem4.log
 
 NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
@@ -74,6 +74,12 @@ JSON_STRING=$(jq -n \
 	echo "${JSON_STRING}" >/home/jethros/setup
 	#"sudo ./run_pvnf_coresident.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + str(expr)
 
+
+# for tlsv
+#   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio
+for PID in $(pgrep contention); do sudo -u jethros kill $PID; done
+
+
 sudo /home/jethros/dev/pvn/utils/netbricks_expr/misc/nb_cleanup.sh
 sleep 3
 
@@ -85,6 +91,33 @@ pids=""
 RESULT=0
 
 
+while sleep 5; do
+	if [[ $(pgrep contention_cpu) ]]; then
+		:
+	else
+		/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" 1 "$CPU_LOG" &
+	fi
+done &
+pids="$pids $!"
+while sleep 5; do
+	if [[ $(pgrep contention_mem) ]]; then
+		:
+	else
+		sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
+	fi
+done &
+pids="$pids $!"
+while sleep 5; do
+	if [[ $(pgrep contention_disk) ]]; then
+		:
+	else
+		sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 "hdd" "$DISKIO_LOG" &
+		sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 "hdd" "$DISKIO_LOG" &
+	fi
+done &
+pids="$pids $!"
+
+
 "$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 pids="$pids $!"
 
@@ -93,7 +126,7 @@ core_id=3
 # match NF_id to run docker
 #
 # {"1": "xcdr", "2": "rand1", "3": "rand2", "4": "rand4", "5": "rand3", "6": "tlsv", "7": "p2p", "8": "rdr"}
-if ["$4"=="6"]; then
+if [ "$4" == "6" ]; then
 	# "6": "tlsv"
 	cd ~/dev/pvn/tlsv-builder/
 	docker run -d --cpuset-cpus "$core_id" --name tlsv_6_${core_id} \
@@ -108,7 +141,7 @@ if ["$4"=="6"]; then
 	pids="$pids $!"
 
 # FIXME: Run P2P seeder and leechers....
-elif ["$4"=="7"]; then
+elif [ "$4" == "7" ]; then
 	# "7": "p2p"
 	PORT1=$((9090+core_id))
 	PORT2=$((51412+core_id))
@@ -126,7 +159,7 @@ elif ["$4"=="7"]; then
 	docker logs -f p2p_7_${core_id} &> ${SYNTHETIC_LOG}__7_${core_id}.log &
 	pids="$pids $!"
 
-elif ["$4"=="8"]; then
+elif [ "$4" == "8" ]; then
 	# "8": "rdr"
 	cd ~/dev/pvn/rdr-builder/
 	docker run -d --cpuset-cpus $core_id --name rdr_8_${core_id} \
@@ -140,6 +173,7 @@ elif ["$4"=="8"]; then
 	pids="$pids $!"
 
 else
+	echo $3, $4
 	# {"1": "xcdr", "2": "rand1", "3": "rand2", "4": "rand4", "5": "rand3", "6": "tlsv", "7": "p2p", "8": "rdr"}
 	cd ~/dev/pvn/utils/synthetic_srv/
 
@@ -165,6 +199,20 @@ docker ps
 # while true; do docker stats -a --no-stream >> ${DOCKER_STATS_LOG}; done &
 while true; do taskset -c 0 docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
 pids="$pids $!"
+
+while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
+pids="$pids $!"
+while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
+pids="$pids $!"
+while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG2" &
+pids="$pids $!"
+while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
+pids="$pids $!"
+while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh contention; done > "$CPULOG3" &
+pids="$pids $!"
+while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh contention; done > "$MEMLOG3" &
+pids="$pids $!"
+
 
 # mpstat for every second
 taskset -c 0 mpstat -P ALL 1 >> "$MPSTAT_LOG" &
