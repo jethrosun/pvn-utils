@@ -19,24 +19,27 @@ LOG_DIR=$HOME/netbricks_logs/$2/$1
 # log files
 # 3: number of runs
 # 4: *udf_id* for udf_profile; *node id* for udf_schedule
-LOG=$LOG_DIR/$3_$4.log
-TCP_LOG=$LOG_DIR/$3_$4_tcptop.log
-BIO_LOG=$LOG_DIR/$3_$4_biotop.log
-P2P_PROGRESS_LOG=$LOG_DIR/$3_$4_p2p_progress.log
-FAKTORY_LOG=$LOG_DIR/$3_$4_faktory.log
-DOCKER_STATS_LOG=$LOG_DIR/$3_$4_docker_stats.log
-MPSTAT_LOG=$LOG_DIR/$3_$4_mpstat.log
+LOG=$LOG_DIR/$3_$4__$5$6$7.log
+TCP_LOG=$LOG_DIR/$3_$4__$5$6$7_tcptop.log
+BIO_LOG=$LOG_DIR/$3_$4__$5$6$7_biotop.log
+DOCKER_STATS_LOG=$LOG_DIR/$3_$4__$5$6$7_docker_stats.log
+MPSTAT_LOG=$LOG_DIR/$3_$4__$5$6$7_mpstat.log
 # then *core id* and *NF id*
-SYNTHETIC_LOG=$LOG_DIR/$3_$4_srv
+SYNTHETIC_LOG=$LOG_DIR/$3_$4__$5$6$7_srv
 
-CPULOG1=$LOG_DIR/$3_$4_cpu1.log
-CPULOG2=$LOG_DIR/$3_$4_cpu2.log
-CPULOG3=$LOG_DIR/$3_$4_cpu3.log
-CPULOG4=$LOG_DIR/$3_$4_cpu4.log
-MEMLOG1=$LOG_DIR/$3_$4_mem1.log
-MEMLOG2=$LOG_DIR/$3_$4_mem2.log
-MEMLOG3=$LOG_DIR/$3_$4_mem3.log
-MEMLOG4=$LOG_DIR/$3_$4_mem4.log
+CPU_LOG=$LOG_DIR/$3_$4__$5$6$7_cpu.log
+MEM_LOG=$LOG_DIR/$3_$4__$5$6$7_mem.log
+DISKIO_LOG=$LOG_DIR/$3_$4__$5$6$7_diskio.log
+
+CHROME_PLOG=$LOG_DIR/$3_$4__$5$6$7_chrome_process.log
+
+CPULOG1=$LOG_DIR/$3_$4__$5$6$7_cpu1.log
+CPULOG2=$LOG_DIR/$3_$4__$5$6$7_cpu2.log
+CPULOG3=$LOG_DIR/$3_$4__$5$6$7_cpu3.log
+MEMLOG1=$LOG_DIR/$3_$4__$5$6$7_mem1.log
+MEMLOG2=$LOG_DIR/$3_$4__$5$6$7_mem2.log
+MEMLOG3=$LOG_DIR/$3_$4__$5$6$7_mem3.log
+
 
 NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
@@ -129,6 +132,7 @@ core_id=3
 if [ "$4" == "6" ]; then
 	# "6": "tlsv"
 	cd ~/dev/pvn/tlsv-builder/
+	echo 6 $4 "$core_id"
 	docker run -d --cpuset-cpus "$core_id" --name tlsv_6_${core_id} \
 		--rm --network=host \
 		-v /data/tmp:/data \
@@ -146,6 +150,7 @@ elif [ "$4" == "7" ]; then
 	PORT1=$((9090+core_id))
 	PORT2=$((51412+core_id))
 	cd ~/dev/pvn/p2p-builder/
+	echo 7 $4 $core_id
 	docker run -d --cpuset-cpus $core_id --name p2p_7_${core_id} \
 		--rm \
 		-p $PORT1:9091 \
@@ -162,6 +167,7 @@ elif [ "$4" == "7" ]; then
 elif [ "$4" == "8" ]; then
 	# "8": "rdr"
 	cd ~/dev/pvn/rdr-builder/
+	echo 8 $4 "$core_id"
 	docker run -d --cpuset-cpus $core_id --name rdr_8_${core_id} \
 		--rm  --network=host \
 		-v /data/tmp:/data \
@@ -174,6 +180,7 @@ elif [ "$4" == "8" ]; then
 
 else
 	echo $3, $4
+	echo "$profile_id" $4 "$core_id"
 	# {"1": "xcdr", "2": "rand1", "3": "rand2", "4": "rand4", "5": "rand3", "6": "tlsv", "7": "p2p", "8": "rdr"}
 	cd ~/dev/pvn/utils/synthetic_srv/
 
