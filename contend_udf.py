@@ -24,7 +24,7 @@ def netbricks_sess_setup(trace, nf, epoch):
         netbricks_sess.send_commands('cargo b --release')
         netbricks_sess.send_commands('cd /home/jethros/dev/netbricks/experiments')
 
-        time.sleep(3)
+        time.sleep(1)
         return netbricks_sess
     except Exception as err:
         print("Creating screen sessions failed: {}".format(err))
@@ -42,7 +42,7 @@ def pktgen_sess_setup(trace, nf, setup):
         pktgen_sess.enable_logs("pktgen--" + trace + "_" + nf + ".log")
         pktgen_sess.send_commands('cd /home/jethros/dev/pktgen-dpdk/experiments')
 
-        time.sleep(20)
+        time.sleep(1)
         return pktgen_sess
     except Exception as err:
         print("Creating screen sessions failed: {}".format(err))
@@ -74,7 +74,7 @@ def p2p_sess_setup(node, trace, nf, epoch):
         p2p_sess.send_commands('cd /home/jethros/dev/pvn/utils/p2p_expr')
         p2p_sess.send_commands('git pull')
 
-        time.sleep(5)
+        time.sleep(1)
         return p2p_sess
     except Exception as err:
         print("Creating screen sessions failed: {}".format(err))
@@ -88,11 +88,11 @@ def run_pktgen(sess, trace, setup):
     set_port_str = "set 0 rate " + str(setup)
     start_str = "start 0"
 
-    time.sleep(30)
+    time.sleep(5)
     # print("Pktgen\nStart with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str, set_port_str, start_str)
 
-    time.sleep(10)
+    time.sleep(5)
     print("Pktgen\nRUN pktgen")
 
 
@@ -223,7 +223,7 @@ def main(expr_list):
                     time.sleep(5)
 
             sess_destroy(pktgen_sess)
-            time.sleep(30)
+            time.sleep(5)
 
 
 main(conf.udf_schedule)  # rdr, xcdr
