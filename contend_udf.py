@@ -167,7 +167,7 @@ def main(expr_list):
     for expr in expr_list:
         print("Running experiments that for {} application NF".format(expr))
         # app_rdr_g, app_rdr_t; app_p2p_g, app_p2p_t
-        nf = conf.pvn_nf[expr]
+        nf = conf.pvn_nf[expr][0]
         sending_rate = 10
         for node in conf.udf_nf_list:
             # setup here maps to node (1,2,3)
