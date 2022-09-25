@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+
+# cmd_str = "sudo ./run_udf_contend.sh " + trace + " " + nf + " " + str(epoch) + " " + setup
+
 # BATCH=400019
 # BATCH=664673
 # BATCH=1374946
@@ -15,7 +18,7 @@ LOG_DIR=$HOME/netbricks_logs/$2/$1
 
 # log files
 # 3: number of runs
-# 4: *???* for udf_profile; *node id* for udf_schedule
+# 4: *udf_id* for udf_profile; *node id* for udf_schedule
 LOG=$LOG_DIR/$3_$4.log
 TCP_LOG=$LOG_DIR/$3_$4_tcptop.log
 BIO_LOG=$LOG_DIR/$3_$4_biotop.log

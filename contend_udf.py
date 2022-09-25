@@ -96,8 +96,8 @@ def run_pktgen(sess, trace, setup):
     print("Pktgen\nRUN pktgen")
 
 
-def run_netbricks(sess, trace, nf, epoch, setup):
-    cmd_str = "sudo ./run_udf_contend.sh " + trace + " " + nf + " " + str(epoch) + " " + setup
+def run_netbricks(sess, trace, nf, epoch, setup, cpu, mem, diskio):
+    cmd_str = "sudo ./run_udf_contend.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + cpu + " " + mem + " " + diskio
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
@@ -167,13 +167,15 @@ def main(expr_list):
     for expr in expr_list:
         print("Running experiments that for {} application NF".format(expr))
         # app_rdr_g, app_rdr_t; app_p2p_g, app_p2p_t
-        for nf in conf.pvn_nf[expr]:
-            sending_rate = 50
-            pktgen_sess = pktgen_sess_setup(conf.trace[expr], nf, sending_rate)
-            run_pktgen(pktgen_sess, conf.trace[expr], sending_rate)
-
+        nf = conf.pvn_nf[expr]
+        sending_rate = 10
+        for node in conf.udf_nf_list:
             # setup here maps to node (1,2,3)
-            for node in conf.udf_nf_list:
+            for contention in conf.setup:
+
+                pktgen_sess = pktgen_sess_setup(conf.trace[expr], nf, sending_rate)
+                run_pktgen(pktgen_sess, conf.trace[expr], sending_rate)
+
                 # epoch from 0 to 9
                 for epoch in range(conf.num_of_epoch):
                     netbricks_sess = netbricks_sess_setup(conf.trace[expr], nf, epoch)
@@ -203,7 +205,7 @@ def main(expr_list):
                     run_p2p_node('leecher', leecher2_sess, epoch)
                     run_p2p_node('leecher', leecher3_sess, epoch)
 
-                    run_netbricks(netbricks_sess, conf.trace[expr], nf, epoch, node)
+                    run_netbricks(netbricks_sess, conf.trace[expr], nf, epoch, node, contention[0], contention[1], contention[2])
 
                     time.sleep(conf.udf_expr_wait_time)
 

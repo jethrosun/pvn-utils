@@ -176,27 +176,6 @@ trace = {
     'udf_schedule': 'rdr1_p2p1.pcap'
 }
 
-# # nf app
-# 'pvn-rdr-transform-app',
-# 'pvn-transcoder-transform-app',
-# 'pvn-tlsv-transform-app',
-# 'pvn-p2p-transform-app',
-# 'pvn-p2p-transform-app',
-# 'pvn-p2p-transform-app',
-# # chain
-# 'pvn-tlsv-rdr-coexist-app',
-# 'pvn-rdr-p2p-coexist-app',
-# 'pvn-rdr-xcdr-coexist-app',
-# 'pvn-tlsv-p2p-coexist-app',
-# 'pvn-tlsv-xcdr-coexist-app',
-# 'pvn-xcdr-p2p-coexist-app',
-# # coresident
-# 'pvn-tlsv-rdr-p2p-coexist-app',
-# 'pvn-tlsv-p2p-xcdr-coexist-app',
-# 'pvn-tlsv-rdr-xcdr-coexist-app',
-# 'pvn-rdr-xcdr-p2p-coexist-app',
-# 'pvn-tlsv-rdr-p2p-xcdr-coexist-app',
-
 rdr_clean_list = [
     'pvn-rdr-transform-app',
     # chain
@@ -241,57 +220,30 @@ xcdr_clean_list = [
     'udf_schedule'
 ]
 
-# expr_nf_list = [
-#     'pvn-tlsv-transform-app',
-#     'pvn-p2p-transform-app',
-#     'pvn-rdr-transform-app',
-#     'pvn-transcoder-transform-app',
-# ]
-# p2p_nf_list = ['pvn-p2p-transform-app', 'pvn-p2p-groupby-app']
-# pvn_chain_list = ['pvn-tlsv-rdr-coexist-app']
-# p2p_nf_list = ['pvn-p2p-transform-app', 'pvn-p2p-groupby-app']
-# p2p_chain_list = [
-#     'pvn-tlsv-p2p-coexist-app', 'pvn-rdr-p2p-coexist-app',
-#     'pvn-xcdr-p2p-coexist-app'
-# ]
-# xcdr_nf_list = ['pvn-transcoder-transform-app', 'pvn-transcoder-groupby-app']
-# xcdr_chain_list = ['pvn-rdr-xcdr-coexist-app', 'pvn-tlsv-xcdr-coexist-app']
-# xcdr_p2p_chain_list = ['pvn-xcdr-p2p-coexist-app']
-# p2p_ext_list = ['11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
-
 ########################################################################
 #
 # Experiment defined values:
 #
 ########################################################################
-# expr_wait_time = 300  # only for RDR latency
-expr_wait_time = 250
-# expr is 3 min/180 sec
-# expr_wait_time = 220
-xcdr_port_base = 7418
-batch = 1
 
-# app
-rdr_xcdr_tlsv = ['app_rdr', 'app_xcdr', 'app_tlsv']
-rdr_xcdr = ['app_rdr', 'app_xcdr']
-tlsv = ['app_tlsv']
-xcdr = ['app_xcdr']
-rdr = ['app_rdr']
-p2p_controlled = ['app_p2p-controlled']
 
-# coresident
-non_p2p_co = ['co_tlsv_rdr', 'co_rdr_xcdr', 'co_tlsv_xcdr', 'co_tlsv_rdr_xcdr']
-p2p_co = [
-    'co_rdr_p2p', 'co_tlsv_p2p', 'co_xcdr_p2p', 'co_tlsv_rdr_p2p', 'co_tlsv_xcdr_p2p', 'co_rdr_xcdr_p2p',
-    'co_tlsv_rdr_xcdr_p2p'
-]
-raw_p2p_tasks = ['rdr1_xcdr3_p2p1']
+setup = []
+zero = '0'
+# in isolation
+setup.append([zero, zero, zero])
+for i in ['1', '2', '3']:
+    setup.append([i, zero, zero])
+    setup.append([zero, i, zero])
+    setup.append([zero, zero, i])
+
+# No need, we only want to look at contention in isolation
+# combination set
+# for i in ['1', '2', '3']:
+#     for j in ['1', '2', '3']:
+#         for k in ['1', '2', '3']:
+#             setup.append([i, j, k])
 
 udf_schedule = ['udf_schedule']
-udf_profile = ['udf_profile']
-udf_node_list = ['1', '2', '3']
-# udf_nf_list = ['1', '6', '7', '8']
 udf_nf_list = ['1', '2', '3', '4', '5', '6', '7', '8']
 num_of_epoch = 3
-# udf_expr_wait_time = 2000
-udf_expr_wait_time = 4000
+udf_expr_wait_time = 200
