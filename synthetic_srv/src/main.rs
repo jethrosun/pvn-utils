@@ -17,7 +17,7 @@ mod udf;
 
 fn main() {
     // let expr_time = 1800;
-    let expr_time = 3800;
+    let expr_time = 3600;
     // let start = Instant::now();
 
     let params: Vec<String> = env::args().collect();
