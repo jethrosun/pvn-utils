@@ -1,9 +1,10 @@
 #!/bin/bash
 set -e
 
-BATCH=400019
+# BATCH=400019
 # BATCH=664673
 # BATCH=1374946
+BATCH=contention
 
 # configs
 DELAY_INTERVAL=1
@@ -14,7 +15,7 @@ LOG_DIR=$HOME/netbricks_logs/$2/$1
 
 # log files
 # 3: number of runs
-# 4: *NF id* for udf_profile, and *node id* for udf_schedule
+# 4: *???* for udf_profile; *node id* for udf_schedule
 LOG=$LOG_DIR/$3_$4.log
 TCP_LOG=$LOG_DIR/$3_$4_tcptop.log
 BIO_LOG=$LOG_DIR/$3_$4_biotop.log
@@ -41,17 +42,17 @@ BIO_TOP_MONITOR=/usr/share/bcc/tools/biotop
 # PCPU=$HOME/dev/pvn/utils/netbricks_expr/misc/pcpu.sh
 # PMEM=$HOME/dev/pvn/utils/netbricks_expr/misc/pmem.sh
 
-NB_CONFIG=$HOME/dev/netbricks/experiments/udf_1core.toml
+NB_CONFIG=$HOME/dev/netbricks/experiments/udf_1core_contention.toml
 TMP_NB_CONFIG=$HOME/config.toml
 
-SERVER=$HOME/data/cargo-target/release/synthetic_srv
+# SERVER=$HOME/data/cargo-target/release/synthetic_srv
 
 # 1800 seconds = 30 min
-# sed "/duration = 1800/i log_path = '${LOG}'" "${NB_CONFIG}" >"${TMP_NB_CONFIG}"
-sed "/duration = 3800/i log_path = '${LOG}'" "${NB_CONFIG}" >"${TMP_NB_CONFIG}"
+sed "/duration = 180/i log_path = '${LOG}'" "${NB_CONFIG}" >"${TMP_NB_CONFIG}"
+# sed "/duration = 3800/i log_path = '${LOG}'" "${NB_CONFIG}" >"${TMP_NB_CONFIG}"
 
 INST_LEVEL=off
-EXPR_MODE=long
+EXPR_MODE=long # bogus config?
 
 mkdir -p "$LOG_DIR"
 
@@ -70,56 +71,26 @@ JSON_STRING=$(jq -n \
 	echo "${JSON_STRING}" >/home/jethros/setup
 	#"sudo ./run_pvnf_coresident.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + str(expr)
 
+sudo /home/jethros/dev/pvn/utils/netbricks_expr/misc/nb_cleanup.sh
+sleep 3
+
 # https://www.baeldung.com/ops/docker-logs
 truncate -s 0 /var/lib/docker/containers/*/*-json.log
-
-# sudo /home/jethros/dev/pvn/utils/netbricks_expr/misc/nb_cleanup.sh
-# sleep 3
-
 
 # docker run -d --cpuset-cpus 0 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
 pids=""
 RESULT=0
 
-# TODO: Run P2P seeder and leechers....
 
-
-# /home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$7" "$FAKTORY_LOG" &
-# P1=$!
 "$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 pids="$pids $!"
 
+core_id=3
 
-cd ~/dev/pvn/utils/synthetic_srv/
-
+# match NF_id to run docker
+#
 # {"1": "xcdr", "2": "rand1", "3": "rand2", "4": "rand4", "5": "rand3", "6": "tlsv", "7": "p2p", "8": "rdr"}
-for core_id in {1..5}
-do
-	for profile_id in {1..5}
-	do
-		# run docker and collect logs
-		# https://www.baeldung.com/ops/docker-logs
-		docker run -d --cpuset-cpus $core_id --name synthetic_srv_${profile_id}_${core_id} \
-			--rm --network=host \
-			-v /home/jethros/dev/pvn/utils/data:/udf_data \
-			-v /data/tmp:/data \
-			-v /home/jethros:/config \
-			-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
-			-v /home/jethros/dev/pvn/workload/udf_workload/${BATCH}:/udf_workload \
-			synthetic:alphine "$profile_id" $4 "$core_id"
-		docker logs -f synthetic_srv_${profile_id}_${core_id} &> ${SYNTHETIC_LOG}__${profile_id}_${core_id}.log &
-		pids="$pids $!"
-		# $SERVER $core_id $profile_id > $LOG_DIR/$3_$4__${core_id}_${profile_id}.log &
-		# PID=$!
-		# pids="$pids $PID"
-		# https://www.baeldung.com/linux/process-periodic-cpu-usage
-		# sudo -u jethros taskset -c 0 top -b -d $DELAY_INTERVAL -p $PID | grep -w $PID  > $LOG_DIR/$3_$4__${core_id}_${profile_id}_top.log &
-		# pids="$pids $!"
-	done
-done
-
-for core_id in {1..5}
-do
+if ["$4"=="6"]; then
 	# "6": "tlsv"
 	cd ~/dev/pvn/tlsv-builder/
 	docker run -d --cpuset-cpus "$core_id" --name tlsv_6_${core_id} \
@@ -133,6 +104,8 @@ do
 	docker logs -f tlsv_6_${core_id} &> ${SYNTHETIC_LOG}__6_${core_id}.log &
 	pids="$pids $!"
 
+# FIXME: Run P2P seeder and leechers....
+elif ["$4"=="7"]; then
 	# "7": "p2p"
 	PORT1=$((9090+core_id))
 	PORT2=$((51412+core_id))
@@ -150,6 +123,7 @@ do
 	docker logs -f p2p_7_${core_id} &> ${SYNTHETIC_LOG}__7_${core_id}.log &
 	pids="$pids $!"
 
+elif ["$4"=="8"]; then
 	# "8": "rdr"
 	cd ~/dev/pvn/rdr-builder/
 	docker run -d --cpuset-cpus $core_id --name rdr_8_${core_id} \
@@ -162,7 +136,24 @@ do
 	docker logs -f rdr_8_${core_id} &> ${SYNTHETIC_LOG}__8_${core_id}.log &
 	pids="$pids $!"
 
-done
+else
+	# {"1": "xcdr", "2": "rand1", "3": "rand2", "4": "rand4", "5": "rand3", "6": "tlsv", "7": "p2p", "8": "rdr"}
+	cd ~/dev/pvn/utils/synthetic_srv/
+
+	# run docker and collect logs
+	# https://www.baeldung.com/ops/docker-logs
+	docker run -d --cpuset-cpus $core_id --name synthetic_srv_${profile_id}_${core_id} \
+		--rm --network=host \
+		-v /home/jethros/dev/pvn/utils/data:/udf_data \
+		-v /data/tmp:/data \
+		-v /home/jethros:/config \
+		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
+		-v /home/jethros/dev/pvn/workload/udf_workload/${BATCH}:/udf_workload \
+		synthetic:alphine "$profile_id" $4 "$core_id"
+	docker logs -f synthetic_srv_${profile_id}_${core_id} &> ${SYNTHETIC_LOG}__${profile_id}_${core_id}.log &
+	pids="$pids $!"
+
+fi
 
 docker ps
 
