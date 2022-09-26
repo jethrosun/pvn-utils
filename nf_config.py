@@ -58,12 +58,11 @@ for i in ['1', '2', '3']:
     setup.append([zero, i, zero])
     setup.append([zero, zero, i])
 
-# No need, we only want to look at contention in isolation
 # combination set
-# for i in ['1', '2', '3']:
-#     for j in ['1', '2', '3']:
-#         for k in ['1', '2', '3']:
-#             setup.append([i, j, k])
+for i in ['1', '2', '3']:
+    for j in ['1', '2', '3']:
+        for k in ['1', '2', '3']:
+            setup.append([i, j, k])
 
 udf_schedule = ['udf_schedule']
 udf_nf_list = ['1', '2', '3', '4', '5', '6', '7', '8']
