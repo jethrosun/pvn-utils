@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
+# cmd_str = "sudo ./run_udf_contend.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + cpu + " " + mem + " " + diskio
 
-# cmd_str = "sudo ./run_udf_contend.sh " + trace + " " + nf + " " + str(epoch) + " " + setup
 
 # BATCH=400019
 # BATCH=664673
