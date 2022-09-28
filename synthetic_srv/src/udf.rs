@@ -95,7 +95,7 @@ pub fn map_profile(file_path: String) -> serde_json::Result<HashMap<usize, Strin
     Ok(profile_map)
 }
 
-pub fn file_io(counter: &mut i32, f: &mut File, buf: Box<[u8]>) {
+pub fn file_io(counter: &mut i32, f: &mut File, buf: &mut Box<[u8]>) {
     // write sets * 50mb to file
     f.write_all(&buf).unwrap();
     f.flush().unwrap();
@@ -115,8 +115,8 @@ pub fn execute(
     cname: &String,
     large_vec: &Vec<u128>,
     // file: &mut File,
-    buf: Box<[u8]>,
-) -> io::Result<()> {
+    buf: &mut Box<[u8]>,
+) -> io::Result<i32> {
     let beginning = Instant::now();
 
     let _sleep_time = Duration::from_millis(50);
@@ -169,15 +169,15 @@ pub fn execute(
             //     break;
             // }
         }
-        println!(
-            "Metric: 1 exec w/ {} rounds since {:?}",
-            counter,
-            beginning.elapsed()
-        );
+        // println!(
+        //     "Metric: 1 exec w/ {} rounds since {:?}",
+        //     counter,
+        //     beginning.elapsed()
+        // );
 
         if beginning.elapsed() >= Duration::from_millis(990) {
             break;
         }
     }
-    Ok(())
+    Ok(counter)
 }

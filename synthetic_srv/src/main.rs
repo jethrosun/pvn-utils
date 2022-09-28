@@ -141,7 +141,7 @@ fn main() {
         // rand1-4
         else {
             let mut load = udf_load(&pname, count as f64).unwrap();
-            println!("count {:?}, {:?}", count, load);
+            println!("WorkloadChanged, count {:?}, {:?}", count, load);
 
             //RAM
             let mut large_vec = vec![42u128; (load.ram as u128).try_into().unwrap()];
@@ -153,7 +153,7 @@ fn main() {
                 buf.push(rand::random())
             }
             println!("buf size: {:?}", buf.capacity());
-            let buf = buf.into_boxed_slice();
+            let mut buf = buf.into_boxed_slice();
 
             // files
             // FIXME: file size grows???
@@ -170,11 +170,11 @@ fn main() {
                 let now = Instant::now();
 
                 // let _ = execute(load, &large_vec, &mut file, buf.clone());
-                let _ = execute(load, &cname, &large_vec, buf.clone());
+                let rounds = execute(load, &cname, &large_vec, &mut buf);
                 println!(
-                    "\tjob: {:?} ({:?}) with {:?} millis with core: {:?}",
+                    "\tMetric: {:?} rounds, count{:?} with {:?} millis with core: {:?}",
+                    rounds,
                     count,
-                    load,
                     now.elapsed().as_millis(),
                     core
                 );
