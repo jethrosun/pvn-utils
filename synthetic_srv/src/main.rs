@@ -84,7 +84,7 @@ fn main() {
         let mut pivot = times_iter.next().unwrap();
         pivot = times_iter.next().unwrap();
         println!(
-            "WorkloadChanged, count: {:?}, waiting for: {:?}",
+            "WorkloadChanged, count: {:?} waiting for: {:?}",
             count, pivot,
         );
 
@@ -131,7 +131,7 @@ fn main() {
                     };
                     num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
                     println!(
-                        "WorkloadChanged, count: {:?}, pivot waiting for: {:?}, num_of_jobs: {:?}",
+                        "WorkloadChanged, count: {:?} pivot waiting for: {:?}, num_of_jobs: {:?}",
                         count, pivot, num_of_jobs
                     );
                     continue;
@@ -141,7 +141,7 @@ fn main() {
         // rand1-4
         else {
             let mut load = udf_load(&pname, count as f64).unwrap();
-            println!("WorkloadChanged, count {:?}, {:?}", count, load);
+            println!("WorkloadChanged, count: {:?} load: {:?}", count, load);
 
             //RAM
             let mut large_vec = vec![42u128; (load.ram as u128).try_into().unwrap()];
@@ -195,7 +195,7 @@ fn main() {
                     };
                     load = udf_load(&pname, count as f64).unwrap();
                     println!(
-                        "WorkloadChanged, count: {:?}, pivot waiting for: {:?}, new load {:?}",
+                        "WorkloadChanged, count: {:?} pivot waiting for: {:?}, new load {:?}",
                         count, pivot, load
                     );
                     large_vec.resize(load.ram as usize, 42u128);
