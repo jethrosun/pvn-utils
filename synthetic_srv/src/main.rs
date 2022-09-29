@@ -93,10 +93,10 @@ fn main() {
             let mut num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
 
             println!("Timer started");
-            let now = Instant::now();
             let mut next_sec = 1_usize;
 
             loop {
+                let now = Instant::now();
                 let cur_time = now.elapsed().as_secs() as usize;
                 if cur_time <= next_sec {
                     continue;
@@ -135,6 +135,10 @@ fn main() {
                         count, pivot, num_of_jobs
                     );
                     continue;
+                } else {
+                    if now.elapsed() < Duration::from_millis(990) {
+                        thread::sleep(Duration::from_millis(990) - now.elapsed());
+                    }
                 }
             }
         }
@@ -178,9 +182,6 @@ fn main() {
                     now.elapsed().as_millis(),
                     core
                 );
-                if now.elapsed() < Duration::from_millis(990) {
-                    thread::sleep(Duration::from_millis(990) - now.elapsed());
-                }
 
                 // run until the next change
                 //
@@ -200,6 +201,10 @@ fn main() {
                     );
                     large_vec.resize(load.ram as usize, 42u128);
                     continue;
+                } else {
+                    if now.elapsed() < Duration::from_millis(990) {
+                        thread::sleep(Duration::from_millis(990) - now.elapsed());
+                    }
                 }
             }
         }
