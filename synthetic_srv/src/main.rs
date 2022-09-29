@@ -172,9 +172,9 @@ fn main() {
                 // let _ = execute(load, &large_vec, &mut file, buf.clone());
                 let rounds = execute(load, &cname, &large_vec, &mut buf);
                 println!(
-                    "\tMetric: {:?} rounds, count{:?} with {:?} millis with core: {:?}",
-                    rounds,
+                    "\tMetric: count {:?} rounds {:?} with {:?} millis with core: {:?}",
                     count,
+                    rounds,
                     now.elapsed().as_millis(),
                     core
                 );
