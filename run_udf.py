@@ -93,7 +93,7 @@ def run_pktgen(sess, trace, setup):
 
 
 def run_netbricks(sess, trace, nf, epoch, setup):
-    cmd_str = "sudo ./run_pvnf_udf.sh " + trace + " " + nf + " " + str(epoch) + " " + setup
+    cmd_str = "sudo ./run_udf_schedule.sh " + trace + " " + nf + " " + str(epoch) + " " + setup
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
