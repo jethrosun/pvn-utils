@@ -135,11 +135,7 @@ fn main() {
                         count, pivot, num_of_jobs
                     );
                     continue;
-                } else {
-                    if now.elapsed() < Duration::from_millis(990) {
-                        thread::sleep(Duration::from_millis(990) - now.elapsed());
-                    }
-                }
+                } 
             }
         }
         // rand1-4
