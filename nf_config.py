@@ -65,8 +65,12 @@ for i in ['1', '2', '3']:
             setup.append([i, j, k])
 
 udf_schedule = ['udf_schedule']
+udf_profile = ['udf_profile']
+
 # We always want to run p2p first
 # {"1": "xcdr", "2": "rand1", "3": "rand2", "4": "rand4", "5": "rand3", "6": "tlsv", "7": "p2p", "8": "rdr"}
+udf_node_list = ['1', '2', '3']
 udf_nf_list = ['7', '1', '2', '3', '4', '5', '6', '8']
 num_of_epoch = 3
-udf_expr_wait_time = 200
+udf_profile_time = 200
+udf_schedule_time = 3800

@@ -207,7 +207,7 @@ def main(expr_list):
 
                     run_netbricks(netbricks_sess, conf.trace[expr], nf, epoch, node, contention[0], contention[1], contention[2])
 
-                    time.sleep(conf.udf_expr_wait_time)
+                    time.sleep(conf.udf_profile_time)
 
                     # run clean up for p2p nf before experiment
                     p2p_cleanup("netbricks", netbricks_sess)
