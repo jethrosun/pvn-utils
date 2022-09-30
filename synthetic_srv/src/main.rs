@@ -97,7 +97,7 @@ fn main() {
 
             loop {
                 let now = Instant::now();
-                let cur_time = now.elapsed().as_secs() as usize;
+                let cur_time = beginning.elapsed().as_secs() as usize;
                 if cur_time <= next_sec {
                     continue;
                 }
@@ -135,7 +135,7 @@ fn main() {
                         count, pivot, num_of_jobs
                     );
                     continue;
-                } 
+                }
             }
         }
         // rand1-4
