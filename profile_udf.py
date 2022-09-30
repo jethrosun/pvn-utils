@@ -180,40 +180,45 @@ def main(expr_list):
                 for epoch in range(conf.num_of_epoch):
                     netbricks_sess = netbricks_sess_setup(conf.trace[expr], nf, epoch)
 
-                    leecher1_sess = p2p_sess_setup('bt2', conf.trace[expr], nf, epoch)
-                    leecher2_sess = p2p_sess_setup('bt3', conf.trace[expr], nf, epoch)
-                    leecher3_sess = p2p_sess_setup('bt4', conf.trace[expr], nf, epoch)
+                    if node == '7':
+                        leecher1_sess = p2p_sess_setup('bt2', conf.trace[expr], nf, epoch)
+                        leecher2_sess = p2p_sess_setup('bt3', conf.trace[expr], nf, epoch)
+                        leecher3_sess = p2p_sess_setup('bt4', conf.trace[expr], nf, epoch)
 
                     if epoch == 0:
                         p2p_setup("netbricks", netbricks_sess)
-                        p2p_setup("leecher", leecher1_sess)
-                        p2p_setup("leecher", leecher2_sess)
-                        p2p_setup("leecher", leecher3_sess)
+                        if node == '7':
+                            p2p_setup("leecher", leecher1_sess)
+                            p2p_setup("leecher", leecher2_sess)
+                            p2p_setup("leecher", leecher3_sess)
 
-                    # run clean up for p2p nf before experiment
-                    p2p_cleanup("netbricks", netbricks_sess)
-                    p2p_cleanup("leecher", leecher1_sess)
-                    p2p_cleanup("leecher", leecher2_sess)
-                    p2p_cleanup("leecher", leecher3_sess)
+                    if node == '7':
+                        # run clean up for p2p nf before experiment
+                        p2p_cleanup("netbricks", netbricks_sess)
+                        p2p_cleanup("leecher", leecher1_sess)
+                        p2p_cleanup("leecher", leecher2_sess)
+                        p2p_cleanup("leecher", leecher3_sess)
 
                     rdr_cleanup(netbricks_sess)
                     # xcdr_cleanup(netbricks_sess)
                     time.sleep(5)
 
                     # Actual RUN
-                    run_p2p_node('leecher', leecher1_sess, epoch)
-                    run_p2p_node('leecher', leecher2_sess, epoch)
-                    run_p2p_node('leecher', leecher3_sess, epoch)
+                    if node == '7':
+                        run_p2p_node('leecher', leecher1_sess, epoch)
+                        run_p2p_node('leecher', leecher2_sess, epoch)
+                        run_p2p_node('leecher', leecher3_sess, epoch)
 
                     run_netbricks(netbricks_sess, conf.trace[expr], nf, epoch, node, contention[0], contention[1], contention[2])
 
                     time.sleep(conf.udf_profile_time)
 
-                    # run clean up for p2p nf before experiment
-                    p2p_cleanup("netbricks", netbricks_sess)
-                    p2p_cleanup("leecher", leecher1_sess)
-                    p2p_cleanup("leecher", leecher2_sess)
-                    p2p_cleanup("leecher", leecher3_sess)
+                    if node == '7':
+                        # run clean up for p2p nf before experiment
+                        p2p_cleanup("netbricks", netbricks_sess)
+                        p2p_cleanup("leecher", leecher1_sess)
+                        p2p_cleanup("leecher", leecher2_sess)
+                        p2p_cleanup("leecher", leecher3_sess)
 
                     rdr_cleanup(netbricks_sess)
                     # xcdr_cleanup(netbricks_sess)
@@ -226,5 +231,5 @@ def main(expr_list):
             time.sleep(5)
 
 
-main(conf.udf_schedule)  # rdr, xcdr
+main(conf.udf_schedule)
 print("All experiment finished {}".format(conf.udf_schedule))
