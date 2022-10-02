@@ -77,5 +77,6 @@ udf_schedule_time = 3800
 # num_of_epoch = 3
 
 # profile
-udf_nf_list = ['1', '6', '8']
+# udf_nf_list = ['1', '6', '8']
+udf_nf_list = ['7']
 num_of_epoch = 3
