@@ -209,6 +209,13 @@ def main(expr_list):
                     p2p_cleanup("leecher", leecher2_sess)
                     p2p_cleanup("leecher", leecher3_sess)
 
+                    time.sleep(15)
+
+                    sess_destroy(leecher1_sess)
+                    sess_destroy(leecher2_sess)
+                    sess_destroy(leecher3_sess)
+
+
                     rdr_cleanup(netbricks_sess)
                     # xcdr_cleanup(netbricks_sess)
                     time.sleep(5)
