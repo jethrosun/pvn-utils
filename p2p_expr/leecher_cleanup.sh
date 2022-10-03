@@ -1,7 +1,7 @@
 #!/bin/bash
-# https://www.reddit.com/r/freenas/comments/41gj0q/remove_completed_torrents_from_transmission/
 # set -x
 
+# https://www.reddit.com/r/freenas/comments/41gj0q/remove_completed_torrents_from_transmission/
 # torrentlist=`transmission-remote --list | sed -e '1d;$d;s/^ *//' | cut -f1 -d' '`
 # for torrentid in $torrentlist
 # do
@@ -19,6 +19,12 @@
 # 	echo "removing torrent from list"
 # 	transmission-remote --torrent $torrentid --remove
 # done
+
+for a in $(docker ps -a -q)
+do
+  echo "Stopping container - $a"
+  docker stop "$a"
+done
 
 
 sudo rm -rf /home/jethros/data/downloads
