@@ -238,4 +238,4 @@ def main(expr_list):
 
 
 main(conf.udf_schedule)
-print("All experiment finished {}".format(conf.udf_schedule))
+print("Profile finished {}".format(conf.udf_nf_list))
