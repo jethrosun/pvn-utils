@@ -31,3 +31,9 @@ sudo rm -rf /home/jethros/data/downloads
 sudo mkdir -p /home/jethros/data/downloads
 sudo chown -R debian-transmission:debian-transmission /home/jethros/data/downloads
 sudo chmod -R 775 /home/jethros/data/downloads
+
+sudo rm -rf /home/jethros/data/Downloads
+sudo mkdir -p /home/jethros/data/Downloads
+sudo chown -R debian-transmission:debian-transmission /home/jethros/data/Downloads
+sudo chmod -R 775 /home/jethros/data/Downloads
+
