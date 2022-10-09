@@ -53,16 +53,16 @@ setup = []
 zero = '0'
 # in isolation
 setup.append([zero, zero, zero])
-for i in ['1', '2', '3']:
-    setup.append([i, zero, zero])
-    setup.append([zero, i, zero])
-    setup.append([zero, zero, i])
+# for i in ['1', '2', '3']:
+#     setup.append([i, zero, zero])
+#     setup.append([zero, i, zero])
+#     setup.append([zero, zero, i])
 
 # combination set
-for i in ['1', '2', '3']:
-    for j in ['1', '2', '3']:
-        for k in ['1', '2', '3']:
-            setup.append([i, j, k])
+# for i in ['1', '2', '3']:
+#     for j in ['1', '2', '3']:
+#         for k in ['1', '2', '3']:
+#             setup.append([i, j, k])
 
 udf_schedule = ['udf_schedule']
 
@@ -77,5 +77,6 @@ udf_schedule_time = 3800
 
 # profile
 # udf_nf_list = ['1', '6', '8']
-udf_nf_list = ['7']
+udf_nf_list = ['7', '1', '2', '3', '4', '5', '6', '8']
+# udf_nf_list = ['7']
 num_of_epoch = 3

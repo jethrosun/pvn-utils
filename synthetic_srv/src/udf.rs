@@ -1,7 +1,6 @@
 use rand::Rng;
 use std::collections::HashMap;
-use std::fs::File;
-use std::fs::OpenOptions;
+use std::fs::{OpenOptions, File};
 use std::io::Write;
 use std::time::{Duration, Instant};
 use std::vec::Vec;
@@ -25,6 +24,7 @@ pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
     let io_load = 100.0; // 1 P2P user from logs
 
     let load = match profile_name {
+        // job: 6 (Load { cpu: 29, ram: 3252000, io: 25 })
         "rand1" => Load {
             cpu: ((0.0475 * cpu_load * count) as f64).ceil() as u64,
             ram: ((0.0271 * GB_SIZE * ram_load * count) as f64).ceil() as u64,
