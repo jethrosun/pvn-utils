@@ -30,5 +30,5 @@ done
 # sudo chmod -R 775 /data/downloads
 
 
-cd /home/jethros/dev/pvn/p2p_builder
+cd /home/jethros/dev/pvn/p2p-builder
 sudo -u jethros make net

@@ -16,5 +16,5 @@ mkdir -p ~/torrents
 # scp torrents
 scp -r jethros@10.200.111.125:~/torrents/* ~/torrents
 
-cd ~/dev/pvn/p2p_builder 
+cd ~/dev/pvn/p2p-builder 
 make net
