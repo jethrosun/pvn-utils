@@ -79,4 +79,4 @@ udf_schedule_time = 3800
 # udf_nf_list = ['1', '6', '8']
 udf_nf_list = ['7', '1', '2', '3', '4', '5', '6', '8']
 # udf_nf_list = ['7']
-num_of_epoch = 5
+num_of_epoch = 3
