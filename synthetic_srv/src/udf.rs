@@ -6,7 +6,7 @@ use std::time::{Duration, Instant};
 use std::vec::Vec;
 use std::{io, thread};
 
-const GB_SIZE: f64 = 1_000_000_000.0;
+const MB_SIZE: f64 = 1_000_000.0;
 
 #[derive(Copy, Clone, Debug)]
 pub struct Load {
@@ -19,30 +19,33 @@ pub struct Load {
 /// which is the largest size we can use setup: 10GB, 20GB, 50GB. 50GB is definitely causing too
 /// much paging.
 pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
-    let cpu_load = 100.0; // 50%
-    let ram_load = 0.02; // 1GB
-    let io_load = 100.0; // 1 P2P user from logs
+    // cpu_cap = 500
+    // mem_cap = 54 * 1000 # 54GB to MB
+    // io_cap = 155 * 1000 # 155MB/s to KB
+    let cpu_load = 5.0; // 50%
+    let ram_load = 50; // 1GB
+    let io_load = 5.0; // MB: 1 P2P user from logs
 
     let load = match profile_name {
         // job: 6 (Load { cpu: 29, ram: 3252000, io: 25 })
         "rand1" => Load {
             cpu: ((0.0475 * cpu_load * count) as f64).ceil() as u64,
-            ram: ((0.0271 * GB_SIZE * ram_load * count) as f64).ceil() as u64,
+            ram: ((0.0271 * MB_SIZE * ram_load * count) as f64).ceil() as u64,
             io: ((0.0413 * io_load * count) as f64).ceil() as u64,
         },
         "rand2" => Load {
             cpu: ((0.3449 * cpu_load * count) as f64).ceil() as u64,
-            ram: ((0.639 * GB_SIZE * ram_load * count) as f64).ceil() as u64,
+            ram: ((0.639 * MB_SIZE * ram_load * count) as f64).ceil() as u64,
             io: ((0.5554 * io_load * count) as f64).ceil() as u64,
         },
         "rand3" => Load {
             cpu: ((0.1555 * cpu_load * count) as f64).ceil() as u64,
-            ram: ((0.6971 * GB_SIZE * ram_load * count) as f64).ceil() as u64,
+            ram: ((0.6971 * MB_SIZE * ram_load * count) as f64).ceil() as u64,
             io: ((0.833 * io_load * count) as f64).ceil() as u64,
         },
         "rand4" => Load {
             cpu: ((0.9647 * cpu_load * count) as f64).ceil() as u64,
-            ram: ((0.6844 * GB_SIZE * ram_load * count) as f64).ceil() as u64,
+            ram: ((0.6844 * MB_SIZE * ram_load * count) as f64).ceil() as u64,
             io: ((0.0955 * io_load * count) as f64).ceil() as u64,
         },
         _ => {
