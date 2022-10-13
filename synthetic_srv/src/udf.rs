@@ -23,7 +23,7 @@ pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
     // mem_cap = 54 * 1000 # 54GB to MB
     // io_cap = 155 * 1000 # 155MB/s to KB
     let cpu_load = 5.0; // 50%
-    let ram_load = 50; // 1GB
+    let ram_load = 50.0; // MB
     let io_load = 5.0; // MB: 1 P2P user from logs
 
     let load = match profile_name {
