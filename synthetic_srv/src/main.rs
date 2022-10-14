@@ -92,6 +92,14 @@ fn main() {
             let mut job_count = 0;
             let mut num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
 
+            // let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
+            // let infile = "/Users/jethros/dev/pvn/utils/data/tiny.y4m";
+            let infile = "/udf_data/tiny.y4m";
+
+            let width_height = "360x24";
+
+            let mut infh: Box<dyn io::Read> = Box::new(File::open(infile).unwrap());
+
             println!("Timer started");
             let mut next_sec = 1_usize;
 
@@ -106,7 +114,7 @@ fn main() {
                 // https://github.com/jethrosun/NetBricks/blob/expr/framework/src/pvn/xcdr.rs#L110
                 // NOTE: 25 jobs roughly takes 1 second
                 for _ in 0..num_of_jobs {
-                    let _ = transcode();
+                    let _ = transcode(infh);
                 }
                 job_count += num_of_jobs;
                 // TODO: better way to track this

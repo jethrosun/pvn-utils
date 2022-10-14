@@ -4,17 +4,12 @@ use std::fs::File;
 use std::vec::Vec;
 use std::{io, vec};
 
+
 /// Actual video transcoding.
 ///
 /// We set up all the parameters for the transcoding job to happen.
-pub fn transcode() {
-    // let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
-    // let infile = "/Users/jethros/dev/pvn/utils/data/tiny.y4m";
-    let infile = "/udf_data/tiny.y4m";
-
-    let width_height = "360x24";
-
-    let mut infh: Box<dyn io::Read> = Box::new(File::open(infile).unwrap());
+fn transcode(mut infh: Box<dyn io::Read>, width_height: String) {
+    // let mut infh: Box<dyn io::Read> = Box::new(File::open(&infile).unwrap());
     let mut out = Vec::new();
     let dst_dims: Vec<_> = width_height
         .split("x")
@@ -47,3 +42,5 @@ pub fn transcode() {
         }
     }
 }
+
+
