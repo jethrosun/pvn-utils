@@ -7,6 +7,7 @@ use std::vec::Vec;
 use std::{io, thread};
 
 const MB_SIZE: f64 = 1_000_000.0;
+const RAND_GEN_SIZE: f64 = 1_000_000.0;
 
 #[derive(Copy, Clone, Debug)]
 pub struct Load {
@@ -29,22 +30,22 @@ pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
     let load = match profile_name {
         // job: 6 (Load { cpu: 29, ram: 3252000, io: 25 })
         "rand1" => Load {
-            cpu: ((0.0475 * cpu_load * count) as f64).ceil() as u64,
+            cpu: ((0.0475 * RAND_GEN_SIZE * cpu_load * count) as f64).ceil() as u64,
             ram: ((0.0271 * MB_SIZE * ram_load * count) as f64).ceil() as u64,
             io: ((0.0413 * io_load * count) as f64).ceil() as u64,
         },
         "rand2" => Load {
-            cpu: ((0.3449 * cpu_load * count) as f64).ceil() as u64,
+            cpu: ((0.3449 * RAND_GEN_SIZE* cpu_load * count) as f64).ceil() as u64,
             ram: ((0.639 * MB_SIZE * ram_load * count) as f64).ceil() as u64,
             io: ((0.5554 * io_load * count) as f64).ceil() as u64,
         },
         "rand3" => Load {
-            cpu: ((0.1555 * cpu_load * count) as f64).ceil() as u64,
+            cpu: ((0.1555 * RAND_GEN_SIZE * cpu_load * count) as f64).ceil() as u64,
             ram: ((0.6971 * MB_SIZE * ram_load * count) as f64).ceil() as u64,
             io: ((0.833 * io_load * count) as f64).ceil() as u64,
         },
         "rand4" => Load {
-            cpu: ((0.9647 * cpu_load * count) as f64).ceil() as u64,
+            cpu: ((0.9647 * RAND_GEN_SIZE * cpu_load * count) as f64).ceil() as u64,
             ram: ((0.6844 * MB_SIZE * ram_load * count) as f64).ceil() as u64,
             io: ((0.0955 * io_load * count) as f64).ceil() as u64,
         },
