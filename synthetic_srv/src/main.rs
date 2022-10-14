@@ -8,6 +8,8 @@ use crate::transcode::*;
 use crate::udf::*;
 use core_affinity::CoreId;
 use std::convert::TryInto;
+use std::fs::File;
+use std::io;
 use std::time::{Duration, Instant};
 use std::vec;
 use std::{env, process, thread};
@@ -95,9 +97,7 @@ fn main() {
             // let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
             // let infile = "/Users/jethros/dev/pvn/utils/data/tiny.y4m";
             let infile = "/udf_data/tiny.y4m";
-
             let width_height = "360x24";
-
             let mut infh: Box<dyn io::Read> = Box::new(File::open(infile).unwrap());
 
             println!("Timer started");
@@ -114,7 +114,7 @@ fn main() {
                 // https://github.com/jethrosun/NetBricks/blob/expr/framework/src/pvn/xcdr.rs#L110
                 // NOTE: 25 jobs roughly takes 1 second
                 for _ in 0..num_of_jobs {
-                    let _ = transcode(infh);
+                    let _ = transcode(&mut infh, width_height);
                 }
                 job_count += num_of_jobs;
                 // TODO: better way to track this

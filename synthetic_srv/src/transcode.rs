@@ -4,11 +4,10 @@ use std::fs::File;
 use std::vec::Vec;
 use std::{io, vec};
 
-
 /// Actual video transcoding.
 ///
 /// We set up all the parameters for the transcoding job to happen.
-fn transcode(mut infh: Box<dyn io::Read>, width_height: String) {
+pub fn transcode(infh: &mut Box<dyn io::Read>, width_height: &str) {
     // let mut infh: Box<dyn io::Read> = Box::new(File::open(&infile).unwrap());
     let mut out = Vec::new();
     let dst_dims: Vec<_> = width_height
@@ -16,7 +15,7 @@ fn transcode(mut infh: Box<dyn io::Read>, width_height: String) {
         .map(|s| s.parse().unwrap())
         .collect();
 
-    let mut decoder = y4m::decode(&mut infh).unwrap();
+    let mut decoder = y4m::decode(infh).unwrap();
 
     if decoder.get_bit_depth() != 8 {
         panic!(
@@ -42,5 +41,3 @@ fn transcode(mut infh: Box<dyn io::Read>, width_height: String) {
         }
     }
 }
-
-
