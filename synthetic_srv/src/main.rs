@@ -9,7 +9,7 @@ use crate::udf::*;
 use core_affinity::CoreId;
 use std::convert::TryInto;
 use std::fs::File;
-use std::io;
+use std::io::Read;
 use std::time::{Duration, Instant};
 use std::vec;
 use std::{env, process, thread};
@@ -39,8 +39,8 @@ fn main() {
     let core = CoreId { id: core_id };
 
     // get udf profiles
-    // let profile_map_path = "/home/jethros/dev/pvn/workload/results/profile_map.json";
-    let profile_map_path = "/udf_config/profile_map.json";
+    let profile_map_path = "/home/jethros/dev/pvn/workload/udf_config/profile_map.json";
+    // let profile_map_path = "/udf_config/profile_map.json";
 
     let profile_map = map_profile(profile_map_path.to_string()).unwrap();
     let profile_name = profile_map.get(&profile_id).unwrap().clone();
@@ -50,20 +50,20 @@ fn main() {
     );
 
     // get workload based on node_id/core_id/profile_id
-    // let workload_path = "/home/jethros/dev/pvn/workload/results/udf_profile".to_owned()
-    //     + &profile_id.to_string()
-    //     + "_node"
-    //     + &node_id.to_string()
-    //     + "_core"
-    //     + &core_id.to_string()
-    //     + ".json";
-    let workload_path = "/udf_workload/udf_profile".to_owned()
+    let workload_path = "/home/jethros/dev/pvn/workload/udf_workload/664673/udf_profile".to_owned()
         + &profile_id.to_string()
         + "_node"
         + &node_id.to_string()
         + "_core"
         + &core_id.to_string()
         + ".json";
+    // let workload_path = "/udf_workload/udf_profile".to_owned()
+    //     + &profile_id.to_string()
+    //     + "_node"
+    //     + &node_id.to_string()
+    //     + "_core"
+    //     + &core_id.to_string()
+    //     + ".json";
 
     let (times, workload) = retrieve_workload(workload_path.to_string(), expr_time).unwrap();
     println!("retrieved workload: {}", workload_path);
@@ -94,11 +94,17 @@ fn main() {
             let mut job_count = 0;
             let mut num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
 
-            // let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
+            let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
             // let infile = "/Users/jethros/dev/pvn/utils/data/tiny.y4m";
-            let infile = "/udf_data/tiny.y4m";
+            // let infile = "/udf_data/tiny.y4m";
+
+            // let mut infh: Box<dyn io::Read> = Box::new(File::open(infile).unwrap());
+
+            let mut file = File::open(infile).unwrap();
+            let mut buffer = Vec::new();
+            file.read_to_end(&mut buffer).unwrap();
+
             let width_height = "360x24";
-            let mut infh: Box<dyn io::Read> = Box::new(File::open(infile).unwrap());
 
             println!("Timer started");
             let mut next_sec = 1_usize;
@@ -114,7 +120,7 @@ fn main() {
                 // https://github.com/jethrosun/NetBricks/blob/expr/framework/src/pvn/xcdr.rs#L110
                 // NOTE: 25 jobs roughly takes 1 second
                 for _ in 0..num_of_jobs {
-                    let _ = transcode(&mut infh, width_height);
+                    let _ = transcode(buffer.as_slice(), width_height);
                 }
                 job_count += num_of_jobs;
                 // TODO: better way to track this

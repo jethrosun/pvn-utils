@@ -7,7 +7,8 @@ use std::{io, vec};
 /// Actual video transcoding.
 ///
 /// We set up all the parameters for the transcoding job to happen.
-pub fn transcode(infh: &mut Box<dyn io::Read>, width_height: &str) {
+// pub fn transcode(infh: &mut Box<dyn io::Read>, width_height: &str) {
+pub fn transcode(infh: &[u8], width_height: &str) {
     // let mut infh: Box<dyn io::Read> = Box::new(File::open(&infile).unwrap());
     let mut out = Vec::new();
     let dst_dims: Vec<_> = width_height
