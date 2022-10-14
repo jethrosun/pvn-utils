@@ -22,7 +22,7 @@ pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
     // cpu_cap = 500
     // mem_cap = 54 * 1000 # 54GB to MB
     // io_cap = 155 * 1000 # 155MB/s to KB
-    let cpu_load = 100.0; // 50%
+    let cpu_load = 10.0; // 50%
     let ram_load = 100.0; // MB
     let io_load = 20.0; // MB: 1 P2P user from logs
 
@@ -157,7 +157,7 @@ pub fn execute(
     // CPU work
     // just run the random number generator based on the load number
     for _ in 0..load.cpu {
-        let _: usize = rng.gen_range(0..100);
+        let _: usize = rng.gen_range(0..10);
     }
 
     // RAM
