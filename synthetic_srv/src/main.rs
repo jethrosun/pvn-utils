@@ -131,7 +131,9 @@ fn main() {
                     elapsed.as_millis(),
                     core
                 );
-                thread::sleep(Duration::from_millis(990) - elapsed);
+                if Duration::from_millis(990) - elapsed {
+                    thread::sleep(Duration::from_millis(990) - elapsed);
+                }
                 next_sec = cur_time + 1;
 
                 // run until the next change
@@ -214,8 +216,9 @@ fn main() {
                     large_vec.resize(load.ram as usize, 42u128);
                     continue;
                 } else {
-                    if now.elapsed() < Duration::from_millis(990) {
-                        thread::sleep(Duration::from_millis(990) - now.elapsed());
+                    let elapsed = now.elapsed();
+                    if elapsed < Duration::from_millis(990) {
+                        thread::sleep(Duration::from_millis(990) - elapsed);
                     }
                 }
             }

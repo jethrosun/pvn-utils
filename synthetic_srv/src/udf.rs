@@ -7,7 +7,7 @@ use std::vec::Vec;
 use std::{io, thread};
 
 const MB_SIZE: f64 = 1_000_000.0;
-const RAND_GEN_SIZE: f64 = 1_000_000.0;
+const RAND_GEN_SIZE: f64 = 20_000_000.0;
 
 #[derive(Copy, Clone, Debug)]
 pub struct Load {
@@ -23,7 +23,7 @@ pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
     // cpu_cap = 500
     // mem_cap = 54 * 1000 # 54GB to MB
     // io_cap = 155 * 1000 # 155MB/s to KB
-    let cpu_load = 100.0; // 50%
+    let cpu_load = RAND_GEN_SIZE; // # of generated random 0..100 numbers
     let ram_load = 100.0; // MB
     let io_load = 20.0; // MB: 1 P2P user from logs
 
