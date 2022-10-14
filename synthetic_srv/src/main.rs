@@ -131,7 +131,7 @@ fn main() {
                     elapsed.as_millis(),
                     core
                 );
-                if Duration::from_millis(990) - elapsed {
+                if Duration::from_millis(990) > elapsed {
                     thread::sleep(Duration::from_millis(990) - elapsed);
                 }
                 next_sec = cur_time + 1;

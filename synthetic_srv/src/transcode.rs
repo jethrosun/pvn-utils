@@ -1,8 +1,7 @@
 use resize::Pixel::Gray8;
 use resize::Type::Triangle;
-use std::fs::File;
+use std::vec;
 use std::vec::Vec;
-use std::{io, vec};
 
 /// Actual video transcoding.
 ///
