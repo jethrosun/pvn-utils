@@ -110,12 +110,14 @@ fn main() {
                 }
                 job_count += num_of_jobs;
                 // TODO: better way to track this
+                elapsed = now.elapsed();
                 println!(
                     "Metric: {:?} jobs transcoded in {:?} millis with core: {:?}",
                     num_of_jobs,
-                    now.elapsed().as_millis(),
+                    elapsed.as_millis,
                     core
                 );
+                thread::sleep(Duration::from_millis(990) - elapsed);
                 next_sec = cur_time + 1;
 
                 // run until the next change
