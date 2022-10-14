@@ -22,9 +22,9 @@ pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
     // cpu_cap = 500
     // mem_cap = 54 * 1000 # 54GB to MB
     // io_cap = 155 * 1000 # 155MB/s to KB
-    let cpu_load = 5.0; // 50%
-    let ram_load = 50.0; // MB
-    let io_load = 5.0; // MB: 1 P2P user from logs
+    let cpu_load = 100.0; // 50%
+    let ram_load = 100.0; // MB
+    let io_load = 20.0; // MB: 1 P2P user from logs
 
     let load = match profile_name {
         // job: 6 (Load { cpu: 29, ram: 3252000, io: 25 })
@@ -122,9 +122,9 @@ pub fn execute(
 ) -> io::Result<i32> {
     let beginning = Instant::now();
 
-    let _sleep_time = Duration::from_millis(50);
+    // let _sleep_time = Duration::from_millis(50);
     // counting the iterations
-    let mut counter = 0;
+    // let mut counter = 0;
 
     // CPU
     let mut rng = rand::thread_rng();
@@ -137,50 +137,37 @@ pub fn execute(
         .open(file_name)
         .unwrap();
 
+    // RAM
+    for i in 0..load.ram as usize / 256 {
+        let _ = large_vec[i * 256];
+        // println!("current value: {:?}", t);
+    }
+
     // I/O
     let _ = file_io(&mut counter, &mut file, buf);
 
-    // make sure we run for exactly one second
-    loop {
-        let cpu_run_time = Duration::from_millis(load.cpu);
-        let mut cpu_time = Duration::from_millis(0);
-
-        // sleep a little
-        thread::sleep(_sleep_time);
-
-        loop {
-            // CPU work
-            // we generate 100 randon numbers
-            if cpu_time < cpu_run_time {
-                let mut _now = Instant::now();
-                let _ = rng.gen_range(0..100);
-                cpu_time += _now.elapsed();
-            }
-
-            // RAM
-            for i in 0..load.ram as usize / 256 {
-                let _ = large_vec[i * 256];
-                // println!("current value: {:?}", t);
-            }
-            counter += 1;
-
-            if beginning.elapsed() >= Duration::from_millis(990) {
-                break;
-            }
-            // if _now.elapsed() >= _sleep_time + _run_time {
-            //     _now = Instant::now();
-            //     break;
-            // }
-        }
-        // println!(
-        //     "Metric: 1 exec w/ {} rounds since {:?}",
-        //     counter,
-        //     beginning.elapsed()
-        // );
-
-        if beginning.elapsed() >= Duration::from_millis(990) {
-            break;
-        }
+    // RAM
+    for i in 0..load.ram as usize / 256 {
+        let _ = large_vec[i * 256];
+        // println!("current value: {:?}", t);
     }
-    Ok(counter)
+
+    // CPU work
+    // just run the random number generator based on the load number
+    for _ in 0..load.cpu {
+        let _ = rng.gen_range(0..100);
+    }
+
+    // RAM
+    for i in 0..load.ram as usize / 256 {
+        let _ = large_vec[i * 256];
+        // println!("current value: {:?}", t);
+    }
+
+    // sleep a little
+    let elapsed_time = beginning.elapsed();
+    let _sleep_time = Duration::from_millis(990) - elapsed_time;
+    thread::sleep(_sleep_time);
+
+    Ok(elapsed_time)
 }
