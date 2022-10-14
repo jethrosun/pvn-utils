@@ -1,6 +1,6 @@
 use rand::Rng;
 use std::collections::HashMap;
-use std::fs::{OpenOptions, File};
+use std::fs::{File, OpenOptions};
 use std::io::Write;
 use std::time::{Duration, Instant};
 use std::vec::Vec;
@@ -98,7 +98,8 @@ pub fn map_profile(file_path: String) -> serde_json::Result<HashMap<usize, Strin
     Ok(profile_map)
 }
 
-pub fn file_io(counter: &mut i32, f: &mut File, buf: &mut Box<[u8]>) {
+//pub fn file_io(counter: &mut i32, f: &mut File, buf: &mut Box<[u8]>) {
+pub fn file_io(f: &mut File, buf: &mut Box<[u8]>) {
     // write sets * 50mb to file
     f.write_all(&buf).unwrap();
     f.flush().unwrap();
@@ -107,7 +108,7 @@ pub fn file_io(counter: &mut i32, f: &mut File, buf: &mut Box<[u8]>) {
     // f.seek(SeekFrom::Start(0)).unwrap();
     // // read sets * 50mb mb from file
     // f.read_exact(&mut buf).unwrap();
-    *counter += 1;
+    // *counter += 1;
 }
 
 /// Execute the work we need in exactly one second
@@ -119,7 +120,7 @@ pub fn execute(
     large_vec: &Vec<u128>,
     // file: &mut File,
     buf: &mut Box<[u8]>,
-) -> io::Result<i32> {
+) -> io::Result<Duration> {
     let beginning = Instant::now();
 
     // let _sleep_time = Duration::from_millis(50);
@@ -144,7 +145,8 @@ pub fn execute(
     }
 
     // I/O
-    let _ = file_io(&mut counter, &mut file, buf);
+    // let _ = file_io(&mut counter, &mut file, buf);
+    let _ = file_io(&mut file, buf);
 
     // RAM
     for i in 0..load.ram as usize / 256 {
@@ -155,7 +157,7 @@ pub fn execute(
     // CPU work
     // just run the random number generator based on the load number
     for _ in 0..load.cpu {
-        let _ = rng.gen_range(0..100);
+        let _: usize = rng.gen_range(0..100);
     }
 
     // RAM

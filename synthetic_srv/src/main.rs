@@ -170,11 +170,11 @@ fn main() {
                 let now = Instant::now();
 
                 // let _ = execute(load, &large_vec, &mut file, buf.clone());
-                let rounds = execute(load, &cname, &large_vec, &mut buf).unwrap();
+                let elapsed = execute(load, &cname, &large_vec, &mut buf).unwrap();
                 println!(
-                    "\tMetric: count {:?} rounds {:?} with {:?} millis with core: {:?}",
+                    "\tMetric: count {:?} runtime {:?} with {:?} millis with core: {:?}",
                     count,
-                    rounds,
+                    elapsed,
                     now.elapsed().as_millis(),
                     core
                 );
