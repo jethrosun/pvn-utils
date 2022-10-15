@@ -119,7 +119,6 @@ pub fn execute(
     load: Load,
     cname: &String,
     large_vec: &Vec<u128>,
-    // file: &mut File,
     buf: &mut Box<[u8]>,
 ) -> io::Result<Duration> {
     let beginning = Instant::now();
@@ -169,8 +168,9 @@ pub fn execute(
 
     // sleep a little
     let elapsed_time = beginning.elapsed();
-    let _sleep_time = Duration::from_millis(990) - elapsed_time;
-    thread::sleep(_sleep_time);
+    if Duration::from_millis(990) > elapsed_time {
+        thread::sleep(Duration::from_millis(990)- elapsed_time);
+    }
 
     Ok(elapsed_time)
 }

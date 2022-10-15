@@ -97,14 +97,11 @@ fn main() {
             // let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
             // let infile = "/Users/jethros/dev/pvn/utils/data/tiny.y4m";
             let infile = "/udf_data/tiny.y4m";
-
-            // let mut infh: Box<dyn io::Read> = Box::new(File::open(infile).unwrap());
+            let width_height = "360x24";
 
             let mut file = File::open(infile).unwrap();
             let mut buffer = Vec::new();
             file.read_to_end(&mut buffer).unwrap();
-
-            let width_height = "360x24";
 
             println!("Timer started");
             let mut next_sec = 1_usize;
@@ -173,21 +170,9 @@ fn main() {
             println!("buf size: {:?}", buf.capacity());
             let mut buf = buf.into_boxed_slice();
 
-            // files
-            // FIXME: file size grows???
-            // let file_name = "/data/foobar".to_owned() + &cname + ".bin";
-            // let mut file = OpenOptions::new()
-            //     .write(true)
-            //     .read(true)
-            //     .create(true)
-            //     .open(file_name)
-            //     .unwrap();
-
-            // let mut report_time = 300;
             loop {
                 let now = Instant::now();
 
-                // let _ = execute(load, &large_vec, &mut file, buf.clone());
                 let elapsed = execute(load, &cname, &large_vec, &mut buf).unwrap();
                 println!(
                     "\tMetric: count {:?} runtime {:?} with {:?} millis with core: {:?}",
