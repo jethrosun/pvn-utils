@@ -177,7 +177,7 @@ fn main() {
                 println!(
                     "\tMetric: count {:?} runtime {:?} with {:?} millis with core: {:?}",
                     count,
-                    elapsed,
+                    elapsed.as_millis(),
                     now.elapsed().as_millis(),
                     core
                 );
