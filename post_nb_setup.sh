@@ -4,6 +4,10 @@ set -x
 cd "$HOME/dev/pvn/utils" || exit
 git pull
 
+cd "$HOME/dev/pvn/workload" || exit
+git pull
+
+
 "$HOME/dev/pvn/utils/setup.sh"
 
 sudo "$HOME/dev/pvn/utils/cleanup.sh"
