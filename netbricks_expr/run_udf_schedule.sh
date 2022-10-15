@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 
-BATCH=400019
-# BATCH=664673
-# BATCH=1374946
+BATCH=664673:rand
+# BATCH=400019:rand
+# BATCH=1374946:rand
 
 # configs
 DELAY_INTERVAL=1
@@ -48,7 +48,7 @@ SERVER=$HOME/data/cargo-target/release/synthetic_srv
 
 # 1800 seconds = 30 min
 # sed "/duration = 1800/i log_path = '${LOG}'" "${NB_CONFIG}" >"${TMP_NB_CONFIG}"
-sed "/duration = 3800/i log_path = '${LOG}'" "${NB_CONFIG}" >"${TMP_NB_CONFIG}"
+sed "/duration = 3600/i log_path = '${LOG}'" "${NB_CONFIG}" >"${TMP_NB_CONFIG}"
 
 INST_LEVEL=off
 EXPR_MODE=long
