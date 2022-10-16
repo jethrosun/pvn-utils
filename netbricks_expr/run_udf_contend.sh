@@ -10,9 +10,8 @@ set -e
 BATCH=contention
 
 # configs
-DELAY_INTERVAL=1
-DELAY_INTERVAL=3
-SLEEP_INTERVAL=3
+# DELAY_INTERVAL=3
+SLEEP_INTERVAL=1
 
 # base log dir
 LOG_DIR=$HOME/netbricks_logs/$2/$1
@@ -81,6 +80,8 @@ JSON_STRING=$(jq -n \
 
 # for tlsv
 #   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio
+
+# clean previous contention process, if any
 for PID in $(pgrep contention); do sudo -u jethros kill $PID; done
 
 
@@ -90,7 +91,6 @@ sleep 3
 # https://www.baeldung.com/ops/docker-logs
 truncate -s 0 /var/lib/docker/containers/*/*-json.log
 
-# docker run -d --cpuset-cpus 0 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
 pids=""
 RESULT=0
 
@@ -180,7 +180,7 @@ elif [ "$4" == "8" ]; then
 	pids="$pids $!"
 
 else
-	echo $3, $4 # 0, 1
+	# echo $3, $4 # 0, 1
 	echo $4 $4 "$core_id" # null, 1, 3
 	# {"1": "xcdr", "2": "rand1", "3": "rand2", "4": "rand4", "5": "rand3", "6": "tlsv", "7": "p2p", "8": "rdr"}
 	cd ~/dev/pvn/utils/synthetic_srv/

@@ -1,13 +1,12 @@
 #!/bin/bash
 set -e
 
-BATCH=664673:rand
-# BATCH=400019:rand
-# BATCH=1374946:rand
+BATCH=664673/rand
+# BATCH=400019/rand
+# BATCH=1374946/rand
 
 # configs
-DELAY_INTERVAL=1
-DELAY_INTERVAL=3
+# DELAY_INTERVAL=1
 
 # base log dir
 LOG_DIR=$HOME/netbricks_logs/$2/$1
@@ -25,21 +24,9 @@ MPSTAT_LOG=$LOG_DIR/$3_$4_mpstat.log
 # then *core id* and *NF id*
 SYNTHETIC_LOG=$LOG_DIR/$3_$4_srv
 
-# CPULOG1=$LOG_DIR/$3_$4_cpu1.log
-# CPULOG2=$LOG_DIR/$3_$4_cpu2.log
-# CPULOG3=$LOG_DIR/$3_$4_cpu3.log
-# CPULOG4=$LOG_DIR/$3_$4_cpu4.log
-# MEMLOG1=$LOG_DIR/$3_$4_mem1.log
-# MEMLOG2=$LOG_DIR/$3_$4_mem2.log
-# MEMLOG3=$LOG_DIR/$3_$4_mem3.log
-# MEMLOG4=$LOG_DIR/$3_$4_mem4.log
-
 NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
 BIO_TOP_MONITOR=/usr/share/bcc/tools/biotop
-
-# PCPU=$HOME/dev/pvn/utils/netbricks_expr/misc/pcpu.sh
-# PMEM=$HOME/dev/pvn/utils/netbricks_expr/misc/pmem.sh
 
 NB_CONFIG=$HOME/dev/netbricks/experiments/udf_1core.toml
 TMP_NB_CONFIG=$HOME/config.toml
@@ -73,11 +60,9 @@ JSON_STRING=$(jq -n \
 # https://www.baeldung.com/ops/docker-logs
 truncate -s 0 /var/lib/docker/containers/*/*-json.log
 
-# sudo /home/jethros/dev/pvn/utils/netbricks_expr/misc/nb_cleanup.sh
-# sleep 3
+sudo /home/jethros/dev/pvn/utils/netbricks_expr/misc/nb_cleanup.sh
+sleep 3
 
-
-# docker run -d --cpuset-cpus 0 --name faktory_src --rm -it -p 127.0.0.1:7419:7419 -p 127.0.0.1:7420:7420 contribsys/faktory:latest
 pids=""
 RESULT=0
 
@@ -97,6 +82,7 @@ for core_id in {1..5}
 do
 	for profile_id in {1..5}
 	do
+		echo $3 $4 $profile_id "$core_id" # null, 1, 3
 		# run docker and collect logs
 		# https://www.baeldung.com/ops/docker-logs
 		docker run -d --cpuset-cpus $core_id --name synthetic_srv_${profile_id}_${core_id} \
@@ -193,11 +179,3 @@ fi
 
 # PID and waits:
 # https://stackoverflow.com/questions/356100/how-to-wait-in-bash-for-several-subprocesses-to-finish-and-return-exit-code-0
-
-
-# parameters?
-# $1: trace
-# $2: nf
-# $3: iter
-# $4: setup
-
