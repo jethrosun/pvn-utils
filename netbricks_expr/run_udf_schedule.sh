@@ -1,15 +1,9 @@
 #!/bin/bash
 set -e
 
-BATCH=664673/rand
-# BATCH=400019/rand
-# BATCH=1374946/rand
-
-# configs
-# DELAY_INTERVAL=1
-
-# base log dir
-LOG_DIR=$HOME/netbricks_logs/$2/$1
+# base log dir:
+# $1 = batch, $2 = schedule
+LOG_DIR=$HOME/netbricks_logs/$1/$2
 
 # log files
 # 3: number of runs
@@ -91,7 +85,7 @@ do
 			-v /data/tmp:/data \
 			-v /home/jethros:/config \
 			-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
-			-v /home/jethros/dev/pvn/workload/udf_workload/${BATCH}:/udf_workload \
+			-v /home/jethros/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
 			synthetic:alphine "$profile_id" $4 "$core_id"
 		docker logs -f synthetic_srv_${profile_id}_${core_id} &> ${SYNTHETIC_LOG}__${profile_id}_${core_id}.log &
 		pids="$pids $!"
@@ -114,7 +108,7 @@ do
 		-v /home/jethros/data/traces/pvn_tlsv/tmp:/traces \
 		-v /home/jethros:/config \
 		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
-		-v /home/jethros/dev/pvn/workload/udf_workload/${BATCH}:/udf_workload \
+		-v /home/jethros/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
 		tlsv:alphine 6 $4 "$core_id"
 	docker logs -f tlsv_6_${core_id} &> ${SYNTHETIC_LOG}__6_${core_id}.log &
 	pids="$pids $!"
@@ -130,7 +124,7 @@ do
 		-p $PORT2:51413/udp \
 		-v /data/downloads/core_${core_id}:/downloads \
 		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
-		-v /home/jethros/dev/pvn/workload/udf_workload/${BATCH}:/udf_workload \
+		-v /home/jethros/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
 		-v /home/jethros/torrents:/torrents \
 		p2p:transmission 7 $4 $core_id
 	docker logs -f p2p_7_${core_id} &> ${SYNTHETIC_LOG}__7_${core_id}.log &
@@ -143,7 +137,7 @@ do
 		-v /data/tmp:/data \
 		-v /home/jethros:/config \
 		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
-		-v /home/jethros/dev/pvn/workload/udf_workload/${BATCH}:/udf_workload \
+		-v /home/jethros/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
 		rdr:alphine 8 $4 $core_id
 	docker logs -f rdr_8_${core_id} &> ${SYNTHETIC_LOG}__8_${core_id}.log &
 	pids="$pids $!"
