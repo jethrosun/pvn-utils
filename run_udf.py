@@ -92,8 +92,9 @@ def run_pktgen(sess, trace, setup):
     print("Pktgen\nRUN pktgen")
 
 
-def run_netbricks(sess, trace, nf, epoch, setup):
-    cmd_str = "sudo ./run_udf_schedule.sh " + trace + " " + nf + " " + str(epoch) + " " + setup
+# def run_netbricks(sess, trace, nf, epoch, setup):
+def run_netbricks(sess, batch , schedule, epoch, setup):
+    cmd_str = "sudo ./run_udf_schedule.sh " + batch + " " + schedule + " " + str(epoch) + " " + setup
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
@@ -159,11 +160,13 @@ def rdr_cleanup(sess):
     sess.send_commands(cmd_str)
 
 
-def main(expr_list):
-    for expr in expr_list:
+def main(batch_list, schedule_list):
+    expr = 'udf_schedule' # we only use one expr anyway
+    nf = conf.pvn_nf[expr][0]
+    for batch in batch_list:
         print("Running experiments that for {} application NF".format(expr))
         # app_rdr_g, app_rdr_t; app_p2p_g, app_p2p_t
-        for nf in conf.pvn_nf[expr]:
+        for schedule in schedule_list:
             sending_rate = 50
             pktgen_sess = pktgen_sess_setup(conf.trace[expr], nf, sending_rate)
             run_pktgen(pktgen_sess, conf.trace[expr], sending_rate)
@@ -199,7 +202,7 @@ def main(expr_list):
                     run_p2p_node('leecher', leecher2_sess, epoch)
                     run_p2p_node('leecher', leecher3_sess, epoch)
 
-                    run_netbricks(netbricks_sess, conf.trace[expr], nf, epoch, node)
+                    run_netbricks(netbricks_sess, batch, schedule, epoch, node)
 
                     time.sleep(conf.udf_schedule_time)
 
@@ -227,6 +230,6 @@ def main(expr_list):
             time.sleep(30)
 
 
-main(conf.udf_schedule)  # rdr, xcdr
-print("All experiment finished {}".format(conf.udf_schedule))
+main(conf.batch_list, conf.schedule_list)  # rdr, xcdr
+print("All experiment finished. NF {}, Batch {}, Schedule {}".format(conf.udf_schedule, conf.batch_list, conf.schedule_list))
 

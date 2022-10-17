@@ -75,9 +75,17 @@ udf_schedule_time = 3800
 # udf_nf_list = ['7', '1', '2', '3', '4', '5', '6', '8']
 # num_of_epoch = 3
 
-# profile
+#      PROFILE
+# -------------------
 # udf_nf_list = ['1', '6', '8']
 # udf_nf_list = ['7']
 # udf_nf_list = ['7', '1', '2', '3', '4', '5', '6', '8']
 udf_nf_list = ['1', '2', '3', '4', '5', '6', '8', '7', ]
 num_of_epoch = 3
+
+
+#      SCHEDULE
+# ----------------------
+batch_list = ['400019', '664673', '1374946']
+schedule_list = ['rand']
+
