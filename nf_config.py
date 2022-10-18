@@ -86,6 +86,7 @@ num_of_epoch = 3
 
 #      SCHEDULE
 # ----------------------
-batch_list = ['400019', '664673', '1374946']
+#batch_list = ['400019', '664673', '1374946']
+batch_list = ['664673']
 schedule_list = ['rand', 'resrc_pining']
 num_of_sched_epoch = 1
