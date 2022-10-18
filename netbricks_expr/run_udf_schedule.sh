@@ -149,17 +149,20 @@ docker ps
 # docker stats
 # https://github.com/moby/moby/issues/22618
 # while true; do docker stats -a --no-stream >> ${DOCKER_STATS_LOG}; done &
-while true; do taskset -c 0 docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
+# while true; do taskset -c 0 docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
+while true; do docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
 pids="$pids $!"
 
 # mpstat for every second
-taskset -c 0 mpstat -P ALL 1 >> "$MPSTAT_LOG" &
+# taskset -c 0 mpstat -P ALL 1 >> "$MPSTAT_LOG" &
+mpstat -P ALL 1 >> "$MPSTAT_LOG" &
 pids="$pids $!"
 
 # intel PQoS
 
 # Block IO
-taskset -c 0 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+# taskset -c 0 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+"$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
 pids="$pids $!"
 
 for pid in $pids; do

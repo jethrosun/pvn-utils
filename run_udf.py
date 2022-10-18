@@ -174,7 +174,7 @@ def main(batch_list, schedule_list):
             # setup here maps to node (1,2,3)
             for node in conf.udf_node_list:
                 # epoch from 0 to 9
-                for epoch in range(conf.num_of_epoch):
+                for epoch in range(conf.num_of_sched_epoch):
                     netbricks_sess = netbricks_sess_setup(conf.trace[expr], nf, epoch)
 
                     leecher1_sess = p2p_sess_setup('bt2', conf.trace[expr], nf, epoch)
