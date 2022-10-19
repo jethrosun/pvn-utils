@@ -114,14 +114,13 @@ do
 	pids="$pids $!"
 
 	# "7": "p2p"
-	PORT1=$((9090+core_id))
+	PORT1=$((58845+core_id))
 	PORT2=$((51412+core_id))
 	cd ~/dev/pvn/p2p-builder/
 	docker run -d --cpuset-cpus $core_id --name p2p_7_${core_id} \
 		--rm --network=btnet \
-		-p $PORT1:9091 \
+		-p $PORT1:58845\
 		-p $PORT2:51413 \
-		-p $PORT2:51413/udp \
 		-v /data/downloads/core_${core_id}:/downloads \
 		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
 		-v /home/jethros/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
