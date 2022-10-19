@@ -177,7 +177,7 @@ def main(expr_list):
                 run_pktgen(pktgen_sess, conf.trace[expr], sending_rate)
 
                 # epoch from 0 to 9
-                for epoch in range(conf.num_of_epoch):
+                for epoch in range(conf.profile_num_of_epoch):
                     netbricks_sess = netbricks_sess_setup(conf.trace[expr], nf, epoch)
 
                     if node == '7':
