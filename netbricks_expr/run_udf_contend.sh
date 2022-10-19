@@ -148,20 +148,19 @@ if [ "$4" == "6" ]; then
 # FIXME: Run P2P seeder and leechers....
 elif [ "$4" == "7" ]; then
 	# "7": "p2p"
-	PORT1=$((9090+core_id))
+	PORT1=$((58845+core_id))
 	PORT2=$((51412+core_id))
 	cd ~/dev/pvn/p2p-builder/
 	echo 7 $4 $core_id
 	docker run -d --cpuset-cpus $core_id --name p2p_7_${core_id} \
 		--rm \
-		-p $PORT1:9091 \
+		-p $PORT1:58845\
 		-p $PORT2:51413 \
-		-p $PORT2:51413/udp \
 		-v /data/downloads/core_${core_id}:/downloads \
 		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
 		-v /home/jethros/dev/pvn/workload/udf_workload/${BATCH}:/udf_workload \
 		-v /home/jethros/torrents:/torrents \
-		p2p:transmission 7 $4 $core_id
+		p2p:deluge 7 $4 $core_id
 	docker logs -f p2p_7_${core_id} &> ${SYNTHETIC_LOG}__7_${core_id}.log &
 	pids="$pids $!"
 
@@ -205,7 +204,8 @@ docker ps
 # docker stats
 # https://github.com/moby/moby/issues/22618
 # while true; do docker stats -a --no-stream >> ${DOCKER_STATS_LOG}; done &
-while true; do taskset -c 0 docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
+# while true; do taskset -c 0 docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
+while true; do docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
 pids="$pids $!"
 
 while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
@@ -223,13 +223,13 @@ pids="$pids $!"
 
 
 # mpstat for every second
-taskset -c 0 mpstat -P ALL 1 >> "$MPSTAT_LOG" &
+mpstat -P ALL 1 >> "$MPSTAT_LOG" &
 pids="$pids $!"
 
 # intel PQoS
 
 # Block IO
-taskset -c 0 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+"$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
 pids="$pids $!"
 
 for pid in $pids; do
@@ -244,9 +244,3 @@ fi
 # PID and waits:
 # https://stackoverflow.com/questions/356100/how-to-wait-in-bash-for-several-subprocesses-to-finish-and-return-exit-code-0
 
-
-# parameters?
-# $1: trace
-# $2: nf
-# $3: iter
-# $4: setup
