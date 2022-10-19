@@ -84,7 +84,10 @@ fn main() {
         };
         let mut times_iter = times.iter();
         let mut pivot = times_iter.next().unwrap();
-        pivot = times_iter.next().unwrap();
+        match times_iter.next() {
+            Some(p) => pivot = p,
+            None => pivot = &3600,
+        }
         println!(
             "WorkloadChanged, count: {:?} waiting for: {:?}",
             count, pivot,
