@@ -91,6 +91,6 @@ for i in ['1', '2', '3']:
 # ----------------------
 #batch_list = ['400019', '664673', '1374946']
 batch_list = ['664673']
-# schedule_list = ['rand', 'resrc_pining']
-schedule_list = ['rand']
+schedule_list = ['rand', 'resrc_pining']
+# schedule_list = ['rand']
 sched_num_of_epoch = 1
