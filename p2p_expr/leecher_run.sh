@@ -3,11 +3,11 @@ set -ex
 
 BATCH=contention
 
-# run deluged?
-
-
 # run p2p builder in leecher branch
 echo "Run P2P builder in leecher mode"
+
+echo "Starting up now ..."
+deluged -c /home/jethros/bt_data/config
 
 # docker run -d --network=host \
 # 	--name leecher --rm \

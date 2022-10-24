@@ -46,4 +46,5 @@ fi
 
 echo "Starting up now ..."
 nice deluged -c /home/jethros/bt_data/config
+
 # deluge-web -c ~/bt_data/config
