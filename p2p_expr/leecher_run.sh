@@ -22,4 +22,4 @@ deluged -c /home/jethros/bt_data/config
 
 # need to run bin directly
 cd ~/dev/pvn/p2p-builder/
-cargo r --release $2 $3
+cargo r --release $1 $2
