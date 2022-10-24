@@ -18,7 +18,7 @@ cd ~/data/downloads
 for core in {1..5}
 do
 	echo "Core $core "
-	for i in {0..12}
+	for i in {0..21}
 	do
 		echo "Making $i images"
 		sudo fallocate -l 1G p2p_core_${core}_image_${i}.img
