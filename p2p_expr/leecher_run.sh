@@ -1,13 +1,13 @@
 #!/bin/bash
 set -ex
 
-echo $1 $2 $3
+# echo $1 $2 $3
 
 # run p2p builder in leecher branch
 echo "Run P2P builder in leecher mode"
 
 echo "Starting up now ..."
-deluged -c /home/jethros/bt_data/config
+nohup deluged -c /home/jethros/bt_data/config
 
 # docker run -d --network=host \
 # 	--name leecher --rm \
