@@ -17,3 +17,15 @@ sudo rm -rf /home/jethros/data/downloads
 sudo mkdir -p /home/jethros/data/downloads
 sudo chown -R jethros:jethros /home/jethros/data/downloads
 sudo chmod -R 775 /home/jethros/data/downloads
+
+
+sudo rm -rf /home/jethros/bt_data/
+sudo mkdir -p /home/jethros/bt_data/config
+sudo chown -R jethros:jethros /home/jethros/bt_data
+sudo chmod -R 775 /home/jethros/bt_data
+
+
+sudo -u jethros deluged -c /home/jethros/bt_data/config
+sudo -u jethros deluge-console -c /home/jethros/bt_data/config halt
+
+sudo -u jethro cp /home/jethros/dev/pvn/p2p-builder/scripts/core.conf /home/jethros/bt_data/config/core.conf

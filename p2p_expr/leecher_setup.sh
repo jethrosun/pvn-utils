@@ -20,5 +20,4 @@ cd ~/dev/pvn/p2p-builder
 git checkout leecher
 
 
-cp scripts/core.conf ~/bt_data/config/core.conf
 # make net
