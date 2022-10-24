@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-BATCH=contention
+echo $1 $2 $3
 
 # run p2p builder in leecher branch
 echo "Run P2P builder in leecher mode"
@@ -21,6 +21,5 @@ deluged -c /home/jethros/bt_data/config
 
 
 # need to run bin directly
-#
 cd ~/dev/pvn/p2p-builder/
-cargo r --release 7 7 3
+cargo r --release $2 $3
