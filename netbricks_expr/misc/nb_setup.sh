@@ -27,7 +27,7 @@ do
 	sudo -u jethros mkdir -p /data/downloads/core_${core_id}
 done
 # sudo chown -R debian-transmission:debian-transmission /data/downloads
-# sudo chmod -R 775 /data/downloads
+sudo chmod -R 777 /data/downloads
 
 
 # cd /home/jethros/dev/pvn/p2p-builder
