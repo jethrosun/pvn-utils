@@ -115,7 +115,7 @@ fn main() {
 
             loop {
                 lat.clear();
-                beginning = Instant::now();
+                let cur_time = Instant::now();
                 for _ in 0..5 {
                     let now = Instant::now();
                     // translate number of users to number of transcoding jobs
@@ -138,7 +138,7 @@ fn main() {
                 println!(
                     "Metric: {:?} jobs in {:?}ms with core: {:?}",
                     num_of_jobs * 5,
-                    beginning.elapsed().as_millis(),
+                    cur_time.elapsed().as_millis(),
                     core
                 );
                 println!("Latency(ms): {:?}", lat);
@@ -182,7 +182,7 @@ fn main() {
 
             loop {
                 lat.clear();
-                beginning = Instant::now();
+                let cur_time = Instant::now();
                 for _ in 0..5 {
                     let now = Instant::now();
                     let elapsed = execute(load, &cname, &large_vec, &mut buf).unwrap();
@@ -191,7 +191,7 @@ fn main() {
                 println!(
                     "Metric: count {:?} in {:?}ms with core: {:?}",
                     count * 5,
-                    beginning.elapsed().as_millis(),
+                    cur_time.elapsed().as_millis(),
                     core
                 );
                 println!("Latency(ms): {:?}", lat);
@@ -215,9 +215,9 @@ fn main() {
                     large_vec.resize(load.ram as usize, 42u128);
                     continue;
                 } else {
-                    let elapsed = now.elapsed();
-                    if elapsed < Duration::from_millis(990) {
-                        thread::sleep(Duration::from_millis(990) - elapsed);
+                    let elapsed = cur_time.elapsed();
+                    if elapsed < Duration::from_millis(4990) {
+                        thread::sleep(Duration::from_millis(4990) - elapsed);
                     }
                 }
             }
