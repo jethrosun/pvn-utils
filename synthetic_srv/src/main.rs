@@ -39,8 +39,8 @@ fn main() {
     let core = CoreId { id: core_id };
 
     // get udf profiles
-    let profile_map_path = "/home/jethros/dev/pvn/workload/udf_config/profile_map.json";
-    // let profile_map_path = "/udf_config/profile_map.json";
+    // let profile_map_path = "/home/jethros/dev/pvn/workload/udf_config/profile_map.json";
+    let profile_map_path = "/udf_config/profile_map.json";
 
     let profile_map = map_profile(profile_map_path.to_string()).unwrap();
     let profile_name = profile_map.get(&profile_id).unwrap().clone();
@@ -50,21 +50,21 @@ fn main() {
     );
 
     // get workload based on node_id/core_id/profile_id
-    let workload_path = "/home/jethros/dev/pvn/workload/udf_workload/contention/udf_profile"
-        .to_owned()
-        + &profile_id.to_string()
-        + "_node"
-        + &node_id.to_string()
-        + "_core"
-        + &core_id.to_string()
-        + ".json";
-    // let workload_path = "/udf_workload/udf_profile".to_owned()
+    // let workload_path = "/home/jethros/dev/pvn/workload/udf_workload/contention/udf_profile"
+    //     .to_owned()
     //     + &profile_id.to_string()
     //     + "_node"
     //     + &node_id.to_string()
     //     + "_core"
     //     + &core_id.to_string()
     //     + ".json";
+    let workload_path = "/udf_workload/udf_profile".to_owned()
+        + &profile_id.to_string()
+        + "_node"
+        + &node_id.to_string()
+        + "_core"
+        + &core_id.to_string()
+        + ".json";
 
     let (times, workload) = retrieve_workload(workload_path.to_string(), expr_time).unwrap();
     println!("retrieved workload: {}", workload_path);
@@ -101,9 +101,9 @@ fn main() {
             let mut job_count = 0;
             let mut num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
 
-            let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
+            // let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
             // let infile = "/Users/jethros/dev/pvn/utils/data/tiny.y4m";
-            // let infile = "/udf_data/tiny.y4m";
+            let infile = "/udf_data/tiny.y4m";
             let width_height = "360x24";
 
             let mut file = File::open(infile).unwrap();
@@ -112,17 +112,11 @@ fn main() {
 
             println!("Timer started after {:?}", beginning.elapsed().as_millis());
             beginning = Instant::now();
-            // let mut next_sec = 5_usize;
 
             loop {
                 lat.clear();
                 beginning = Instant::now();
                 for _ in 0..5 {
-                    // let cur_time = beginning.elapsed().as_secs() as usize;
-                    // if cur_time <= next_sec {
-                    //     continue;
-                    // }
-
                     let now = Instant::now();
                     // translate number of users to number of transcoding jobs
                     // https://github.com/jethrosun/NetBricks/blob/expr/framework/src/pvn/xcdr.rs#L110
