@@ -92,6 +92,7 @@ fn main() {
             "WorkloadChanged, count: {:?} waiting for: {:?}",
             count, pivot,
         );
+        let mut lat = Vec::new();
 
         if pname == "xcdr" {
             let mut job_count = 0;
@@ -110,31 +111,37 @@ fn main() {
             let mut next_sec = 1_usize;
 
             loop {
-                let now = Instant::now();
-                let cur_time = beginning.elapsed().as_secs() as usize;
-                if cur_time <= next_sec {
-                    continue;
+                for _ in 0..5 {
+                    lat.clear();
+                    let cur_time = beginning.elapsed().as_secs() as usize;
+                    if cur_time <= next_sec {
+                        continue;
+                    }
+
+                    let now = Instant::now();
+                    // translate number of users to number of transcoding jobs
+                    // https://github.com/jethrosun/NetBricks/blob/expr/framework/src/pvn/xcdr.rs#L110
+                    // NOTE: 25 jobs roughly takes 1 second
+                    for _ in 0..num_of_jobs {
+                        let _ = transcode(buffer.as_slice(), width_height);
+                    }
+                    job_count += num_of_jobs;
+                    // TODO: better way to track this
+                    let elapsed = now.elapsed();
+                    lat.push(elapsed.as_millis());
+
+                    if Duration::from_millis(990) > elapsed {
+                        thread::sleep(Duration::from_millis(990) - elapsed);
+                    }
+                    next_sec = cur_time + 1;
                 }
 
-                // translate number of users to number of transcoding jobs
-                // https://github.com/jethrosun/NetBricks/blob/expr/framework/src/pvn/xcdr.rs#L110
-                // NOTE: 25 jobs roughly takes 1 second
-                for _ in 0..num_of_jobs {
-                    let _ = transcode(buffer.as_slice(), width_height);
-                }
-                job_count += num_of_jobs;
-                // TODO: better way to track this
-                let elapsed = now.elapsed();
                 println!(
-                    "Metric: {:?} jobs transcoded in {:?} millis with core: {:?}",
-                    num_of_jobs,
-                    elapsed.as_millis(),
+                    "Metric: {:?} jobs in with core: {:?}",
+                    num_of_jobs * 5,
                     core
                 );
-                if Duration::from_millis(990) > elapsed {
-                    thread::sleep(Duration::from_millis(990) - elapsed);
-                }
-                next_sec = cur_time + 1;
+                println!("Latency: {:?}", lat);
 
                 // run until the next change
                 //
@@ -175,15 +182,18 @@ fn main() {
 
             loop {
                 let now = Instant::now();
-
-                let elapsed = execute(load, &cname, &large_vec, &mut buf).unwrap();
+                for _ in 0..5 {
+                    lat.clear();
+                    let elapsed = execute(load, &cname, &large_vec, &mut buf).unwrap();
+                    lat.push(elapsed.as_millis());
+                }
                 println!(
-                    "\tMetric: count {:?} runtime {:?} with {:?} millis with core: {:?}",
-                    count,
-                    elapsed.as_millis(),
+                    "Metric: count {:?} of {:?} millis with core: {:?}",
+                    count * 5,
                     now.elapsed().as_millis(),
                     core
                 );
+                println!("Latency: {:?}", lat);
 
                 // run until the next change
                 //
