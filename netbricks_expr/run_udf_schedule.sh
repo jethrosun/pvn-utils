@@ -177,7 +177,7 @@ do
 	cnames="$cnames rdr_8_${core_id}"
 	echo $cnames
 
-	while true; do docker stats cnames --no-stream  >> ${DOCKER_STATS_CORE}${core_id}.log; sleep 1; done &
+	while true; do docker stats ${cnames} --no-stream  >> ${DOCKER_STATS_CORE}${core_id}.log; sleep 1; done &
 	pids="$pids $!"
 done
 
