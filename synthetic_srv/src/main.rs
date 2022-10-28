@@ -95,7 +95,8 @@ fn main() {
             "WorkloadChanged, count: {:?} waiting for: {:?}",
             count, pivot,
         );
-        let mut lat = Vec::new();
+        let mut loads = Vec::new();
+        let mut lats = Vec::new();
 
         if pname == "xcdr" {
             let mut job_count = 0;
@@ -114,7 +115,8 @@ fn main() {
             beginning = Instant::now();
 
             loop {
-                lat.clear();
+                loads.clear();
+                lats.clear();
                 let cur_time = Instant::now();
                 for _ in 0..5 {
                     let now = Instant::now();
@@ -127,21 +129,23 @@ fn main() {
                     job_count += num_of_jobs;
                     // TODO: better way to track this
                     let elapsed = now.elapsed();
-                    lat.push(elapsed.as_millis());
+
+                    loads.push(num_of_jobs);
+                    lats.push(elapsed.as_millis());
 
                     if Duration::from_millis(990) > elapsed {
                         thread::sleep(Duration::from_millis(990) - elapsed);
                     }
                     // next_sec = cur_time + 5;
                 }
-
                 println!(
-                    "Metric: {:?} jobs in {:?}ms with core: {:?}",
+                    "Info: {:?} jobs in {:?}ms with core: {:?}",
                     num_of_jobs * 5,
                     cur_time.elapsed().as_millis(),
                     core
                 );
-                println!("Latency(ms): {:?}", lat);
+                println!("Metric: {:?}", loads);
+                println!("Latency(ms): {:?}", lats);
 
                 // run until the next change
                 //
@@ -181,20 +185,23 @@ fn main() {
             let mut buf = buf.into_boxed_slice();
 
             loop {
-                lat.clear();
+                loads.clear();
+                lats.clear();
                 let cur_time = Instant::now();
                 for _ in 0..5 {
                     let now = Instant::now();
                     let elapsed = execute(load, &cname, &large_vec, &mut buf).unwrap();
-                    lat.push(elapsed.as_millis());
+                    loads.push(1);
+                    lats.push(elapsed.as_millis());
                 }
                 println!(
-                    "Metric: count {:?} in {:?}ms with core: {:?}",
+                    "Info: count {:?} in {:?}ms with core: {:?}",
                     count * 5,
                     cur_time.elapsed().as_millis(),
                     core
                 );
-                println!("Latency(ms): {:?}", lat);
+                println!("Metric: {:?}", loads);
+                println!("Latency(ms): {:?}", lats);
 
                 // run until the next change
                 //
