@@ -14,6 +14,7 @@ BIO_LOG=$LOG_DIR/$3_$4_biotop.log
 P2P_PROGRESS_LOG=$LOG_DIR/$3_$4_p2p_progress.log
 FAKTORY_LOG=$LOG_DIR/$3_$4_faktory.log
 DOCKER_STATS_LOG=$LOG_DIR/$3_$4_docker_stats.log
+DOCKER_STATS_CORE=$LOG_DIR/$3_$4_docker_stats_core
 MPSTAT_LOG=$LOG_DIR/$3_$4_mpstat.log
 # then *core id* and *NF id*
 SYNTHETIC_LOG=$LOG_DIR/$3_$4_srv
@@ -151,16 +152,35 @@ docker ps
 # while true; do taskset -c 0 docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
 # while true; do docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
 # while true; do docker stats --no-stream >> ${DOCKER_STATS_LOG}; sleep 0.5; done &
-# NOTE: use format
-while true; do docker stats --no-stream --format "table {{.Name}},{{.CPUPerc}},{{.MemUsage}},{{.BlockIO}}" >> ${DOCKER_STATS_LOG}; sleep 1; done &
-# NOTE: use nice values 
-# while true; do nice docker stats --no-stream  >> ${DOCKER_STATS_LOG}; sleep 1; done &
 #
-# TODO: split into different core related docker stats
+# NOTE[x]: use format
+# while true; do docker stats --no-stream --format "table {{.Name}},{{.CPUPerc}},{{.MemUsage}},{{.BlockIO}}" >> ${DOCKER_STATS_LOG}; sleep 1; done &
+#
+# NOTE: use nice values
 # while true; do nice docker stats --no-stream  >> ${DOCKER_STATS_LOG}; sleep 1; done &
 # TODO: pin to core 0
 # while true; do nice docker stats --no-stream  >> ${DOCKER_STATS_LOG}; sleep 1; done &
-pids="$pids $!"
+#
+# pids="$pids $!"
+
+
+# TODO: split into different core related docker stats
+for core_id in {1..5}
+do
+	cnames=""
+	for profile_id in {1..5}
+	do
+		cnames="$cnames synthetic_srv_${profile_id}_${core_id}"
+	done
+	cnames="$cnames tlsv_6_${core_id}"
+	cnames="$cnames p2p_7_${core_id}"
+	cnames="$cnames rdr_8_${core_id}"
+	echo $cnames
+
+	while true; do docker stats cnames --no-stream  >> ${DOCKER_STATS_CORE}${core_id}.log; sleep 1; done &
+	pids="$pids $!"
+done
+
 
 # mpstat for every second
 # taskset -c 0 mpstat -P ALL 1 >> "$MPSTAT_LOG" &
