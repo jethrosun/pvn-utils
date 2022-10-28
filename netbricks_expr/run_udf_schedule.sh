@@ -150,7 +150,7 @@ docker ps
 # while true; do docker stats -a --no-stream >> ${DOCKER_STATS_LOG}; done &
 # while true; do taskset -c 0 docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
 # while true; do docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
-while true; do docker stats --no-stream >> ${DOCKER_STATS_LOG}; sleep 1; done &
+while true; do docker stats --no-stream >> ${DOCKER_STATS_LOG}; sleep 0.5; done &
 pids="$pids $!"
 
 # mpstat for every second
