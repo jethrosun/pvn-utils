@@ -116,10 +116,11 @@ while sleep 5; do
 		:
 	else
 		sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 "hdd" "$DISKIO_LOG" &
-		sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 "hdd" "$DISKIO_LOG" &
+		# sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 "hdd" "$DISKIO_LOG" &
 	fi
 done &
-pids="$pids $!"
+contention_pid=$!
+pids="$pids $contention_pid"
 
 
 "$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
@@ -229,7 +230,7 @@ pids="$pids $!"
 # intel PQoS
 
 # Block IO
-"$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+"$BIO_TOP_MONITOR" -C -p $contention_pid  > "$BIO_LOG" &
 pids="$pids $!"
 
 for pid in $pids; do

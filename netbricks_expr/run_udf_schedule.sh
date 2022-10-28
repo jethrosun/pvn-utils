@@ -156,30 +156,27 @@ docker ps
 # NOTE[x]: use format
 # while true; do docker stats --no-stream --format "table {{.Name}},{{.CPUPerc}},{{.MemUsage}},{{.BlockIO}}" >> ${DOCKER_STATS_LOG}; sleep 1; done &
 #
-# NOTE: use nice values
-# while true; do nice docker stats --no-stream  >> ${DOCKER_STATS_LOG}; sleep 1; done &
-# TODO: pin to core 0
-# while true; do nice docker stats --no-stream  >> ${DOCKER_STATS_LOG}; sleep 1; done &
+# NOTE[]: use nice values and core pining
+while true; do nice -20 tasket 0 docker stats --no-stream  >> ${DOCKER_STATS_LOG}; sleep 1; done &
+pids="$pids $!"
+
+
+# NOTE[]: split into different core related docker stats
+# for core_id in {1..5}
+# do
+# 	cnames=""
+# 	for profile_id in {1..5}
+# 	do
+# 		cnames="$cnames synthetic_srv_${profile_id}_${core_id}"
+# 	done
+# 	cnames="$cnames tlsv_6_${core_id}"
+# 	cnames="$cnames p2p_7_${core_id}"
+# 	cnames="$cnames rdr_8_${core_id}"
+# 	echo $cnames
 #
-# pids="$pids $!"
-
-
-# TODO: split into different core related docker stats
-for core_id in {1..5}
-do
-	cnames=""
-	for profile_id in {1..5}
-	do
-		cnames="$cnames synthetic_srv_${profile_id}_${core_id}"
-	done
-	cnames="$cnames tlsv_6_${core_id}"
-	cnames="$cnames p2p_7_${core_id}"
-	cnames="$cnames rdr_8_${core_id}"
-	echo $cnames
-
-	while true; do docker stats ${cnames} --no-stream  >> ${DOCKER_STATS_CORE}${core_id}.log; sleep 1; done &
-	pids="$pids $!"
-done
+# 	while true; do docker stats ${cnames} --no-stream  >> ${DOCKER_STATS_CORE}${core_id}.log; sleep 1; done &
+# 	pids="$pids $!"
+# done
 
 
 # mpstat for every second
