@@ -18,6 +18,8 @@ scp -r jethros@10.200.111.125:~/torrents/* ~/torrents
 
 cd ~/dev/pvn/p2p-builder
 git checkout leecher
+git pull
 
+cp ~/dev/pvn/p2p-builder/scripts/core.conf ~/bt_data/config
 
 # make net
