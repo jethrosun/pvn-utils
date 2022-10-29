@@ -72,34 +72,33 @@ pids="$pids $!"
 cd ~/dev/pvn/utils/synthetic_srv/
 
 # {"1": "xcdr", "2": "rand1", "3": "rand2", "4": "rand4", "5": "rand3", "6": "tlsv", "7": "p2p", "8": "rdr"}
-# for core_id in {1..5}
-# do
-# 	for profile_id in {1..5}
-# 	do
-# 		echo $3 $4 $profile_id "$core_id" # null, 1, 3
-# 		# run docker and collect logs
-# 		# https://www.baeldung.com/ops/docker-logs
-# 		docker run -d --cpuset-cpus $core_id --name synthetic_srv_${profile_id}_${core_id} \
-# 			--rm --network=host \
-# 			-v /home/jethros/dev/pvn/utils/data:/udf_data \
-# 			-v /data/tmp:/data \
-# 			-v /home/jethros:/config \
-# 			-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
-# 			-v /home/jethros/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
-# 			synthetic:alphine "$profile_id" $4 "$core_id"
-# 		docker logs -f synthetic_srv_${profile_id}_${core_id} &> ${SYNTHETIC_LOG}__${profile_id}_${core_id}.log &
-# 		pids="$pids $!"
-# 		# $SERVER $core_id $profile_id > $LOG_DIR/$3_$4__${core_id}_${profile_id}.log &
-# 		# PID=$!
-# 		# pids="$pids $PID"
-# 		# https://www.baeldung.com/linux/process-periodic-cpu-usage
-# 		# sudo -u jethros taskset -c 0 top -b -d $DELAY_INTERVAL -p $PID | grep -w $PID  > $LOG_DIR/$3_$4__${core_id}_${profile_id}_top.log &
-# 		# pids="$pids $!"
-# 	done
-# done
+for core_id in {1..5}
+do
+	for profile_id in {1..5}
+	do
+		echo $3 $4 $profile_id "$core_id" # null, 1, 3
+		# run docker and collect logs
+		# https://www.baeldung.com/ops/docker-logs
+		docker run -d --cpuset-cpus $core_id --name synthetic_srv_${profile_id}_${core_id} \
+			--rm --network=host \
+			-v /home/jethros/dev/pvn/utils/data:/udf_data \
+			-v /data/tmp:/data \
+			-v /home/jethros:/config \
+			-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
+			-v /home/jethros/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
+			synthetic:alphine "$profile_id" $4 "$core_id"
+		docker logs -f synthetic_srv_${profile_id}_${core_id} &> ${SYNTHETIC_LOG}__${profile_id}_${core_id}.log &
+		pids="$pids $!"
+		# $SERVER $core_id $profile_id > $LOG_DIR/$3_$4__${core_id}_${profile_id}.log &
+		# PID=$!
+		# pids="$pids $PID"
+		# https://www.baeldung.com/linux/process-periodic-cpu-usage
+		# sudo -u jethros taskset -c 0 top -b -d $DELAY_INTERVAL -p $PID | grep -w $PID  > $LOG_DIR/$3_$4__${core_id}_${profile_id}_top.log &
+		# pids="$pids $!"
+	done
+done
 
-# for core_id in {1..5}
-for core_id in {1..1}
+for core_id in {1..5}
 do
 	# "6": "tlsv"
 	cd ~/dev/pvn/tlsv-builder/

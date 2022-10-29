@@ -54,7 +54,8 @@ xcdr_clean_list = [
 udf_schedule = ['udf_schedule']
 udf_node_list = ['1', '2', '3']
 udf_profile_time = 200
-udf_schedule_time = 3900
+# udf_schedule_time = 3900
+udf_schedule_time = 7200
 
 setup = []
 zero = '0'
