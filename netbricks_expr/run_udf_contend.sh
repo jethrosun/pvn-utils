@@ -206,7 +206,7 @@ docker ps
 # https://github.com/moby/moby/issues/22618
 # while true; do docker stats -a --no-stream >> ${DOCKER_STATS_LOG}; done &
 # while true; do taskset -c 0 docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
-while true; do docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
+while true; do taskset -c 5 docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
 pids="$pids $!"
 
 while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
@@ -230,7 +230,7 @@ pids="$pids $!"
 # intel PQoS
 
 # Block IO
-"$BIO_TOP_MONITOR" -C -p $contention_pid  > "$BIO_LOG" &
+taskset -c 5 "$BIO_TOP_MONITOR" -C -p $contention_pid  > "$BIO_LOG" &
 pids="$pids $!"
 
 for pid in $pids; do

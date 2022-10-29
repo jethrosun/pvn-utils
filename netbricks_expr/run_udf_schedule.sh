@@ -66,7 +66,7 @@ RESULT=0
 
 # /home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$7" "$FAKTORY_LOG" &
 # P1=$!
-"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
+taskset -c 0 "$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 pids="$pids $!"
 
 
@@ -157,7 +157,7 @@ docker ps
 # while true; do docker stats --no-stream --format "table {{.Name}},{{.CPUPerc}},{{.MemUsage}},{{.BlockIO}}" >> ${DOCKER_STATS_LOG}; sleep 1; done &
 #
 # NOTE[]: use nice values and core pining
-while true; do nice -20 tasket 0 docker stats --no-stream  >> ${DOCKER_STATS_LOG}; sleep 1; done &
+while true; do nice -20 taskset -c 0 docker stats --no-stream  >> ${DOCKER_STATS_LOG}; sleep 1; done &
 pids="$pids $!"
 
 
@@ -180,15 +180,13 @@ pids="$pids $!"
 
 
 # mpstat for every second
-# taskset -c 0 mpstat -P ALL 1 >> "$MPSTAT_LOG" &
-mpstat -P ALL 1 >> "$MPSTAT_LOG" &
+taskset -c 0 mpstat -P ALL 1 >> "$MPSTAT_LOG" &
 pids="$pids $!"
 
 # intel PQoS
 
 # Block IO
-# taskset -c 0 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
-"$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+taskset -c 0 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
 pids="$pids $!"
 
 for pid in $pids; do
