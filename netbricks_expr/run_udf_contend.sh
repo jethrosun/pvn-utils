@@ -150,13 +150,15 @@ elif [ "$4" == "7" ]; then
 	# "7": "p2p"
 	PORT1=$((58845+core_id))
 	PORT2=$((51412+core_id))
+	PORT3=$((52800+core_id))
 	cd ~/dev/pvn/p2p-builder/
 	echo 7 $4 $core_id
 	docker run -d --cpuset-cpus $core_id --name p2p_7_${core_id} \
 		--rm \
-		-p $PORT1:58845\
+		-p $PORT1:58846 \
 		-p $PORT2:51413 \
-		-v /data/downloads/core_${core_id}:/downloads \
+		-p $PORT3:52801 \
+		-v /data/downloads/core_${core_id}:/data \
 		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
 		-v /home/jethros/dev/pvn/workload/udf_workload/${BATCH}:/udf_workload \
 		-v /home/jethros/torrents:/torrents \
