@@ -154,12 +154,14 @@ docker ps
 # NOTE: use format
 # while true; do docker stats --no-stream --format "table {{.Name}},{{.CPUPerc}},{{.MemUsage}},{{.BlockIO}}" >> ${DOCKER_STATS_LOG}; sleep 1; done &
 # NOTE: use nice values
-while true; do nice docker stats --no-stream  >> ${DOCKER_STATS_LOG}; sleep 1; done &
+# while true; do nice docker stats --no-stream  >> ${DOCKER_STATS_LOG}; sleep 1; done &
 #
 # TODO: split into different core related docker stats
 # while true; do nice docker stats --no-stream  >> ${DOCKER_STATS_LOG}; sleep 1; done &
 # TODO: pin to core 0
 # while true; do nice docker stats --no-stream  >> ${DOCKER_STATS_LOG}; sleep 1; done &
+# NOTE: no trunc
+docker stats --no-trunc >> ${DOCKER_STATS_LOG} &
 pids="$pids $!"
 
 # mpstat for every second
