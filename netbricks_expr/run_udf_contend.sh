@@ -3,7 +3,6 @@ set -e
 
 # cmd_str = "sudo ./run_udf_contend.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + cpu + " " + mem + " " + diskio
 
-
 # BATCH=400019
 # BATCH=664673
 # BATCH=1374946
@@ -116,10 +115,11 @@ while sleep 5; do
 		:
 	else
 		sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 "hdd" "$DISKIO_LOG" &
-		sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 "hdd" "$DISKIO_LOG" &
+		# sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 "hdd" "$DISKIO_LOG" &
+		contention_disk_pid=$!
 	fi
 done &
-pids="$pids $!"
+pids="$pids $contention_diskio_pid"
 
 
 "$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
@@ -202,10 +202,7 @@ fi
 docker ps
 
 # docker stats
-# https://github.com/moby/moby/issues/22618
-# while true; do docker stats -a --no-stream >> ${DOCKER_STATS_LOG}; done &
-# while true; do taskset -c 0 docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
-while true; do docker stats --no-stream >> ${DOCKER_STATS_LOG}; sleep 1; done &
+taskset -c 0 docker stats --no-trunc --format "table {{.Name}},{{.CPUPerc}},{{.MemUsage}},{{.BlockIO}}" >> ${DOCKER_STATS_LOG} &
 pids="$pids $!"
 
 while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
@@ -223,13 +220,13 @@ pids="$pids $!"
 
 
 # mpstat for every second
-mpstat -P ALL 1 >> "$MPSTAT_LOG" &
+taskset -c 0 mpstat -P ALL 1 >> "$MPSTAT_LOG" &
 pids="$pids $!"
 
 # intel PQoS
 
 # Block IO
-"$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+taskset -c 0 "$BIO_TOP_MONITOR" -C -p $contention_diskio_pid > "$BIO_LOG" &
 pids="$pids $!"
 
 for pid in $pids; do

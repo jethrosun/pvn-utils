@@ -60,10 +60,6 @@ sleep 3
 pids=""
 RESULT=0
 
-# TODO: Run P2P seeder and leechers....
-
-
-# /home/jethros/dev/pvn/utils/faktory_srv/start_faktory.sh "$4" "$7" "$FAKTORY_LOG" &
 # P1=$!
 "$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 pids="$pids $!"
@@ -146,34 +142,17 @@ done
 docker ps
 
 # docker stats
-# https://github.com/moby/moby/issues/22618
-# while true; do docker stats -a --no-stream >> ${DOCKER_STATS_LOG}; done &
-# while true; do taskset -c 0 docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
-# while true; do docker stats --no-stream | tee --append ${DOCKER_STATS_LOG}; sleep 1; done &
-# while true; do docker stats --no-stream >> ${DOCKER_STATS_LOG}; sleep 0.5; done &
-# NOTE: use format
-# while true; do docker stats --no-stream --format "table {{.Name}},{{.CPUPerc}},{{.MemUsage}},{{.BlockIO}}" >> ${DOCKER_STATS_LOG}; sleep 1; done &
-# NOTE: use nice values
-# while true; do nice docker stats --no-stream  >> ${DOCKER_STATS_LOG}; sleep 1; done &
-#
-# TODO: split into different core related docker stats
-# while true; do nice docker stats --no-stream  >> ${DOCKER_STATS_LOG}; sleep 1; done &
-# TODO: pin to core 0
-# while true; do nice docker stats --no-stream  >> ${DOCKER_STATS_LOG}; sleep 1; done &
-# NOTE: no trunc
-docker stats --no-trunc >> ${DOCKER_STATS_LOG} &
+taskset -c 0 docker stats --no-trunc --format "table {{.Name}},{{.CPUPerc}},{{.MemUsage}},{{.BlockIO}}" >> ${DOCKER_STATS_LOG} &
 pids="$pids $!"
 
 # mpstat for every second
-# taskset -c 0 mpstat -P ALL 1 >> "$MPSTAT_LOG" &
-mpstat -P ALL 1 >> "$MPSTAT_LOG" &
+taskset -c 0 mpstat -P ALL 1 >> "$MPSTAT_LOG" &
 pids="$pids $!"
 
 # intel PQoS
 
 # Block IO
-# taskset -c 0 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
-"$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+taskset -c 0 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
 pids="$pids $!"
 
 for pid in $pids; do
