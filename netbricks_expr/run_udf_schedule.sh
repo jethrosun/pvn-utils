@@ -144,7 +144,7 @@ done
 docker ps
 
 # docker stats
-taskset -c 0 docker stats --no-trunc --format "table {{.Name}},{{.CPUPerc}},{{.MemUsage}},{{.BlockIO}}" >> ${DOCKER_STATS_LOG} &
+taskset -c 0 docker stats --no-trunc --format "table {{.Name}} {{.CPUPerc}} {{.MemUsage}} {{.BlockIO}}" >> ${DOCKER_STATS_LOG} &
 pids="$pids $!"
 
 # mpstat for every second

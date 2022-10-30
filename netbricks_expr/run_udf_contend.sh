@@ -204,7 +204,7 @@ fi
 docker ps
 
 # docker stats
-taskset -c 0 docker stats --no-trunc --format "table {{.Name}},{{.CPUPerc}},{{.MemUsage}},{{.BlockIO}}" >> ${DOCKER_STATS_LOG} &
+taskset -c 0 docker stats --no-trunc --format "table {{.Name}} {{.CPUPerc}} {{.MemUsage}} {{.BlockIO}}" >> ${DOCKER_STATS_LOG} &
 pids="$pids $!"
 
 while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
@@ -222,13 +222,13 @@ pids="$pids $!"
 
 
 # mpstat for every second
-taskset -c 0 mpstat -P ALL 1 >> "$MPSTAT_LOG" &
+taskset -c 5 mpstat -P ALL 1 >> "$MPSTAT_LOG" &
 pids="$pids $!"
 
 # intel PQoS
 
 # Block IO
-taskset -c 0 "$BIO_TOP_MONITOR" -C -p $contention_diskio_pid > "$BIO_LOG" &
+taskset -c 5 "$BIO_TOP_MONITOR" -C -p $contention_diskio_pid > "$BIO_LOG" &
 pids="$pids $!"
 
 for pid in $pids; do
