@@ -42,8 +42,7 @@ MEMLOG3=$LOG_DIR/$3_$4__$5$6$7_mem3.log
 
 NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
-BIO_TOP_MONITOR=/usr/share/bcc/tools/biotop
-
+BIO_TOP_MONITOR="/usr/local/python3 /usr/share/bcc/tools/biotop"
 # PCPU=$HOME/dev/pvn/utils/netbricks_expr/misc/pcpu.sh
 # PMEM=$HOME/dev/pvn/utils/netbricks_expr/misc/pmem.sh
 
