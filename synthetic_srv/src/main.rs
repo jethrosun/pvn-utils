@@ -191,7 +191,7 @@ fn main() {
                 for _ in 0..5 {
                     let now = Instant::now();
                     let elapsed = execute(load, &cname, &large_vec, &mut buf).unwrap();
-                    loads.push(count);
+                    loads.push(count as usize);
                     lats.push(elapsed.as_millis());
                 }
                 println!(
