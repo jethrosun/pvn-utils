@@ -20,8 +20,7 @@ SYNTHETIC_LOG=$LOG_DIR/$3_$4_srv
 
 NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
-BIO_TOP_MONITOR=/usr/share/bcc/tools/biotop
-
+BIO_TOP_MONITOR="/usr/bin/python3 /usr/share/bcc/tools/biotop"
 NB_CONFIG=$HOME/dev/netbricks/experiments/udf_1core.toml
 TMP_NB_CONFIG=$HOME/config.toml
 
