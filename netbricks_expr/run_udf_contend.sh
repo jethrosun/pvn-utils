@@ -42,7 +42,8 @@ MEMLOG3=$LOG_DIR/$3_$4__$5$6$7_mem3.log
 
 NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
-BIO_TOP_MONITOR="/usr/bin/python3 /usr/share/bcc/tools/biotop"
+# BIO_TOP_MONITOR="/usr/bin/python3 /usr/share/bcc/tools/biotop"
+BIO_TOP_MONITOR="/usr/share/bcc/tools/biotop"
 # PCPU=$HOME/dev/pvn/utils/netbricks_expr/misc/pcpu.sh
 # PMEM=$HOME/dev/pvn/utils/netbricks_expr/misc/pmem.sh
 
@@ -114,19 +115,9 @@ while sleep 5; do
 		:
 	else
 		sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 "hdd" "$DISKIO_LOG" &
-		contention_diskio_pid1=$!
-		echo "PID1" $contention_diskio_pid1
-
-		echo "Test"
-		contention_diskio_pids=$(pgrep contention_disk)
-		echo $contention_diskio_pids
-
 	fi
 done &
-contention_diskio_pid2=$!
-echo "PID2" $contention_diskio_pid2
-pids="$pids $contention_diskio_pid1"
-
+pids="$pids $!"
 
 # "$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
 # pids="$pids $!"
@@ -234,7 +225,7 @@ pids="$pids $!"
 # intel PQoS
 
 # Block IO
-sudo taskset -c 5 /usr/bin/python3 /usr/share/bcc/tools/biotop -C -p $contention_diskio_pid > "$BIO_LOG" &
+taskset -c 5 $BIO_TOP_MONITOR -C  > "$BIO_LOG" &
 pids="$pids $!"
 
 for pid in $pids; do
