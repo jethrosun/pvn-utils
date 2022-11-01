@@ -153,8 +153,8 @@ pids="$pids $!"
 # intel PQoS
 
 # Block IO
-taskset -c 0 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
-pids="$pids $!"
+# taskset -c 0 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+# pids="$pids $!"
 
 for pid in $pids; do
 	wait $pid || let "RESULT=1"

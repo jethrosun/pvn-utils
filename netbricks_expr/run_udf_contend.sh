@@ -115,9 +115,10 @@ while sleep 5; do
 	else
 		sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 "hdd" "$DISKIO_LOG" &
 		# sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 "hdd" "$DISKIO_LOG" &
-		contention_diskio_pid=$!
 	fi
 done &
+contention_diskio_pid=$!
+echo "PID" $contention_diskio_pid
 pids="$pids $contention_diskio_pid"
 
 
