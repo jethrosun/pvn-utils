@@ -116,6 +116,11 @@ while sleep 5; do
 		sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 "hdd" "$DISKIO_LOG" &
 		contention_diskio_pid1=$!
 		echo "PID1" $contention_diskio_pid1
+
+		echo "Test"
+		contention_diskio_pids=$(pgrep contention_disk)
+		echo $contention_diskio_pids
+
 	fi
 done &
 contention_diskio_pid2=$!
