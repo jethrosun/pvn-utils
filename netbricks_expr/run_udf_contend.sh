@@ -227,7 +227,7 @@ pids="$pids $!"
 # intel PQoS
 
 # Block IO
-taskset -c 5 "$BIO_TOP_MONITOR" -C -p $contention_diskio_pid > "$BIO_LOG" &
+sudo taskset -c 5 /usr/bin/python3 /usr/share/bcc/tools/biotop -C -p $contention_diskio_pid > "$BIO_LOG" &
 pids="$pids $!"
 
 for pid in $pids; do
