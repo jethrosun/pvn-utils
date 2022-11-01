@@ -114,12 +114,13 @@ while sleep 5; do
 		:
 	else
 		sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 "hdd" "$DISKIO_LOG" &
-		# sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 4 "hdd" "$DISKIO_LOG" &
+		contention_diskio_pid1=$!
+		echo "PID1" $contention_diskio_pid1
 	fi
 done &
-contention_diskio_pid=$!
-echo "PID" $contention_diskio_pid
-pids="$pids $contention_diskio_pid"
+contention_diskio_pid2=$!
+echo "PID2" $contention_diskio_pid2
+pids="$pids $contention_diskio_pid1"
 
 
 # "$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
