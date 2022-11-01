@@ -19,7 +19,7 @@ mod udf;
 
 fn main() {
     // let expr_time = 1800;
-    let expr_time = 3900;
+    let expr_time = 4000;
     // let start = Instant::now();
 
     let params: Vec<String> = env::args().collect();
@@ -89,7 +89,7 @@ fn main() {
         let mut pivot = times_iter.next().unwrap();
         match times_iter.next() {
             Some(p) => pivot = p,
-            None => pivot = &3900,
+            None => pivot = &4000,
         }
         println!(
             "WorkloadChanged, count: {:?} waiting for: {:?}",
