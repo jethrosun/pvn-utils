@@ -119,8 +119,8 @@ while sleep 5; do
 done &
 pids="$pids $!"
 
-# "$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
-# pids="$pids $!"
+"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
+pids="$pids $!"
 
 core_id=3
 
