@@ -62,8 +62,8 @@ zero = '0'
 #      RESRC PIN
 # -------------------
 # udf_nf_list = ['1', '2', '3', '4', '5', '6', '8', '7', ]
-# num_of_epoch = 3
-# setup.append([zero, zero, zero])
+num_of_epoch = 3
+setup.append([zero, zero, zero])
 
 
 
@@ -74,17 +74,17 @@ zero = '0'
 udf_nf_list = ['7', '1', '2', '3', '4', '5', '6', '8']
 profile_num_of_epoch = 1
 
-# setup.append([zero, zero, zero])
-for i in ['1', '2', '3']:
-    setup.append([i, zero, zero])
-    setup.append([zero, i, zero])
-    setup.append([zero, zero, i])
-
-# # combination set
-for i in ['1', '2', '3']:
-    for j in ['1', '2', '3']:
-        for k in ['1', '2', '3']:
-            setup.append([i, j, k])
+# # setup.append([zero, zero, zero])
+# for i in ['1', '2', '3']:
+#     setup.append([i, zero, zero])
+#     setup.append([zero, i, zero])
+#     setup.append([zero, zero, i])
+#
+# # # combination set
+# for i in ['1', '2', '3']:
+#     for j in ['1', '2', '3']:
+#         for k in ['1', '2', '3']:
+#             setup.append([i, j, k])
 
 
 #      SCHEDULE
