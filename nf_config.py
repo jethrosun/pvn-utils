@@ -96,7 +96,6 @@ batch_list = ['664673']
 # schedule_list = [ 'resrc_pining_23_', 'resrc_pining_32_', 'resrc_pining_41_', 'resrc_pining_122', 'resrc_pining_311' ]
 #
 # schedule_list = [ 'rand', 'resrc_pining_23_', 'resrc_pining_32_', 'resrc_pining_41_', 'resrc_pining_122', 'resrc_pining_311' ]
-# schedule_list = [ 'rand', 'resrc_pining' ]
-schedule_list = [ 'resrc_pining_23_', 'resrc_pining_32_', 'resrc_pining_122' ]
+schedule_list = [ 'rand', 'resrc_pining', 'resrc_pining_23_', 'resrc_pining_32_', 'resrc_pining_122' ]
 
 sched_num_of_epoch = 1
