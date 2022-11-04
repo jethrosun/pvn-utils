@@ -75,16 +75,16 @@ udf_nf_list = ['7', '1', '2', '3', '4', '5', '6', '8']
 profile_num_of_epoch = 1
 
 # # setup.append([zero, zero, zero])
-# for i in ['1', '2', '3']:
-#     setup.append([i, zero, zero])
-#     setup.append([zero, i, zero])
-#     setup.append([zero, zero, i])
+for i in ['1', '2', '3']:
+    setup.append([i, zero, zero])
+    setup.append([zero, i, zero])
+    setup.append([zero, zero, i])
 #
-# # # combination set
-# for i in ['1', '2', '3']:
-#     for j in ['1', '2', '3']:
-#         for k in ['1', '2', '3']:
-#             setup.append([i, j, k])
+# combination set
+for i in ['1', '2', '3']:
+    for j in ['1', '2', '3']:
+        for k in ['1', '2', '3']:
+            setup.append([i, j, k])
 
 
 #      SCHEDULE
@@ -96,6 +96,7 @@ batch_list = ['664673']
 # schedule_list = [ 'resrc_pining_23_', 'resrc_pining_32_', 'resrc_pining_41_', 'resrc_pining_122', 'resrc_pining_311' ]
 #
 # schedule_list = [ 'rand', 'resrc_pining_23_', 'resrc_pining_32_', 'resrc_pining_41_', 'resrc_pining_122', 'resrc_pining_311' ]
-schedule_list = [ 'rand', 'resrc_pining_311', 'resrc_pining_23_', 'resrc_pining_32_', 'resrc_pining_122' ]
+# schedule_list = [ 'rand', 'resrc_pining_311', 'resrc_pining_23_', 'resrc_pining_32_', 'resrc_pining_122' ]
+schedule_list = [ 'rand', 'resrc_central', 'profile' ]
 
 sched_num_of_epoch = 1
