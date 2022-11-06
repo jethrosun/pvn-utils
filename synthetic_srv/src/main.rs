@@ -130,7 +130,7 @@ fn main() {
                     // TODO: better way to track this
                     let elapsed = now.elapsed();
 
-                    loads.push(num_of_jobs);
+                    loads.push(count as usize);
                     lats.push(elapsed.as_millis());
 
                     if Duration::from_millis(990) > elapsed {
@@ -139,8 +139,8 @@ fn main() {
                     // next_sec = cur_time + 5;
                 }
                 println!(
-                    "Info: {:?} jobs in {:?}ms with core: {:?}",
-                    num_of_jobs * 5,
+                    "Info: {:?} users in {:?}ms with core: {:?}",
+                    count * 5,
                     cur_time.elapsed().as_millis(),
                     core
                 );
@@ -189,7 +189,6 @@ fn main() {
                 lats.clear();
                 let cur_time = Instant::now();
                 for _ in 0..5 {
-                    let now = Instant::now();
                     let elapsed = execute(load, &cname, &large_vec, &mut buf).unwrap();
                     loads.push(count as usize);
                     lats.push(elapsed.as_millis());
