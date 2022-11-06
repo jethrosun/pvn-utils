@@ -13,11 +13,53 @@ use std::io::Read;
 use std::time::{Duration, Instant};
 use std::vec;
 use std::{env, process, thread};
+use tokio::task;
 
 mod transcode;
 mod udf;
 
-fn main() {
+async fn process_xcdr(
+    count: u64,
+    num_of_jobs: usize,
+    buffer: &mut Vec<u8>,
+    width_height: &str,
+    loads: &mut Vec<usize>,
+    lats: &mut Vec<u128>,
+) {
+    for _ in 0..5 {
+        let now = Instant::now();
+        // translate number of users to number of transcoding jobs
+        // https://github.com/jethrosun/NetBricks/blob/expr/framework/src/pvn/xcdr.rs#L110
+        // NOTE: 25 jobs roughly takes 1 second
+        for _ in 0..num_of_jobs {
+            let _ = transcode(buffer.as_slice(), width_height);
+        }
+        // TODO: better way to track this
+        let elapsed = now.elapsed();
+
+        loads.push(count as usize);
+        lats.push(elapsed.as_millis());
+    }
+}
+
+async fn process_rand(
+    count: u64,
+    load: Load,
+    cname: &String,
+    large_vec: &Vec<u128>,
+    buf: &mut Box<[u8]>,
+    loads: &mut Vec<usize>,
+    lats: &mut Vec<u128>,
+) {
+    for _ in 0..5 {
+        let elapsed = execute(load, cname, &large_vec, buf).unwrap();
+        loads.push(count as usize);
+        lats.push(elapsed.as_millis());
+    }
+}
+
+#[tokio::main]
+async fn main() {
     // let expr_time = 1800;
     let expr_time = 4000;
     // let start = Instant::now();
@@ -74,161 +116,144 @@ fn main() {
     let cname = core_id.to_string() + "-" + &profile_id.to_string();
     let pname = profile_name.clone();
 
-    let handler = thread::spawn(move || {
-        core_affinity::set_for_current(core);
-        println!("thread pined to {:?}", core);
+    let mut beginning = Instant::now();
 
-        let mut beginning = Instant::now();
+    let mut count = if times.contains(&0) {
+        *workload.get(&0).unwrap()
+    } else {
+        0 as u64
+    };
+    let mut times_iter = times.iter();
+    let mut pivot = times_iter.next().unwrap();
+    match times_iter.next() {
+        Some(p) => pivot = p,
+        None => pivot = &4000,
+    }
+    println!(
+        "WorkloadChanged, count: {:?} waiting for: {:?}",
+        count, pivot,
+    );
+    let mut loads = Vec::new();
+    let mut lats = Vec::new();
 
-        let mut count = if times.contains(&0) {
-            *workload.get(&0).unwrap()
-        } else {
-            0 as u64
-        };
-        let mut times_iter = times.iter();
-        let mut pivot = times_iter.next().unwrap();
-        match times_iter.next() {
-            Some(p) => pivot = p,
-            None => pivot = &4000,
-        }
-        println!(
-            "WorkloadChanged, count: {:?} waiting for: {:?}",
-            count, pivot,
-        );
-        let mut loads = Vec::new();
-        let mut lats = Vec::new();
+    if pname == "xcdr" {
+        // let mut job_count = 0;
+        let mut num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
 
-        if pname == "xcdr" {
-            let mut job_count = 0;
-            let mut num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
+        // let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
+        // let infile = "/Users/jethros/dev/pvn/utils/data/tiny.y4m";
+        let infile = "/udf_data/tiny.y4m";
+        let width_height = "360x24";
 
-            // let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
-            // let infile = "/Users/jethros/dev/pvn/utils/data/tiny.y4m";
-            let infile = "/udf_data/tiny.y4m";
-            let width_height = "360x24";
+        let mut file = File::open(infile).unwrap();
+        let mut buffer = Vec::new();
+        file.read_to_end(&mut buffer).unwrap();
 
-            let mut file = File::open(infile).unwrap();
-            let mut buffer = Vec::new();
-            file.read_to_end(&mut buffer).unwrap();
+        println!("Timer started after {:?}", beginning.elapsed().as_millis());
+        beginning = Instant::now();
 
-            println!("Timer started after {:?}", beginning.elapsed().as_millis());
-            beginning = Instant::now();
+        loop {
+            let cur_time = Instant::now();
+            loads.clear();
+            lats.clear();
 
-            loop {
-                loads.clear();
-                lats.clear();
-                let cur_time = Instant::now();
-                for _ in 0..5 {
-                    let now = Instant::now();
-                    // translate number of users to number of transcoding jobs
-                    // https://github.com/jethrosun/NetBricks/blob/expr/framework/src/pvn/xcdr.rs#L110
-                    // NOTE: 25 jobs roughly takes 1 second
-                    for _ in 0..num_of_jobs {
-                        let _ = transcode(buffer.as_slice(), width_height);
-                    }
-                    job_count += num_of_jobs;
-                    // TODO: better way to track this
-                    let elapsed = now.elapsed();
+            process_xcdr(
+                count,
+                num_of_jobs,
+                &mut buffer,
+                width_height,
+                &mut loads,
+                &mut lats,
+            )
+            .await;
+            println!(
+                "Info: {:?} users in {:?}ms with core: {:?}",
+                count * 5,
+                cur_time.elapsed().as_millis(),
+                core
+            );
+            println!("Metric: {:?}", loads);
+            println!("Latency(ms): {:?}", lats);
 
-                    loads.push(count as usize);
-                    lats.push(elapsed.as_millis());
-
-                    if Duration::from_millis(990) > elapsed {
-                        thread::sleep(Duration::from_millis(990) - elapsed);
-                    }
-                    // next_sec = cur_time + 5;
-                }
+            // run until the next change
+            //
+            if beginning.elapsed().as_secs() >= expr_time as u64 {
+                println!("Have run for {}, exiting now", expr_time);
+                process::exit(0x0100);
+            } else if beginning.elapsed().as_secs() >= *pivot as u64 {
+                count = *workload.get(pivot).unwrap();
+                pivot = match times_iter.next() {
+                    Some(t) => t,
+                    None => &expr_time,
+                };
+                num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
                 println!(
-                    "Info: {:?} users in {:?}ms with core: {:?}",
-                    count * 5,
-                    cur_time.elapsed().as_millis(),
-                    core
+                    "WorkloadChanged, count: {:?} pivot waiting for: {:?}, num_of_jobs: {:?}",
+                    count, pivot, num_of_jobs
                 );
-                println!("Metric: {:?}", loads);
-                println!("Latency(ms): {:?}", lats);
-
-                // run until the next change
-                //
-                if beginning.elapsed().as_secs() >= expr_time as u64 {
-                    println!("Have run for {}, exiting now", expr_time);
-                    process::exit(0x0100);
-                } else if beginning.elapsed().as_secs() >= *pivot as u64 {
-                    count = *workload.get(pivot).unwrap();
-                    pivot = match times_iter.next() {
-                        Some(t) => t,
-                        None => &expr_time,
-                    };
-                    num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
-                    println!(
-                        "WorkloadChanged, count: {:?} pivot waiting for: {:?}, num_of_jobs: {:?}",
-                        count, pivot, num_of_jobs
-                    );
-                    continue;
-                }
+                continue;
             }
         }
-        // rand1-4
-        else {
-            let mut load = udf_load(&pname, count as f64).unwrap();
-            println!("WorkloadChanged, count: {:?} load: {:?}", count, load);
+    }
+    // rand1-4
+    else {
+        let mut load = udf_load(&pname, count as f64).unwrap();
+        println!("WorkloadChanged, count: {:?} load: {:?}", count, load);
 
-            //RAM
-            let mut large_vec = vec![42u128; (load.ram as u128).try_into().unwrap()];
+        //RAM
+        let mut large_vec = vec![42u128; (load.ram as u128).try_into().unwrap()];
 
-            // File I/O
-            // use buffer to store random data
-            let mut buf: Vec<u8> = Vec::with_capacity((load.io * 1_000_000).try_into().unwrap()); // B to MB
-            for _ in 0..buf.capacity() {
-                buf.push(rand::random())
-            }
-            println!("buf size: {:?}", buf.capacity());
-            let mut buf = buf.into_boxed_slice();
+        // File I/O
+        // use buffer to store random data
+        let mut buf: Vec<u8> = Vec::with_capacity((load.io * 1_000_000).try_into().unwrap()); // B to MB
+        for _ in 0..buf.capacity() {
+            buf.push(rand::random())
+        }
+        println!("buf size: {:?}", buf.capacity());
+        let mut buf = buf.into_boxed_slice();
 
-            loop {
-                loads.clear();
-                lats.clear();
-                let cur_time = Instant::now();
-                for _ in 0..5 {
-                    let elapsed = execute(load, &cname, &large_vec, &mut buf).unwrap();
-                    loads.push(count as usize);
-                    lats.push(elapsed.as_millis());
-                }
+        loop {
+            loads.clear();
+            lats.clear();
+            let cur_time = Instant::now();
+            process_rand(
+                count, load, &cname, &large_vec, &mut buf, &mut loads, &mut lats,
+            )
+            .await;
+
+            println!(
+                "Info: count {:?} in {:?}ms with core: {:?}",
+                count * 5,
+                cur_time.elapsed().as_millis(),
+                core
+            );
+            println!("Metric: {:?}", loads);
+            println!("Latency(ms): {:?}", lats);
+
+            // run until the next change
+            //
+            if beginning.elapsed().as_secs() >= expr_time as u64 {
+                println!("Have run for {}, exiting now", expr_time);
+                process::exit(0x0100);
+            } else if beginning.elapsed().as_secs() >= *pivot as u64 {
+                count = *workload.get(pivot).unwrap();
+                pivot = match times_iter.next() {
+                    Some(t) => t,
+                    None => &expr_time,
+                };
+                load = udf_load(&pname, count as f64).unwrap();
                 println!(
-                    "Info: count {:?} in {:?}ms with core: {:?}",
-                    count * 5,
-                    cur_time.elapsed().as_millis(),
-                    core
+                    "WorkloadChanged, count: {:?} pivot waiting for: {:?}, new load {:?}",
+                    count, pivot, load
                 );
-                println!("Metric: {:?}", loads);
-                println!("Latency(ms): {:?}", lats);
-
-                // run until the next change
-                //
-                if beginning.elapsed().as_secs() >= expr_time as u64 {
-                    println!("Have run for {}, exiting now", expr_time);
-                    process::exit(0x0100);
-                } else if beginning.elapsed().as_secs() >= *pivot as u64 {
-                    count = *workload.get(pivot).unwrap();
-                    pivot = match times_iter.next() {
-                        Some(t) => t,
-                        None => &expr_time,
-                    };
-                    load = udf_load(&pname, count as f64).unwrap();
-                    println!(
-                        "WorkloadChanged, count: {:?} pivot waiting for: {:?}, new load {:?}",
-                        count, pivot, load
-                    );
-                    large_vec.resize(load.ram as usize, 42u128);
-                    continue;
-                } else {
-                    let elapsed = cur_time.elapsed();
-                    if elapsed < Duration::from_millis(4990) {
-                        thread::sleep(Duration::from_millis(4990) - elapsed);
-                    }
-                }
+                large_vec.resize(load.ram as usize, 42u128);
+                continue;
+            } else {
+                // let elapsed = cur_time.elapsed();
+                // if elapsed < Duration::from_millis(4990) {
+                //     thread::sleep(Duration::from_millis(4990) - elapsed);
+                // }
             }
         }
-    });
-
-    handler.join().unwrap();
+    }
 }
