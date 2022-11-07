@@ -10,15 +10,15 @@ use core_affinity::CoreId;
 use std::convert::TryInto;
 use std::fs::File;
 use std::io::Read;
-use std::time::{Duration, Instant};
-use std::vec;
-use std::{env, process, thread};
-use tokio::task;
+use std::time::Instant;
+use std::{env, process, vec};
+use tokio::time;
 
 mod transcode;
 mod udf;
 
 async fn process_xcdr(
+    interval: &mut time::Interval,
     count: u64,
     num_of_jobs: usize,
     buffer: &mut Vec<u8>,
@@ -26,7 +26,8 @@ async fn process_xcdr(
     loads: &mut Vec<usize>,
     lats: &mut Vec<u128>,
 ) {
-    for _ in 0..5 {
+    for _i in 0..5 {
+        interval.tick().await;
         let now = Instant::now();
         // translate number of users to number of transcoding jobs
         // https://github.com/jethrosun/NetBricks/blob/expr/framework/src/pvn/xcdr.rs#L110
@@ -43,6 +44,7 @@ async fn process_xcdr(
 }
 
 async fn process_rand(
+    interval: &mut time::Interval,
     count: u64,
     load: Load,
     cname: &String,
@@ -52,6 +54,7 @@ async fn process_rand(
     lats: &mut Vec<u128>,
 ) {
     for _ in 0..5 {
+        interval.tick().await;
         let elapsed = execute(load, cname, &large_vec, buf).unwrap();
         loads.push(count as usize);
         lats.push(elapsed.as_millis());
@@ -60,9 +63,7 @@ async fn process_rand(
 
 #[tokio::main]
 async fn main() {
-    // let expr_time = 1800;
     let expr_time = 4000;
-    // let start = Instant::now();
 
     let params: Vec<String> = env::args().collect();
     if params.len() == 4 {
@@ -152,12 +153,14 @@ async fn main() {
         println!("Timer started after {:?}", beginning.elapsed().as_millis());
         beginning = Instant::now();
 
+        let mut interval = time::interval(time::Duration::from_secs(1));
         loop {
             let cur_time = Instant::now();
             loads.clear();
             lats.clear();
 
             process_xcdr(
+                &mut interval,
                 count,
                 num_of_jobs,
                 &mut buffer,
@@ -212,12 +215,20 @@ async fn main() {
         println!("buf size: {:?}", buf.capacity());
         let mut buf = buf.into_boxed_slice();
 
+        let mut interval = time::interval(time::Duration::from_secs(1));
         loop {
             loads.clear();
             lats.clear();
             let cur_time = Instant::now();
             process_rand(
-                count, load, &cname, &large_vec, &mut buf, &mut loads, &mut lats,
+                &mut interval,
+                count,
+                load,
+                &cname,
+                &large_vec,
+                &mut buf,
+                &mut loads,
+                &mut lats,
             )
             .await;
 
