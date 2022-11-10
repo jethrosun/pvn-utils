@@ -228,10 +228,10 @@ def main(expr_list):
 
                     rdr_cleanup(netbricks_sess)
                     # xcdr_cleanup(netbricks_sess)
-                    time.sleep(5)
+                    time.sleep(10)
 
                     sess_destroy(netbricks_sess)
-                    time.sleep(5)
+                    time.sleep(20)
 
             sess_destroy(pktgen_sess)
             time.sleep(5)
