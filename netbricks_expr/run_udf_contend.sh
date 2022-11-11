@@ -212,9 +212,9 @@ pids="$pids $!"
 # pids="$pids $!"
 # while sleep 1; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
 # pids="$pids $!"
-while sleep 1; do taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh contention; done > "$CPULOG3" &
+while sleep 1; do taskset -c 4 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh contention; done > "$CPULOG3" &
 pids="$pids $!"
-while sleep 1; do taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh contention; done > "$MEMLOG3" &
+while sleep 1; do taskset -c 4 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh contention; done > "$MEMLOG3" &
 pids="$pids $!"
 
 
