@@ -69,7 +69,8 @@ setup.append([zero, zero, zero])
 #      PROFILE
 # -------------------
 # udf_nf_list = ['7']
-udf_nf_list = ['7', '1', '2', '3', '4', '5', '6', '8']
+# udf_nf_list = ['7', '1', '2', '3', '4', '5', '6', '8']
+udf_nf_list = ['3', '4']
 profile_num_of_epoch = 1
 
 # # setup.append([zero, zero, zero])
