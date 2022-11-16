@@ -100,4 +100,4 @@ sched_num_of_epoch = 1
 #                  'resrc_pining_41_', 'resrc_pining_122', 'resrc_pining_311']
 # schedule_list = ['resrc_central', 'rand',
 #                  'resrc_pining_122', 'resrc_pining_41_']
-schedule_list = ['resrc_central', 'profile']
+schedule_list = ['profile', 'resrc_central']
