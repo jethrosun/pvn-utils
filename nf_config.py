@@ -87,8 +87,8 @@ for i in ['1', '2', '3']:
 
 #      SCHEDULE
 # ----------------------
-#batch_list = ['400019', '664673', '1374946']
-batch_list = ['664673']
+batch_list = ['400019', '664673', '1374946']
+# batch_list = ['664673']
 
 # schedule_list = [ 'rand', 'resrc_pining_23_', 'resrc_pining_32_', 'resrc_pining_41_', 'resrc_pining_122', 'resrc_pining_311' ]
 # schedule_list = [ 'rand', 'resrc_pining_311', 'resrc_pining_23_', 'resrc_pining_32_', 'resrc_pining_122' ]
@@ -100,4 +100,5 @@ sched_num_of_epoch = 1
 #                  'resrc_pining_41_', 'resrc_pining_122', 'resrc_pining_311']
 # schedule_list = ['resrc_central', 'rand',
 #                  'resrc_pining_122', 'resrc_pining_41_']
-schedule_list = ['profile', 'resrc_central']
+# schedule_list = ['profile', 'resrc_central']
+schedule_list = ['rand',]
