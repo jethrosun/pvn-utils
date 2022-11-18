@@ -50,7 +50,7 @@ fn main() {
     // The regular way to get core ids are not going work as we have configured isol cpus to reduce context switches for DPDK and our things.
     // We want to cause equal pressure to all of the cores for CPU contention
     let mut core_ids = Vec::new();
-    for idx in 0..4 {
+    for idx in 1..4 {
         core_ids.push(CoreId { id: idx });
     }
     core_ids.push(CoreId { id: 5 });
