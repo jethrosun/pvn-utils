@@ -96,8 +96,8 @@ sched_num_of_epoch = 1
 # schedule_list = ['resrc_central', 'rand',
 #                  'resrc_pining_122', 'resrc_pining_41_']
 # schedule_list = ['profile', 'resrc_central']
-schedule_list = ['rand', 'resrc_central',
-                 'profile_w_rand', 'resrc_central_w_cont']
+schedule_list = [ #'rand',
+                 'resrc_central', 'profile_w_rand', 'resrc_central_w_cont']
 
 # batch_list = ['400019', '664673', '1374946']
 batch_list = ['664673']
