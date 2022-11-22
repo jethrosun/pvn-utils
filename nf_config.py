@@ -101,3 +101,4 @@ schedule_list = ['rand', 'resrc_pining_23_', 'resrc_pining_32_', 'resrc_pining_4
 
 # batch_list = ['400019', '664673', '1374946']
 batch_list = ['664673']
+batch_list = ['664673_05', '664673_10', '664673_20']

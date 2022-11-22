@@ -15,6 +15,7 @@ P2P_PROGRESS_LOG=$LOG_DIR/$3_$4_p2p_progress.log
 FAKTORY_LOG=$LOG_DIR/$3_$4_faktory.log
 DOCKER_STATS_LOG=$LOG_DIR/$3_$4_docker_stats.log
 MPSTAT_LOG=$LOG_DIR/$3_$4_mpstat.log
+LOADAVG_LOG=$LOG_DIR/$3_$4_loadavg.log
 # then *core id* and *NF id*
 SYNTHETIC_LOG=$LOG_DIR/$3_$4_srv
 
@@ -148,6 +149,10 @@ pids="$pids $!"
 
 # mpstat for every second
 taskset -c 0 mpstat -P ALL 1 >> "$MPSTAT_LOG" &
+pids="$pids $!"
+
+# loadavg
+while sleep 1; do taskset -c 0 cat /proc/loadavg; done > "$LOADAVG_LOG" &
 pids="$pids $!"
 
 # intel PQoS
