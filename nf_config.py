@@ -91,8 +91,11 @@ for i in ['1', '2', '3']:
 
 sched_num_of_epoch = 1
 
-# TODO
-schedule_list = [ 'rand', 'profile', 'profile_w_rand', 'resrc_central', 'resrc_central_w_cont',
-                 'resrc_pining_23_', 'resrc_pining_32_', 'resrc_pining_41_', 'resrc_pining_122', 'resrc_pining_311' ]
+# schedule_list = [ 'rand', 'profile', 'profile_w_rand', 'resrc_central', 'resrc_central_w_cont',
+#                  'resrc_pining_23_', 'resrc_pining_32_', 'resrc_pining_41_', 'resrc_pining_122', 'resrc_pining_311' ]
 
-batch_list = ['664673_05', '664673_10', '664673_20']
+# TODO
+schedule_list = [ 'profile', 'profile_w_rand', 'resrc_central', 'resrc_central_w_cont']
+# batch_list = ['664673_05', '664673_10', '664673_20']
+batch_list = ['664673_05', '664673_10']
+
