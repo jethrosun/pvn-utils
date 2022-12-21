@@ -98,6 +98,13 @@ sched_num_of_epoch = 1
 # schedule_list = [ 'profile', 'profile_w_rand', 'resrc_central', 'resrc_central_w_cont']
 # batch_list = ['664673_05', '664673_10', '400019_05', '400019_10', '1374946_05', '1374946_10']
 #
-# TODO
-schedule_list = [ 'profile', 'profile_w_rand', 'resrc_central', 'resrc_central_w_cont']
-batch_list = ['664673_20', '400019_20', '1374946_20']
+# TODO: complete schedule for new model
+# schedule_list = [ 'profile_w_rand', 'resrc_central' ]
+# batch_list = ['664673_05', '664673_10', '400019_05', '400019_10', '1374946_05', '1374946_10',  '664673_20', '400019_20', '1374946_20']
+
+
+
+schedule_list = [ 'rand' ]
+batch_list = [ '664673_05', '664673_10',
+              # '400019_05', '1374946_05', '400019_10', '1374946_10'
+              ]
