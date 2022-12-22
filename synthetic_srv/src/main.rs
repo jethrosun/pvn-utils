@@ -32,8 +32,10 @@ async fn process_xcdr(
         // translate number of users to number of transcoding jobs
         // https://github.com/jethrosun/NetBricks/blob/expr/framework/src/pvn/xcdr.rs#L110
         // NOTE: 25 jobs roughly takes 1 second
-        for _ in 0..num_of_jobs {
-            let _ = transcode(buffer.as_slice(), width_height);
+        if num_of_jobs > 0 {
+            for _ in 0..num_of_jobs {
+                let _ = transcode(buffer.as_slice(), width_height);
+            }
         }
         // TODO: better way to track this
         let elapsed = now.elapsed();
