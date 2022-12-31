@@ -65,7 +65,13 @@ RESULT=0
 
 # P1=$!
 "$NETBRICKS_BUILD" run "udf-schedule" -f "$TMP_NB_CONFIG" > "$LOG" &
+nb_id=$!
+pids="$pids $nb_id"
+
+# Block IO
+taskset -c 0 "$BIO_TOP_MONITOR" -C -p $nb_id > "$BIO_LOG" &
 pids="$pids $!"
+
 
 while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh udf; done > "$CPULOG" &
 pids="$pids $!"
@@ -163,10 +169,6 @@ while sleep 1; do taskset -c 0 cat /proc/loadavg; done > "$LOADAVG_LOG" &
 pids="$pids $!"
 
 # intel PQoS
-
-# Block IO
-taskset -c 0 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
-pids="$pids $!"
 
 for pid in $pids; do
 	wait $pid || let "RESULT=1"
