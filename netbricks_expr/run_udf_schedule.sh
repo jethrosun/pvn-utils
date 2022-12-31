@@ -69,7 +69,7 @@ nb_id=$!
 pids="$pids $nb_id"
 
 # Block IO
-taskset -c 0 "$BIO_TOP_MONITOR" -C -p $nb_id > "$BIO_LOG" &
+taskset -c 0 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pbiotop.sh $nb_id > "$BIO_LOG" &
 pids="$pids $!"
 
 
