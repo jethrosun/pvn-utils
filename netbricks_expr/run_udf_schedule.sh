@@ -18,6 +18,8 @@ MPSTAT_LOG=$LOG_DIR/$3_$4_mpstat.log
 LOADAVG_LOG=$LOG_DIR/$3_$4_loadavg.log
 # then *core id* and *NF id*
 SYNTHETIC_LOG=$LOG_DIR/$3_$4_srv
+CPULOG=$LOG_DIR/$3_$4_cpu.log
+MEMLOG=$LOG_DIR/$3_$4_mem.log
 
 NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
@@ -61,9 +63,13 @@ pids=""
 RESULT=0
 
 # P1=$!
-"$NETBRICKS_BUILD" run "$2" -f "$TMP_NB_CONFIG" > "$LOG" &
+"$NETBRICKS_BUILD" run "udf-schedule" -f "$TMP_NB_CONFIG" > "$LOG" &
 pids="$pids $!"
 
+while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG" &
+pids="$pids $!"
+while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG" &
+pids="$pids $!"
 
 cd ~/dev/pvn/utils/synthetic_srv/
 
