@@ -4,6 +4,7 @@ set -e
 # base log dir:
 # $1 = batch, $2 = schedule
 LOG_DIR=$HOME/netbricks_logs/$1/$2
+SLEEP_INTERVAL=1
 
 # log files
 # 3: number of runs
@@ -66,9 +67,9 @@ RESULT=0
 "$NETBRICKS_BUILD" run "udf-schedule" -f "$TMP_NB_CONFIG" > "$LOG" &
 pids="$pids $!"
 
-while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG" &
+while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh udf; done > "$CPULOG" &
 pids="$pids $!"
-while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG" &
+while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh udf; done > "$MEMLOG" &
 pids="$pids $!"
 
 cd ~/dev/pvn/utils/synthetic_srv/
@@ -164,8 +165,8 @@ pids="$pids $!"
 # intel PQoS
 
 # Block IO
-# taskset -c 0 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
-# pids="$pids $!"
+taskset -c 0 "$BIO_TOP_MONITOR" -C > "$BIO_LOG" &
+pids="$pids $!"
 
 for pid in $pids; do
 	wait $pid || let "RESULT=1"
