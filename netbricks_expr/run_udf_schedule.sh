@@ -68,14 +68,15 @@ RESULT=0
 nb_id=$!
 pids="$pids $nb_id"
 
+# TODO: remove?
 # Block IO
 taskset -c 0 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pbiotop.sh $nb_id > "$BIO_LOG" &
 pids="$pids $!"
 
-
-while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh udf; done > "$CPULOG" &
+# TODO: remove?
+while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 0 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh udf; done > "$CPULOG" &
 pids="$pids $!"
-while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh udf; done > "$MEMLOG" &
+while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 0 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh udf; done > "$MEMLOG" &
 pids="$pids $!"
 
 cd ~/dev/pvn/utils/synthetic_srv/
@@ -160,6 +161,7 @@ docker ps
 taskset -c 0 docker stats --no-trunc --format "table {{.Name}} {{.CPUPerc}} {{.MemUsage}} {{.BlockIO}}" >> ${DOCKER_STATS_LOG} &
 pids="$pids $!"
 
+# TODO: remove?
 # mpstat for every second
 taskset -c 0 mpstat -P ALL 1 >> "$MPSTAT_LOG" &
 pids="$pids $!"
