@@ -25,6 +25,8 @@ MEMLOG=$LOG_DIR/$3_$4_mem.log
 NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
 BIO_TOP_MONITOR="/usr/bin/python3 /usr/share/bcc/tools/biotop"
+
+# NB_CONFIG=$HOME/dev/netbricks/experiments/udf_1core_extend.toml
 NB_CONFIG=$HOME/dev/netbricks/experiments/udf_1core.toml
 TMP_NB_CONFIG=$HOME/config.toml
 
@@ -32,7 +34,8 @@ SERVER=$HOME/data/cargo-target/release/synthetic_srv
 
 # 1800 seconds = 30 min
 # sed "/duration = 1800/i log_path = '${LOG}'" "${NB_CONFIG}" >"${TMP_NB_CONFIG}"
-sed "/duration = 3900/i log_path = '${LOG}'" "${NB_CONFIG}" >"${TMP_NB_CONFIG}"
+# sed "/duration = 3900/i log_path = '${LOG}'" "${NB_CONFIG}" >"${TMP_NB_CONFIG}"
+sed "/duration = 3600/i log_path = '${LOG}'" "${NB_CONFIG}" >"${TMP_NB_CONFIG}"
 
 INST_LEVEL=off
 EXPR_MODE=long
@@ -65,19 +68,21 @@ RESULT=0
 
 # P1=$!
 "$NETBRICKS_BUILD" run "udf-schedule" -f "$TMP_NB_CONFIG" > "$LOG" &
-nb_id=$!
-pids="$pids $nb_id"
+pids="$pids $!"
+
+# nb_id=$!
+# pids="$pids $nb_id"
 
 # TODO: remove?
 # Block IO
-taskset -c 0 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pbiotop.sh $nb_id > "$BIO_LOG" &
-pids="$pids $!"
+# taskset -c 0 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pbiotop.sh $nb_id > "$BIO_LOG" &
+# pids="$pids $!"
 
 # TODO: remove?
-while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 0 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh udf; done > "$CPULOG" &
-pids="$pids $!"
-while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 0 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh udf; done > "$MEMLOG" &
-pids="$pids $!"
+# while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 0 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh udf; done > "$CPULOG" &
+# pids="$pids $!"
+# while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 0 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh udf; done > "$MEMLOG" &
+# pids="$pids $!"
 
 cd ~/dev/pvn/utils/synthetic_srv/
 
@@ -163,8 +168,8 @@ pids="$pids $!"
 
 # TODO: remove?
 # mpstat for every second
-taskset -c 0 mpstat -P ALL 1 >> "$MPSTAT_LOG" &
-pids="$pids $!"
+# taskset -c 0 mpstat -P ALL 1 >> "$MPSTAT_LOG" &
+# pids="$pids $!"
 
 # loadavg
 while sleep 1; do taskset -c 0 cat /proc/loadavg; done > "$LOADAVG_LOG" &
