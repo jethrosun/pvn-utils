@@ -105,9 +105,11 @@ sched_num_of_epoch = 1
 # schedule_list = ['resrc_pining_23_', 'resrc_pining_32_', 'resrc_pining_41_', 'resrc_pining_122', 'resrc_pining_311']
 
 # schedule_list = ['rand']
-schedule_list = ['profile', 'profile_w_rand',
-                 'resrc_central', 'resrc_central_w_cont']
-batch_list = ['664673_10', '664673_20', '664673_30', '664673_40', '664673_50',
-              '400019_10', '400019_20', '400019_30', '400019_40', '400019_50',
-              '1374946_10', '1374946_20', '1374946_30', '1374946_40', '1374946_50']
+schedule_list = ['profile_w_rand', 'resrc_central']
+# 'profile', , 'resrc_central_w_cont']
+batch_list = [
+    '400019_10', '400019_20', '400019_30', '400019_40', '400019_50',
+    '1374946_10', '1374946_20', '1374946_30', '1374946_40', '1374946_50',
+    '664673_10', '664673_20', '664673_30', '664673_40', '664673_50',
+]
 # batch_list = [ '1374946_30', '1374946_40', '1374946_50']
