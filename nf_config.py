@@ -71,16 +71,16 @@ udf_nf_list = ['1', '2', '3', '4', '5', '6', '7', '8']
 profile_num_of_epoch = 1
 
 setup.append([zero, zero, zero])
-for i in ['1', '2', '3']:
-    setup.append([i, zero, zero])
-    setup.append([zero, i, zero])
-    setup.append([zero, zero, i])
+# for i in ['1', '2', '3']:
+#     setup.append([i, zero, zero])
+#     setup.append([zero, i, zero])
+#     setup.append([zero, zero, i])
 #
 # combination set
-for i in ['1', '2', '3']:
-    for j in ['1', '2', '3']:
-        for k in ['1', '2', '3']:
-            setup.append([i, j, k])
+# for i in ['1', '2', '3']:
+#     for j in ['1', '2', '3']:
+#         for k in ['1', '2', '3']:
+#             setup.append([i, j, k])
 
 
 #      SCHEDULE
@@ -105,12 +105,14 @@ sched_num_of_epoch = 1
 
 # 'profile', , 'resrc_central_w_cont']
 # schedule_list = ['rand']
-schedule_list = ['profile_w_rand', 'resrc_central']
-batch_list = [
-    '400019_50',
-    '1374946_50',
-    '664673_50'
-]
+
+
+
+# schedule_list = ['profile_w_rand',]
+# batch_list = ['1374946_50',]
+
+schedule_list = ['resrc_central']
+batch_list = ['400019_50',]
 
 
 # TODO: complete schedule for new model
