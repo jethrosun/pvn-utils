@@ -107,12 +107,11 @@ sched_num_of_epoch = 1
 # schedule_list = ['rand']
 
 
+schedule_list = ['profile_w_rand', ]
+batch_list = ['1374946_50', ]
 
-# schedule_list = ['profile_w_rand',]
-# batch_list = ['1374946_50',]
-
-schedule_list = ['resrc_central']
-batch_list = ['400019_50',]
+# schedule_list = ['resrc_central']
+# batch_list = ['400019_50',]
 
 
 # TODO: complete schedule for new model
