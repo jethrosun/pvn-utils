@@ -16,13 +16,13 @@ elif [ "$HOSTNAME" == "saul" ]; then
 		ln -s "$HOME/dev/pvn/utils/pktgen_expr" "$HOME/dev/pktgen-dpdk/experiments"
 	fi
 
-	if [ -e .venv ]; then
+	if [ -e "$HOME/.venv" ]; then
 		echo "Passing, venv exists.."
 	else
-		virtualenv -p /usr/bin/python3 .venv
+		virtualenv -p /usr/bin/python3 "$HOME/.venv"
 	fi
 
-	source "$PWD/.venv/bin/activate"
+	source "$HOME/.venv/bin/activate"
 	pip3 install -r requirements.txt
 	deactivate
 
