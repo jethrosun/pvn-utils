@@ -99,12 +99,13 @@ sched_num_of_epoch = 1
 # batch_list = ['664673_05', '664673_10', '400019_05', '400019_10', '1374946_05', '1374946_10']
 #
 
+# schedule_list = ['profile_w_rand', 'resrc_central']
 
 # batch_list = [ '400019_10', '1374946_10', '664673_10',]
 
 # batch_list = ['1374946_30', '664673_30', '400019_30', ]
 
-schedule_list = ['profile_w_rand', 'resrc_central']
+schedule_list = ['resrc_central']
 batch_list = ['400019_50', '1374946_50', '664673_50', ]
 
 
