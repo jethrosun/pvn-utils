@@ -14,11 +14,13 @@ def netbricks_sess_setup(trace, nf, epoch):
         print("netbricks session is spawned")
 
         netbricks_sess.send_commands('bash')
-        netbricks_sess.enable_logs("netbricks--" + trace + "_" + nf + "_" + str(epoch) + ".log")
+        netbricks_sess.enable_logs(
+            "netbricks--" + trace + "_" + nf + "_" + str(epoch) + ".log")
         netbricks_sess.send_commands('ssh jethros@tuco')
         # netbricks_sess.send_commands('cd /home/jethros/dev/pvn/utils/faktory_srv')
         # netbricks_sess.send_commands('cargo b --release')
-        netbricks_sess.send_commands('cd /home/jethros/dev/netbricks/experiments')
+        netbricks_sess.send_commands(
+            'cd /home/jethros/dev/netbricks/experiments')
 
         time.sleep(15)
         return netbricks_sess
@@ -36,7 +38,8 @@ def pktgen_sess_setup(trace, nf, setup):
 
         pktgen_sess.send_commands('bash')
         pktgen_sess.enable_logs("pktgen--" + trace + "_" + nf + ".log")
-        pktgen_sess.send_commands('cd /home/jethros/dev/pktgen-dpdk/experiments')
+        pktgen_sess.send_commands(
+            'cd /home/jethros/dev/pktgen-dpdk/experiments')
 
         time.sleep(20)
         return pktgen_sess
@@ -44,6 +47,7 @@ def pktgen_sess_setup(trace, nf, setup):
         print("Creating screen sessions failed: {}".format(err))
         pktgen_sess.kill()
         sys.exit(1)
+
 
 def p2p_sess_setup(node, trace, nf, epoch):
     p2p_nodes = {
@@ -93,15 +97,17 @@ def run_pktgen(sess, trace, setup):
 
 
 # def run_netbricks(sess, trace, nf, epoch, setup):
-def run_netbricks(sess, batch , schedule, epoch, setup):
-    cmd_str = "sudo ./run_udf_schedule.sh " + batch + " " + schedule + " " + str(epoch) + " " + setup
+def run_netbricks(sess, batch, schedule, epoch, setup):
+    cmd_str = "sudo ./run_udf_schedule.sh " + batch + \
+        " " + schedule + " " + str(epoch) + " " + setup
     print("Run NetBricks\nTry to run with cmd: {}".format(cmd_str))
     sess.send_commands(cmd_str)
 
 
 def run_p2p_node(typ, sess, node, batch, sched):
     if typ == "leecher":
-        cmd_str = "./leecher_run.sh " + str(node) + " " + str(batch) + " " + str(sched)
+        cmd_str = "./leecher_run.sh " + \
+            str(node) + " " + str(batch) + " " + str(sched)
         print("Run P2P Leecher \n\tCmd: {}".format(cmd_str))
         sess.send_commands(cmd_str)
 
@@ -161,12 +167,12 @@ def rdr_cleanup(sess):
 
 
 def main(batch_list, schedule_list):
-    expr = 'udf_schedule' # we only use one expr anyway
+    expr = 'udf_schedule'  # we only use one expr anyway
     nf = conf.pvn_nf[expr][0]
     for batch in batch_list:
         print("Running experiments that for {} application NF".format(expr))
         for schedule in schedule_list:
-            sending_rate = 10
+            sending_rate = 50
             pktgen_sess = pktgen_sess_setup(conf.trace[expr], nf, sending_rate)
             run_pktgen(pktgen_sess, conf.trace[expr], sending_rate)
 
@@ -174,11 +180,15 @@ def main(batch_list, schedule_list):
             for node in conf.udf_node_list:
                 # epoch from 0 to 9
                 for epoch in range(conf.sched_num_of_epoch):
-                    netbricks_sess = netbricks_sess_setup(conf.trace[expr], nf, epoch)
+                    netbricks_sess = netbricks_sess_setup(
+                        conf.trace[expr], nf, epoch)
 
-                    leecher1_sess = p2p_sess_setup('bt2', conf.trace[expr], nf, epoch)
-                    leecher2_sess = p2p_sess_setup('bt3', conf.trace[expr], nf, epoch)
-                    leecher3_sess = p2p_sess_setup('bt4', conf.trace[expr], nf, epoch)
+                    leecher1_sess = p2p_sess_setup(
+                        'bt2', conf.trace[expr], nf, epoch)
+                    leecher2_sess = p2p_sess_setup(
+                        'bt3', conf.trace[expr], nf, epoch)
+                    leecher3_sess = p2p_sess_setup(
+                        'bt4', conf.trace[expr], nf, epoch)
 
                     if epoch == 0:
                         p2p_setup("netbricks", netbricks_sess)
@@ -197,9 +207,12 @@ def main(batch_list, schedule_list):
                     time.sleep(5)
 
                     # Actual RUN
-                    run_p2p_node('leecher', leecher1_sess, node, batch, schedule)
-                    run_p2p_node('leecher', leecher2_sess, node, batch, schedule)
-                    run_p2p_node('leecher', leecher3_sess, node, batch, schedule)
+                    run_p2p_node('leecher', leecher1_sess,
+                                 node, batch, schedule)
+                    run_p2p_node('leecher', leecher2_sess,
+                                 node, batch, schedule)
+                    run_p2p_node('leecher', leecher3_sess,
+                                 node, batch, schedule)
 
                     run_netbricks(netbricks_sess, batch, schedule, epoch, node)
 
@@ -217,7 +230,6 @@ def main(batch_list, schedule_list):
                     sess_destroy(leecher2_sess)
                     sess_destroy(leecher3_sess)
 
-
                     rdr_cleanup(netbricks_sess)
                     # xcdr_cleanup(netbricks_sess)
                     time.sleep(5)
@@ -230,5 +242,5 @@ def main(batch_list, schedule_list):
 
 
 main(conf.batch_list, conf.schedule_list)  # rdr, xcdr
-print("All experiment finished. NF {}, Batch {}, Schedule {}".format(conf.udf_schedule, conf.batch_list, conf.schedule_list))
-
+print("All experiment finished. NF {}, Batch {}, Schedule {}".format(
+    conf.udf_schedule, conf.batch_list, conf.schedule_list))
