@@ -172,7 +172,7 @@ def main(batch_list, schedule_list):
     for batch in batch_list:
         print("Running experiments that for {} application NF".format(expr))
         for schedule in schedule_list:
-            sending_rate = 50
+            sending_rate = 10
             pktgen_sess = pktgen_sess_setup(conf.trace[expr], nf, sending_rate)
             run_pktgen(pktgen_sess, conf.trace[expr], sending_rate)
 
