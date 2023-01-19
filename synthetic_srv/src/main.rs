@@ -28,18 +28,8 @@ async fn process_xcdr(
 ) {
     for _i in 0..5 {
         interval.tick().await;
-        let now = Instant::now();
-        // translate number of users to number of transcoding jobs
-        // https://github.com/jethrosun/NetBricks/blob/expr/framework/src/pvn/xcdr.rs#L110
-        // NOTE: 25 jobs roughly takes 1 second
-        if num_of_jobs > 0 {
-            for _ in 0..num_of_jobs {
-                let _ = transcode(buffer.as_slice(), width_height);
-            }
-        }
-        // TODO: better way to track this
-        let elapsed = now.elapsed();
 
+        let elapsed = transcode_jobs(num_of_jobs, buffer.as_slice(), width_height).unwrap();
         loads.push(count as usize);
         lats.push(elapsed.as_millis());
     }

@@ -1,10 +1,10 @@
 use rand::Rng;
 use std::collections::HashMap;
 use std::fs::{File, OpenOptions};
+use std::io;
 use std::io::Write;
 use std::time::{Duration, Instant};
 use std::vec::Vec;
-use std::{io, thread};
 
 const MB_SIZE: f64 = 1_000_000.0;
 const RAND_GEN_SIZE: f64 = 20_000_000.0;
@@ -123,10 +123,6 @@ pub fn execute(
 ) -> io::Result<Duration> {
     let beginning = Instant::now();
 
-    // let _sleep_time = Duration::from_millis(50);
-    // counting the iterations
-    // let mut counter = 0;
-
     // CPU
     let mut rng = rand::thread_rng();
 
@@ -167,10 +163,6 @@ pub fn execute(
     }
 
     // sleep a little
-    let elapsed_time = beginning.elapsed();
-    if Duration::from_millis(990) > elapsed_time {
-        thread::sleep(Duration::from_millis(990)- elapsed_time);
-    }
 
-    Ok(elapsed_time)
+    Ok(beginning.elapsed())
 }
