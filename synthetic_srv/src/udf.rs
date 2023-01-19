@@ -162,7 +162,5 @@ pub fn execute(
         // println!("current value: {:?}", t);
     }
 
-    // sleep a little
-
     Ok(beginning.elapsed())
 }

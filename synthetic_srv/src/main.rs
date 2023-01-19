@@ -192,11 +192,17 @@ async fn main() {
     }
     // rand1-4
     else {
+        // max size
+        let max_count = workload.iter().max_by_key(|entry| entry.1).unwrap();
+        let max_load = udf_load(&pname, *max_count.1 as f64).unwrap();
+
+        // actual load
         let mut load = udf_load(&pname, count as f64).unwrap();
         println!("WorkloadChanged, count: {:?} load: {:?}", count, load);
 
-        //RAM
-        let mut large_vec = vec![42u128; (load.ram as u128).try_into().unwrap()];
+        // RAM
+        // let mut large_vec = vec![42u128; (load.ram as u128).try_into().unwrap()];
+        let mut large_vec = vec![42u128; (max_load.ram as u128).try_into().unwrap()];
 
         // File I/O
         // use buffer to store random data
