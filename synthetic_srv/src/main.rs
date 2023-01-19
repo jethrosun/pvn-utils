@@ -182,11 +182,10 @@ async fn main() {
             println!("Latency(ms): {:?} {:?}", report_time, lats);
 
             // run until the next change
-            //
-            if beginning.elapsed().as_secs() >= expr_time as u64 {
+            if report_time >= expr_time as u64 {
                 println!("Have run for {}, exiting now", expr_time);
                 process::exit(0x0100);
-            } else if beginning.elapsed().as_secs() >= *pivot as u64 {
+            } else if report_time >= *pivot as u64 {
                 count = *workload.get(pivot).unwrap();
                 pivot = match times_iter.next() {
                     Some(t) => t,
@@ -247,11 +246,10 @@ async fn main() {
             println!("Latency(ms): {:?} {:?}", report_time, lats);
 
             // run until the next change
-            //
-            if beginning.elapsed().as_secs() >= expr_time as u64 {
+            if report_time >= expr_time as u64 {
                 println!("Have run for {}, exiting now", expr_time);
                 process::exit(0x0100);
-            } else if beginning.elapsed().as_secs() >= *pivot as u64 {
+            } else if report_time >= *pivot as u64 {
                 count = *workload.get(pivot).unwrap();
                 pivot = match times_iter.next() {
                     Some(t) => t,
