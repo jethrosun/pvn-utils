@@ -168,8 +168,8 @@ async fn main() {
                 core
             );
             let report_time = beginning.elapsed().as_secs();
-            println!("Metric: {:?} {:?}", report_time, loads);
-            println!("Latency(ms): {:?} {:?}", report_time, lats);
+            println!("Metric: {:?} {:?} {:?}", report_time, loads, lats);
+            // println!("Latency(ms): {:?} {:?}", report_time, lats);
 
             // run until the next change
             if report_time >= expr_time as u64 {
@@ -232,8 +232,8 @@ async fn main() {
                 core
             );
             let report_time = beginning.elapsed().as_secs();
-            println!("Metric: {:?} {:?}", report_time, loads);
-            println!("Latency(ms): {:?} {:?}", report_time, lats);
+            println!("Metric: {:?} {:?} {:?}", report_time, loads, lats);
+            // println!("Latency(ms): {:?} {:?}", report_time, lats);
 
             // run until the next change
             if report_time >= expr_time as u64 {
