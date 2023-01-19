@@ -104,7 +104,7 @@ async fn main() {
     let (times, workload) = retrieve_workload(workload_path.to_string(), expr_time).unwrap();
     println!("retrieved workload: {}", workload_path);
     println!("times {:?}", times);
-    println!("workload {:?}", workload);
+    println!("edf_workload {:?}", workload);
 
     let cname = core_id.to_string() + "-" + &profile_id.to_string();
     let pname = profile_name.clone();
