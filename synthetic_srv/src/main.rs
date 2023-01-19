@@ -177,8 +177,9 @@ async fn main() {
                 cur_time.elapsed().as_millis(),
                 core
             );
-            println!("Metric: {:?}", loads);
-            println!("Latency(ms): {:?}", lats);
+            let report_time = beginning.elapsed().as_secs();
+            println!("Metric: {:?} {:?}", report_time, loads);
+            println!("Latency(ms): {:?} {:?}", report_time, lats);
 
             // run until the next change
             //
@@ -217,6 +218,7 @@ async fn main() {
         println!("buf size: {:?}", buf.capacity());
         let mut buf = buf.into_boxed_slice();
 
+        beginning = Instant::now();
         let mut interval = time::interval(time::Duration::from_secs(1));
         loop {
             loads.clear();
@@ -240,8 +242,9 @@ async fn main() {
                 cur_time.elapsed().as_millis(),
                 core
             );
-            println!("Metric: {:?}", loads);
-            println!("Latency(ms): {:?}", lats);
+            let report_time = beginning.elapsed().as_secs();
+            println!("Metric: {:?} {:?}", report_time, loads);
+            println!("Latency(ms): {:?} {:?}", report_time, lats);
 
             // run until the next change
             //
