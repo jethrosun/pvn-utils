@@ -202,10 +202,11 @@ async fn main() {
 
         // RAM
         // let mut large_vec = vec![42u128; (load.ram as u128).try_into().unwrap()];
-        let mut large_vec = vec![42u128; (max_load.ram as u128).try_into().unwrap()];
+        // 1MB = 62500 * 16 Byte (unit)
+        let mut large_vec = vec![42u128; (max_load.ram * 62_500).try_into().unwrap()];
 
-        // File I/O
-        // use buffer to store random data
+        // File I/O: use buffer to store random data
+        // 1 MB = 1_000_000 * 1 Byte (unit)
         let mut buf: Vec<u8> = Vec::with_capacity((load.io * 1_000_000).try_into().unwrap()); // B to MB
         for _ in 0..buf.capacity() {
             buf.push(rand::random())
