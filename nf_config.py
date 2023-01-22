@@ -94,16 +94,17 @@ sched_num_of_epoch = 1
 # schedule_list = [ 'rand', 'profile', 'profile_w_rand', 'resrc_central', 'resrc_central_w_cont',
 #                  'resrc_pining_23_', 'resrc_pining_32_', 'resrc_pining_41_', 'resrc_pining_122', 'resrc_pining_311' ]
 # schedule_list = [ 'profile', 'profile_w_rand', 'resrc_central', 'resrc_central_w_cont']
-# schedule_list = ['profile_w_rand', 'resrc_central']
 
 
-schedule_list = ['rand']
+# schedule_list = ['rand']
 # batch_list = ['400019_50', '1374946_50', '664673_50', ]
 # batch_list = ['1374946_30', '664673_30', '400019_30']
 # batch_list = ['400019_40', '1374946_40', '664673_40', ]
-batch_list = ['1374946_20', '664673_20', '400019_20']
+# batch_list = ['1374946_20', '664673_20', '400019_20']
 
-# schedule_list = ['resrc_central']
+
+schedule_list = ['profile_w_rand', 'resrc_central']
+batch_list = ['1374946_30', '664673_30', '400019_30']
 # batch_list = ['400019_50', '1374946_50', '664673_50', ]
 
 # TODO: complete schedule for new model training and scheduling
