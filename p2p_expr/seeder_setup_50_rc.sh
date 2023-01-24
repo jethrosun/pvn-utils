@@ -19,7 +19,7 @@ for core in {1..1}
 do
 	echo "Core $core "
 	# 101 images
-	for i in {0..85}
+	for i in {0..130}
 	do
 		echo "Making $i images"
 		sudo fallocate -l 1G p2p_core_${core}_image_${i}.img
@@ -38,11 +38,11 @@ do
 	done
 done
 
-for core in {2..3}
+for core in {2..2}
 do
 	echo "Core $core "
 	# 101 images
-	for i in {0..50}
+	for i in {0..20}
 	do
 		echo "Making $i images"
 		sudo fallocate -l 1G p2p_core_${core}_image_${i}.img
@@ -61,12 +61,34 @@ do
 	done
 done
 
+for core in {3..3}
+do
+	echo "Core $core "
+	# 101 images
+	for i in {0..130}
+	do
+		echo "Making $i images"
+		sudo fallocate -l 1G p2p_core_${core}_image_${i}.img
+		sudo dd if=/dev/random of=p2p_core_${core}_image_${i}.img bs=1 count=0 seek=1G
+
+		# stat p2p_core_${core}_image_${i}.img
+		sudo chmod 644 p2p_core_${core}_image_${i}.img
+
+		# make torrents
+		# transmission-create -o ~/torrents/p2p_core_${core}_image_${i}.torrent --private --tracker http://10.200.111.125:9000/announce p2p_core_${core}_image_${i}.img
+		mktorrent -v -p -a http://10.200.111.125:9000/announce -o ~/torrents/p2p_core_${core}_image_${i}.torrent p2p_core_${core}_image_${i}.img
+
+		# cp p2p_core_${core}_image_${i}.img.torrent ~/torrents
+		chmod 644 ~/torrents/p2p_core_${core}_image_${i}.torrent
+
+	done
+done
 
 for core in {4..4}
 do
 	echo "Core $core "
 	# 101 images
-	for i in {0..120}
+	for i in {0..130}
 	do
 		echo "Making $i images"
 		sudo fallocate -l 1G p2p_core_${core}_image_${i}.img
@@ -89,7 +111,7 @@ for core in {5..5}
 do
 	echo "Core $core "
 	# 101 images
-	for i in {0..160}
+	for i in {0..60}
 	do
 		echo "Making $i images"
 		sudo fallocate -l 1G p2p_core_${core}_image_${i}.img
