@@ -54,7 +54,8 @@ xcdr_clean_list = [
 udf_schedule = ['udf_schedule']
 udf_node_list = ['1', '2', '3']
 udf_profile_time = 200
-udf_schedule_time = 4000
+udf_schedule_time = 4000  # only for rand
+udf_schedule_time = 3700
 
 setup = []
 zero = '0'
@@ -114,22 +115,23 @@ sched_num_of_epoch = 1
 # schedule_list = ['profile_w_rand', 'resrc_central']
 # batch_list = ['1374946_30', '664673_30', '400019_30']
 
-schedule_list = ['resrc_central']
+# schedule_list = ['resrc_central']
 # schedule_list = ['profile_w_rand']
-batch_list = ['400019_50', '1374946_50', '664673_50',
-              '400019_40', '1374946_40', '664673_40', ]
+# batch_list = ['400019_50', '1374946_50', '664673_50',
+#               '400019_40', '1374946_40', '664673_40', ]
 
 # TODO: complete schedule for new model training and scheduling
 
 # batch_list = [ '400019_10', '1374946_10', '664673_10',]
 # batch_list = [ '400019_20', '1374946_20', '664673_20',]
 
-# schedule_list = ['resrc_pining_23_', 'resrc_pining_32_', 'resrc_pining_41_', 'resrc_pining_122', 'resrc_pining_311']
+schedule_list = ['resrc_pining_23_', 'resrc_pining_32_', 'resrc_pining_41_', 'resrc_pining_122', 'resrc_pining_311']
+
+batch_list = ['1374946_30', '664673_30', '400019_30']
+
 # TODO: complete schedule for new model
 
 # batch_list = ['400019_50', '1374946_50', '664673_50', ]
-# batch_list = ['1374946_30', '664673_30', '400019_30']
-
 # batch_list = [ '400019_10', '1374946_10', '664673_10',]
 # batch_list = ['400019_40', '1374946_40', '664673_40', ]
 # batch_list = ['1374946_20', '664673_20', '400019_20']
