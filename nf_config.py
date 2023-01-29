@@ -55,7 +55,7 @@ udf_schedule = ['udf_schedule']
 udf_node_list = ['1', '2', '3']
 udf_profile_time = 200
 udf_schedule_time = 4000  # only for rand
-udf_schedule_time = 3700
+# udf_schedule_time = 3700
 
 setup = []
 zero = '0'
