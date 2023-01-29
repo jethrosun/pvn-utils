@@ -183,12 +183,9 @@ def main(batch_list, schedule_list):
                     netbricks_sess = netbricks_sess_setup(
                         conf.trace[expr], nf, epoch)
 
-                    leecher1_sess = p2p_sess_setup(
-                        'bt2', conf.trace[expr], nf, epoch)
-                    leecher2_sess = p2p_sess_setup(
-                        'bt3', conf.trace[expr], nf, epoch)
-                    leecher3_sess = p2p_sess_setup(
-                        'bt4', conf.trace[expr], nf, epoch)
+                    leecher1_sess = p2p_sess_setup('bt2', conf.trace[expr], nf, epoch)
+                    leecher2_sess = p2p_sess_setup('bt3', conf.trace[expr], nf, epoch)
+                    leecher3_sess = p2p_sess_setup('bt4', conf.trace[expr], nf, epoch)
 
                     if epoch == 0:
                         p2p_setup("netbricks", netbricks_sess)
@@ -207,12 +204,9 @@ def main(batch_list, schedule_list):
                     time.sleep(5)
 
                     # Actual RUN
-                    run_p2p_node('leecher', leecher1_sess,
-                                 node, batch, schedule)
-                    run_p2p_node('leecher', leecher2_sess,
-                                 node, batch, schedule)
-                    run_p2p_node('leecher', leecher3_sess,
-                                 node, batch, schedule)
+                    run_p2p_node('leecher', leecher1_sess, node, batch, schedule)
+                    run_p2p_node('leecher', leecher2_sess, node, batch, schedule)
+                    run_p2p_node('leecher', leecher3_sess, node, batch, schedule)
 
                     run_netbricks(netbricks_sess, batch, schedule, epoch, node)
 
