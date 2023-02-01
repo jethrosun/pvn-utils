@@ -52,8 +52,8 @@ xcdr_clean_list = [
 # {"1": "xcdr", "2": "rand1", "3": "rand2", "4": "rand4", "5": "rand3", "6": "tlsv", "7": "p2p", "8": "rdr"}
 
 udf_schedule = ['udf_schedule']
-# udf_node_list = ['1', '2', '3']
-udf_node_list = ['2']
+udf_node_list = ['1', '2', '3']
+# udf_node_list = ['2']
 udf_profile_time = 200
 udf_schedule_time = 4000  # only for rand
 # udf_schedule_time = 3700
