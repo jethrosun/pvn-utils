@@ -21,6 +21,7 @@ LOADAVG_LOG=$LOG_DIR/$3_$4_loadavg.log
 SYNTHETIC_LOG=$LOG_DIR/$3_$4_srv
 CPULOG=$LOG_DIR/$3_$4_cpu.log
 MEMLOG=$LOG_DIR/$3_$4_mem.log
+IOLOG=$LOG_DIR/$3_$4_io.log
 
 NETBRICKS_BUILD=$HOME/dev/netbricks/build.sh
 TCP_TOP_MONITOR=/usr/share/bcc/tools/tcptop
@@ -76,12 +77,6 @@ pids="$pids $!"
 # TODO: remove?
 # Block IO
 # taskset -c 0 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pbiotop.sh $nb_id > "$BIO_LOG" &
-# pids="$pids $!"
-
-# TODO: remove?
-# while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 0 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh udf; done > "$CPULOG" &
-# pids="$pids $!"
-# while sleep "$SLEEP_INTERVAL"; do sudo -u jethros taskset -c 0 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh udf; done > "$MEMLOG" &
 # pids="$pids $!"
 
 cd ~/dev/pvn/utils/synthetic_srv/
@@ -174,6 +169,14 @@ pids="$pids $!"
 # loadavg
 while sleep 1; do taskset -c 0 cat /proc/loadavg; done > "$LOADAVG_LOG" &
 pids="$pids $!"
+
+while sleep "$SLEEP_INTERVAL"; do taskset -c 0 cat /proc/pressure/cpu; done > "$CPULOG" &
+pids="$pids $!"
+while sleep "$SLEEP_INTERVAL"; do taskset -c 0 cat /proc/pressure/memory; done > "$MEMLOG" &
+pids="$pids $!"
+while sleep "$SLEEP_INTERVAL"; do taskset -c 0 cat /proc/pressure/io; done > "$IOLOG" &
+pids="$pids $!"
+
 
 # intel PQoS
 
