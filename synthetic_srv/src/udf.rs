@@ -6,7 +6,7 @@ use std::io::Write;
 use std::time::{Duration, Instant};
 use std::vec::Vec;
 
-const MB_SIZE: f64 = 1_000_000.0;
+// const MB_SIZE: f64 = 1_000_000.0;
 const RAND_GEN_SIZE: f64 = 20_000_000.0;
 
 #[derive(Copy, Clone, Debug)]
@@ -24,8 +24,8 @@ pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
     // mem_cap = 54 * 1000 # 54GB to MB
     // io_cap = 155 * 1000 # 155MB/s to KB
     let cpu_load = RAND_GEN_SIZE; // # of generated random 0..100 numbers
-    let ram_load = 20.0 * MB_SIZE; // MB
-    let io_load = 10.0; // MB: 1 P2P user from logs
+    let ram_load = 500.0; // MB
+    let io_load = 20.0; // MB: 1 P2P user from logs
 
     let load = match profile_name {
         // job: 6 (Load { cpu: 29, ram: 3252000, io: 25 })
