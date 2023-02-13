@@ -107,23 +107,23 @@ sched_num_of_epoch = 1
 #       rand
 # ----------------------
 
-# schedule_list = ['rand']
+schedule_list = ['rand']
 # batch_list = ['400019_50', '1374946_50', '664673_50', ]
 # batch_list = ['1374946_30', '664673_30', '400019_30']
 # batch_list = ['400019_40', '1374946_40', '664673_40', ]
 # batch_list = ['1374946_20', '664673_20', '400019_20']
 # TODO: complete schedule for new model training and scheduling
-# batch_list = [ '400019_10', '1374946_10', '664673_10',]
+batch_list = [ '400019_10', '1374946_10', '664673_10',]
 
 # ----------------------------
 #       pining
 # ----------------------------
 
-schedule_list = ['resrc_pining_23_', 'resrc_pining_32_', 'resrc_pining_41_', 'resrc_pining_122', 'resrc_pining_311']
+# schedule_list = ['resrc_pining_23_', 'resrc_pining_32_', 'resrc_pining_41_', 'resrc_pining_122', 'resrc_pining_311']
 # batch_list = ['1374946_30', '664673_30', '400019_30', '400019_50', ]
 # batch_list = ['1374946_50', '664673_50', ]
 
-batch_list = ['400019_40', '1374946_40', '664673_40', '1374946_20', '664673_20', '400019_20']
+# batch_list = ['400019_40', '1374946_40', '664673_40', '1374946_20', '664673_20', '400019_20']
 # TODO: complete schedule for new model
 
 # batch_list = [ '400019_10', '1374946_10', '664673_10',]
