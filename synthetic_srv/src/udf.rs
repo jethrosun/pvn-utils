@@ -7,7 +7,7 @@ use std::time::{Duration, Instant};
 use std::vec::Vec;
 
 // const MB_SIZE: f64 = 1_000_000.0;
-const RAND_GEN_SIZE: f64 = 20_000_000.0;
+const RAND_GEN_SIZE: f64 = 5_000_000.0;
 
 #[derive(Copy, Clone, Debug)]
 pub struct Load {
@@ -24,7 +24,7 @@ pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
     // mem_cap = 54 * 1000 # 54GB to MB
     // io_cap = 155 * 1000 # 155MB/s to KB
     let cpu_load = RAND_GEN_SIZE; // # of generated random 0..100 numbers
-    let ram_load = 400.0; // MB
+    let ram_load = 800.0; // MB
     let io_load = 20.0; // MB: 1 P2P user from logs
 
     let load = match profile_name {
