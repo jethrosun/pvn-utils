@@ -29,7 +29,7 @@ fn create_job_queue(
     timestamps: &mut Vec<usize>,
 ) {
     println!("\tDEBUG: executed: {:?}, cur time {:?} ", executed, cur_time );
-    timestamps.push(*executed);
+    // timestamps.push(*executed);
     timestamps.push(cur_time);
     let values = (*executed..cur_time+1).map(|x| *workload.get(&x).unwrap()).collect::<Vec<_>>();
     counts.push(values.iter().sum());
@@ -53,36 +53,42 @@ fn create_job_queue(
 /// key property: the workload is sorted by deadline, and we need to guarantee that the job will be exeuted eventually
 async fn enforce_process_xcdr(
     interval: &mut time::Interval,
-    counts: &mut Vec<u64>,
     buffer: &mut Vec<u8>,
     width_height: &str,
+    executed: &mut usize,
     loads: &mut Vec<usize>,
     lats: &mut Vec<u128>,
+    counts: &mut Vec<u64>,
+    timestamps: &mut Vec<usize>,
 ) {
-    for count in counts {
+    for i in 0..5{
         interval.tick().await;
-        let elapsed = transcode_jobs(*count, buffer.as_slice(), width_height).unwrap();
-        loads.push(*count as usize);
+        let elapsed = transcode_jobs(counts[i], buffer.as_slice(), width_height).unwrap();
+        loads.push(counts[i] as usize);
         lats.push(elapsed.as_millis());
+        *executed = timestamps[i];
     }
 }
 
 async fn enforce_process_rand(
     pname: &str,
     interval: &mut time::Interval,
-    counts: &mut Vec<u64>,
     cname: &String,
     large_vec: &Vec<u128>,
     buf: &mut Box<[u8]>,
+    executed: &mut usize,
     loads: &mut Vec<usize>,
     lats: &mut Vec<u128>,
+    counts: &mut Vec<u64>,
+    timestamps: &mut Vec<usize>,
 ) {
-    for count in counts {
+    for i in 0..5{
         interval.tick().await;
-        let load = udf_load(&pname, *count as f64).unwrap();
+        let load = udf_load(&pname, counts[i] as f64).unwrap();
         let elapsed = execute(load, cname, &large_vec, buf).unwrap();
-        loads.push(*count as usize);
+        loads.push(counts[i] as usize);
         lats.push(elapsed.as_millis());
+        *executed = timestamps[i];
     }
 }
 
@@ -244,11 +250,13 @@ async fn main() {
                 create_job_queue(&mut executed, beginning.elapsed().as_secs() as usize, &workload, &mut counts, &mut timestamps);
                 enforce_process_xcdr(
                     &mut interval,
-                    &mut counts,
                     &mut buffer,
                     width_height,
+                    &mut executed,
                     &mut loads,
                     &mut lats,
+                    &mut counts,
+                    &mut timestamps,
                 ).await;
             }
             else {
@@ -329,12 +337,14 @@ async fn main() {
                 enforce_process_rand(
                     &pname,
                     &mut interval,
-                    &mut counts,
                     &cname,
                     &large_vec,
                     &mut buf,
+                    &mut executed,
                     &mut loads,
                     &mut lats,
+                    &mut counts,
+                    &mut timestamps,
                 ).await;
             }
             else {
