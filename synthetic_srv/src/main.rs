@@ -13,11 +13,44 @@ use std::io::Read;
 use std::time::Instant;
 use std::{env, process, vec};
 use tokio::time;
+use std::collections::HashMap;
 
 mod transcode;
 mod udf;
 
+/// Generate the job queue to be executed.
+///
+/// Specifically, we put all jobs that are behind into the first to execute
+fn create_job_queue(
+    executed: &usize,
+    cur_time: usize,
+    workload: &HashMap<usize, u64>,
+    counts: &mut Vec<u64>,
+    timestamps: &mut Vec<usize>,
+) {
+    println!("\tDEBUG: executed: {:?}, cur time {:?} ", executed, cur_time );
+    timestamps.push(*executed);
+    timestamps.push(cur_time);
+    let values = (*executed..cur_time+1).map(|x| *workload.get(&x).unwrap()).collect::<Vec<_>>();
+    counts.push(values.iter().sum());
 
+    // let mut values = Vec::new();
+    // for i in *executed..cur_time+1 {
+    //     values.push(*workload.get(&i).unwrap());
+    // }
+    // counts.push(values.iter().sum());
+
+    for i in cur_time + 1..cur_time +5{
+        let work_at_i = workload.get(&i).unwrap();
+        println!("\tDEBUG workload at {} is {}", i, work_at_i);
+        counts.push(*work_at_i);
+        timestamps.push(i);
+    }
+    println!("DEBUG_job_queue: timestamps {:?}, counts {:?}", timestamps, counts);
+}
+
+
+/// key property: the workload is sorted by deadline, and we need to guarantee that the job will be exeuted eventually
 async fn enforce_process_xcdr(
     interval: &mut time::Interval,
     counts: &mut Vec<u64>,
@@ -96,9 +129,7 @@ async fn main() {
         println!("Parsing 4 args");
         println!("{:?}", params);
     } else {
-        println!(
-            "More or less than 4 args are provided. Run it with *profile_id/name node_id core_id enforce*"
-        );
+        println!("More or less than 4 args are provided. Run it with *profile_id/name node_id core_id enforce*");
         process::exit(0x0100);
     }
 
@@ -164,6 +195,7 @@ async fn main() {
 
     let mut beginning = Instant::now();
 
+    // states for non enforce version
     let mut count = if times.contains(&0) {
         *workload.get(&0).unwrap()
     } else {
@@ -179,9 +211,13 @@ async fn main() {
         "WorkloadChanged, count: {:?} waiting for: {:?}",
         count, pivot,
     );
+    // states for enforce version
+    let mut executed = 0;
+
     let mut loads = Vec::new();
     let mut lats = Vec::new();
     let mut counts = Vec::new();
+    let mut timestamps = Vec::new();
 
     if pname == "xcdr" {
         // let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
@@ -202,11 +238,10 @@ async fn main() {
             loads.clear();
             lats.clear();
             counts.clear();
+            timestamps.clear();
 
             if enforce {
-                for i in 0..5 {
-                    counts.push(*workload.get(&(pivot+i)).unwrap())
-                }
+                create_job_queue(&mut executed, beginning.elapsed().as_secs() as usize, &workload, &mut counts, &mut timestamps);
                 enforce_process_xcdr(
                     &mut interval,
                     &mut counts,
@@ -286,11 +321,11 @@ async fn main() {
             loads.clear();
             lats.clear();
             counts.clear();
+            timestamps.clear();
+
             let cur_time = Instant::now();
             if enforce {
-                for i in 0..5 {
-                    counts.push(*workload.get(&(pivot+i)).unwrap())
-                }
+                create_job_queue(&mut executed, beginning.elapsed().as_secs() as usize, &workload, &mut counts, &mut timestamps);
                 enforce_process_rand(
                     &pname,
                     &mut interval,
