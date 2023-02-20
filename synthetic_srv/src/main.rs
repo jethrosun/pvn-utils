@@ -28,25 +28,22 @@ fn create_job_queue(
     counts: &mut Vec<u64>,
     timestamps: &mut Vec<usize>,
 ) {
-    println!("\tDEBUG: executed: {:?}, cur time {:?} ", executed, cur_time );
-    // timestamps.push(*executed);
     timestamps.push(cur_time);
-    let values = (*executed..cur_time+1).map(|x| *workload.get(&x).unwrap()).collect::<Vec<_>>();
+    // we want (executed, cur_time]
+    let values = (*executed+1..cur_time+1).map(|x| *workload.get(&x).unwrap()).collect::<Vec<_>>();
     counts.push(values.iter().sum());
 
-    // let mut values = Vec::new();
-    // for i in *executed..cur_time+1 {
-    //     values.push(*workload.get(&i).unwrap());
-    // }
-    // counts.push(values.iter().sum());
-
-    for i in cur_time + 1..cur_time +5{
+    for i in cur_time + 1..cur_time +5 {
         let work_at_i = workload.get(&i).unwrap();
-        println!("\tDEBUG workload at {} is {}", i, work_at_i);
+        // println!("\tDEBUG workload at {} is {}", i, work_at_i);
         counts.push(*work_at_i);
         timestamps.push(i);
     }
-    println!("DEBUG_job_queue: timestamps {:?}, counts {:?}", timestamps, counts);
+
+    if cur_time > executed +1 {
+        println!("\tDEBUG: executed: {:?}, cur time {:?} ", executed, cur_time );
+        println!("DEBUG_job_queue: timestamps {:?}, counts {:?}", timestamps, counts);
+    }
 }
 
 
@@ -61,7 +58,7 @@ async fn enforce_process_xcdr(
     counts: &mut Vec<u64>,
     timestamps: &mut Vec<usize>,
 ) {
-    for i in 0..5{
+    for i in 0..5 {
         interval.tick().await;
         let elapsed = transcode_jobs(counts[i], buffer.as_slice(), width_height).unwrap();
         loads.push(counts[i] as usize);
@@ -82,7 +79,7 @@ async fn enforce_process_rand(
     counts: &mut Vec<u64>,
     timestamps: &mut Vec<usize>,
 ) {
-    for i in 0..5{
+    for i in 0..5 {
         interval.tick().await;
         let load = udf_load(&pname, counts[i] as f64).unwrap();
         let elapsed = execute(load, cname, &large_vec, buf).unwrap();
