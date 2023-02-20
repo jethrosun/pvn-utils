@@ -42,7 +42,7 @@ fn create_job_queue(
 
     if cur_time > executed +1 {
         println!("\tDEBUG: executed: {:?}, cur time {:?} ", executed, cur_time );
-        println!("DEBUG_job_queue: timestamps {:?}, counts {:?}", timestamps, counts);
+        println!("\tDEBUG_job_queue: timestamps {:?}, counts {:?}", timestamps, counts);
     }
 }
 
