@@ -17,10 +17,45 @@ use tokio::time;
 mod transcode;
 mod udf;
 
+
+async fn enforce_process_xcdr(
+    interval: &mut time::Interval,
+    counts: &mut Vec<u64>,
+    buffer: &mut Vec<u8>,
+    width_height: &str,
+    loads: &mut Vec<usize>,
+    lats: &mut Vec<u128>,
+) {
+    for count in counts {
+        interval.tick().await;
+        let elapsed = transcode_jobs(*count, buffer.as_slice(), width_height).unwrap();
+        loads.push(*count as usize);
+        lats.push(elapsed.as_millis());
+    }
+}
+
+async fn enforce_process_rand(
+    pname: &str,
+    interval: &mut time::Interval,
+    counts: &mut Vec<u64>,
+    cname: &String,
+    large_vec: &Vec<u128>,
+    buf: &mut Box<[u8]>,
+    loads: &mut Vec<usize>,
+    lats: &mut Vec<u128>,
+) {
+    for count in counts {
+        interval.tick().await;
+        let load = udf_load(&pname, *count as f64).unwrap();
+        let elapsed = execute(load, cname, &large_vec, buf).unwrap();
+        loads.push(*count as usize);
+        lats.push(elapsed.as_millis());
+    }
+}
+
 async fn process_xcdr(
     interval: &mut time::Interval,
     count: u64,
-    num_of_jobs: usize,
     buffer: &mut Vec<u8>,
     width_height: &str,
     loads: &mut Vec<usize>,
@@ -28,8 +63,7 @@ async fn process_xcdr(
 ) {
     for _i in 0..5 {
         interval.tick().await;
-
-        let elapsed = transcode_jobs(num_of_jobs, buffer.as_slice(), width_height).unwrap();
+        let elapsed = transcode_jobs(count, buffer.as_slice(), width_height).unwrap();
         loads.push(count as usize);
         lats.push(elapsed.as_millis());
     }
@@ -58,12 +92,12 @@ async fn main() {
     let expr_time = 4000;
 
     let params: Vec<String> = env::args().collect();
-    if params.len() == 4 {
-        println!("Parsing 3 args");
+    if params.len() == 5 {
+        println!("Parsing 4 args");
         println!("{:?}", params);
     } else {
         println!(
-            "More or less than 3 args are provided. Run it with *profile_id/name node_id core_id*"
+            "More or less than 4 args are provided. Run it with *profile_id/name node_id core_id enforce*"
         );
         process::exit(0x0100);
     }
@@ -71,6 +105,19 @@ async fn main() {
     let profile_id = params[1].parse::<usize>().unwrap();
     let node_id = params[2].parse::<usize>().unwrap();
     let core_id = params[3].parse::<usize>().unwrap();
+    let enforce = match params[4].parse::<usize>(){
+        Ok(1) => true,  // we are enforcing all jobs to be explicitly executed, even passed its
+                        // deadline
+        Ok(0) => false, // jobs will not be scheduled if passed deadline
+        Ok(_) => {
+            println!("Neither 1 or 0 are passed as enforce value, exiting...");
+            process::exit(0x0100);
+        },
+        Err(e) => {
+            println!("Parse Error: {:?}, exiting...", e);
+            process::exit(0x0100);
+        },
+    } ;
     let core = CoreId { id: core_id };
 
     // get udf profiles
@@ -101,7 +148,13 @@ async fn main() {
         + &core_id.to_string()
         + ".json";
 
-    let (times, workload) = retrieve_workload(workload_path.to_string(), expr_time).unwrap();
+    let (times, workload) = if enforce {
+        retrieve_enforce_workload(workload_path.to_string(), expr_time).unwrap()
+    }
+    else {
+        retrieve_workload(workload_path.to_string(), expr_time).unwrap()
+    };
+
     println!("retrieved workload: {}", workload_path);
     println!("times {:?}", times);
     println!("edf_workload {:?}", workload);
@@ -128,11 +181,9 @@ async fn main() {
     );
     let mut loads = Vec::new();
     let mut lats = Vec::new();
+    let mut counts = Vec::new();
 
     if pname == "xcdr" {
-        // let mut job_count = 0;
-        let mut num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
-
         // let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
         // let infile = "/Users/jethros/dev/pvn/utils/data/tiny.y4m";
         let infile = "/udf_data/tiny.y4m";
@@ -150,23 +201,38 @@ async fn main() {
             let cur_time = Instant::now();
             loads.clear();
             lats.clear();
+            counts.clear();
 
-            process_xcdr(
-                &mut interval,
-                count,
-                num_of_jobs,
-                &mut buffer,
-                width_height,
-                &mut loads,
-                &mut lats,
-            )
-            .await;
+            if enforce {
+                for i in 0..5 {
+                    counts.push(*workload.get(&(pivot+i)).unwrap())
+                }
+                enforce_process_xcdr(
+                    &mut interval,
+                    &mut counts,
+                    &mut buffer,
+                    width_height,
+                    &mut loads,
+                    &mut lats,
+                ).await;
+            }
+            else {
+                process_xcdr(
+                    &mut interval,
+                    count,
+                    &mut buffer,
+                    width_height,
+                    &mut loads,
+                    &mut lats,
+                ).await;
+            }
             println!(
                 "Info: {:?} users in {:?}ms with core: {:?}",
                 count * 5,
                 cur_time.elapsed().as_millis(),
                 core
             );
+
             let report_time = beginning.elapsed().as_secs();
             println!("Metric: {:?} {:?} {:?}", report_time, loads, lats);
             // println!("Latency(ms): {:?} {:?}", report_time, lats);
@@ -175,16 +241,16 @@ async fn main() {
             if report_time >= expr_time as u64 {
                 println!("Have run for {}, exiting now", expr_time);
                 process::exit(0x0100);
-            } else if report_time >= *pivot as u64 {
+            } else if report_time >= *pivot as u64 && !enforce {
                 count = *workload.get(pivot).unwrap();
                 pivot = match times_iter.next() {
                     Some(t) => t,
                     None => &expr_time,
                 };
-                num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
+                // num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
                 println!(
-                    "WorkloadChanged, count: {:?} pivot waiting for: {:?}, num_of_jobs: {:?}",
-                    count, pivot, num_of_jobs
+                    "WorkloadChanged, count: {:?} pivot waiting for: {:?}",
+                    count, pivot
                 );
                 continue;
             }
@@ -219,18 +285,35 @@ async fn main() {
         loop {
             loads.clear();
             lats.clear();
+            counts.clear();
             let cur_time = Instant::now();
-            process_rand(
-                &mut interval,
-                count,
-                load,
-                &cname,
-                &large_vec,
-                &mut buf,
-                &mut loads,
-                &mut lats,
-            )
-            .await;
+            if enforce {
+                for i in 0..5 {
+                    counts.push(*workload.get(&(pivot+i)).unwrap())
+                }
+                enforce_process_rand(
+                    &pname,
+                    &mut interval,
+                    &mut counts,
+                    &cname,
+                    &large_vec,
+                    &mut buf,
+                    &mut loads,
+                    &mut lats,
+                ).await;
+            }
+            else {
+                process_rand(
+                    &mut interval,
+                    count,
+                    load,
+                    &cname,
+                    &large_vec,
+                    &mut buf,
+                    &mut loads,
+                    &mut lats,
+                ).await;
+            }
 
             println!(
                 "Info: count {:?} in {:?}ms with core: {:?}",
@@ -246,7 +329,7 @@ async fn main() {
             if report_time >= expr_time as u64 {
                 println!("Have run for {}, exiting now", expr_time);
                 process::exit(0x0100);
-            } else if report_time >= *pivot as u64 {
+            } else if report_time >= *pivot as u64 && !enforce {
                 count = *workload.get(pivot).unwrap();
                 pivot = match times_iter.next() {
                     Some(t) => t,

@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+
+ENFORCE=1
+# ENFORCE=0
+
+
 # base log dir:
 # $1 = batch, $2 = schedule
 LOG_DIR=$HOME/netbricks_logs/$1/$2
@@ -96,7 +101,7 @@ do
 			-v /home/jethros:/config \
 			-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
 			-v /home/jethros/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
-			synthetic:alphine "$profile_id" $4 "$core_id"
+			synthetic:alphine "$profile_id" $4 "$core_id" $ENFORCE
 		docker logs -f synthetic_srv_${profile_id}_${core_id} &> ${SYNTHETIC_LOG}__${profile_id}_${core_id}.log &
 		pids="$pids $!"
 		# $SERVER $core_id $profile_id > $LOG_DIR/$3_$4__${core_id}_${profile_id}.log &
@@ -119,7 +124,7 @@ do
 		-v /home/jethros:/config \
 		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
 		-v /home/jethros/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
-		tlsv:alphine 6 $4 "$core_id"
+		tlsv:alphine 6 $4 "$core_id" $ENFORCE
 	docker logs -f tlsv_6_${core_id} &> ${SYNTHETIC_LOG}__6_${core_id}.log &
 	pids="$pids $!"
 
@@ -137,7 +142,7 @@ do
 		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
 		-v /home/jethros/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
 		-v /home/jethros/torrents:/torrents \
-		p2p:deluge 7 $4 $core_id
+		p2p:deluge 7 $4 $core_id $ENFORCE
 	docker logs -f p2p_7_${core_id} &> ${SYNTHETIC_LOG}__7_${core_id}.log &
 	pids="$pids $!"
 
@@ -149,7 +154,7 @@ do
 		-v /home/jethros:/config \
 		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
 		-v /home/jethros/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
-		rdr:alphine 8 $4 $core_id
+		rdr:alphine 8 $4 $core_id $ENFORCE
 	docker logs -f rdr_8_${core_id} &> ${SYNTHETIC_LOG}__8_${core_id}.log &
 	pids="$pids $!"
 

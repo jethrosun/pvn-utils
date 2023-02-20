@@ -47,7 +47,8 @@ pub fn transcode(infh: &[u8], width_height: &str) {
 
 /// translate number of users to number of transcoding jobs
 /// https://github.com/jethrosun/NetBricks/blob/expr/framework/src/pvn/xcdr.rs#L110
-pub fn transcode_jobs(num_of_jobs: usize, infh: &[u8], width_height: &str) -> io::Result<Duration> {
+pub fn transcode_jobs(count: u64, infh: &[u8], width_height: &str) -> io::Result<Duration> {
+    let num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
     let beginning = Instant::now();
 
     for _ in 0..num_of_jobs {

@@ -57,6 +57,13 @@ pub fn udf_load(profile_name: &str, count: f64) -> Option<Load> {
     Some(load)
 }
 
+/// Issue:
+///   1. the current workload only records the change of edfs numbers at each time (t=1, c=5;
+///      t=100, c=500)
+///   2. and in our impl, we adjust the load by updating the number of edf based on workload
+///   3. the notion of time is considered implicitly by timer
+///   4. we now need a separate data struct which also maintains time and load (t=1, c=5; t=2, c=5;
+///      t=3, c=5 ; ...; t=100, c=500)
 pub fn retrieve_workload(
     file_path: String,
     expr_time: usize,
@@ -75,10 +82,40 @@ pub fn retrieve_workload(
         };
         udf_workload.insert(t, count);
     }
-    let mut vec: Vec<usize> = udf_workload.clone().into_keys().collect();
-    vec.sort_unstable();
-    Ok((vec, udf_workload))
+    let mut time_vec: Vec<usize> = udf_workload.clone().into_keys().collect();
+    time_vec.sort_unstable();
+    Ok((time_vec, udf_workload))
 }
+
+
+pub fn retrieve_enforce_workload(
+    file_path: String,
+    expr_time: usize,
+) -> serde_json::Result<(Vec<usize>, HashMap<usize, u64>)> {
+    println!("DEBUG: workload path is {:?}", file_path);
+    let file = File::open(file_path).expect("file should open read only");
+    let json_data: serde_json::Value =
+        serde_json::from_reader(file).expect("file should be proper JSON");
+    // println!("DEBUG: json data {:?}", json_data);
+
+    let mut count = 0;
+    let mut udf_workload: HashMap<usize, u64> = HashMap::new();
+
+    for t in 0..expr_time {
+        // if t is in the workload, which means we update count
+        match json_data.get(t.to_string()) {
+            Some(val) => count = val.as_u64().unwrap(),
+            None => {}
+        }
+        // add an entry 
+        udf_workload.insert(t, count);
+    }
+    // TODO: time vec will just be 0...expr time then
+    let mut time_vec: Vec<usize> = udf_workload.clone().into_keys().collect();
+    time_vec.sort_unstable();
+    Ok((time_vec, udf_workload))
+}
+
 
 pub fn map_profile(file_path: String) -> serde_json::Result<HashMap<usize, String>> {
     // println!("DEBUG: profile path is {:?}", file_path);
