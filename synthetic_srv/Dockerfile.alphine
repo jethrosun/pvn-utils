@@ -55,5 +55,5 @@ USER chrome:chrome
 
 # CMD ["/synthetic_srv/synthetic_srv"]
 ENTRYPOINT ["/usr/local/bin/synthetic_srv"]
-CMD ["1", "2", "3"]
+CMD ["1", "2", "3", "0"]
 

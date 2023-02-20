@@ -142,7 +142,7 @@ do
 		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
 		-v /home/jethros/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
 		-v /home/jethros/torrents:/torrents \
-		p2p:deluge 7 $4 $core_id $ENFORCE
+		p2p:deluge 7 $4 $core_id 
 	docker logs -f p2p_7_${core_id} &> ${SYNTHETIC_LOG}__7_${core_id}.log &
 	pids="$pids $!"
 
