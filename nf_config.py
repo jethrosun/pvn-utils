@@ -147,4 +147,4 @@ sched_num_of_epoch = 1
 
 schedule_list = ['rand']
 # schedule_list = ['profile_w_rand2']
-batch_list = ['400019_50', '1374946_50', '664673_50',]
+batch_list = ['1374946_30', '664673_30', '400019_30', '400019_50', '1374946_50', '664673_50',]
