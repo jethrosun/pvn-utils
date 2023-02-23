@@ -1,10 +1,8 @@
 #!/bin/bash
 set -e
 
-
-ENFORCE=1
-# ENFORCE=0
-
+# ENFORCE=1
+ENFORCE=0
 
 # base log dir:
 # $1 = batch, $2 = schedule
