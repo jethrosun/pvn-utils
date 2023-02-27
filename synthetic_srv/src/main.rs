@@ -18,76 +18,6 @@ use std::collections::HashMap;
 mod transcode;
 mod udf;
 
-/// Generate the job queue to be executed.
-///
-/// Specifically, we put all jobs that are behind into the first to execute
-fn create_job_queue(
-    executed: &usize,
-    cur_time: usize,
-    workload: &HashMap<usize, u64>,
-    counts: &mut Vec<u64>,
-    timestamps: &mut Vec<usize>,
-) {
-    timestamps.push(cur_time);
-    // we want (executed, cur_time]
-    let values = (*executed+1..cur_time+1).map(|x| *workload.get(&x).unwrap()).collect::<Vec<_>>();
-    counts.push(values.iter().sum());
-
-    for i in cur_time + 1..cur_time +5 {
-        let work_at_i = workload.get(&i).unwrap();
-        // println!("\tDEBUG workload at {} is {}", i, work_at_i);
-        counts.push(*work_at_i);
-        timestamps.push(i);
-    }
-
-    if cur_time > executed +1 {
-        println!("\tDEBUG: executed: {:?}, cur time {:?} ", executed, cur_time );
-        println!("\tDEBUG_job_queue: timestamps {:?}, counts {:?}", timestamps, counts);
-    }
-}
-
-
-/// key property: the workload is sorted by deadline, and we need to guarantee that the job will be exeuted eventually
-async fn enforce_process_xcdr(
-    interval: &mut time::Interval,
-    buffer: &mut Vec<u8>,
-    width_height: &str,
-    executed: &mut usize,
-    loads: &mut Vec<usize>,
-    lats: &mut Vec<u128>,
-    counts: &mut Vec<u64>,
-    timestamps: &mut Vec<usize>,
-) {
-    for i in 0..5 {
-        interval.tick().await;
-        let elapsed = transcode_jobs(counts[i], buffer.as_slice(), width_height).unwrap();
-        loads.push(counts[i] as usize);
-        lats.push(elapsed.as_millis());
-        *executed = timestamps[i];
-    }
-}
-
-async fn enforce_process_rand(
-    pname: &str,
-    interval: &mut time::Interval,
-    cname: &String,
-    large_vec: &Vec<u128>,
-    buf: &mut Box<[u8]>,
-    executed: &mut usize,
-    loads: &mut Vec<usize>,
-    lats: &mut Vec<u128>,
-    counts: &mut Vec<u64>,
-    timestamps: &mut Vec<usize>,
-) {
-    for i in 0..5 {
-        interval.tick().await;
-        let load = udf_load(&pname, counts[i] as f64).unwrap();
-        let elapsed = execute(load, cname, &large_vec, buf).unwrap();
-        loads.push(counts[i] as usize);
-        lats.push(elapsed.as_millis());
-        *executed = timestamps[i];
-    }
-}
 
 async fn process_xcdr(
     interval: &mut time::Interval,
@@ -139,19 +69,6 @@ async fn main() {
     let profile_id = params[1].parse::<usize>().unwrap();
     let node_id = params[2].parse::<usize>().unwrap();
     let core_id = params[3].parse::<usize>().unwrap();
-    let enforce = match params[4].parse::<usize>(){
-        Ok(1) => true,  // we are enforcing all jobs to be explicitly executed, even passed its
-                        // deadline
-        Ok(0) => false, // jobs will not be scheduled if passed deadline
-        Ok(_) => {
-            println!("Neither 1 or 0 are passed as enforce value, exiting...");
-            process::exit(0x0100);
-        },
-        Err(e) => {
-            println!("Parse Error: {:?}, exiting...", e);
-            process::exit(0x0100);
-        },
-    } ;
     let core = CoreId { id: core_id };
 
     // get udf profiles
@@ -182,12 +99,7 @@ async fn main() {
         + &core_id.to_string()
         + ".json";
 
-    let (times, workload) = if enforce {
-        retrieve_enforce_workload(workload_path.to_string(), expr_time).unwrap()
-    }
-    else {
-        retrieve_workload(workload_path.to_string(), expr_time).unwrap()
-    };
+    let (times, workload) =  retrieve_workload(workload_path.to_string(), expr_time).unwrap();
 
     println!("retrieved workload: {}", workload_path);
     println!("times {:?}", times);
@@ -214,8 +126,6 @@ async fn main() {
         "WorkloadChanged, count: {:?} waiting for: {:?}",
         count, pivot,
     );
-    // states for enforce version
-    let mut executed = 0;
 
     let mut loads = Vec::new();
     let mut lats = Vec::new();
@@ -243,29 +153,14 @@ async fn main() {
             counts.clear();
             timestamps.clear();
 
-            if enforce {
-                create_job_queue(&mut executed, beginning.elapsed().as_secs() as usize, &workload, &mut counts, &mut timestamps);
-                enforce_process_xcdr(
-                    &mut interval,
-                    &mut buffer,
-                    width_height,
-                    &mut executed,
-                    &mut loads,
-                    &mut lats,
-                    &mut counts,
-                    &mut timestamps,
-                ).await;
-            }
-            else {
-                process_xcdr(
-                    &mut interval,
-                    count,
-                    &mut buffer,
-                    width_height,
-                    &mut loads,
-                    &mut lats,
-                ).await;
-            }
+            process_xcdr(
+                &mut interval,
+                count,
+                &mut buffer,
+                width_height,
+                &mut loads,
+                &mut lats,
+            ).await;
             println!(
                 "Info: {:?} users in {:?}ms with core: {:?}",
                 count * 5,
@@ -281,7 +176,7 @@ async fn main() {
             if report_time >= expr_time as u64 {
                 println!("Have run for {}, exiting now", expr_time);
                 process::exit(0x0100);
-            } else if report_time >= *pivot as u64 && !enforce {
+            } else if report_time >= *pivot as u64  {
                 count = *workload.get(pivot).unwrap();
                 pivot = match times_iter.next() {
                     Some(t) => t,
@@ -329,33 +224,16 @@ async fn main() {
             timestamps.clear();
 
             let cur_time = Instant::now();
-            if enforce {
-                create_job_queue(&mut executed, beginning.elapsed().as_secs() as usize, &workload, &mut counts, &mut timestamps);
-                enforce_process_rand(
-                    &pname,
-                    &mut interval,
-                    &cname,
-                    &large_vec,
-                    &mut buf,
-                    &mut executed,
-                    &mut loads,
-                    &mut lats,
-                    &mut counts,
-                    &mut timestamps,
-                ).await;
-            }
-            else {
-                process_rand(
-                    &mut interval,
-                    count,
-                    load,
-                    &cname,
-                    &large_vec,
-                    &mut buf,
-                    &mut loads,
-                    &mut lats,
-                ).await;
-            }
+            process_rand(
+                &mut interval,
+                count,
+                load,
+                &cname,
+                &large_vec,
+                &mut buf,
+                &mut loads,
+                &mut lats,
+            ).await;
 
             println!(
                 "Info: count {:?} in {:?}ms with core: {:?}",
@@ -371,7 +249,7 @@ async fn main() {
             if report_time >= expr_time as u64 {
                 println!("Have run for {}, exiting now", expr_time);
                 process::exit(0x0100);
-            } else if report_time >= *pivot as u64 && !enforce {
+            } else if report_time >= *pivot as u64 {
                 count = *workload.get(pivot).unwrap();
                 pivot = match times_iter.next() {
                     Some(t) => t,
