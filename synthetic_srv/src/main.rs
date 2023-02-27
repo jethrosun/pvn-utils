@@ -31,6 +31,7 @@ const XCDR_DEADLINE: u64 = 1000;
 async fn process_xcdr(
     interval: &mut time::Interval,
     count: u64,
+    num_of_jobs: usize,
     buffer: Arc<Mutex<Vec<u8>>>,
     loads: &mut Vec<usize>,
     lats: &mut Vec<u128>,
@@ -41,7 +42,7 @@ async fn process_xcdr(
         match tokio::time::timeout(
             std::time::Duration::from_millis(XCDR_DEADLINE),
             tokio::task::spawn_blocking(move || {
-                transcode_jobs(count, buf.lock().unwrap()).unwrap()
+                transcode_jobs(count, num_of_jobs, buf.lock().unwrap()).unwrap()
             }),
         )
         .await
@@ -172,6 +173,7 @@ async fn main() {
         "WorkloadChanged, count: {:?} waiting for: {:?}",
         count, pivot,
     );
+    let mut num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
 
     let mut loads = Vec::new();
     let mut lats = Vec::new();
@@ -201,7 +203,7 @@ async fn main() {
             timestamps.clear();
             let b = Arc::clone(&buf);
 
-            process_xcdr(&mut interval, count, b, &mut loads, &mut lats).await;
+            process_xcdr(&mut interval, count, num_of_jobs, b, &mut loads, &mut lats).await;
             println!(
                 "Info: {:?} users in {:?}ms with core: {:?}",
                 count * 5,
@@ -223,7 +225,7 @@ async fn main() {
                     Some(t) => t,
                     None => &expr_time,
                 };
-                // num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
+                num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
                 println!(
                     "WorkloadChanged, count: {:?} pivot waiting for: {:?}",
                     count, pivot
