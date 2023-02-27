@@ -36,7 +36,7 @@ async fn process_xcdr(
     loads: &mut Vec<usize>,
     lats: &mut Vec<u128>,
 ) {
-    for _i in 0..5 {
+    for _ in 0..5 {
         interval.tick().await;
         let buf = Arc::clone(&buffer);
         match tokio::time::timeout(

@@ -10,42 +10,45 @@ static WIDTH_HEIGHT: &str = "360x24";
 /// translate number of users to number of transcoding jobs
 /// https://github.com/jethrosun/NetBricks/blob/expr/framework/src/pvn/xcdr.rs#L110
 pub fn transcode_jobs(
-    count: u64,
+    _count: u64,
     num_of_jobs: usize,
     infh: MutexGuard<Vec<u8>>,
 ) -> io::Result<Duration> {
     let beginning = Instant::now();
+    println!("num of job {:?}", num_of_jobs);
 
-    for _ in 0..num_of_jobs {
-        let mut out = Vec::new();
-        let dst_dims: Vec<_> = WIDTH_HEIGHT
-            .split("x")
-            .map(|s| s.parse().unwrap())
-            .collect();
+    if num_of_jobs > 0 {
+        for _ in 0..num_of_jobs {
+            let mut out = Vec::new();
+            let dst_dims: Vec<_> = WIDTH_HEIGHT
+                .split("x")
+                .map(|s| s.parse().unwrap())
+                .collect();
 
-        let mut decoder = y4m::decode(infh.as_slice()).unwrap();
+            let mut decoder = y4m::decode(infh.as_slice()).unwrap();
 
-        if decoder.get_bit_depth() != 8 {
-            panic!(
-                "Unsupported bit depth {}, this example only supports 8.",
-                decoder.get_bit_depth()
-            );
-        }
-        let (w1, h1) = (decoder.get_width(), decoder.get_height());
-        let (w2, h2) = (dst_dims[0], dst_dims[1]);
-        let mut resizer = resize::new(w1, h1, w2, h2, Gray8, Triangle);
-        let mut dst = vec![0; w2 * h2];
+            if decoder.get_bit_depth() != 8 {
+                panic!(
+                    "Unsupported bit depth {}, this example only supports 8.",
+                    decoder.get_bit_depth()
+                );
+            }
+            let (w1, h1) = (decoder.get_width(), decoder.get_height());
+            let (w2, h2) = (dst_dims[0], dst_dims[1]);
+            let mut resizer = resize::new(w1, h1, w2, h2, Gray8, Triangle);
+            let mut dst = vec![0; w2 * h2];
 
-        let mut encoder = y4m::encode(w2, h2, decoder.get_framerate())
-            .with_colorspace(y4m::Colorspace::Cmono)
-            .write_header(&mut out)
-            .unwrap();
+            let mut encoder = y4m::encode(w2, h2, decoder.get_framerate())
+                .with_colorspace(y4m::Colorspace::Cmono)
+                .write_header(&mut out)
+                .unwrap();
 
-        while let Ok(frame) = decoder.read_frame() {
-            resizer.resize(frame.get_y_plane(), &mut dst);
-            let out_frame = y4m::Frame::new([&dst, &[], &[]], None);
-            if encoder.write_frame(&out_frame).is_err() {
-                return Ok(beginning.elapsed());
+            while let Ok(frame) = decoder.read_frame() {
+                resizer.resize(frame.get_y_plane(), &mut dst);
+                let out_frame = y4m::Frame::new([&dst, &[], &[]], None);
+                if encoder.write_frame(&out_frame).is_err() {
+                    return Ok(beginning.elapsed());
+                }
             }
         }
     }
