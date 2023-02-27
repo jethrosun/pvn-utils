@@ -19,7 +19,7 @@ mod transcode;
 mod udf;
 
 // We setup these noticeable delay as job deadline
-const RAND_DEADLINE: u64 = 1200;
+const RAND_DEADLINE: u64 = 2000;
 const XCDR_DEADLINE: u64 = 1000;
 
 /// transcode video jobs but with a deadline
