@@ -1,10 +1,10 @@
 use resize::Pixel::Gray8;
 use resize::Type::Triangle;
 use std::io;
+use std::sync::{Arc, Mutex, MutexGuard};
 use std::time::{Duration, Instant};
 use std::vec;
 use std::vec::Vec;
-use std::sync::{Arc, Mutex, MutexGuard};
 
 static WIDTH_HEIGHT: &str = "360x24";
 
@@ -50,8 +50,6 @@ pub fn transcode_jobs(count: u64, infh: MutexGuard<Vec<u8>>) -> io::Result<Durat
     Ok(beginning.elapsed())
 }
 
-
-
 /// Actual video transcoding.
 ///
 /// We set up all the parameters for the transcoding job to happen.
@@ -91,5 +89,3 @@ pub fn transcode(infh: &[u8], width_height: &str) {
         }
     }
 }
-
-

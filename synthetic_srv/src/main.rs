@@ -4,13 +4,13 @@ extern crate resize;
 extern crate serde_json;
 extern crate y4m;
 
-use std::sync::{Arc, Mutex};
 use crate::transcode::*;
 use crate::udf::*;
 use core_affinity::CoreId;
 use std::convert::TryInto;
 use std::fs::File;
 use std::io::Read;
+use std::sync::{Arc, Mutex};
 use std::time::Instant;
 use std::{env, process, vec};
 use tokio::time;
@@ -19,9 +19,8 @@ mod transcode;
 mod udf;
 
 // We setup these noticeable delay as job deadline
-const RAND_DEADLINE :u64 = 1200;
-const XCDR_DEADLINE :u64 = 1000;
-
+const RAND_DEADLINE: u64 = 1200;
+const XCDR_DEADLINE: u64 = 1000;
 
 /// https://doc.rust-lang.org/book/ch16-03-shared-state.html
 async fn process_xcdr(
@@ -34,14 +33,20 @@ async fn process_xcdr(
     for _i in 0..5 {
         interval.tick().await;
         let buf = Arc::clone(&buffer);
-        // let elapsed = transcode_jobs(count, buffer.as_slice(), width_height).unwrap();
-        if let Ok(elapsed) = tokio::time::timeout(std::time::Duration::from_millis(XCDR_DEADLINE), tokio::task::spawn_blocking(move ||transcode_jobs(count, buf.lock().unwrap()).unwrap())).await.unwrap() {
-        loads.push(count as usize);
-        lats.push(elapsed.as_millis());
-        }
-        else {
-        loads.push(0);
-        lats.push(0);
+        if let Ok(elapsed) = tokio::time::timeout(
+            std::time::Duration::from_millis(XCDR_DEADLINE),
+            tokio::task::spawn_blocking(move || {
+                transcode_jobs(count, buf.lock().unwrap()).unwrap()
+            }),
+        )
+        .await
+        .unwrap()
+        {
+            loads.push(count as usize);
+            lats.push(elapsed.as_millis());
+        } else {
+            loads.push(0);
+            lats.push(0);
         }
     }
 }
@@ -51,16 +56,32 @@ async fn process_rand(
     count: u64,
     load: Load,
     cname: &String,
-    large_vec: &Vec<u128>,
-    buf: &mut Box<[u8]>,
+    large_vec: Arc<Mutex<Vec<u128>>>,
+    buffer: Arc<Mutex<Vec<u8>>>,
     loads: &mut Vec<usize>,
     lats: &mut Vec<u128>,
 ) {
     for _ in 0..5 {
         interval.tick().await;
-        let elapsed = execute(load, cname, &large_vec, buf).unwrap();
-        loads.push(count as usize);
-        lats.push(elapsed.as_millis());
+        let vec = Arc::clone(&large_vec);
+        let buf = Arc::clone(&buffer);
+        let cname = cname.clone();
+
+        if let Ok(elapsed) = tokio::time::timeout(
+            std::time::Duration::from_millis(RAND_DEADLINE),
+            tokio::task::spawn_blocking(move || {
+                execute(load, &cname, vec.lock().unwrap(), buf.lock().unwrap()).unwrap()
+            }),
+        )
+        .await
+        .unwrap()
+        {
+            loads.push(count as usize);
+            lats.push(elapsed.as_millis());
+        } else {
+            loads.push(0);
+            lats.push(0);
+        }
     }
 }
 
@@ -110,7 +131,7 @@ async fn main() {
         + &core_id.to_string()
         + ".json";
 
-    let (times, workload) =  retrieve_workload(workload_path.to_string(), expr_time).unwrap();
+    let (times, workload) = retrieve_workload(workload_path.to_string(), expr_time).unwrap();
 
     println!("retrieved workload: {}", workload_path);
     println!("times {:?}", times);
@@ -140,8 +161,8 @@ async fn main() {
 
     let mut loads = Vec::new();
     let mut lats = Vec::new();
-    let mut counts :Vec<usize >= Vec::new();
-    let mut timestamps : Vec<u64>= Vec::new();
+    let mut counts: Vec<usize> = Vec::new();
+    let mut timestamps: Vec<u64> = Vec::new();
 
     if pname == "xcdr" {
         // Video file for transcoding
@@ -166,13 +187,7 @@ async fn main() {
             timestamps.clear();
             let b = Arc::clone(&buf);
 
-            process_xcdr(
-                &mut interval,
-                count,
-                b,
-                &mut loads,
-                &mut lats,
-            ).await;
+            process_xcdr(&mut interval, count, b, &mut loads, &mut lats).await;
             println!(
                 "Info: {:?} users in {:?}ms with core: {:?}",
                 count * 5,
@@ -188,7 +203,7 @@ async fn main() {
             if report_time >= expr_time as u64 {
                 println!("Have run for {}, exiting now", expr_time);
                 process::exit(0x0100);
-            } else if report_time >= *pivot as u64  {
+            } else if report_time >= *pivot as u64 {
                 count = *workload.get(pivot).unwrap();
                 pivot = match times_iter.next() {
                     Some(t) => t,
@@ -216,7 +231,8 @@ async fn main() {
         // RAM
         // let mut large_vec = vec![42u128; (load.ram as u128).try_into().unwrap()];
         // 1MB = 62500 * 16 Byte (unit)
-        let mut large_vec = vec![42u128; (max_load.ram * 62_500).try_into().unwrap()];
+        let v = vec![42u128; (max_load.ram * 62_500).try_into().unwrap()];
+        let large_vec = Arc::new(Mutex::new(v));
 
         // File I/O: use buffer to store random data
         // 1 MB = 1_000_000 * 1 Byte (unit)
@@ -225,7 +241,8 @@ async fn main() {
             buf.push(rand::random())
         }
         println!("buf size: {:?}", buf.capacity());
-        let mut buf = buf.into_boxed_slice();
+        // let mut buf = buf.into_boxed_slice();
+        let buffer = Arc::new(Mutex::new(buf));
 
         beginning = Instant::now();
         let mut interval = time::interval(time::Duration::from_secs(1));
@@ -235,17 +252,21 @@ async fn main() {
             counts.clear();
             timestamps.clear();
 
+            let v = Arc::clone(&large_vec);
+            let b = Arc::clone(&buffer);
+
             let cur_time = Instant::now();
             process_rand(
                 &mut interval,
                 count,
                 load,
                 &cname,
-                &large_vec,
-                &mut buf,
+                v,
+                b,
                 &mut loads,
                 &mut lats,
-            ).await;
+            )
+            .await;
 
             println!(
                 "Info: count {:?} in {:?}ms with core: {:?}",
@@ -272,7 +293,7 @@ async fn main() {
                     "WorkloadChanged, count: {:?} pivot waiting for: {:?}, new load {:?}",
                     count, pivot, load
                 );
-                large_vec.resize(load.ram as usize, 42u128);
+                // large_vec.resize(load.ram as usize, 42u128);
                 continue;
             } else {
                 // let elapsed = cur_time.elapsed();

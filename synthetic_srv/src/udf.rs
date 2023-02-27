@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use std::fs::{File, OpenOptions};
 use std::io;
 use std::io::Write;
+use std::sync::MutexGuard;
 use std::time::{Duration, Instant};
 use std::vec::Vec;
 
@@ -87,36 +88,6 @@ pub fn retrieve_workload(
     Ok((time_vec, udf_workload))
 }
 
-
-pub fn retrieve_enforce_workload(
-    file_path: String,
-    expr_time: usize,
-) -> serde_json::Result<(Vec<usize>, HashMap<usize, u64>)> {
-    println!("DEBUG: workload path is {:?}", file_path);
-    let file = File::open(file_path).expect("file should open read only");
-    let json_data: serde_json::Value =
-        serde_json::from_reader(file).expect("file should be proper JSON");
-    // println!("DEBUG: json data {:?}", json_data);
-
-    let mut count = 0;
-    let mut udf_workload: HashMap<usize, u64> = HashMap::new();
-
-    for t in 0..expr_time {
-        // if t is in the workload, which means we update count
-        match json_data.get(t.to_string()) {
-            Some(val) => count = val.as_u64().unwrap(),
-            None => {}
-        }
-        // add an entry 
-        udf_workload.insert(t, count);
-    }
-    // TODO: time vec will just be 0...expr time then
-    let mut time_vec: Vec<usize> = udf_workload.clone().into_keys().collect();
-    time_vec.sort_unstable();
-    Ok((time_vec, udf_workload))
-}
-
-
 pub fn map_profile(file_path: String) -> serde_json::Result<HashMap<usize, String>> {
     // println!("DEBUG: profile path is {:?}", file_path);
     let file = File::open(file_path).expect("file should open read only");
@@ -137,7 +108,7 @@ pub fn map_profile(file_path: String) -> serde_json::Result<HashMap<usize, Strin
 }
 
 //pub fn file_io(counter: &mut i32, f: &mut File, buf: &mut Box<[u8]>) {
-pub fn file_io(f: &mut File, buf: &mut Box<[u8]>) {
+pub fn file_io(f: &mut File, buf: MutexGuard<Vec<u8>>) {
     // write sets * 50mb to file
     f.write_all(&buf).unwrap();
     f.flush().unwrap();
@@ -154,9 +125,9 @@ pub fn file_io(f: &mut File, buf: &mut Box<[u8]>) {
 /// Unit of CPU, RAM, I/O load is determined from measurment/analysis
 pub fn execute(
     load: Load,
-    cname: &String,
-    large_vec: &Vec<u128>,
-    buf: &mut Box<[u8]>,
+    cname: &str,
+    large_vec: MutexGuard<Vec<u128>>,
+    buf: MutexGuard<Vec<u8>>,
 ) -> io::Result<Duration> {
     let beginning = Instant::now();
 
