@@ -33,20 +33,24 @@ async fn process_xcdr(
     for _i in 0..5 {
         interval.tick().await;
         let buf = Arc::clone(&buffer);
-        if let Ok(elapsed) = tokio::time::timeout(
+        // if let Ok(elapsed) =
+        match tokio::time::timeout(
             std::time::Duration::from_millis(XCDR_DEADLINE),
             tokio::task::spawn_blocking(move || {
                 transcode_jobs(count, buf.lock().unwrap()).unwrap()
             }),
         )
         .await
-        .unwrap()
         {
-            loads.push(count as usize);
-            lats.push(elapsed.as_millis());
-        } else {
-            loads.push(0);
-            lats.push(0);
+            Ok(elapsed) => {
+                loads.push(count as usize);
+                lats.push(elapsed.unwrap().as_millis());
+            }
+            // if nothing
+            Err(_e) => {
+                loads.push(0);
+                lats.push(XCDR_DEADLINE.into());
+            }
         }
     }
 }
@@ -67,20 +71,22 @@ async fn process_rand(
         let buf = Arc::clone(&buffer);
         let cname = cname.clone();
 
-        if let Ok(elapsed) = tokio::time::timeout(
+        match tokio::time::timeout(
             std::time::Duration::from_millis(RAND_DEADLINE),
             tokio::task::spawn_blocking(move || {
                 execute(load, &cname, vec.lock().unwrap(), buf.lock().unwrap()).unwrap()
             }),
         )
         .await
-        .unwrap()
         {
-            loads.push(count as usize);
-            lats.push(elapsed.as_millis());
-        } else {
-            loads.push(0);
-            lats.push(0);
+            Ok(elapsed) => {
+                loads.push(count as usize);
+                lats.push(elapsed.unwrap().as_millis());
+            }
+            Err(_e) => {
+                loads.push(0);
+                lats.push(RAND_DEADLINE.into());
+            }
         }
     }
 }
