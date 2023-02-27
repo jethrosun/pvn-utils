@@ -180,7 +180,11 @@ async fn main() {
     let mut timestamps: Vec<u64> = Vec::new();
 
     if pname == "xcdr" {
-        let mut num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
+        let mut num_of_jobs = if count == 0 {
+            0
+        } else {
+            (((count / 10) as f64 + 0.0001).ceil() * 1.13) as usize
+        };
         println!("Start num of job {}", num_of_jobs);
 
         // Video file for transcoding
@@ -228,7 +232,11 @@ async fn main() {
                     Some(t) => t,
                     None => &expr_time,
                 };
-                num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
+                num_of_jobs = if count == 0 {
+                    0
+                } else {
+                    (((count / 10) as f64 + 0.0001).ceil() * 1.13) as usize
+                };
                 println!(
                     "WorkloadChanged, new count: {:?} with {:?} jobs pivot waiting for: {:?}",
                     count, num_of_jobs, pivot
