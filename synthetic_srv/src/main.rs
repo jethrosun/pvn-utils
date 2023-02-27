@@ -173,7 +173,6 @@ async fn main() {
         "WorkloadChanged, count: {:?} waiting for: {:?}",
         count, pivot,
     );
-    let mut num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
 
     let mut loads = Vec::new();
     let mut lats = Vec::new();
@@ -181,6 +180,9 @@ async fn main() {
     let mut timestamps: Vec<u64> = Vec::new();
 
     if pname == "xcdr" {
+        let mut num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
+        println!("Start num of job {}", num_of_jobs);
+
         // Video file for transcoding
 
         let infile = "/udf_data/tiny.y4m";
@@ -205,8 +207,9 @@ async fn main() {
 
             process_xcdr(&mut interval, count, num_of_jobs, b, &mut loads, &mut lats).await;
             println!(
-                "Info: {:?} users in {:?}ms with core: {:?}",
+                "Info: {:?} users with {:?} jobs each in {:?}ms with core: {:?}",
                 count * 5,
+                num_of_jobs,
                 cur_time.elapsed().as_millis(),
                 core
             );
@@ -227,8 +230,8 @@ async fn main() {
                 };
                 num_of_jobs = (((count / 10) as f64 + 0.01).ceil() * 1.13).ceil() as usize;
                 println!(
-                    "WorkloadChanged, count: {:?} pivot waiting for: {:?}",
-                    count, pivot
+                    "WorkloadChanged, new count: {:?} with {:?} jobs pivot waiting for: {:?}",
+                    count, num_of_jobs, pivot
                 );
                 continue;
             }
