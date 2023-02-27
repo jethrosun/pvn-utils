@@ -4,6 +4,7 @@ extern crate resize;
 extern crate serde_json;
 extern crate y4m;
 
+use std::sync::{Arc, Mutex};
 use crate::transcode::*;
 use crate::udf::*;
 use core_affinity::CoreId;
@@ -13,25 +14,35 @@ use std::io::Read;
 use std::time::Instant;
 use std::{env, process, vec};
 use tokio::time;
-use std::collections::HashMap;
 
 mod transcode;
 mod udf;
 
+// We setup these noticeable delay as job deadline
+const RAND_DEADLINE :u64 = 1200;
+const XCDR_DEADLINE :u64 = 1000;
 
+
+/// https://doc.rust-lang.org/book/ch16-03-shared-state.html
 async fn process_xcdr(
     interval: &mut time::Interval,
     count: u64,
-    buffer: &mut Vec<u8>,
-    width_height: &str,
+    buffer: Arc<Mutex<Vec<u8>>>,
     loads: &mut Vec<usize>,
     lats: &mut Vec<u128>,
 ) {
     for _i in 0..5 {
         interval.tick().await;
-        let elapsed = transcode_jobs(count, buffer.as_slice(), width_height).unwrap();
+        let buf = Arc::clone(&buffer);
+        // let elapsed = transcode_jobs(count, buffer.as_slice(), width_height).unwrap();
+        if let Ok(elapsed) = tokio::time::timeout(std::time::Duration::from_millis(XCDR_DEADLINE), tokio::task::spawn_blocking(move ||transcode_jobs(count, buf.lock().unwrap()).unwrap())).await.unwrap() {
         loads.push(count as usize);
         lats.push(elapsed.as_millis());
+        }
+        else {
+        loads.push(0);
+        lats.push(0);
+        }
     }
 }
 
@@ -129,18 +140,19 @@ async fn main() {
 
     let mut loads = Vec::new();
     let mut lats = Vec::new();
-    let mut counts = Vec::new();
-    let mut timestamps = Vec::new();
+    let mut counts :Vec<usize >= Vec::new();
+    let mut timestamps : Vec<u64>= Vec::new();
 
     if pname == "xcdr" {
+        // Video file for transcoding
+
+        let infile = "/udf_data/tiny.y4m";
         // let infile = "/home/jethros/dev/pvn/utils/data/tiny.y4m";
         // let infile = "/Users/jethros/dev/pvn/utils/data/tiny.y4m";
-        let infile = "/udf_data/tiny.y4m";
-        let width_height = "360x24";
-
         let mut file = File::open(infile).unwrap();
         let mut buffer = Vec::new();
         file.read_to_end(&mut buffer).unwrap();
+        let buf = Arc::new(Mutex::new(buffer));
 
         println!("Timer started after {:?}", beginning.elapsed().as_millis());
         beginning = Instant::now();
@@ -152,12 +164,12 @@ async fn main() {
             lats.clear();
             counts.clear();
             timestamps.clear();
+            let b = Arc::clone(&buf);
 
             process_xcdr(
                 &mut interval,
                 count,
-                &mut buffer,
-                width_height,
+                b,
                 &mut loads,
                 &mut lats,
             ).await;
