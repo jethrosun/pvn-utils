@@ -1,7 +1,7 @@
 use resize::Pixel::Gray8;
 use resize::Type::Triangle;
 use std::io;
-use std::sync::{Arc, Mutex, MutexGuard};
+use std::sync::MutexGuard;
 use std::time::{Duration, Instant};
 use std::vec;
 use std::vec::Vec;

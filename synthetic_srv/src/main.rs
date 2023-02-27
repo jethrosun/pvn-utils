@@ -22,6 +22,11 @@ mod udf;
 const RAND_DEADLINE: u64 = 1200;
 const XCDR_DEADLINE: u64 = 1000;
 
+/// transcode video jobs but with a deadline
+///
+/// EDF is expected to transcode *count* number of videos in one second, so passing one second
+/// means not meeting the deadline.
+///
 /// https://doc.rust-lang.org/book/ch16-03-shared-state.html
 async fn process_xcdr(
     interval: &mut time::Interval,
@@ -33,7 +38,6 @@ async fn process_xcdr(
     for _i in 0..5 {
         interval.tick().await;
         let buf = Arc::clone(&buffer);
-        // if let Ok(elapsed) =
         match tokio::time::timeout(
             std::time::Duration::from_millis(XCDR_DEADLINE),
             tokio::task::spawn_blocking(move || {
@@ -55,6 +59,10 @@ async fn process_xcdr(
     }
 }
 
+/// exccute jobs but with a deadline
+///
+/// EDF is expected to execute *count* number of load with the deadline for each job, so passing *count x deadline*
+/// means not meeting the deadline.
 async fn process_rand(
     interval: &mut time::Interval,
     count: u64,
@@ -72,7 +80,7 @@ async fn process_rand(
         let cname = cname.clone();
 
         match tokio::time::timeout(
-            std::time::Duration::from_millis(RAND_DEADLINE),
+            std::time::Duration::from_millis(count * RAND_DEADLINE),
             tokio::task::spawn_blocking(move || {
                 execute(load, &cname, vec.lock().unwrap(), buf.lock().unwrap()).unwrap()
             }),
@@ -85,7 +93,7 @@ async fn process_rand(
             }
             Err(_e) => {
                 loads.push(0);
-                lats.push(RAND_DEADLINE.into());
+                lats.push((count * RAND_DEADLINE).into());
             }
         }
     }
