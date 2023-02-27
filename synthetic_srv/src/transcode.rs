@@ -15,7 +15,7 @@ pub fn transcode_jobs(
     infh: MutexGuard<Vec<u8>>,
 ) -> io::Result<Duration> {
     let beginning = Instant::now();
-    // println!("num of job {:?}", num_of_jobs);
+    println!("count: {:?}, num of job {:?}", _count, num_of_jobs);
 
     if num_of_jobs > 0 {
         for _ in 0..num_of_jobs {
