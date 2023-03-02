@@ -96,7 +96,6 @@ do
 		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
 		-v /home/jethros/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
 		rdr:alphine 8 $4 $core_id $ENFORCE &
-	pids="$pids $!"
 
 	# "6": "tlsv"
 	cd ~/dev/pvn/tlsv-builder/
@@ -108,7 +107,6 @@ do
 		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
 		-v /home/jethros/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
 		tlsv:alphine 6 $4 "$core_id" $ENFORCE &
-	pids="$pids $!"
 
 	# "7": "p2p"
 	PORT1=$((58845+core_id))
@@ -125,7 +123,6 @@ do
 		-v /home/jethros/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
 		-v /home/jethros/torrents:/torrents \
 		p2p:deluge 7 $4 $core_id &
-	pids="$pids $!"
 
 	for profile_id in {1..5}
 	do
@@ -140,29 +137,6 @@ do
 			-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
 			-v /home/jethros/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
 			synthetic:alphine "$profile_id" $4 "$core_id" $ENFORCE &
-		pids="$pids $!"
-	done
-done
-
-# dump logs
-# better way to do this?
-for core_id in {1..5}
-do
-	docker logs -f rdr_8_${core_id} &> ${SYNTHETIC_LOG}__8_${core_id}.log &
-	pids="$pids $!"
-
-	# "6": "tlsv"
-	docker logs -f tlsv_6_${core_id} &> ${SYNTHETIC_LOG}__6_${core_id}.log &
-	pids="$pids $!"
-
-	# "7": "p2p"
-	docker logs -f p2p_7_${core_id} &> ${SYNTHETIC_LOG}__7_${core_id}.log &
-	pids="$pids $!"
-
-	for profile_id in {1..5}
-	do
-		docker logs -f synthetic_srv_${profile_id}_${core_id} &> ${SYNTHETIC_LOG}__${profile_id}_${core_id}.log &
-		pids="$pids $!"
 	done
 done
 
@@ -197,6 +171,25 @@ done
 
 if [ "$RESULT" == "1" ];
 then
+
+# dump logs
+# better way to do this?
+for core_id in {1..5}
+do
+	docker logs -f rdr_8_${core_id} &> ${SYNTHETIC_LOG}__8_${core_id}.log 
+
+	# "6": "tlsv"
+	docker logs -f tlsv_6_${core_id} &> ${SYNTHETIC_LOG}__6_${core_id}.log 
+
+	# "7": "p2p"
+	docker logs -f p2p_7_${core_id} &> ${SYNTHETIC_LOG}__7_${core_id}.log 
+
+	for profile_id in {1..5}
+	do
+		docker logs -f synthetic_srv_${profile_id}_${core_id} &> ${SYNTHETIC_LOG}__${profile_id}_${core_id}.log 
+	done
+done
+
 	exit 1
 fi
 
