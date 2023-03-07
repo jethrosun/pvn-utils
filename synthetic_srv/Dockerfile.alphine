@@ -33,6 +33,8 @@ RUN cargo build --target x86_64-unknown-linux-musl --release
 ####################################################################################################
 FROM alpine
 
+RUN apk add --no-cache bash
+
 RUN addgroup -S chrome && adduser -S -g chrome chrome \
     && mkdir -p /home/chrome/Downloads \
     && chown -R chrome:chrome /home/chrome \
@@ -46,25 +48,18 @@ COPY --from=builder /etc/group /etc/group
 WORKDIR /synthetic_srv
 
 # Copy our build
-COPY --from=builder \
-    /synthetic_srv/target/x86_64-unknown-linux-musl/release/synthetic_srv \
-    /usr/local/bin
+COPY --from=builder /synthetic_srv/target/x86_64-unknown-linux-musl/release/synthetic_srv /usr/local/bin
+
+# get wait for it script
+COPY --from=builder /synthetic_srv/scripts/wait-for-it.sh /usr/local/bin
+COPY --from=builder /synthetic_srv/scripts/set-env.sh /usr/local/bin
+# RUN chmod +x /usr/local/bin/wait-for-it.sh
+# RUN chmod +x /usr/local/bin/set-env.sh
 
 # Use an unprivileged user.
 # USER synthetic:synthetic
 USER chrome:chrome
 
 
-# get wait for it script
-COPY /udf_config/wait-for-it.sh /wait-for-it.sh
-COPY /udf_config/set-env.sh /set-env.sh
-RUN chmod +x /wait-for-it.sh
-RUN chmod +x /set-env.sh
-
-# wait til port 4000 is open
-RUN ./set-env.sh
-
-
-# CMD ["/synthetic_srv/synthetic_srv"]
-ENTRYPOINT ["/usr/local/bin/synthetic_srv"]
+ENTRYPOINT ["/usr/local/bin/set-env.sh"]
 CMD ["1", "2", "3", "0"]
