@@ -64,7 +64,11 @@ JSON_STRING=$(jq -n \
 
 # clean up things before running the experiment
 
+ufw status verbose
+ufw enable
 ufw delete allow 4000
+ufw status verbose
+
 
 # https://www.baeldung.com/ops/docker-logs
 truncate -s 0 /var/lib/docker/containers/*/*-json.log
@@ -147,7 +151,7 @@ done
 
 # we open the port so all docker containers can start 
 ufw allow 4000
-
+ufw status verbose
 
 
 # dump logs
