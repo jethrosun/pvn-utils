@@ -65,7 +65,7 @@ JSON_STRING=$(jq -n \
 # clean up things before running the experiment
 
 ufw status verbose
-ufw enable
+ufw --force enable
 ufw delete allow 4000
 ufw status verbose
 
