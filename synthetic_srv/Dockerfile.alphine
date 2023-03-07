@@ -27,6 +27,7 @@ COPY ./ .
 
 RUN cargo build --target x86_64-unknown-linux-musl --release
 
+
 ####################################################################################################
 ## Final image
 ####################################################################################################
@@ -53,7 +54,17 @@ COPY --from=builder \
 # USER synthetic:synthetic
 USER chrome:chrome
 
+
+# get wait for it script
+COPY /udf_config/wait-for-it.sh /wait-for-it.sh
+COPY /udf_config/set-env.sh /set-env.sh
+RUN chmod +x /wait-for-it.sh
+RUN chmod +x /set-env.sh
+
+# wait til port 4000 is open
+RUN ./set-env.sh
+
+
 # CMD ["/synthetic_srv/synthetic_srv"]
 ENTRYPOINT ["/usr/local/bin/synthetic_srv"]
 CMD ["1", "2", "3", "0"]
-

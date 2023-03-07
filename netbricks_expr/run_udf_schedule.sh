@@ -61,6 +61,11 @@ JSON_STRING=$(jq -n \
 	echo "${JSON_STRING}" >/home/jethros/setup
 	#"sudo ./run_pvnf_coresident.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + str(expr)
 
+
+# clean up things before running the experiment
+
+ufw delete allow 4000
+
 # https://www.baeldung.com/ops/docker-logs
 truncate -s 0 /var/lib/docker/containers/*/*-json.log
 
@@ -139,6 +144,11 @@ do
 			synthetic:alphine "$profile_id" $4 "$core_id" $ENFORCE
 	done
 done
+
+# we open the port so all docker containers can start 
+ufw allow 4000
+
+
 
 # dump logs
 # better way to do this?
