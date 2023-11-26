@@ -30,7 +30,7 @@ else
 fi
 echo "Core is $2"
 
-cd /home/jethros/data
+cd /home/${USER}/data
 target="tmp$2"
 mkdir -p $target
 

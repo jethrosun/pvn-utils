@@ -73,7 +73,7 @@ JSON_STRING=$(jq -n \
 	--arg inst "$INST_LEVEL" \
 	--arg mode "$EXPR_MODE" \
 	'{setup: $setup, tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup,  iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}')
-	echo "${JSON_STRING}" >/home/jethros/setup
+	echo "${JSON_STRING}" >/home/${USER}/setup
 	#"sudo ./run_pvnf_coresident.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + str(expr)
 
 
@@ -81,10 +81,10 @@ JSON_STRING=$(jq -n \
 #   $ ./run_pvnf_contend.sh $1=trace $2=nf $3=iter $4=setup $5=cpu $6=mem $7=diskio
 
 # clean previous contention process, if any
-for PID in $(pgrep contention); do sudo -u jethros kill $PID; done
+for PID in $(pgrep contention); do sudo -u ${USER} kill $PID; done
 
 
-sudo /home/jethros/dev/pvn/utils/netbricks_expr/misc/nb_cleanup.sh
+sudo /home/${USER}/dev/pvn/utils/netbricks_expr/misc/nb_cleanup.sh
 sleep 3
 
 # https://www.baeldung.com/ops/docker-logs
@@ -98,7 +98,7 @@ while sleep 5; do
 	if [[ $(pgrep contention_cpu) ]]; then
 		:
 	else
-		/home/jethros/dev/pvn/utils/contention_cpu/start.sh "$5" 1 "$CPU_LOG" &
+		/home/${USER}/dev/pvn/utils/contention_cpu/start.sh "$5" 1 "$CPU_LOG" &
 	fi
 done &
 pids="$pids $!"
@@ -106,7 +106,7 @@ while sleep 5; do
 	if [[ $(pgrep contention_mem) ]]; then
 		:
 	else
-		sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
+		sudo taskset -c 5 /home/${USER}/dev/pvn/utils/contention_mem/start.sh "$6" "$MEM_LOG" &
 	fi
 done &
 pids="$pids $!"
@@ -114,7 +114,7 @@ while sleep 5; do
 	if [[ $(pgrep contention_disk) ]]; then
 		:
 	else
-		sudo taskset -c 5 /home/jethros/dev/pvn/utils/contention_diskio/start.sh "$7" 3 "hdd" "$DISKIO_LOG" &
+		sudo taskset -c 5 /home/${USER}/dev/pvn/utils/contention_diskio/start.sh "$7" 3 "hdd" "$DISKIO_LOG" &
 	fi
 done &
 pids="$pids $!"
@@ -134,10 +134,10 @@ if [ "$4" == "6" ]; then
 	docker run -d --cpuset-cpus "$core_id" --name tlsv_6_${core_id} \
 		--rm --network=host \
 		-v /data/tmp:/data \
-		-v /home/jethros/data/traces/pvn_tlsv/tmp:/traces \
-		-v /home/jethros:/config \
-		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
-		-v /home/jethros/dev/pvn/workload/udf_workload/${BATCH}:/udf_workload \
+		-v /home/${USER}/data/traces/pvn_tlsv/tmp:/traces \
+		-v /home/${USER}:/config \
+		-v /home/${USER}/dev/pvn/workload/udf_config:/udf_config \
+		-v /home/${USER}/dev/pvn/workload/udf_workload/${BATCH}:/udf_workload \
 		tlsv:alphine 6 $4 "$core_id"
 	docker logs -f tlsv_6_${core_id} &> ${SYNTHETIC_LOG}__6_${core_id}.log &
 	pids="$pids $!"
@@ -156,9 +156,9 @@ elif [ "$4" == "7" ]; then
 		-p $PORT2:51413 \
 		-p $PORT3:52801 \
 		-v /data/downloads/core_${core_id}:/data \
-		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
-		-v /home/jethros/dev/pvn/workload/udf_workload/${BATCH}:/udf_workload \
-		-v /home/jethros/torrents:/torrents \
+		-v /home/${USER}/dev/pvn/workload/udf_config:/udf_config \
+		-v /home/${USER}/dev/pvn/workload/udf_workload/${BATCH}:/udf_workload \
+		-v /home/${USER}/torrents:/torrents \
 		p2p:deluge 7 $4 $core_id
 	docker logs -f p2p_7_${core_id} &> ${SYNTHETIC_LOG}__7_${core_id}.log &
 	pids="$pids $!"
@@ -170,9 +170,9 @@ elif [ "$4" == "8" ]; then
 	docker run -d --cpuset-cpus $core_id --name rdr_8_${core_id} \
 		--rm  --network=host \
 		-v /data/tmp:/data \
-		-v /home/jethros:/config \
-		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
-		-v /home/jethros/dev/pvn/workload/udf_workload/${BATCH}:/udf_workload \
+		-v /home/${USER}:/config \
+		-v /home/${USER}/dev/pvn/workload/udf_config:/udf_config \
+		-v /home/${USER}/dev/pvn/workload/udf_workload/${BATCH}:/udf_workload \
 		rdr:alphine 8 $4 $core_id
 	docker logs -f rdr_8_${core_id} &> ${SYNTHETIC_LOG}__8_${core_id}.log &
 	pids="$pids $!"
@@ -187,11 +187,11 @@ else
 	# https://www.baeldung.com/ops/docker-logs
 	docker run -d --cpuset-cpus $core_id --name synthetic_srv_$4_${core_id} \
 		--rm --network=host \
-		-v /home/jethros/dev/pvn/utils/data:/udf_data \
+		-v /home/${USER}/dev/pvn/utils/data:/udf_data \
 		-v /data/tmp:/data \
-		-v /home/jethros:/config \
-		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
-		-v /home/jethros/dev/pvn/workload/udf_workload/${BATCH}:/udf_workload \
+		-v /home/${USER}:/config \
+		-v /home/${USER}/dev/pvn/workload/udf_config:/udf_config \
+		-v /home/${USER}/dev/pvn/workload/udf_workload/${BATCH}:/udf_workload \
 		synthetic:alphine $4 $4 "$core_id"
 	docker logs -f synthetic_srv_$4_${core_id} &> ${SYNTHETIC_LOG}__$4_${core_id}.log &
 	pids="$pids $!"
@@ -204,17 +204,17 @@ docker ps
 taskset -c 5 docker stats --no-trunc --format "table {{.Name}} {{.CPUPerc}} {{.MemUsage}} {{.BlockIO}}" >> ${DOCKER_STATS_LOG} &
 pids="$pids $!"
 
-# while sleep 1; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
+# while sleep 1; do sudo -u ${USER} taskset -c 5 /home/${USER}/dev/pvn/utils/netbricks_expr/misc/pcpu.sh pvn; done > "$CPULOG1" &
 # pids="$pids $!"
-# while sleep 1; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
+# while sleep 1; do sudo -u ${USER} taskset -c 5 /home/${USER}/dev/pvn/utils/netbricks_expr/misc/pmem.sh pvn; done > "$MEMLOG1" &
 # pids="$pids $!"
-# while sleep 1; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG2" &
+# while sleep 1; do sudo -u ${USER} taskset -c 5 /home/${USER}/dev/pvn/utils/netbricks_expr/misc/pcpu.sh chrom; done > "$CPULOG2" &
 # pids="$pids $!"
-# while sleep 1; do sudo -u jethros taskset -c 5 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
+# while sleep 1; do sudo -u ${USER} taskset -c 5 /home/${USER}/dev/pvn/utils/netbricks_expr/misc/pmem.sh chrom; done > "$MEMLOG2" &
 # pids="$pids $!"
-while sleep 2; do taskset -c 4 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pcpu.sh contention; done > "$CPULOG3" &
+while sleep 2; do taskset -c 4 /home/${USER}/dev/pvn/utils/netbricks_expr/misc/pcpu.sh contention; done > "$CPULOG3" &
 pids="$pids $!"
-while sleep 2; do taskset -c 4 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pmem.sh contention; done > "$MEMLOG3" &
+while sleep 2; do taskset -c 4 /home/${USER}/dev/pvn/utils/netbricks_expr/misc/pmem.sh contention; done > "$MEMLOG3" &
 pids="$pids $!"
 
 

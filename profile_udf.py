@@ -2,10 +2,13 @@
 
 import sys
 import time
+import getpass as gt
 
 import nf_config as conf
 from screenutils import Screen, list_screens
 
+
+current_user = gt.getuser()
 
 def netbricks_sess_setup(trace, nf, epoch):
     print("Entering netbricks_sess setup")
@@ -15,14 +18,14 @@ def netbricks_sess_setup(trace, nf, epoch):
 
         netbricks_sess.send_commands('bash')
         netbricks_sess.enable_logs("netbricks--" + trace + "_" + nf + "_" + str(epoch) + ".log")
-        netbricks_sess.send_commands('ssh jethros@tuco')
-        netbricks_sess.send_commands('cd /home/jethros/dev/pvn/utils/contention_cpu')
+        netbricks_sess.send_commands('ssh ' + current_user + '@tuco')
+        netbricks_sess.send_commands('cd /home/' + current_user + '/dev/pvn/utils/contention_cpu')
         netbricks_sess.send_commands('cargo b --release')
-        netbricks_sess.send_commands('cd /home/jethros/dev/pvn/utils/contention_mem')
+        netbricks_sess.send_commands('cd /home/' + current_user + '/dev/pvn/utils/contention_mem')
         netbricks_sess.send_commands('cargo b --release')
-        netbricks_sess.send_commands('cd /home/jethros/dev/pvn/utils/contention_diskio')
+        netbricks_sess.send_commands('cd /home/' + current_user + '/dev/pvn/utils/contention_diskio')
         netbricks_sess.send_commands('cargo b --release')
-        netbricks_sess.send_commands('cd /home/jethros/dev/netbricks/experiments')
+        netbricks_sess.send_commands('cd /home/' + current_user + '/dev/netbricks/experiments')
 
         time.sleep(1)
         return netbricks_sess
@@ -40,7 +43,7 @@ def pktgen_sess_setup(trace, nf, setup):
 
         pktgen_sess.send_commands('bash')
         pktgen_sess.enable_logs("pktgen--" + trace + "_" + nf + ".log")
-        pktgen_sess.send_commands('cd /home/jethros/dev/pktgen-dpdk/experiments')
+        pktgen_sess.send_commands('cd /home/' + current_user + '/dev/pktgen-dpdk/experiments')
 
         time.sleep(1)
         return pktgen_sess
@@ -70,8 +73,8 @@ def p2p_sess_setup(node, trace, nf, epoch):
 
         p2p_sess.send_commands('bash')
         p2p_sess.enable_logs(node + "--" + trace + "_" + nf + ".log")
-        p2p_sess.send_commands('ssh jethros@' + p2p_ips[node])
-        p2p_sess.send_commands('cd /home/jethros/dev/pvn/utils/p2p_expr')
+        p2p_sess.send_commands('ssh ' + current_user + '@' + p2p_ips[node])
+        p2p_sess.send_commands('cd /home/' + current_user + '/dev/pvn/utils/p2p_expr')
         p2p_sess.send_commands('git pull')
 
         time.sleep(1)

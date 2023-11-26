@@ -58,13 +58,13 @@ JSON_STRING=$(jq -n \
 	--arg inst "$INST_LEVEL" \
 	--arg mode "$EXPR_MODE" \
 	'{setup: $setup, tlsv_setup: $tlsv_setup, rdr_setup: $rdr_setup, xcdr_setup: $xcdr_setup, p2p_setup: $p2p_setup,  iter: $iter, port: $port, expr_num: $expr_num, inst: $inst, mode: $mode}')
-	echo "${JSON_STRING}" >/home/jethros/setup
+	echo "${JSON_STRING}" >/home/${USER}/setup
 	#"sudo ./run_pvnf_coresident.sh " + trace + " " + nf + " " + str(epoch) + " " + setup + " " + str(expr)
 
 # https://www.baeldung.com/ops/docker-logs
 truncate -s 0 /var/lib/docker/containers/*/*-json.log
 
-sudo /home/jethros/dev/pvn/utils/netbricks_expr/misc/nb_cleanup.sh
+sudo /home/${USER}/dev/pvn/utils/netbricks_expr/misc/nb_cleanup.sh
 sleep 3
 
 pids=""
@@ -79,7 +79,7 @@ pids="$pids $!"
 
 # TODO: remove?
 # Block IO
-# taskset -c 0 /home/jethros/dev/pvn/utils/netbricks_expr/misc/pbiotop.sh $nb_id > "$BIO_LOG" &
+# taskset -c 0 /home/${USER}/dev/pvn/utils/netbricks_expr/misc/pbiotop.sh $nb_id > "$BIO_LOG" &
 # pids="$pids $!"
 
 cd ~/dev/pvn/utils/synthetic_srv/
@@ -92,9 +92,9 @@ do
 	docker run -d --cpuset-cpus $core_id --name rdr_8_${core_id} \
 		--rm  --network=host \
 		-v /data/tmp:/data \
-		-v /home/jethros:/config \
-		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
-		-v /home/jethros/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
+		-v /home/${USER}:/config \
+		-v /home/${USER}/dev/pvn/workload/udf_config:/udf_config \
+		-v /home/${USER}/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
 		rdr:alphine 8 $4 $core_id $ENFORCE
 
 	# "6": "tlsv"
@@ -102,10 +102,10 @@ do
 	docker run -d --cpuset-cpus "$core_id" --name tlsv_6_${core_id} \
 		--rm --network=host \
 		-v /data/tmp:/data \
-		-v /home/jethros/data/traces/pvn_tlsv/tmp:/traces \
-		-v /home/jethros:/config \
-		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
-		-v /home/jethros/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
+		-v /home/${USER}/data/traces/pvn_tlsv/tmp:/traces \
+		-v /home/${USER}:/config \
+		-v /home/${USER}/dev/pvn/workload/udf_config:/udf_config \
+		-v /home/${USER}/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
 		tlsv:alphine 6 $4 "$core_id" $ENFORCE
 
 	# "7": "p2p"
@@ -119,9 +119,9 @@ do
 		-p $PORT2:51413 \
 		-p $PORT3:52801 \
 		-v /data/downloads/core_${core_id}:/data \
-		-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
-		-v /home/jethros/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
-		-v /home/jethros/torrents:/torrents \
+		-v /home/${USER}/dev/pvn/workload/udf_config:/udf_config \
+		-v /home/${USER}/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
+		-v /home/${USER}/torrents:/torrents \
 		p2p:deluge 7 $4 $core_id
 
 	for profile_id in {1..5}
@@ -131,11 +131,11 @@ do
 		# https://www.baeldung.com/ops/docker-logs
 		docker run -d --cpuset-cpus $core_id --name synthetic_srv_${profile_id}_${core_id} \
 			--rm --network=host \
-			-v /home/jethros/dev/pvn/utils/data:/udf_data \
+			-v /home/${USER}/dev/pvn/utils/data:/udf_data \
 			-v /data/tmp:/data \
-			-v /home/jethros:/config \
-			-v /home/jethros/dev/pvn/workload/udf_config:/udf_config \
-			-v /home/jethros/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
+			-v /home/${USER}:/config \
+			-v /home/${USER}/dev/pvn/workload/udf_config:/udf_config \
+			-v /home/${USER}/dev/pvn/workload/udf_workload/$1/$2:/udf_workload \
 			synthetic:alphine "$profile_id" $4 "$core_id" $ENFORCE
 	done
 done
